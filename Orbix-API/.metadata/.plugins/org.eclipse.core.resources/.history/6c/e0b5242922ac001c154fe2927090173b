@@ -1,0 +1,22 @@
+/**
+ * 
+ */
+package com.orbix.api.reports.service;
+
+import java.util.List;
+
+import com.orbix.api.reports.models.NegativeStockReport;
+
+/**
+ * @author Godfrey
+ *
+ */
+public class NegativeStockReportServiceImpl implements NegativeStockReportService {
+
+	@Override
+	public List<NegativeStockReport> getNegativeStockReport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

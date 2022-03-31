@@ -1,0 +1,23 @@
+<div class="EnclosureBox">
+    <div class="SectionEnclosureBox">
+        <div class="SectionOnBoxHeading">--Admin--</div>
+        <div class="SectionOnBoxSubHeading" (click)="userandaccess.toggle()" mdbWavesEffect>User & Access</div>
+        <div  mdbCollapse #userandaccess="bs-collapse">
+            <a routerLink="/user-profile"><div class="SectionOnBox">User Profile</div></a>  
+            <a routerLink="/role-manager"><div class="SectionOnBox">Role Manager</div></a>  
+            <a routerLink="/access-control"><div class="SectionOnBox">Access Control</div></a>
+        </div>
+         
+        <!--<a routerLink="/biometrics"><div class="SectionOnBox">Biometrics</div></a>--> 
+        <div class="SectionOnBoxSubHeading" (click)="pos.toggle()" mdbWavesEffect>POS</div> 
+        <div mdbCollapse #pos="bs-collapse">
+            <a routerLink="/till-administration"><div class="SectionOnBox">Till Administration</div></a> 
+        </div>  
+        
+        <div class="SectionOnBoxSubHeading" (click)="company.toggle()" mdbWavesEffect>Company</div> 
+        <div mdbCollapse #company="bs-collapse">
+            <a routerLink="/company-profile"><div class="SectionOnBox">Company Profile</div></a> 
+        </div>         
+    </div>
+</div>
+

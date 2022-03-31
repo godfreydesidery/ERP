@@ -1,0 +1,23 @@
+/**
+ * 
+ */
+package com.orbix.api.reports.service;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import com.orbix.api.reports.models.ProductStockCardReport;
+
+/**
+ * @author Godfrey
+ *
+ */
+public class ProductStockCardReportServiceImpl implements ProductStockCardReportService {
+
+	@Override
+	public List<ProductStockCardReport> getProductStockCardReport(LocalDate from, LocalDate to) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

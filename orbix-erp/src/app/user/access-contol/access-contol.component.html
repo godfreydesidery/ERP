@@ -1,0 +1,82 @@
+<div class="row" [@fadeInOut]>
+    <div class="col">
+        <table style="width: 100%;">
+            <tr style="width: 100%;">
+                <td style="width: 100mm; vertical-align: top;"><p class="h6">Admin / Access Control</p></td>
+                <td></td>                                   
+            </tr>
+        </table>
+        <table style="width: 100%;">
+            <tr style="width: 100%;">
+                <td style="vertical-align: top; height: 75vh;">
+                    <div class="container-fluid">
+                        <div class="row">  
+                            <div class="col-2">
+                                <label>Select Role:</label><br>
+                                <select *ngIf="grant(['ROLE-CREATE','ROLE-UPDATE','ROLE-DELETE'])" [ngModel]="selectedRole" (ngModelChange)="selectRole($event)" class="form-control">
+                                    <option></option>
+                                    <option *ngFor="let role of roles">{{role}}</option>
+                                </select>
+                            </div>     
+                            <div class="col-10">
+                                <label><b>{{selectedRoleMessage}}</b></label><br>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <td>Object</td>
+                                            <td>Actions</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!--<tr *ngFor="let object of objects">
+                                            <td style="vertical-align: top;">{{object}}</td>
+                                            <td style="vertical-align: top;">
+                                                <button *ngFor="let operation of operations" class="btn btn-light" style="margin-left: 1mm; margin-right: 1mm;"><input type="checkbox" [checked]="privilegeChecked(object, operation)" (change)="addOrRemovePrivilege($event, object, operation)" style="height: 5mm; width: 5mm;"><label>{{operation}}</label></button>
+                                            </td>
+                                        </tr> -->
+                                        <tr *ngFor="let model of privModels">
+                                            <td style="vertical-align: top;">{{model.object}}</td>
+                                            <td style="vertical-align: top;">
+                                                <button *ngFor="let operation of model.operations" class="btn btn-light" style="margin-left: 1mm; margin-right: 1mm;"><input type="checkbox" [checked]="privilegeChecked(model.object, operation)" (change)="addOrRemovePrivilege($event, model.object, operation)" style="height: 5mm; width: 5mm;"><label>{{operation}}</label></button>
+                                            </td>
+                                        </tr> 
+                                    </tbody>
+                                </table>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td><button *ngIf="grant(['ROLE-CREATE','ROLE-UPDATE','ROLE-DELETE'])" class="btn btn-success" (click)="addPrivilegeToRole(selectedRole)">Save</button></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>                                         
+                        </div><hr>
+                        <div class="row">    
+                            <div *ngIf="grant(['ROLE-CREATE','ROLE-READ','ROLE-UPDATE','ROLE-DELETE'])" class="col-12">
+                                <label>Access Summary</label><br>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <td>Role</td>
+                                            <td>Privileges</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of privileges | keyvalue">
+                                            <td>{{item.key | json}}</td>
+                                            <td>{{item.value | json}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>                                         
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

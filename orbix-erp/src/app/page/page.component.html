@@ -1,0 +1,120 @@
+<div>
+    <div *ngIf="isLoggedIn===false">
+      <app-login></app-login>
+    </div>
+    <div *ngIf="isLoggedIn===true">
+
+        <!--Navbar-->
+<mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark unique-color sticky-top" [containerInside]="false">
+
+    <!-- Navbar brand -->
+    <mdb-navbar-brand><a class="navbar-brand" style="color: white;">ORBIX-ERP</a></mdb-navbar-brand>
+  
+    <!-- Collapsible content -->
+    <links>
+  
+      <!-- Links -->
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link waves-light" routerLink="home" (click)="showBlankMenu()" mdbWavesEffect>Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item dropdown" dropdown>
+            <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+              Administration<span class="caret"></span></a>
+            <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+              <a class="dropdown-item waves-light" (click)="showAdminMenu()" mdbWavesEffect>Admin Functions</a>
+              <div class="divider dropdown-divider"></div>
+              <a class="dropdown-item waves-light" (click)="showHumanResourceMenu()" mdbWavesEffect>HumanResource</a>
+              <a class="dropdown-item waves-light" (click)="showSupplierRelationsMenu()" mdbWavesEffect>Supplier Relations</a>
+              <a class="dropdown-item waves-light" (click)="showCustomerRelationsMenu()" mdbWavesEffect>Customer Relations</a>
+              <div class="divider dropdown-divider"></div>
+              <a class="dropdown-item waves-light" (click)="showDayMenu()" mdbWavesEffect>Day Operations</a>
+            </div>
+          </li>
+        <li class="nav-item">
+          <a class="nav-link waves-light"  (click)="showInventoryMenu()" mdbWavesEffect>Inventory</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link waves-light" (click)="showMechandizerMenu()" mdbWavesEffect>Mechandizing</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link waves-light" (click)="showProductionMenu()" mdbWavesEffect>Production</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link waves-light" (click)="showReportMenu()" mdbWavesEffect>Reports</a>
+        </li>
+      </ul>
+      <!-- Links -->
+  
+      <ul class="navbar-nav ml-auto nav-flex-icons">
+        <li class="nav-item">
+          <a class="nav-link">
+            <div class="btn-group" mdbDropdown>
+                <small><i> {{systemDate}} .</i></small>
+                <small><i> {{userName}}   .</i></small>
+              <mdb-icon fas icon="user" mdbDropdownToggle></mdb-icon>
+              <div class="dropdown-menu dropdown-menu-right dropdown-primary">
+                <a class="dropdown-item" (click)="logOut()">Logout</a>
+              </div>
+              
+            </div>
+          </a>
+        </li>
+      </ul>
+    </links>
+    <!-- Collapsible content -->
+  
+  </mdb-navbar>
+  <!--/.Navbar-->
+
+      <div class="row">
+        <div class="col-md-2" style="background-color: #BDBDBD; height: 100vh; overflow: auto;">
+
+<div>
+    <div *ngIf="adminMenuShown">
+        <app-admin-menu></app-admin-menu>
+    </div> 
+    <div *ngIf="inventoryMenuShown">
+        <app-inventory-menu></app-inventory-menu>
+    </div>  
+    <div *ngIf="mechandizerMenuShown">
+        <app-mechandizer-menu></app-mechandizer-menu>
+    </div> 
+    <div *ngIf="productionMenuShown">
+        <app-production-menu></app-production-menu>
+    </div> 
+    <div *ngIf="supplierRelationsMenuShown">
+        <app-supplier-relations-menu></app-supplier-relations-menu>
+    </div>  
+    <div *ngIf="customerRelationsMenuShown">
+        <app-customer-relations-menu></app-customer-relations-menu>
+    </div> 
+    <div *ngIf="humanResourceMenuShown">
+        <app-human-resource-menu></app-human-resource-menu>
+    </div> 
+    <div *ngIf="reportMenuShown">
+        <app-report-menu></app-report-menu>
+    </div>
+    <div *ngIf="dayMenuShown">
+        <app-day-menu></app-day-menu>
+    </div>
+</div> 
+
+
+        </div>
+        <div class="col-md-10 main-background" style="margin-top: 3mm; height: 100vh; overflow: auto; padding: 5mm;">
+            <router-outlet></router-outlet>
+            <!--Footer-->
+        <div style="width: 100%; text-align: center; vertical-align: bottom;">
+            <font style="font-size: smaller;" color="black">Copyright &copy; 2021, Orbix. All Rights Reserved.</font>
+        </div>
+
+
+  <!-- Footer -->
+
+        </div>
+        
+      </div>
+      
+    </div>
+  </div>

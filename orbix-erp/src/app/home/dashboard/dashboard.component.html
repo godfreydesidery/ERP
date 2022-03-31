@@ -1,0 +1,44 @@
+<div class="row" [@fadeInOut]>
+    <div class="col">
+        <table style="width: 100%;">
+            <tr style="width: 100%;">
+                <td style="width: 100mm; vertical-align: top;"><p class="h6">Home / My Dashboard</p></td>
+                <td></td>                                   
+            </tr>
+        </table>
+        <table style="width: 100%;">
+            <tr style="width: 100%;">
+                <td style="vertical-align: top; height: 80vh;">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-4" style="margin-top: 10mm;">
+                                <mdb-card>
+                                    <mdb-card-body>
+                                        <mdb-card-title>
+                                            <h4>My Shortcuts</h4>
+                                        </mdb-card-title>
+                                        <div class="flex-row">
+                                            <span *ngFor="let shortcut of shortcuts"><a  class="card-link" routerLink='/{{shortcut.link}}'>{{shortcut.name}}----------</a><span class='bi bi-eraser' (click)="removeShortcut(shortcut.name)" style="cursor: pointer;"><mdb-icon fas icon="trash" mdbDropdownToggle></mdb-icon></span><br></span>
+                                        </div>
+                                    </mdb-card-body>
+                                </mdb-card>
+                            </div>
+                            <div class="col-sm-4" style="margin-top: 10mm;">
+                                <mdb-card>
+                                    <mdb-card-body>
+                                        <mdb-card-title>
+                                            <h4>My Messages</h4>
+                                        </mdb-card-title>
+                                        <div class="flex-row">
+
+                                        </div>
+                                    </mdb-card-body>
+                                </mdb-card>
+                            </div>                          
+                        </div>                       
+                    </div>                   
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

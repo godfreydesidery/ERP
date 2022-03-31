@@ -1,0 +1,55 @@
+<div class="EnclosureBox">
+    <div class="SectionEnclosureBox">
+        <div class="SectionOnBoxHeading">--Inventory--</div>
+        <div class="SectionOnBoxSubHeading" (click)="products.toggle()" mdbWavesEffect>Products</div>
+        <div mdbCollapse #products="bs-collapse">
+            <a routerLink="/product-master"><div class="SectionOnBox">Product Master</div></a>  
+            <a routerLink="/product-inquiry"><div class="SectionOnBox">Product Inquiry</div></a>  
+        </div>
+        
+        
+        <div class="SectionOnBoxSubHeading" (click)="materials.toggle()" mdbWavesEffect>Materials</div>
+        <div mdbCollapse #materials="bs-collapse">
+            <a routerLink="/material-master"><div class="SectionOnBox">Material Master</div></a>  
+        </div>
+        
+        <!--<a routerLink="/material-inquiry"><div class="SectionOnBox">Material Inquiry</div></a>-->
+        
+        <div class="SectionOnBoxSubHeading" (click)="inventoryUnits.toggle()" mdbWavesEffect>Inventory Units</div> 
+        <div mdbCollapse #inventoryUnits="bs-collapse">
+            <a routerLink="/department"><div class="SectionOnBox">Departments</div></a> 
+            <a routerLink="/class"><div class="SectionOnBox">Classes</div></a>  
+            <a routerLink="/sub-class"><div class="SectionOnBox">Sub-Classes</div></a>  
+            <hr>
+            <a routerLink="/category"><div class="SectionOnBox">Categories</div></a>  
+            <a routerLink="/sub-category"><div class="SectionOnBox">Sub Categories</div></a> 
+        </div>
+        
+        <div class="SectionOnBoxSubHeading" (click)="groups.toggle()" mdbWavesEffect>Groups</div>  
+        <div mdbCollapse #groups="bs-collapse">
+            <a routerLink="/group-level1"><div class="SectionOnBox">Level 1</div></a>
+            <a routerLink="/group-level2"><div class="SectionOnBox">Level 2</div></a> 
+            <a routerLink="/group-level3"><div class="SectionOnBox">Level 3</div></a>
+            <a routerLink="/group-level4"><div class="SectionOnBox">Level 4</div></a> 
+        </div> 
+        
+        <div class="SectionOnBoxSubHeading" (click)="massOperations.toggle()" mdbWavesEffect>Mass Operations</div>
+        <div mdbCollapse #massOperations="bs-collapse">
+            <a routerLink="/product-mass-manager"><div class="SectionOnBox">Products</div></a>
+            <a routerLink="/material-mass-manager"><div class="SectionOnBox">Materials</div></a> 
+        </div>   
+        
+        <div class="SectionOnBoxSubHeading" (click)="inventoryConversions.toggle()" mdbWavesEffect>Inventory Conversions</div>
+        <div mdbCollapse #inventoryConversions="bs-collapse">
+            <a routerLink="/product-to-material"><div class="SectionOnBox">Product to Material</div></a>
+            <!--<a routerLink="/material-to-product"><div class="SectionOnBox">Material to Product</div></a>  
+            <a routerLink="/product-to-product"><div class="SectionOnBox">Product to Product</div></a>
+            <a routerLink="/material-to-material"><div class="SectionOnBox">Material to Material</div></a>-->  
+        </div>
+        
+        <div class="SectionOnBoxSubHeading" (click)="inventorySettings.toggle()" mdbWavesEffect>Inventory Settings</div>   
+        <div mdbCollapse #inventorySettings="bs-collapse">
+            <a routerLink="/product-material-ratio"><div class="SectionOnBox">Product-Material Ratio</div></a>
+        </div>
+    </div>
+</div>

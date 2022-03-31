@@ -1,0 +1,42 @@
+<div class="EnclosureBox">
+    <div class="SectionEnclosureBox">
+        <div class="SectionOnBoxHeading">--Mechandizer--</div>
+        <div class="SectionOnBoxSubHeading" (click)="orderProcessing.toggle()" mdbWavesEffect>Order Processing</div>
+        <div mdbCollapse #orderProcessing="bs-collapse">
+            <a routerLink="/lpo"><div class="SectionOnBox">LPO</div></a>
+            <a routerLink="/grn"><div class="SectionOnBox">GRN</div></a>  
+        </div>
+        <div class="SectionOnBoxSubHeading" (click)="salesAndReturns.toggle()" mdbWavesEffect>Sales and Returns</div>
+        <div mdbCollapse #salesAndReturns="bs-collapse">
+            <a routerLink="/quotations"><div class="SectionOnBox">Quotations</div></a>
+            <a routerLink="/sales-invoices"><div class="SectionOnBox">Sales Invoices</div></a>
+            <a routerLink="/sales-receipts"><div class="SectionOnBox">Sales Receipt</div></a>
+            <a routerLink="/allocations"><div class="SectionOnBox">Allocations</div></a>
+            <a routerLink="/sales-ledge"><div class="SectionOnBox">Sales Ledge</div></a>
+            <a routerLink="/sales-journal"><div class="SectionOnBox">Sales Journal</div></a>
+            <a routerLink="/bill-reprint"><div class="SectionOnBox">Bill Reprint</div></a>
+            <hr>
+            <a routerLink="/packing-list"><div class="SectionOnBox">Packing List</div></a>
+            <a routerLink="/sales-list"><div class="SectionOnBox">Sales List</div></a>
+            <hr>
+            <a routerLink="/customer-returns"><div class="SectionOnBox">Customer Returns</div></a> 
+            <a routerLink="/customer-claims"><div class="SectionOnBox">Customer Claims</div></a>
+            <a routerLink="/return-to-vendor"><div class="SectionOnBox">Return to Vendor</div></a> 
+        </div>
+        
+        
+        <div class="SectionOnBoxSubHeading" (click)="creditNotes.toggle()" mdbWavesEffect>Credit Notes</div>
+        <div mdbCollapse #creditNotes="bs-collapse">
+            <a routerLink="/vendor-cr-note"><div class="SectionOnBox">Vendor Cr Note</div></a>
+            <a routerLink="/customer-cr-note"><div class="SectionOnBox">Customer Cr Note</div></a>
+        </div>
+        
+        <div class="SectionOnBoxSubHeading" (click)="debtProcessing.toggle()" mdbWavesEffect>Debt Processing</div>
+        <div mdbCollapse #debtProcessing="bs-collapse">
+            <a routerLink="/debt-tracker"><div class="SectionOnBox">Debt Tracker</div></a>
+            <a routerLink="/debt-receipts"><div class="SectionOnBox">Debt Receipt</div></a>
+            <a routerLink="/debt-allocations"><div class="SectionOnBox">Debt Allocation</div></a>   
+        </div> 
+    </div>
+</div>
+

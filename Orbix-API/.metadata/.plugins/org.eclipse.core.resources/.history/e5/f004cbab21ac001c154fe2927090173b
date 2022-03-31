@@ -1,0 +1,12 @@
+/**
+ * 
+ */
+package com.orbix.api.reports.service;
+
+/**
+ * @author Godfrey
+ *
+ */
+public class NegativeStockReportServiceImpl {
+
+}

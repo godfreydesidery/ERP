@@ -1,0 +1,296 @@
+<div class="row" [@fadeInOut]>
+    <div class="col-sm-12" style="text-align: center;">
+        <h6>Mechandizing | Sales List</h6>
+    </div>
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-4">
+                <a routerLink="/home"><button class="btn" (click)="clear()" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+                <button class="btn" style="margin: 2px; width: 20mm;" (click)="showList(listContent)" data-mdb-toggle="tooltip" title="View LPO List for selection"><i class="fas fa-list"></i><br>List</button>
+                <button class="btn" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing LPO"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
+                <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing LPO"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
+            </div>
+            <div class="col-sm-4">
+                <button class="btn"style="margin: 2px; width: 20mm;" (click)="cancel(id)" data-mdb-toggle="tooltip" title="Cancel an LPO"><i class="fa-solid fa-times fa-fw"></i><br>Cancel</button>
+                <button class="btn"style="margin: 2px; width: 20mm;" (click)="approve(id)" data-mdb-toggle="tooltip" title="Approve a Pending LPO"><i class="fa-solid fa-check fa-fw"></i><br>Approve</button>
+                <button class="btn"style="margin: 2px; width: 20mm;" (click)="exportToPdf()" data-mdb-toggle="tooltip" title="Export document to PDF"><i class="fas fa-file-pdf"></i><br>PDF</button>
+            </div>
+            <div class="col-sm-4">
+                <button (click)="archive(id)" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Send a Received LPO to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive</button>
+                <button (click)="archiveAll()" class="btn"style="margin: 2px; width: 30mm;" data-mdb-toggle="tooltip" title="Send all Received LPOs to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive All</button>
+                <button class="btn"style="margin: 2px; width: 30mm;" (click)="createShortCut('Sales List', 'sales-list')" data-mdb-toggle="tooltip" title="Create a page shortcut on user's Dashboard"><i class="fas fa-external-link-alt"></i><br>Shortcut</button>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="col-sm-12">
+        <br><br>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Sales List#</small>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="row">
+                            <div class="col-8">
+                                <input type="text" [(ngModel)]="no" class="form-control special" [readonly]="slstNoLocked">
+                            </div>
+                            <div class="col-4">
+                                <button class="btn btn-success" (click)="getByNo(no)" style="margin: 2px; width: 26mm;"><i class="fas fa-search"></i>Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Customer</small>
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="text" [(ngModel)]="customerNo" class="form-control special" readonly>
+                        <input type="text" [(ngModel)]="customerName" class="form-control special" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Sales Person</small>
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="text" [(ngModel)]="employeeNo" class="form-control special" readonly>
+                        <input type="text" [(ngModel)]="employeeName" class="form-control special" readonly>
+                    </div>
+                </div>              
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Total Amount Packed</small>
+                    </div>
+                    <div class="col-sm-8" style="text-align: right;">
+                        <small style="text-align: right;">{{totalAmountPacked | currency:'':''}}</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Total Sales</small>
+                    </div>
+                    <div class="col-sm-8" style="text-align: right;">
+                        <small style="text-align: right;">{{totalSales | currency:'':''}}</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Total Offered</small>
+                    </div>
+                    <div class="col-sm-8" style="text-align: right;">
+                        <small style="text-align: right;">{{totalOffered | currency:'':''}}</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Total Returns</small>
+                    </div>
+                    <div class="col-sm-8" style="text-align: right;">
+                        <small style="text-align: right;">{{totalReturns | currency:'':''}}</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Total Damages</small>
+                    </div>
+                    <div class="col-sm-8" style="text-align: right;">
+                        <small style="text-align: right;">{{totalDamages | currency:'':''}}</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Total Discounts</small>
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="text" [(ngModel)]="totalDiscounts" class="form-control special" style="text-align: right;" [readonly]="valuesLocked">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Total Expenses</small>
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="text" [(ngModel)]="totalExpenditures" class="form-control special" style="text-align: right;" [readonly]="valuesLocked">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Total Bank</small>
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="text" [(ngModel)]="totalBank" class="form-control special" style="text-align: right;" [readonly]="valuesLocked">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Total Cash</small>
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="text" [(ngModel)]="totalCash" class="form-control special" style="text-align: right;" [readonly]="valuesLocked">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button (click)="calculateTotalDeficit()">Total Deficit</button>
+                    </div>
+                    <div class="col-sm-8" style="text-align: right;">
+                        <small style="text-align: right;">{{totalDeficit | currency:'':''}}</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <small>Comments</small>
+                        <textarea [(ngModel)]="comments" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="row">
+                    <div class="col-3">
+                        <small>Status</small>
+                    </div>
+                    <div class="col-9">
+                        <small>{{status}}</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <small>Created</small>
+                    </div>
+                    <div class="col-9">
+                        <small>{{created}}</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <small>Approved</small>
+                    </div>
+                    <div class="col-9">
+                        <small>{{approved}}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+    </div>
+    <hr>
+    <div class="col-12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>Code</td>
+                    <td>Description</td>
+                    <td>Price(Incl)</td>
+                    <td>Total Packed</td>
+                    <td>Qty Sold</td>
+                    <td>Qty Offered</td>
+                    <td>Qty Returned</td>
+                    <td>Qty Damaged</td>
+                    <td>Action</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let d of salesListDetails">
+                    <td>{{d.product.code}}</td>
+                    <td>{{d.product.description}}</td>
+                    <td style="text-align: right;">{{d.sellingPriceVatIncl | currency:'':''}}</td>
+                    <td>{{d.totalPacked}}</td>
+                    <td>{{d.qtySold}}</td>
+                    <td>{{d.qtyOffered}}</td>
+                    <td>{{d.qtyReturned}}</td>
+                    <td>{{d.qtyDamaged}}</td>
+                    <td><span style="cursor: pointer;" (click)="open(content, d.product.id, d.id)">[Edit]</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add/Edit Product</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td style="text-align: right;">Barcode</td>
+                    <td>{{barcode}}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Code</td>
+                    <td>{{code}}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Description</td>
+                    <td>{{description}}</td>
+                </tr> 
+                <tr>
+                    <td style="text-align: right;">Price</td>
+                    <td style="text-align: right; font-weight: bold;">{{sellingPriceVatIncl | currency:'':''}}</td>
+                </tr>
+                <hr>
+                <tr>
+                    <td style="text-align: right;">Qty Packed</td><td style="padding: 0;"><input type="text" [(ngModel)]="totalPacked" class="form-control special" readonly></td>
+                </tr>
+                <hr>
+                <tr>
+                    <td style="text-align: right;">Qty Sold</td><td style="padding: 0;"><input type="text" [(ngModel)]="qtySold" class="form-control special"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Qty Offered</td><td style="padding: 0;"><input type="text" [(ngModel)]="qtyOffered" class="form-control special"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Qty Returned</td><td style="padding: 0;"><input type="text" [(ngModel)]="qtyReturned" class="form-control special"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Qty Damaged</td><td style="padding: 0;"><input type="text" [(ngModel)]="qtyDamaged" class="form-control special"></td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+      <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>-->
+      <button type="button" (click)="saveDetail()" (click)="modal.close('Save click')" class="btn btn-outline-dark">Save</button>
+    </div>
+</ng-template>
+
+<ng-template #listContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">LPO List</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-12" style="height: 10cm; overflow: auto;">
+                <table class="table table-bordered">
+                    <thead style="position: sticky; top: 0;">
+                        <tr class="table-dark">
+                            <td>Sales List#</td>
+                            <td>Status</td>
+                            <td>Select</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let slst of salesLists">
+                            <td>{{slst.no}}</td>
+                            <td>{{slst.status}}</td>
+                            <td><span (click)="get(slst.id)" style="cursor: pointer;">[Select]</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+    <div class="modal-footer">
+      
+    </div>
+</ng-template>

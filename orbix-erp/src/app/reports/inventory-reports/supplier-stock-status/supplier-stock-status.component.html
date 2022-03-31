@@ -1,0 +1,58 @@
+<div class="row">
+    <div class="col">
+        <table style="width: 100%;">
+            <tr style="width: 100%;">
+                <td style="width: 100mm; vertical-align: top;"><p class="h6">Reports / Inventory / Supplier Stock Status Report</p></td>
+                <td></td>                                   
+            </tr>
+        </table>
+        <table style="width: 100%;">
+            <tr style="width: 100%;">
+                <td style="vertical-align: top; height: 75vh;">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <h6>Select Supplier</h6>
+                                        <select [(ngModel)]="supplierName" class="form-control">
+                                            <option></option>
+                                            <option *ngFor="let n of supplierNames">{{n}}</option>
+                                        </select>                             
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <button (click)="getSupplierStockStatusReport(supplierName)" class="btn btn-success" style="margin: 2px;">Run Report</button>
+                                        <button (click)="exportToPdf()" class="btn btn-success" style="margin: 2px;">Export-PDF</button>
+                                        <button class="btn btn-danger" style="margin: 2px;">Clear</button>
+                                    </div>
+                                </div>
+                                <br>
+                            </div>  
+                            <div class="col-12">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <td>Code</td>
+                                            <td>Description</td>
+                                            <td>Qty</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let r of report">
+                                            <td>{{r.code}}</td>
+                                            <td>{{r.description}}</td>
+                                            <td>{{r.stock}}</td>
+                                        </tr>               
+                                    </tbody>
+                                </table>
+                            </div>                                      
+                        </div>
+                    </div>                   
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
