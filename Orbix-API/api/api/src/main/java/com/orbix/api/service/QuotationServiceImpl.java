@@ -21,6 +21,7 @@ import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.models.QuotationDetailModel;
 import com.orbix.api.models.QuotationModel;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.DayRepository;
 import com.orbix.api.repositories.ProductRepository;
 import com.orbix.api.repositories.QuotationDetailRepository;
@@ -275,5 +276,16 @@ public class QuotationServiceImpl implements QuotationService {
 		String sNumber = number.toString();
 		//return "QUT-"+Formater.formatSix(sNumber);
 		return Formater.formatWithCurrentDate("QUT",sNumber);
+	}
+	
+	@Override
+	public RecordModel requestQuotationNo() {
+		Long id = 1L;
+		try {
+			id = quotationRepository.getLastId() + 1;
+		}catch(Exception e) {}
+		RecordModel model = new RecordModel();
+		model.setNo(Formater.formatWithCurrentDate("QUT",id.toString()));
+		return model;
 	}
 }

@@ -425,6 +425,35 @@ export class SalesReceiptComponent implements OnInit {
     }
   }
 
+  showList(listContent: any) {
+    
+    this.modalService.open(listContent, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  async requestNo(){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<any>(API_URL+'/sales_receipts/request_no', options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        console.log(data)
+        this.no = data!['no']
+        this.receiptNoLocked  = true
+      },
+      error => {
+        console.log(error)
+        alert('Receipt No request failed')
+      }
+    )
+  }
+
   async loadCustomerNames(){
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)

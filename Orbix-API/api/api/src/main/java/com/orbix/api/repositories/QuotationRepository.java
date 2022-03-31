@@ -25,5 +25,8 @@ public interface QuotationRepository extends JpaRepository<Quotation, Long> {
 	
 	@Query("SELECT q FROM Quotation q WHERE q.status IN (:statuses)")
 	List<Quotation> findAllVissible(List<String> statuses);
+	
+	@Query("SELECT MAX(q.id) FROM Quotation q")
+	Long getLastId();
 
 }

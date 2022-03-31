@@ -9,6 +9,7 @@ import com.orbix.api.domain.Quotation;
 import com.orbix.api.domain.QuotationDetail;
 import com.orbix.api.models.QuotationDetailModel;
 import com.orbix.api.models.QuotationModel;
+import com.orbix.api.models.RecordModel;
 
 /**
  * @author GODFREY
@@ -26,4 +27,5 @@ public interface QuotationService {
 	List<QuotationDetailModel>getAllDetails(Quotation quotation);	
 	boolean archive(Quotation quotation);
 	boolean archiveAll();
+	RecordModel requestQuotationNo();
 }

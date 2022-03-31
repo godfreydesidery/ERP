@@ -1,102 +1,158 @@
 <div class="row" [@fadeInOut]>
-    <div class="col">
-        <table style="width: 100%;">
-            <tr style="width: 100%;">
-                <td style="width: 100mm; vertical-align: top;"><p class="h6">Mechandizing / Sales Receipt</p></td>
-                <td>[<a routerLink="/home">Home</a>][<span class="short-cut" (click)="createShortCut('Sales Receipts', 'sales-receipts')">Create Shortcut</span>]</td>                                  
-            </tr>
-        </table>
-        <table style="width: 100%;">
-            <tr style="width: 100%;">
-                <td style="vertical-align: top; height: 75vh;">
-                    <div class="container-fluid">
-                        <br>
+    <div class="col-sm-12" style="text-align: center;">
+        <h6>Mechandizing | Sales Receipt</h6>
+    </div>
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-4">
+                <a routerLink="/home"><button class="btn" (click)="clear()" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+                <button class="btn" style="margin: 2px; width: 20mm;" (click)="showList(listContent)" data-mdb-toggle="tooltip" title="View LPO List for selection"><i class="fas fa-list"></i><br>List</button>
+                <button class="btn" (click)="clear()" (click)="unlockAll()" (click)="requestNo()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new LPO"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
+                <button class="btn" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing LPO"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
+                <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing LPO"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
+            </div>
+            <div class="col-sm-4">
+                <button class="btn"style="margin: 2px; width: 20mm;" (click)="cancel(id)" data-mdb-toggle="tooltip" title="Cancel an LPO"><i class="fa-solid fa-times fa-fw"></i><br>Cancel</button>
+                <button class="btn"style="margin: 2px; width: 20mm;" (click)="approve(id)" data-mdb-toggle="tooltip" title="Approve a Pending LPO"><i class="fa-solid fa-check fa-fw"></i><br>Approve</button>
+                <button class="btn"style="margin: 2px; width: 20mm;" (click)="exportToPdf()" data-mdb-toggle="tooltip" title="Export document to PDF"><i class="fas fa-file-pdf"></i><br>PDF</button>
+            </div>
+            <div class="col-sm-4">
+                <button (click)="archive(id)" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Send a Received LPO to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive</button>
+                <button (click)="archiveAll()" class="btn"style="margin: 2px; width: 30mm;" data-mdb-toggle="tooltip" title="Send all Received LPOs to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive All</button>
+                <button class="btn"style="margin: 2px; width: 30mm;" (click)="createShortCut('Sales Receipts', 'sales-receipts')" data-mdb-toggle="tooltip" title="Create a page shortcut on user's Dashboard"><i class="fas fa-external-link-alt"></i><br>Shortcut</button>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <div class="col-sm-12">
+        <br><br>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Receipt#</small>
+                    </div>
+                    <div class="col-sm-8">
                         <div class="row">
-                            <div class="col-5">
-                                <table class="table table-bordered">
-                                    <tbody>
-                                        <tr>
-                                            <input type="hidden" [(ngModel)]="id">
-                                            <td style="text-align: right;">Receipt No</td><td style="padding: 0;"><input type="text" [(ngModel)]="no" class="form-control special" [readonly]="receiptNoLocked"></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: right;">Customer</td>
-                                            <td style="padding: 0;">
-                                                <input type="text" [(ngModel)]="customerNo" class="form-control special" placeholder="Customer No" readonly>
-                                                <select [(ngModel)]="customerName" (ngModelChange)="searchCustomer(customerName)" class="form-control input-sm" [disabled]="inputsLocked">
-                                                    <option></option>
-                                                    <option *ngFor="let c of customerNames">{{c}}</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: right;">Mode of Payment</td>
-                                            <td style="padding: 0;">
-                                                <select [(ngModel)]="mode" class="form-control input-sm" [disabled]="inputsLocked">
-                                                    <option></option>
-                                                    <option>Cash</option>
-                                                    <option>Cheque</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: right;">Check No</td><td style="padding: 0;"><input type="text" [(ngModel)]="chequeNo" class="form-control special" [readonly]="inputsLocked"></td>
-                                        </tr> 
-                                        <tr>
-                                            <td style="text-align: right;">Amount</td><td style="padding: 0;"><input type="text" [(ngModel)]="amount" class="form-control special" style="text-align: right; font-family: 'Courier New', Courier, monospace; font-weight: bold;" [readonly]="inputsLocked"></td>
-                                        </tr>                                                             
-                                        <tr>
-                                            <td style="text-align: right;">Created</td><td>{{created}}</td>
-                                        </tr> 
-                                        <tr>
-                                            <td style="text-align: right;">Approved</td><td>{{approved}}</td>
-                                        </tr> 
-                                        <tr>
-                                            <td style="text-align: right;">Comments</td>
-                                            <td style="padding: 0;"><textarea [(ngModel)]="comments" class="form-control special"></textarea></td>          
-                                        </tr>
-                                    </tbody>
-                                </table><br>
-                                <button class="btn btn-success"style="margin: 2px; width: 25mm;" (click)="approve(id)">Approve</button>
-                                <button (click)="exportToPdf()" class="btn btn-success"style="margin: 2px; width: 30mm;">Export-PDF</button>
-                                <button class="btn btn-danger"style="margin: 2px; width: 25mm;" (click)="cancel(id)">Cancel</button>
-                                <button (click)="archive(id)" class="btn btn-success"style="margin: 2px; width: 25mm;">Archive</button>
-                                <button (click)="archiveAll()" class="btn btn-success"style="margin: 2px; width: 30mm;">Archive All</button>
+                            <div class="col-8">
+                                <input type="text" [(ngModel)]="no" class="form-control special" [readonly]="receiptNoLocked">
                             </div>
-                            <div class="col-1">
-                                <button class="btn btn-success" (click)="getByNo(no)" style="margin: 2px; width: 25mm;">Search</button><br><br>
-                                <button class="btn btn-success" (click)="clear()" (click)="unlockAll()" style="margin: 2px; width: 25mm;">New</button><br>
-                                <button class="btn btn-success" (click)="unlockAll()" style="margin: 2px; width: 25mm;">Edit</button><br>
-                                <button (click)="save()" class="btn btn-success"style="margin: 2px; width: 25mm;">Save</button><br>
-                            </div>
-                            <div class="col-1"></div>
-                            <div class="col-5" style="height: 7cm; overflow: auto;">
-                                <table class="table table-bordered">
-                                    <thead style="position: sticky; top: 0;">
-                                        <tr class="table-dark">
-                                            <td>Receipt No</td>
-                                            <td>Status</td>
-                                            <td>Select</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let rec of receipts">
-                                            <td>{{rec.no}}</td>
-                                            <td>{{rec.status}}</td>
-                                            <td><span (click)="get(rec.id)" style="cursor: pointer;">[Select]</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="col-4">
+                                <button class="btn btn-success" (click)="getByNo(no)" style="margin: 2px; width: 26mm;"><i class="fas fa-search"></i>Search</button>
                             </div>
                         </div>
-                    </div>                
-                </td>
-            </tr>
-        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Select Customer</small>
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="text" [(ngModel)]="customerNo" class="form-control special" placeholder="Customer No" readonly>
+                        <select [(ngModel)]="customerName" (ngModelChange)="searchCustomer(customerName)" class="form-control input-sm" [disabled]="inputsLocked">
+                            <option></option>
+                            <option *ngFor="let c of customerNames">{{c}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Mode of Payment</small>
+                    </div>
+                    <div class="col-sm-8">
+                        <select [(ngModel)]="mode" class="form-control input-sm" [disabled]="inputsLocked">
+                            <option></option>
+                            <option>Cash</option>
+                            <option>Cheque</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Check No</small>
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="text" [(ngModel)]="chequeNo" class="form-control special" [readonly]="inputsLocked">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Amount</small>
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="text" [(ngModel)]="amount" class="form-control special" style="text-align: right; font-family: 'Courier New', Courier, monospace; font-weight: bold;" [readonly]="inputsLocked">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <small>Comments</small>
+                        <textarea [(ngModel)]="comments" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="row">
+                    <div class="col-3">
+                        <small>Status</small>
+                    </div>
+                    <div class="col-9">
+                        <small>{{status}}</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <small>Created</small>
+                    </div>
+                    <div class="col-9">
+                        <small>{{created}}</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <small>Approved</small>
+                    </div>
+                    <div class="col-9">
+                        <small>{{approved}}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
     </div>
+    <hr>
 </div>
-<div class="row">
-    <div class="col-12">
-        
+
+<ng-template #listContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Sales Receipt List</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
     </div>
-</div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-12" style="height: 10cm; overflow: auto;">
+                <table class="table table-bordered">
+                    <thead style="position: sticky; top: 0;">
+                        <tr class="table-dark">
+                            <td>Receipt No</td>
+                            <td>Status</td>
+                            <td>Select</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let rec of receipts">
+                            <td>{{rec.no}}</td>
+                            <td>{{rec.status}}</td>
+                            <td><span (click)="get(rec.id)" style="cursor: pointer;">[Select]</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>        
+    </div>
+    <div class="modal-footer">
+      
+    </div>
+</ng-template>

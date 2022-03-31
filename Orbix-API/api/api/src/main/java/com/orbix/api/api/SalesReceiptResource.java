@@ -24,6 +24,7 @@ import com.orbix.api.domain.Customer;
 import com.orbix.api.domain.SalesReceipt;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.models.SalesReceiptModel;
 import com.orbix.api.repositories.CustomerRepository;
 import com.orbix.api.repositories.SalesReceiptRepository;
@@ -69,6 +70,12 @@ public class SalesReceiptResource {
 	public ResponseEntity<SalesReceiptModel> getSalesReceiptByNo(
 			@RequestParam(name = "no") String no){
 		return ResponseEntity.ok().body(salesReceiptService.getByNo(no));
+	}
+	
+	@GetMapping("/sales_receipts/request_no")
+	//@PreAuthorize("hasAnyAuthority('LPO-READ')")
+	public ResponseEntity<RecordModel> requestNo(){
+		return ResponseEntity.ok().body(salesReceiptService.requestSalesReceiptNo());
 	}
 	
 	@PostMapping("/sales_receipts/create")

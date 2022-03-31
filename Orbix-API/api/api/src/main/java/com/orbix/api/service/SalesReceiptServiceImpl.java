@@ -21,6 +21,7 @@ import com.orbix.api.domain.SalesReceipt;
 import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.models.SalesInvoiceModel;
 import com.orbix.api.models.SalesReceiptModel;
 import com.orbix.api.repositories.CustomerRepository;
@@ -230,6 +231,17 @@ public class SalesReceiptServiceImpl implements SalesReceiptService {
 		if(rec.getApprovedAt() != null && rec.getApprovedBy() != null) {
 			model.setApproved(dayRepository.findById(rec.getApprovedAt()).get().getBussinessDate() +" "+ userRepository.getAlias(rec.getApprovedBy()));
 		}		
+		return model;
+	}
+	
+	@Override
+	public RecordModel requestSalesReceiptNo() {
+		Long id = 1L;
+		try {
+			id = salesReceiptRepository.getLastId() + 1;
+		}catch(Exception e) {}
+		RecordModel model = new RecordModel();
+		model.setNo(Formater.formatWithCurrentDate("SRC",id.toString()));
 		return model;
 	}
 

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.orbix.api.domain.Customer;
 import com.orbix.api.domain.SalesInvoice;
 import com.orbix.api.domain.SalesInvoiceDetail;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.models.SalesInvoiceDetailModel;
 import com.orbix.api.models.SalesInvoiceModel;
 
@@ -31,4 +32,5 @@ public interface SalesInvoiceService {
 	boolean archive(SalesInvoice salesInvoice);
 	boolean archiveAll();
 	SalesInvoiceModel post(SalesInvoice salesInvoice, HttpServletRequest request);
+	RecordModel requestSalesInvoiceNo();
 }

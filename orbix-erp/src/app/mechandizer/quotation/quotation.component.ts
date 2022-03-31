@@ -306,43 +306,41 @@ export class QuotationComponent implements OnInit {
       /**
        * First Create a new Quotation
        */
-      alert('Quotation not available, the system will create a new Quotation')
-      this.save()
-    }else{
-      /**
-       * Enter Quotation Detail
-       */
-      let options = {
-        headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
-      }   
-      var detail = {
-        quotation : {id : this.id},
-        product : {id : this.productId, code : this.code},
-        qty : this.qty,
-        sellingPriceVatIncl : this.sellingPriceVatIncl,
-        sellingPriceVatExcl : this.sellingPriceVatExcl
-      }
-      this.spinner.show()
-      await this.http.post(API_URL+'/quotation_details/save', detail, options)
-      .pipe(finalize(() => this.spinner.hide()))
-      .toPromise()
-      .then(
-        () => {
-          this.clearDetail()
-          this.get(this.id)
-          if(this.blank == true){
-            this.blank = false
-            this.loadQuotations()
-          }
-        }
-      )
-      .catch(
-        error => {
-          console.log(error)
-          ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not save detail')
-        }
-      )
+      await this.save()
     }
+    /**
+     * Enter Quotation Detail
+     */
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }   
+    var detail = {
+      quotation : {id : this.id},
+      product : {id : this.productId, code : this.code},
+      qty : this.qty,
+      sellingPriceVatIncl : this.sellingPriceVatIncl,
+      sellingPriceVatExcl : this.sellingPriceVatExcl
+    }
+    this.spinner.show()
+    await this.http.post(API_URL+'/quotation_details/save', detail, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      () => {
+        this.clearDetail()
+        this.get(this.id)
+        if(this.blank == true){
+          this.blank = false
+          //this.loadQuotations()
+        }
+      }
+    )
+    .catch(
+      error => {
+        console.log(error)
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not save detail')
+      }
+    )
   }
 
   getDetailByNo(no: string) {
@@ -592,6 +590,27 @@ export class QuotationComponent implements OnInit {
     })
   }
 
+  async requestNo(){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<any>(API_URL+'/quotations/request_no', options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        console.log(data)
+        this.no = data!['no']
+        this.quotationNoLocked  = true
+      },
+      error => {
+        console.log(error)
+        alert('Quotation No request failed')
+      }
+    )
+  }
+
   open(content : any, productId : string, detailId : string) {
     if(this.customerNo == '' || this.customerNo == null){
       alert('Please enter customer information')
@@ -602,6 +621,14 @@ export class QuotationComponent implements OnInit {
     }
     
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  showList(listContent: any) {
+    
+    this.modalService.open(listContent, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });

@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.orbix.api.domain.SalesInvoice;
 import com.orbix.api.domain.SalesReceipt;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.models.SalesInvoiceModel;
 import com.orbix.api.models.SalesReceiptModel;
 
@@ -23,4 +24,5 @@ public interface SalesReceiptService {
 	boolean archive(SalesReceipt salesReceipt);
 	boolean archiveAll();
 	SalesReceiptModel approve(SalesReceipt salesReceipt);
+	RecordModel requestSalesReceiptNo();
 }

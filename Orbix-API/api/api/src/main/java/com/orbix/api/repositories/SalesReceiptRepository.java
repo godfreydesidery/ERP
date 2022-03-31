@@ -28,5 +28,7 @@ public interface SalesReceiptRepository extends JpaRepository<SalesReceipt, Long
 	
 	@Query("SELECT r FROM SalesReceipt r WHERE r.status =:status")
 	List<SalesReceipt> findAllApproved(String status);
-
+	
+	@Query("SELECT MAX(r.id) FROM SalesReceipt r")
+	Long getLastId();
 }

@@ -30,6 +30,7 @@ import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.models.QuotationDetailModel;
 import com.orbix.api.models.QuotationModel;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.CustomerRepository;
 import com.orbix.api.repositories.ProductRepository;
 import com.orbix.api.repositories.QuotationDetailRepository;
@@ -76,6 +77,12 @@ public class QuotationResource {
 	public ResponseEntity<QuotationModel> getQuotationByNo(
 			@RequestParam(name = "no") String no){
 		return ResponseEntity.ok().body(quotationService.getByNo(no));
+	}
+	
+	@GetMapping("/quotations/request_no")
+	//@PreAuthorize("hasAnyAuthority('LPO-READ')")
+	public ResponseEntity<RecordModel> requestNo(){
+		return ResponseEntity.ok().body(quotationService.requestQuotationNo());
 	}
 	
 	@GetMapping("/quotation_details/get_by_quotation")

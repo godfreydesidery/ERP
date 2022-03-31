@@ -29,6 +29,7 @@ import com.orbix.api.domain.Supplier;
 import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.models.SalesInvoiceDetailModel;
 import com.orbix.api.models.SalesInvoiceModel;
 import com.orbix.api.repositories.CustomerRepository;
@@ -92,7 +93,13 @@ public class SalesInvoiceResource {
 	@PreAuthorize("hasAnyAuthority('SALES_INVOICE-READ')")
 	public ResponseEntity<SalesInvoiceModel> getSalesInvoiceByNo(
 			@RequestParam(name = "no") String no){
-		return ResponseEntity.ok().body(salesInvoiceService.getByNo(no));
+		return ResponseEntity.ok().body(salesInvoiceService.getByNo(no));		
+	}
+	
+	@GetMapping("/sales_invoices/request_no")
+	//@PreAuthorize("hasAnyAuthority('LPO-READ')")
+	public ResponseEntity<RecordModel> requestNo(){
+		return ResponseEntity.ok().body(salesInvoiceService.requestSalesInvoiceNo());
 	}
 	
 	@GetMapping("/sales_invoice_details/get_by_salesInvoice")

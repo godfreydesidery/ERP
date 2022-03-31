@@ -23,6 +23,7 @@ import com.orbix.api.domain.SalesInvoiceDetail;
 import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.models.SalesInvoiceDetailModel;
 import com.orbix.api.models.SalesInvoiceModel;
 import com.orbix.api.repositories.DayRepository;
@@ -404,6 +405,17 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 		if(inv.getApprovedAt() != null && inv.getApprovedBy() != null) {
 			model.setApproved(dayRepository.findById(inv.getApprovedAt()).get().getBussinessDate() +" "+ userRepository.getAlias(inv.getApprovedBy()));
 		}		
+		return model;
+	}
+	
+	@Override
+	public RecordModel requestSalesInvoiceNo() {
+		Long id = 1L;
+		try {
+			id = salesInvoiceRepository.getLastId() + 1;
+		}catch(Exception e) {}
+		RecordModel model = new RecordModel();
+		model.setNo(Formater.formatWithCurrentDate("SNV",id.toString()));
 		return model;
 	}
 }

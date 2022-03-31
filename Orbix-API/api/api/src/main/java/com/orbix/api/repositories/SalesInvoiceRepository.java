@@ -35,4 +35,7 @@ public interface SalesInvoiceRepository extends JpaRepository<SalesInvoice, Long
 	@Query("SELECT i FROM SalesInvoice i WHERE i.customer =:customer AND i.status IN (:statuses)")
 	List<SalesInvoice> findByCustomerAndApprovedOrPosted(Customer customer, List<String> statuses);
 	
+	@Query("SELECT MAX(i.id) FROM SalesInvoice i")
+	Long getLastId();
+	
 }
