@@ -25,6 +25,7 @@ import com.orbix.api.domain.DebtReceipt;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.models.DebtReceiptModel;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.EmployeeRepository;
 import com.orbix.api.repositories.DebtReceiptRepository;
 import com.orbix.api.service.DayService;
@@ -68,6 +69,12 @@ public class DebtReceiptResource {
 	public ResponseEntity<DebtReceiptModel> getDebtReceiptByNo(
 			@RequestParam(name = "no") String no){
 		return ResponseEntity.ok().body(debtReceiptService.getByNo(no));
+	}
+	
+	@GetMapping("/debt_receipts/request_no")
+	//@PreAuthorize("hasAnyAuthority('LPO-READ')")
+	public ResponseEntity<RecordModel> requestNo(){
+		return ResponseEntity.ok().body(debtReceiptService.requestDebtReceiptNo());
 	}
 	
 	@PostMapping("/debt_receipts/create")

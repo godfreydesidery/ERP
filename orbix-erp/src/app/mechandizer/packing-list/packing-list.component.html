@@ -2,7 +2,7 @@
     <div class="col-sm-12" style="text-align: center;">
         <h6>Mechandizing | Packing List</h6>
     </div>
-    <div class="col-sm-12">
+    <div class="col-sm-12" style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
         <div class="row">
             <div class="col-sm-4">
                 <a routerLink="/home"><button class="btn" (click)="clear()" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
@@ -23,7 +23,6 @@
             </div>
         </div>
     </div>
-    <hr>
     <div class="col-sm-12">
         <br><br>
         <div class="row">
@@ -39,6 +38,21 @@
                             </div>
                             <div class="col-4">
                                 <button class="btn btn-success" (click)="getByNo(no)" style="margin: 2px; width: 26mm;"><i class="fas fa-search"></i>Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Sales List#</small>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="row">
+                            <div class="col-8">
+                                <input type="text" [(ngModel)]="salesListNo" class="form-control special" readonly>
+                            </div>
+                            <div class="col-4">
+                                <button class="btn" (click)="goToSalesList(salesListNo)" style="margin: 0px; width: 30mm;" data-mdb-toggle="tooltip" title="Go to Sales List associated with this Packing List"><i class="fas fa-external-link-alt"></i>Sales List</button>
                             </div>
                         </div>
                     </div>
@@ -135,7 +149,7 @@
     </div>
     <div class="col-12">
         <table class="table table-bordered">
-            <thead>
+            <thead style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
                 <tr>
                     <th>Code</th>
                     <th>Description</th>
@@ -253,7 +267,6 @@
                 </table>
             </div>
         </div>
-        
     </div>
     <div class="modal-footer">
       

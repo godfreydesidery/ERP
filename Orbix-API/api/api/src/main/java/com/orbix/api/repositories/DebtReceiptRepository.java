@@ -28,5 +28,8 @@ public interface DebtReceiptRepository extends JpaRepository<DebtReceipt, Long> 
 	
 	@Query("SELECT r FROM DebtReceipt r WHERE r.status =:status")
 	List<DebtReceipt> findAllApproved(String status);
+	
+	@Query("SELECT MAX(r.id) FROM DebtReceipt r")
+	Long getLastId();
 
 }

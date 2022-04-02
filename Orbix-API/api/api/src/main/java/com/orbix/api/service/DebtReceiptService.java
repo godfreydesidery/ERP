@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.orbix.api.domain.DebtReceipt;
 import com.orbix.api.models.DebtReceiptModel;
+import com.orbix.api.models.RecordModel;
 
 /**
  * @author GODFREY
@@ -21,4 +22,5 @@ public interface DebtReceiptService {
 	boolean archive(DebtReceipt debtReceipt);
 	boolean archiveAll();
 	DebtReceiptModel approve(DebtReceipt debtReceipt);
+	RecordModel requestDebtReceiptNo();
 }

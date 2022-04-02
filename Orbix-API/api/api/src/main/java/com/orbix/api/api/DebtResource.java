@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.orbix.api.domain.Employee;
 import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.models.DebtModel;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.EmployeeRepository;
 import com.orbix.api.repositories.DebtReceiptRepository;
 import com.orbix.api.repositories.ProductRepository;
@@ -55,4 +56,6 @@ public class DebtResource {
 		}
 		return ResponseEntity.ok().body(debtService.getByEmployeeAndApprovedOrPartial(e.get()));
 	}
+	
+	
 }

@@ -21,9 +21,6 @@ namespace POS
     {
         Cart cart = null;
 
-        string barCode = "";
-        string code = "";
-        string description = "";
         double costPriceVatExcl = 0;
         double costPriceVatIncl = 0;
         double sellingPriceVatExcl = 0;
@@ -258,10 +255,11 @@ namespace POS
                             // item found
                             if (SaleSequence.multiple == true)
                             {
-                                for (int i = 0; i <= 6; i++)
+                                for (int i = 0; i <= 5; i++)
                                 {
                                     SendKeys.Send("{right}");
                                 }
+                                SendKeys.Send("{up}");
                             }
                             else
                             {
@@ -311,10 +309,11 @@ namespace POS
                             // item found
                             if (SaleSequence.multiple == true)
                             {
-                                for (int i = 0; i <= 4; i++)
+                                for (int i = 0; i <= 5; i++)
                                 {
                                     SendKeys.Send("{right}");
                                 }
+                                SendKeys.Send("{up}");
                             }
                             else
                             {
@@ -435,7 +434,7 @@ namespace POS
                 }
                 json = JObject.Parse(response.ToString());
                 Product product = JsonConvert.DeserializeObject<Product>(json.ToString());
-                barcode = product.primary;
+                barcode = product.barcode;
                 code = product.code;
                 description = product.description;
                 discount = product.discount;
@@ -478,7 +477,7 @@ namespace POS
                     dtgrdProductList[1, row].ReadOnly = true;
                     dtgrdProductList[2, row].ReadOnly = true;
                     seq = seq + 1;
-                    addToCart(barCode, code, description, costPriceVatExcl, costPriceVatIncl, sellingPriceVatExcl, sellingPriceVatIncl, discount, vat, qty, amount);
+                    addToCart(barcode, code, description, costPriceVatExcl, costPriceVatIncl, sellingPriceVatExcl, sellingPriceVatIncl, discount, vat, qty, amount);
                     if (dtgrdProductList.RowCount > 1)
                     {
                         if ((double)dtgrdProductList[6, row - 1].Value > 1)
@@ -1082,6 +1081,11 @@ namespace POS
         private void btnDoubleZero_Click(object sender, EventArgs e)
         {
             place("00");
+        }
+
+        private void cmbProducts_Enter(object sender, EventArgs e)
+        {
+            cmbProducts.Text = "";
         }
     }
 }

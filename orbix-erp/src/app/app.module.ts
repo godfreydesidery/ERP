@@ -97,6 +97,7 @@ import { PageComponent } from './page/page.component';
 import { DailySummaryReportComponent } from './reports/sales-reports/daily-summary-report/daily-summary-report.component';
 import { NegativeStockReportComponent } from './reports/inventory-reports/negative-stock-report/negative-stock-report.component';
 import { SupplierStockStatusComponent } from './reports/inventory-reports/supplier-stock-status/supplier-stock-status.component';
+import { SupplierMassManagerComponent } from './supplier/supplier-mass-manager/supplier-mass-manager.component';
 
 
 @NgModule({
@@ -184,6 +185,7 @@ import { SupplierStockStatusComponent } from './reports/inventory-reports/suppli
     DailySummaryReportComponent,
     NegativeStockReportComponent,
     SupplierStockStatusComponent,
+    SupplierMassManagerComponent,
     //BatchProductionComponent,
     //CustomProductionComponent,
   ],

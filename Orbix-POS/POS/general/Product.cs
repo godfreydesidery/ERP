@@ -10,7 +10,7 @@ namespace POS.general
     class Product
     {       
         public string id { get; set; }
-        public string primary { get; set; }
+        public string barcode { get; set; }
         public string code { get; set; }
         public string description { get; set; }
         public string shortDescription { get; set; }

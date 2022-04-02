@@ -15,7 +15,6 @@
     padding-left: 3px;
     padding-top: 2px;
     padding-bottom: 2px;
-    //font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: large;
     color: rgb(160, 182, 201);
     text-align: center;
@@ -30,7 +29,6 @@
     padding-top: 0px;
     padding-bottom: 0px;
     border: 0px solid #eeeeee;
-    //background-color: rgb(50, 100, 150);
     background-color: #BDBDBD;
     border: 0x solid #eeeeee;
     font-size: large;
@@ -47,7 +45,6 @@
     border: 0px solid #cccccc;
     background-color: #cccccc;
     border: 0px solid #cccccc;
-    //font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: small;
     text-align: center; 
     cursor: pointer; 
@@ -77,8 +74,8 @@ a, .SectionOnBox {
 }
 
 .special{
-    height: 8mm;
-    border-radius: 0px;
+    height:9mm;
+    //border-radius: 0px;
     margin: 2px;
 }
 html, body { height: 100%; }
@@ -98,11 +95,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   }
 
 .main-background {
-    background-color: #E6E6E6;
+    background-color: #E0E0E0;
 }
 
 .primary-background {
-    background-color: #E6E6E6;
+    background-color: #E0E0E0;
 }
 
 .side-menu-background {

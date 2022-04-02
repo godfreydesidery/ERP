@@ -231,6 +231,35 @@ export class DebtReceiptComponent implements OnInit {
     )
   }
 
+  async requestNo(){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<any>(API_URL+'/debt_receipts/request_no', options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        console.log(data)
+        this.no = data!['no']
+        this.receiptNoLocked  = true
+      },
+      error => {
+        console.log(error)
+        alert('Could not request Debt Number')
+      }
+    )
+  }
+
+  showList(listContent: any) {
+    
+    this.modalService.open(listContent, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
   approve(id: any) {
     if(!window.confirm('Confirm approval of the selected Receipt')){
       return
@@ -306,6 +335,7 @@ export class DebtReceiptComponent implements OnInit {
     .toPromise()
     .then(
       data => {
+        console.log(data)
         data?.forEach(element => {
           this.receipts.push(element)
         })

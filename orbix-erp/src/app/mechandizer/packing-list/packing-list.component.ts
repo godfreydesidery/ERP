@@ -781,6 +781,13 @@ export class PackingListComponent implements OnInit {
     )
   }
 
+  goToSalesList(no : string){
+    if(no == '' || no == null){
+      alert('Sales List not available')
+      return
+    }
+  }
+
   async loadEmployeeNames(){
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)

@@ -818,6 +818,7 @@
             this.cmbProducts.TabIndex = 17;
             this.cmbProducts.Visible = false;
             this.cmbProducts.SelectedIndexChanged += new System.EventHandler(this.cmbProducts_SelectedIndexChanged);
+            this.cmbProducts.Enter += new System.EventHandler(this.cmbProducts_Enter);
             this.cmbProducts.KeyUp += new System.Windows.Forms.KeyEventHandler(this.cmbProducts_KeyUp);
             // 
             // MainForm

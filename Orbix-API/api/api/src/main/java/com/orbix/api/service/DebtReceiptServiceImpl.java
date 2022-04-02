@@ -21,6 +21,7 @@ import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.models.DebtReceiptModel;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.models.DebtReceiptModel;
 import com.orbix.api.models.DebtReceiptModel;
 import com.orbix.api.repositories.EmployeeRepository;
@@ -145,6 +146,9 @@ public class DebtReceiptServiceImpl implements DebtReceiptService {
 			model.setNo(rec.getNo());
 			model.setEmployee(rec.getEmployee());
 			model.setStatus(rec.getStatus());
+			for(int i = 0; i < 300; i++) {
+				System.out.println(rec.getStatus().toString());
+			}
 			model.setMode(rec.getMode());
 			model.setChequeNo(rec.getChequeNo());
 			model.setComments(rec.getComments());
@@ -232,5 +236,16 @@ public class DebtReceiptServiceImpl implements DebtReceiptService {
 		}		
 		return model;
 	}
+	
+	@Override
+	public RecordModel requestDebtReceiptNo() {
+		Long id = 1L;
+		try {
+			id = debtReceiptRepository.getLastId() + 1;
+		}catch(Exception e) {}
+		RecordModel model = new RecordModel();
+		model.setNo(Formater.formatWithCurrentDate("DRC",id.toString()));
+		return model;
+	}	
 
 }

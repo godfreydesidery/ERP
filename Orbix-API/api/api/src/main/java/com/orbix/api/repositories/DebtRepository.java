@@ -24,4 +24,7 @@ public interface DebtRepository extends JpaRepository<Debt, Long> {
 	 */
 	@Query("SELECT e FROM Debt e WHERE e.employee =:employee AND e.status IN (:statuses)")
 	List<Debt> findByEmployeeAndPendingOrPartial(Employee employee, List<String> statuses);
+	
+	@Query("SELECT MAX(d.id) FROM Debt d")
+	Long getLastId();
 }

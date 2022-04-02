@@ -17,6 +17,7 @@ import com.orbix.api.domain.Debt;
 import com.orbix.api.domain.Debt;
 import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.models.DebtModel;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.DayRepository;
 import com.orbix.api.repositories.DebtRepository;
 
@@ -95,5 +96,7 @@ public class DebtServiceImpl implements DebtService {
 		//return "DBT-"+Formater.formatNine(sNumber);
 		return Formater.formatWithCurrentDate("DBT",sNumber);
 	}
+	
+	
 
 }
