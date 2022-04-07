@@ -6,6 +6,7 @@ package com.orbix.api.api;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,7 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.orbix.api.domain.Customer;
+import com.orbix.api.domain.Product;
 import com.orbix.api.domain.Supplier;
+import com.orbix.api.exceptions.NotFoundException;
+import com.orbix.api.repositories.SupplierRepository;
 import com.orbix.api.service.SupplierService;
 
 import lombok.RequiredArgsConstructor;
@@ -37,6 +41,7 @@ import lombok.RequiredArgsConstructor;
 public class SupplierResource {
 	
 	private final 	SupplierService supplierService;
+	private final SupplierRepository supplierRepository;
 	
 	@GetMapping("/suppliers")
 	@PreAuthorize("hasAnyAuthority('SUPPLIER-READ')")
@@ -90,6 +95,21 @@ public class SupplierResource {
 	public ResponseEntity<Supplier>updateSupplier(
 			@RequestBody Supplier supplier, 
 			HttpServletRequest request){
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/suppliers/update").toUriString());
+		return ResponseEntity.created(uri).body(supplierService.save(supplier));
+	}
+	
+	@PutMapping("/suppliers/update_by_code")
+	@PreAuthorize("hasAnyAuthority('SUPPLIER-UPDATE')")
+	public ResponseEntity<Supplier>updateSupplierByCode(
+			@RequestBody Supplier supplier, 
+			HttpServletRequest request){
+		Optional<Supplier> sup = supplierRepository.findByCode(supplier.getCode());
+		if(sup.isPresent()) {
+			supplier.setId(sup.get().getId());
+		}else {
+			throw new NotFoundException("Supplier not found");
+		}
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/suppliers/update").toUriString());
 		return ResponseEntity.created(uri).body(supplierService.save(supplier));
 	}

@@ -98,6 +98,7 @@ import { DailySummaryReportComponent } from './reports/sales-reports/daily-summa
 import { NegativeStockReportComponent } from './reports/inventory-reports/negative-stock-report/negative-stock-report.component';
 import { SupplierStockStatusComponent } from './reports/inventory-reports/supplier-stock-status/supplier-stock-status.component';
 import { SupplierMassManagerComponent } from './supplier/supplier-mass-manager/supplier-mass-manager.component';
+import { MyShortcutsMenuComponent } from './my-shortcuts-menu/my-shortcuts-menu.component';
 
 
 @NgModule({
@@ -186,6 +187,7 @@ import { SupplierMassManagerComponent } from './supplier/supplier-mass-manager/s
     NegativeStockReportComponent,
     SupplierStockStatusComponent,
     SupplierMassManagerComponent,
+    MyShortcutsMenuComponent,
     //BatchProductionComponent,
     //CustomProductionComponent,
   ],
@@ -240,6 +242,7 @@ import { SupplierMassManagerComponent } from './supplier/supplier-mass-manager/s
       {path : 'vendor-cr-note', component: VendorCreditNoteComponent},
       {path : 'customer-cr-note', component: CustomerCreditNoteComponent},
       {path : 'supplier-master', component: SupplierMasterComponent},
+      {path : 'supplier-mass-manager', component: SupplierMassManagerComponent},
       {path : 'customer-master', component: CustomerMasterComponent},
       {path : 'employee-register', component: EmployeeRegisterComponent},
       {path : 'group-level1', component: GroupLevel1Component},

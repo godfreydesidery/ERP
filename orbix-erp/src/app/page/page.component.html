@@ -69,40 +69,40 @@
 
       <div class="row">
         <div class="col-md-2" style="background-color: #BDBDBD; height: 100vh; overflow: auto;">
-
-<div>
-    <div *ngIf="adminMenuShown">
-        <app-admin-menu></app-admin-menu>
-    </div> 
-    <div *ngIf="inventoryMenuShown">
-        <app-inventory-menu></app-inventory-menu>
-    </div>  
-    <div *ngIf="mechandizerMenuShown">
-        <app-mechandizer-menu></app-mechandizer-menu>
-    </div> 
-    <div *ngIf="productionMenuShown">
-        <app-production-menu></app-production-menu>
-    </div> 
-    <div *ngIf="supplierRelationsMenuShown">
-        <app-supplier-relations-menu></app-supplier-relations-menu>
-    </div>  
-    <div *ngIf="customerRelationsMenuShown">
-        <app-customer-relations-menu></app-customer-relations-menu>
-    </div> 
-    <div *ngIf="humanResourceMenuShown">
-        <app-human-resource-menu></app-human-resource-menu>
-    </div> 
-    <div *ngIf="reportMenuShown">
-        <app-report-menu></app-report-menu>
-    </div>
-    <div *ngIf="dayMenuShown">
-        <app-day-menu></app-day-menu>
-    </div>
-</div> 
-
-
+          <div>
+              <div>
+                <app-my-shortcuts-menu></app-my-shortcuts-menu>
+              </div>
+              <div *ngIf="adminMenuShown">
+                <app-admin-menu></app-admin-menu>
+              </div> 
+              <div *ngIf="inventoryMenuShown">
+                <app-inventory-menu></app-inventory-menu>
+              </div>  
+              <div *ngIf="mechandizerMenuShown">
+                <app-mechandizer-menu></app-mechandizer-menu>
+              </div> 
+              <div *ngIf="productionMenuShown">
+                <app-production-menu></app-production-menu>
+              </div> 
+              <div *ngIf="supplierRelationsMenuShown">
+                <app-supplier-relations-menu></app-supplier-relations-menu>
+              </div>  
+              <div *ngIf="customerRelationsMenuShown">
+                <app-customer-relations-menu></app-customer-relations-menu>
+              </div> 
+              <div *ngIf="humanResourceMenuShown">
+                <app-human-resource-menu></app-human-resource-menu>
+              </div> 
+              <div *ngIf="reportMenuShown">
+                <app-report-menu></app-report-menu>
+              </div>
+              <div *ngIf="dayMenuShown">
+                <app-day-menu></app-day-menu>
+              </div>
+          </div> 
         </div>
-        <div class="col-md-10 main-background" style="margin-top: 3mm; height: 100vh; overflow: auto; padding: 5mm;">
+        <div class="col-md-10 main-background" style="margin-top: 3mm; height: 100vh; overflow: auto; padding-left: 5mm; padding-right: 5mm; padding-bottom: 5mm;">
             <router-outlet></router-outlet>
             <!--Footer-->
         <div style="width: 100%; text-align: center; vertical-align: bottom;">

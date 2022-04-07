@@ -17,16 +17,16 @@
                                 <div class="alert alert-info" role="alert">
                                     <span>Progress: {{progressStatus}} {{currentRecord}} of {{totalRecords}}</span>
                                     <hr>
-                                    <div class="alert alert-info" role="alert">Upload Products from file
-                                        <input type="file" (change)="uploadProductFile($event)" multiple="false">
+                                    <div class="alert alert-info" role="alert">Upload Suppliers from file
+                                        <input type="file" (change)="uploadSupplierFile($event)" multiple="false">
                                     </div>
                                     <hr>
                                     <div class="alert alert-info" role="alert">Update Suppliers from file
-                                        <input type="file" (change)="updateProductFile($event)" multiple="false">
+                                        <input type="file" (change)="updateSupplierFile($event)" multiple="false">
                                     </div>
                                     <hr>
                                     <div class="alert alert-info" role="alert">Download Suppliers
-                                        <button (click)="exportProductToExcel()">Download</button>
+                                        <button (click)="exportSupplierToExcel()">Download</button>
                                     </div>
                                     <hr>
                                     <div class="alert alert-info" role="alert">Download Supplier Template

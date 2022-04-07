@@ -110,7 +110,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
-                                <button class="btn btn-success" style="margin: 2px; border-radius: 5mm;" (click)="open(content, '', '')" data-mdb-toggle="tooltip" title="Add Product"><i class="fas fa-plus"></i></button>
+                                <button *ngIf="status==='PENDING' || status==='BLANK' || status===''" class="btn btn-success" style="margin: 2px; border-radius: 5mm;" (click)="open(content, '', '')" data-mdb-toggle="tooltip" title="Add Product"><i class="fas fa-plus"></i></button>
                             </div>
                             <div class="col-12">
                                 <table class="table table-bordered">
@@ -133,7 +133,7 @@
                                             <td>{{d.qty}}</td>
                                             <td style="text-align: right;">{{d.costPriceVatIncl | currency:'':''}}</td>
                                             <td style="text-align: right;">{{d.qty*d.costPriceVatIncl | currency:'':''}}</td>
-                                            <td><span style="cursor: pointer;" (click)="deleteDetail(d.id)">[Remove]</span><span style="cursor: pointer;" (click)="open(content, d.product.id, d.id)">[Edit]</span></td>
+                                            <td><span *ngIf="status==='PENDING'" style="cursor: pointer;" (click)="deleteDetail(d.id)"><i class="fas fa-trash"></i></span><span *ngIf="status==='PENDING'" style="cursor: pointer; margin-left: 5mm;" (click)="open(content, d.product.id, d.id)"><i class="fas fa-pencil"></i></span></td>
                                         </tr>
                                         <tr>
                                             <th></th>
@@ -201,7 +201,7 @@
     </div>
     <div class="modal-footer">
       <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>-->
-      <button type="button" (click)="saveDetail()" class="btn btn-outline-dark">Save</button>
+      <button type="button" (click)="saveDetail()" class="btn btn-outline-dark">Add/Update</button>
     </div>
 </ng-template>
 

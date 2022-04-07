@@ -1,0 +1,58 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+POS2
+</name>
+</assembly>
+<members>
+<member name="F:POS2.PointOfSale.posPrinterLogicName">
+ <summary>
+ pos printer settings
+ </summary>
+</member>
+<member name="F:POS2.PointOfSale.strLogicalName">
+ <summary>
+ 'fiscal printer settings
+ </summary>
+</member>
+<member name="F:POS2.PointOfSale.prn">
+ <summary>
+ function to print receipt
+ </summary>
+ 
+ <param name="tillNo"></param>
+ <param name="receiptNo"></param>
+ <param name="date_"></param>
+ <param name="TIN"></param>
+ <param name="VRN"></param>
+ <param name="itemCode"></param>
+ <param name="descr"></param>
+ <param name="qty"></param>
+ <param name="price"></param>
+ <param name="tax"></param>
+ <param name="amount"></param>
+ <param name="subTotal"></param>
+ <param name="VAT"></param>
+ <param name="grandTotal"></param>
+ <returns></returns>
+ 
+</member>
+<member name="T:POS2.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:POS2.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:POS2.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+</members>
+</doc>

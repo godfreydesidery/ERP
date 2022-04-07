@@ -70,6 +70,7 @@ import { StockCardReportComponent } from './reports/inventory-reports/stock-card
 import { DailySummaryReportComponent } from './reports/sales-reports/daily-summary-report/daily-summary-report.component';
 import { NegativeStockReportComponent } from './reports/inventory-reports/negative-stock-report/negative-stock-report.component';
 import { SupplierStockStatusComponent } from './reports/inventory-reports/supplier-stock-status/supplier-stock-status.component';
+import { SupplierMassManagerComponent } from './supplier/supplier-mass-manager/supplier-mass-manager.component';
 
 const routes: Routes = [
   {path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard]},
@@ -110,6 +111,7 @@ const routes: Routes = [
   {path: 'vendor-cr-note', component: VendorCreditNoteComponent, canActivate: [AuthGuard]},
   {path: 'customer-cr-note', component: CustomerCreditNoteComponent, canActivate: [AuthGuard]},
   {path: 'supplier-master', component: SupplierMasterComponent, canActivate: [AuthGuard]},
+  {path: 'supplier-mass-manager', component: SupplierMassManagerComponent, canActivate: [AuthGuard]},
   {path: 'customer-master', component: CustomerMasterComponent, canActivate: [AuthGuard]},
   {path: 'employee-register', component: EmployeeRegisterComponent, canActivate: [AuthGuard]},
   {path: 'group-level1', component: GroupLevel1Component, canActivate: [AuthGuard]},

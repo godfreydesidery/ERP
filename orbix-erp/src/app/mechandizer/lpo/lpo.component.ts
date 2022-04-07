@@ -61,7 +61,7 @@ export class LpoComponent implements OnInit {
 
   supplierNames : string[] = []
 
-  //detail
+  //Detail
   detailId         : any
   barcode          : string
   productId        : any
@@ -745,7 +745,7 @@ export class LpoComponent implements OnInit {
       },
       error => {
         console.log(error)
-        alert('Could not load suppliers names')
+        alert('Could not load Supplier names')
       }
     )
   }
@@ -849,8 +849,8 @@ export class LpoComponent implements OnInit {
         {text : element.product.code.toString(), fontSize : 9}, 
         {text : element.product.description.toString(), fontSize : 9},
         {text : element.qty.toString(), fontSize : 9},  
-        {text : element.costPriceVatIncl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'},
-        {text : (element.qty*element.costPriceVatIncl).toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'},        
+        {text : element.costPriceVatIncl.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), fontSize : 9, alignment : 'right'},
+        {text : (element.qty*element.costPriceVatIncl).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), fontSize : 9, alignment : 'right'},        
       ]
       report.push(detail)
     })
@@ -859,7 +859,7 @@ export class LpoComponent implements OnInit {
       {text : '', fontSize : 9},
       {text : '', fontSize : 9},  
       {text : 'Total', fontSize : 9},
-      {text : total.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'},        
+      {text : total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), fontSize : 9, alignment : 'right'},        
     ]
     report.push(detailSummary)
     const docDefinition = {

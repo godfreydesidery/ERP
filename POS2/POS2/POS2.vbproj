@@ -1,0 +1,570 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F929C583-9BE3-475F-BADE-F46C5D09880E}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>POS2.My.MyApplication</StartupObject>
+    <RootNamespace>POS2</RootNamespace>
+    <AssemblyName>POS2</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsForms</MyType>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\GODFREY\Desktop\Orbit Install Pack\Orbit Retail\POS\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ProductName>Orbit Retail POS</ProductName>
+    <PublisherName>Orbit Retail</PublisherName>
+    <SuiteName>Retail</SuiteName>
+    <DisallowUrlActivation>true</DisallowUrlActivation>
+    <ApplicationRevision>62</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>true</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <ExcludeDeploymentUrl>true</ExcludeDeploymentUrl>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>POS2.xml</DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <Prefer32Bit>true</Prefer32Bit>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>1</WarningLevel>
+    <Optimize>true</Optimize>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>POS2.xml</DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>1</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>4AFD974CFFA48008DCE83632176A040EC4E72CFE</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>POS2_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Devart.Data, Version=5.0.2045.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
+    <Reference Include="Devart.Data.MySql, Version=8.12.1253.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
+    <Reference Include="Devart.Data.MySql.Vs, Version=8.12.1253.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.PointOfService, Version=1.14.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft Point Of Service\SDK\Microsoft.PointOfService.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.PointOfService.ControlBase, Version=1.14.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft Point Of Service\SDK\Microsoft.PointOfService.ControlBase.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="POS.Devices.OPOSCashDrawer">
+      <HintPath>C:\Users\GODFREY\Downloads\OposForDotNetAssemblies-1_12_000\Bin\POS.Devices.OPOSCashDrawer.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="POS.Devices.OPOSFiscalPrinter">
+      <HintPath>C:\Users\GODFREY\Downloads\OposForDotNetAssemblies-1_12_000\Bin\POS.Devices.OPOSFiscalPrinter.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Device" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="Form1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.vb">
+      <DependentUpon>Form1.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="general\AutocompleteTextBox2.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="general\Bill.vb" />
+    <Compile Include="general\Cart.vb" />
+    <Compile Include="general\CartDetail.vb" />
+    <Compile Include="general\CashPickUp.vb" />
+    <Compile Include="general\Collection.vb" />
+    <Compile Include="general\CRNote.vb" />
+    <Compile Include="general\Crypt.vb" />
+    <Compile Include="general\Error.vb" />
+    <Compile Include="general\InstalledPOSDevices.vb" />
+    <Compile Include="general\Hash.vb" />
+    <Compile Include="general\Company.vb" />
+    <Compile Include="general\Database.vb" />
+    <Compile Include="general\Day.vb" />
+    <Compile Include="general\Inventory.vb" />
+    <Compile Include="general\Item.vb" />
+    <Compile Include="general\Key.vb" />
+    <Compile Include="general\LApllication.vb" />
+    <Compile Include="general\LCurrency.vb" />
+    <Compile Include="general\Payment.vb" />
+    <Compile Include="general\Fiscal.vb" />
+    <Compile Include="general\PettyCash.vb" />
+    <Compile Include="general\PointOfSale.vb" />
+    <Compile Include="general\Product.vb" />
+    <Compile Include="general\RandomKeyGenerator.vb" />
+    <Compile Include="general\RawPrinterHelper.vb" />
+    <Compile Include="general\Receipt.vb" />
+    <Compile Include="general\ReceiptDetail.vb" />
+    <Compile Include="general\Role.vb" />
+    <Compile Include="general\SaleSequence.vb" />
+    <Compile Include="general\StockCard.vb" />
+    <Compile Include="general\Till.vb" />
+    <Compile Include="general\TillPosition.vb" />
+    <Compile Include="general\User.vb" />
+    <Compile Include="general\Web.vb" />
+    <Compile Include="gui\frmAllow.Designer.vb">
+      <DependentUpon>frmAllow.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmAllow.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\frmCashPickUp.Designer.vb">
+      <DependentUpon>frmCashPickUp.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmCashPickUp.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\frmDiscount.Designer.vb">
+      <DependentUpon>frmDiscount.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmDiscount.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\frmFiscalPrinter.Designer.vb">
+      <DependentUpon>frmFiscalPrinter.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmFiscalPrinter.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\frmFloat.Designer.vb">
+      <DependentUpon>frmFloat.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmFloat.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\frmLock.Designer.vb">
+      <DependentUpon>frmLock.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmLock.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\frmLogin.Designer.vb">
+      <DependentUpon>frmLogin.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmLogin.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\frmMain.Designer.vb">
+      <DependentUpon>frmMain.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmMain.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\frmNumInput.Designer.vb">
+      <DependentUpon>frmNumInput.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmNumInput.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\frmOrder.Designer.vb">
+      <DependentUpon>frmOrder.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmOrder.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\frmPayPoint.Designer.vb">
+      <DependentUpon>frmPayPoint.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmPayPoint.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\frmPettyCash.Designer.vb">
+      <DependentUpon>frmPettyCash.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmPettyCash.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\frmPrinters.Designer.vb">
+      <DependentUpon>frmPrinters.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmPrinters.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\frmSearchItem.Designer.vb">
+      <DependentUpon>frmSearchItem.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmSearchItem.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\frmServSetup.Designer.vb">
+      <DependentUpon>frmServSetup.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmServSetup.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\frmSplash.Designer.vb">
+      <DependentUpon>frmSplash.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmSplash.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\frmXReport.Designer.vb">
+      <DependentUpon>frmXReport.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmXReport.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\frmZReport.Designer.vb">
+      <DependentUpon>frmZReport.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmZReport.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="gui\frmAllow.resx">
+      <DependentUpon>frmAllow.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmCashPickUp.resx">
+      <DependentUpon>frmCashPickUp.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmDiscount.resx">
+      <DependentUpon>frmDiscount.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmFiscalPrinter.resx">
+      <DependentUpon>frmFiscalPrinter.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmFloat.resx">
+      <DependentUpon>frmFloat.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmLock.resx">
+      <DependentUpon>frmLock.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmLogin.resx">
+      <DependentUpon>frmLogin.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmMain.resx">
+      <DependentUpon>frmMain.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmNumInput.resx">
+      <DependentUpon>frmNumInput.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmOrder.resx">
+      <DependentUpon>frmOrder.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmPayPoint.resx">
+      <DependentUpon>frmPayPoint.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmPettyCash.resx">
+      <DependentUpon>frmPettyCash.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmPrinters.resx">
+      <DependentUpon>frmPrinters.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmSearchItem.resx">
+      <DependentUpon>frmSearchItem.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmServSetup.resx">
+      <DependentUpon>frmServSetup.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmSplash.resx">
+      <DependentUpon>frmSplash.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmXReport.resx">
+      <DependentUpon>frmXReport.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmZReport.resx">
+      <DependentUpon>frmZReport.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\app.manifest" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+    <None Include="POS2_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Office2013CustomActionsLib">
+      <Guid>{AB4D3FA3-21B9-443C-886E-FC4A417D3E4D}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="OposFiscalPrinter_CCO">
+      <Guid>{CCB90070-B81E-11D2-AB74-0040054C3719}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="OposPOSPrinter_CCO">
+      <Guid>{CCB90150-B81E-11D2-AB74-0040054C3719}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="PSISDECDLib">
+      <Guid>{ABBA0019-3075-11D6-88A4-00B0D0200F88}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="RAServerLib">
+      <Guid>{A7C01D63-4403-4BE2-B1AF-6EE0A2E6A1E9}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PublishFile Include="EnvDTE">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="Microsoft.PointOfService">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="Microsoft.PointOfService.ControlBase">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="Microsoft.PointOfService.ControlBase.xml">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="Microsoft.VisualStudio.OLE.Interop">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="Microsoft.VisualStudio.Shell.Interop">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="Microsoft.VisualStudio.TextManager.Interop">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="stdole">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="VSLangProj">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="VsWebSite.Interop">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
