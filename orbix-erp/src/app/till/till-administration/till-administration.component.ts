@@ -33,6 +33,13 @@ export class TillAdministrationComponent implements OnInit, ITill {
   public computerName : string
   public active : boolean
 
+  public operatorName : string
+  public operatorPassword : string
+  public port : string
+  public fiscalPrinterEnabled : boolean
+  public posPrinterLogicName : string
+  public posPrinterEnabled : boolean
+
   public tills : ITill[]
   
   
@@ -46,6 +53,13 @@ export class TillAdministrationComponent implements OnInit, ITill {
     this.no           = ''
     this.computerName = ''
     this.active       = false
+    this.operatorName = ''
+    this.operatorPassword = ''
+    this.port = ''
+    this.fiscalPrinterEnabled = false
+    this.posPrinterLogicName = ''
+    this.posPrinterEnabled = false
+
 
     this.tills        = []
   }
@@ -62,7 +76,11 @@ export class TillAdministrationComponent implements OnInit, ITill {
       id           : this.id,
       no       : this.no,
       computerName : this.computerName,
-      active       : this.active
+      active       : this.active,
+      operatorName : this.operatorName,
+      operatorPassword : this.operatorPassword,
+      port             : this.port,
+      posPrinterLogicName : this.posPrinterLogicName
     }
     if(this.id == null || this.id == ''){
       //save a new till
@@ -76,6 +94,12 @@ export class TillAdministrationComponent implements OnInit, ITill {
           this.no       = data!.no
           this.computerName = data!.computerName
           this.active       = data!.active
+          this.operatorName = data!.operatorName
+          this.operatorPassword = data!.operatorPassword
+          this.port = data!.port
+          this.fiscalPrinterEnabled = data!.fiscalPrinterEnabled
+          this.posPrinterLogicName = data!.posPrinterLogicName
+          this.posPrinterEnabled = data!.posPrinterEnabled
           alert('Till created successifully')
           this.loadTills()
           this.clearData()
@@ -99,6 +123,12 @@ export class TillAdministrationComponent implements OnInit, ITill {
           this.no       = data!.no
           this.computerName = data!.computerName
           this.active       = data!.active
+          this.operatorName = data!.operatorName
+          this.operatorPassword = data!.operatorPassword
+          this.port = data!.port
+          this.fiscalPrinterEnabled = data!.fiscalPrinterEnabled
+          this.posPrinterLogicName = data!.posPrinterLogicName
+          this.posPrinterEnabled = data!.posPrinterEnabled
           alert('Till updated successifully')
           this.loadTills()
         }
@@ -116,6 +146,12 @@ export class TillAdministrationComponent implements OnInit, ITill {
     this.no       = ''
     this.computerName = ''
     this.active       = false
+    this.operatorName = ''
+    this.operatorPassword = ''
+    this.port = ''
+    this.fiscalPrinterEnabled = false
+    this.posPrinterLogicName = ''
+    this.posPrinterEnabled = false
   }
 
   public async deleteTill(id : any){
@@ -194,6 +230,98 @@ export class TillAdministrationComponent implements OnInit, ITill {
     }
   }
 
+  public async changePosPrinter(id : any, active : boolean){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    if(active == false){
+      //activate
+        if(window.confirm('Activate POS printer for this till?') == true){
+          this.spinner.show()
+        await this.http.post(API_URL+'/tills/activate_pos_printer?id='+id, options)
+        .pipe(finalize(() => this.spinner.hide()))
+        .toPromise()
+        .then(
+          data => {
+            alert('POS printer activated succesifully')
+            this.loadTills()
+          }
+        )
+        .catch(
+          error => {
+            ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not activate POS printer')
+          }
+        )
+      }
+    }else{
+      //deactivate
+      if(window.confirm('Deactivate POS printer for this till?') == true){
+        this.spinner.show()
+      await this.http.post(API_URL+'/tills/deactivate_pos_printer?id='+id, options)
+      .pipe(finalize(() => this.spinner.hide()))
+      .toPromise()
+      .then(
+        data => {
+          alert('POS printer deactivated succesifully')
+          this.loadTills()
+        }
+      )
+      .catch(
+        error => {
+          ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not activate POS printer')
+        }
+      )
+    }
+    
+    }
+  }
+
+  public async changeFiscalPrinter(id : any, active : boolean){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    if(active == false){
+      //activate
+        if(window.confirm('Activate Fiscal printer for this till?') == true){
+          this.spinner.show()
+        await this.http.post(API_URL+'/tills/activate_fiscal_printer?id='+id, options)
+        .pipe(finalize(() => this.spinner.hide()))
+        .toPromise()
+        .then(
+          data => {
+            alert('Fiscal printer activated succesifully')
+            this.loadTills()
+          }
+        )
+        .catch(
+          error => {
+            ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not activate Fiscal printer')
+          }
+        )
+      }
+    }else{
+      //deactivate
+      if(window.confirm('Deactivate Fiscal printer for this till?') == true){
+        this.spinner.show()
+      await this.http.post(API_URL+'/tills/deactivate_fiscal_printer?id='+id, options)
+      .pipe(finalize(() => this.spinner.hide()))
+      .toPromise()
+      .then(
+        data => {
+          alert('Fiscal printer deactivated succesifully')
+          this.loadTills()
+        }
+      )
+      .catch(
+        error => {
+          ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not activate Fiscal printer')
+        }
+      )
+    }
+    
+    }
+  }
+
   async loadTills(){
     this.tills = []
     let options = {
@@ -261,6 +389,12 @@ export class TillAdministrationComponent implements OnInit, ITill {
         this.no = data!.no
         this.computerName = data!.computerName
         this.active = data!.active
+        this.operatorName = data!.operatorName
+        this.operatorPassword = data!.operatorPassword
+        this.port = data!.port
+        this.fiscalPrinterEnabled = data!.fiscalPrinterEnabled
+        this.posPrinterLogicName = data!.posPrinterLogicName
+        this.posPrinterEnabled = data!.posPrinterEnabled
       }
     )
     .catch(
@@ -278,6 +412,13 @@ export interface ITill{
   no           : string
   computerName : string
   active       : boolean
+
+  operatorName : string
+  operatorPassword : string
+  port : string
+  fiscalPrinterEnabled : boolean
+  posPrinterLogicName : string
+  posPrinterEnabled : boolean
 
 
   saveTill() : void

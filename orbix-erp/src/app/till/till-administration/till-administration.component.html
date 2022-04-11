@@ -12,8 +12,8 @@
                     <div class="container-fluid">
                         <div class="row">
                             
-                            <div class="col-2"></div>
-                            <div class="col-8">
+                            <div class="col-1"></div>
+                            <div class="col-10">
                                 <br>
                                 <br>
                                 <button class="btn btn-sm btn-success" (click)="open(content, '')" style="margin-left: 2mm;">Add New Till</button>
@@ -24,7 +24,7 @@
                                             <td>Till No</td>
                                             <td>Computer Name</td>
                                             <td>Enabled?</td>
-                                            <td>Action</td>
+                                            <td>Actions</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -35,14 +35,16 @@
                                             <td>
                                                 <button class="btn btn-sm btn-outline-primary" (click)="open(content, till.id)" style="margin-left: 2mm;">Edit</button>
                                                 <button class="btn btn-sm btn-outline-primary" (click)="activateTill(till.id, till.active)" style="margin-left: 2mm;">Activate</button>
-                                                <button class="btn btn-sm btn-outline-primary" (click)="deactivateTill(till.id, till.active)" style="margin-left: 2mm;">Deactivate</button>
+                                                <button class="btn btn-sm btn-outline-primary" (click)="deactivateTill(till.id, till.active)" style="margin-left: 2mm;">Deactivate</button>  
+                                                <button class="btn btn-sm btn-outline-primary" (click)="changePosPrinter(till.id, till.posPrinterEnabled)" style="margin-left: 2mm;">{{till.posPrinterEnabled == true ? 'Disable POS printer' : 'Enable POS printer'}}</button>
+                                                <button class="btn btn-sm btn-outline-primary" (click)="changeFiscalPrinter(till.id, till.posPrinterEnabled)" style="margin-left: 2mm;">{{till.fiscalPrinterEnabled == true ? 'Disable Fiscal printer' : 'Enable Fiscal printer'}}</button>
                                                 <button class="btn btn-sm btn-outline-danger" (click)="deleteTill(till.id)" style="margin-left: 2mm;">Delete</button>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div> 
-                            <div class="col-2"></div>                                      
+                            <div class="col-1"></div>                                      
                         </div>
                     </div>
                 </td>
@@ -67,6 +69,18 @@
                     <td>Computer Name</td><td><input type="text" [(ngModel)]="computerName" class="form-control"></td>
                 </tr>
                 <tr>
+                    <td>Operator Name</td><td><input type="text" [(ngModel)]="operatorName" class="form-control"></td>
+                </tr>
+                <tr>
+                    <td>Operator Password</td><td><input type="text" [(ngModel)]="operatorPassword" class="form-control"></td>
+                </tr>
+                <tr>
+                    <td>Port</td><td><input type="text" [(ngModel)]="port" class="form-control"></td>
+                </tr>
+                <tr>
+                    <td>POS printer logic name</td><td><input type="text" [(ngModel)]="posPrinterLogicName" class="form-control"></td>
+                </tr>
+                <tr>
                     <td></td><td></td>
                 </tr>
             </tbody>
@@ -75,7 +89,7 @@
     </div>
     <div class="modal-footer">
       <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>-->
-      <button type="button" class="btn btn-outline-dark" (click)="saveTill()">Save</button>
+      <button type="button" class="btn btn-outline-dark" (click)="saveTill()">Add/Update</button>
     </div>
 </ng-template>
 

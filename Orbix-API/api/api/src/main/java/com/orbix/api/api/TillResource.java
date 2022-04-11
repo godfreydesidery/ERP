@@ -124,6 +124,46 @@ public class TillResource {
 		return ResponseEntity.created(uri).body(tillService.saveTill(till));
 	}
 	
+	@PostMapping("/tills/activate_pos_printer")
+	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	public ResponseEntity<Till> activatePosPrinter(
+			@RequestParam(name = "id") Long id){
+		Till till = tillService.getTill(id);
+		till.setPosPrinterEnabled(true);
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/tills/activate_pos_printer").toUriString());
+		return ResponseEntity.created(uri).body(tillService.saveTill(till));
+	}
+	
+	@PostMapping("/tills/deactivate_pos_printer")
+	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	public ResponseEntity<Till> deactivatePosPrinter(
+			@RequestParam(name = "id") Long id){
+		Till till = tillService.getTill(id);
+		till.setPosPrinterEnabled(false);
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/tills/activate_pos_printer").toUriString());
+		return ResponseEntity.created(uri).body(tillService.saveTill(till));
+	}
+	
+	@PostMapping("/tills/activate_fiscal_printer")
+	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	public ResponseEntity<Till> activateFiscalPrinter(
+			@RequestParam(name = "id") Long id){
+		Till till = tillService.getTill(id);
+		till.setFiscalPrinterEnabled(true);
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/tills/activate_fiscal_printer").toUriString());
+		return ResponseEntity.created(uri).body(tillService.saveTill(till));
+	}
+	
+	@PostMapping("/tills/deactivate_fiscal_printer")
+	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	public ResponseEntity<Till> deactivateFiscalPrinter(
+			@RequestParam(name = "id") Long id){
+		Till till = tillService.getTill(id);
+		till.setFiscalPrinterEnabled(false);
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/tills/deactivate_fiscal_printer").toUriString());
+		return ResponseEntity.created(uri).body(tillService.saveTill(till));
+	}
+	
 	@PostMapping("/tills/cash_pick_up")
 	//@PreAuthorize("hasAnyAuthority('TILL-CREATE')")
 	public ResponseEntity<Void>cashPickUp(
