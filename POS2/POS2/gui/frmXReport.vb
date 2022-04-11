@@ -15,25 +15,8 @@ Public Class frmXReport
 
     Private Sub frmXReport_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim tillno As String = Till.TILLNO
-        Dim currentdate As String = Day.systemDate
-        Dim query As String = "SELECT SUM(amount) FROM `sale` WHERE `till_no`='" + tillno + "' AND `date`='" + currentdate + "' "
-        Dim command As New MySqlCommand()
-        Dim conn As New MySqlConnection(Database.conString)
-        Try
-            conn.Open()
-            command.CommandText = query
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            Try
-                totalAmount = command.ExecuteScalar
-            Catch ex As Exception
-                totalAmount = 0
-            End Try
-            txtTotal.Text = LCurrency.displayValue(totalAmount.ToString)
-        Catch ex As Devart.Data.MySql.MySqlException
-            LError.databaseConnection()
-            Exit Sub
-        End Try
+        Dim currentdate As String = Day.bussinessDate
+
 
     End Sub
 

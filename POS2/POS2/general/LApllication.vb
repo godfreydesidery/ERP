@@ -2,10 +2,10 @@
 Imports System.Net
 Imports Devart.Data.MySql
 Imports Newtonsoft.Json.Linq
+Imports Newtonsoft.Json
 
 Public Class LApllication
-
-
+    Public Shared BASE_URL As String = ""
 
     Private Shared Function getRemoteXMLFile(path As String)
         Dim document As New System.Xml.XmlDocument()
@@ -72,12 +72,11 @@ Public Class LApllication
                     If (type = XmlNodeType.Element) Then
                         If (document.Name = "Address") Then
                             address = document.ReadInnerXml.ToString()
+                            LApllication.BASE_URL = "http://" + address + "/api"
                         End If
                     End If
                 End While
                 document.Dispose()
-
-
             End If
         Catch ex As Exception
             Dim res As Integer = MsgBox("Could not load settings. Settings configurations not found. Configure System?", vbCritical + vbYesNo, "Missing Configurations")
@@ -90,19 +89,9 @@ Public Class LApllication
             End
         End Try
 
-        Dim settings As New System.Xml.XmlDocument()
         Try
-            settings = getRemoteXMLFile("http://" + address + "/rms/settings/setting_info.xml")
-        Catch ex As System.Net.WebException
-
-            Dim res As Integer = MsgBox("Settings configuretions not found. Configure System?", vbCritical + vbYesNo, "Missing Configurations")
-            If res = DialogResult.Yes Then
-                frmServSetup.ShowDialog()
-            Else
-                MsgBox("Could not load settings. Application will close.", vbExclamation + vbOKOnly, ex.Message.ToString)
-            End If
-            Application.Exit()
-            End
+            Dim response As Object = New Object
+            response = Web.get_("ping")
         Catch ex As Exception
             Dim res As Integer = MsgBox("Settings configurations not found. Configure System?", vbCritical + vbYesNo, "Missing Configurations")
             If res = DialogResult.Yes Then
@@ -111,138 +100,30 @@ Public Class LApllication
                 MsgBox("Could not load settings. Application will close.", vbExclamation + vbOKOnly, ex.Message.ToString)
             End If
             Application.Exit()
-            End
-
         End Try
-
-        'database infomation
-
-        Try
-            databaseName = settings.SelectSingleNode("Settings/Database/Name").InnerText.ToString
-            databaseAddress = settings.SelectSingleNode("Settings/Database/Address").InnerText.ToString
-            databaseUserID = settings.SelectSingleNode("Settings/Database/UserID").InnerText.ToString
-            databasePassword = settings.SelectSingleNode("Settings/Database/Password").InnerText.ToString
-
-        Catch ex As Exception
-            MsgBox(ex.ToString)
-        End Try
-
-        'load database
-
-        Dim connectionString As String = ""
-        connectionString = "server=" + databaseAddress + ";user id=" + databaseUserID + ";password=" + databasePassword + ";Database=" + databaseName + ";pooling=false"
-        Database.conString = connectionString
-        Dim con As New MySqlConnection(Database.conString)
-        Dim isLoaded As Boolean = False
-        Try
-            isLoaded = True
-            con.Open()
-            con.Close()
-
-        Catch ex As Exception
-            isLoaded = False
-            MsgBox("Could not connect to database: " + ex.Message.ToString)
-
-        End Try
-
-
-
+        'Load Till information
         Try
             Dim response As Object = New Object
-            Dim json As JObject = New JObject
             response = Web.get_("tills/get_by_computer_name?computer_name=" + My.Computer.Name.ToString)
-            json = JObject.Parse(response)
-            Till.TILLNO = json.SelectToken("no")
+            Dim till As Till = JsonConvert.DeserializeObject(Of Till)(response.ToString)
+
+            Till.TILLNO = till.no
+
+            PointOfSale.operatorName = till.operatorName
+            PointOfSale.operatorPassword = till.operatorPassword
+            PointOfSale.port = till.port
+            PointOfSale.fiscalPrinterEnabled = till.fiscalPrinterEnabled
+
+            PointOfSale.posPrinterLogicName = till.posPrinterLogicName
+            PointOfSale.posPrinterEnabled = till.posPrinterEnabled
+
         Catch ex As Exception
             MsgBox("Could not find till information. Application will close.", vbOKOnly + vbCritical, "Error: Till")
             Application.Exit()
         End Try
 
-
-
-
-
-
-
-        'load till information
         Try
-            Dim compName As String = My.Computer.Name.ToString
-            Dim query As String = "SELECT till.till_no,till.computer_name FROM `till` WHERE till.computer_name=@computerName"
-            Dim command As New MySqlCommand()
-            Dim conn As New MySqlConnection(Database.conString)
-            conn.Open()
-            command.CommandText = query
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            command.Parameters.AddWithValue("@computerName", compName.ToString)
-            Dim reader As MySqlDataReader = command.ExecuteReader()
-            If reader.HasRows Then
-                While reader.Read
-                    '          Till.TILLNO = reader.GetString("till_no")
-                    '       Exit While
-                End While
-            Else
-
-            End If
-
-        Catch ex As Exception
-            '      MsgBox(ex.Message)
-        End Try
-        'load printer informations
-        Try
-            Dim compName As String = My.Computer.Name.ToString
-            Dim query As String = "SELECT till.till_no,till.computer_name,fiscal_printer.operator_code,fiscal_printer.operator_password,fiscal_printer.port,fiscal_printer.status FROM `till`,`fiscal_printer` WHERE till.till_no=fiscal_printer.till_no AND till.computer_name=@computerName"
-            Dim command As New MySqlCommand()
-            Dim conn As New MySqlConnection(Database.conString)
-            conn.Open()
-            command.CommandText = query
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            command.Parameters.AddWithValue("@computerName", compName.ToString)
-            Dim reader As MySqlDataReader = command.ExecuteReader()
-            If reader.HasRows Then
-                While reader.Read
-                    PointOfSale.operatorName = reader.GetString("operator_code")
-                    PointOfSale.operatorPassword = reader.GetString("operator_password")
-                    PointOfSale.port = reader.GetString("port")
-                    PointOfSale.fiscalPrinterEnabled = reader.GetString("status")
-                    Exit While
-                End While
-            Else
-                MsgBox("No fiscal printer settings", vbExclamation + vbOKOnly, "Error: Fiscal Printer")
-            End If
-
-        Catch ex As Exception
-            '     LError.databaseConnection()
-        End Try
-        Try
-            Dim compName As String = My.Computer.Name.ToString
-            Dim query As String = "SELECT till.till_no,till.computer_name,pos_printer.logical_name,pos_printer.status FROM `till`,`pos_printer` WHERE till.till_no=pos_printer.till_no AND till.computer_name=@computerName"
-            Dim command As New MySqlCommand()
-            Dim conn As New MySqlConnection(Database.conString)
-            conn.Open()
-            command.CommandText = query
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            command.Parameters.AddWithValue("@computerName", compName.ToString)
-            Dim reader As MySqlDataReader = command.ExecuteReader()
-            If reader.HasRows Then
-                While reader.Read
-                    PointOfSale.posPrinterLogicName = reader.GetString("logical_name")
-                    PointOfSale.posPrinterEnabled = reader.GetString("status")
-                    Exit While
-                End While
-            Else
-                MsgBox("No POS printer settings", vbExclamation + vbOKOnly, "Error: POS Printer")
-            End If
-
-        Catch ex As Exception
-            '    LError.databaseConnection()
-        End Try
-
-        'load day information
-        Try
-            Day.systemDate = Day.getCurrentDay.ToString("yyyy-MM-dd") 'settings.SelectSingleNode("Settings/Day/Date").InnerText
+            Day.bussinessDate = Day.getCurrentDay.ToString("yyyy-MM-dd") 'settings.SelectSingleNode("Settings/Day/Date").InnerText
         Catch ex As Exception
             MsgBox("Could not load Day Information. Day not set.", vbExclamation + vbOKOnly, "Error: Day error")
             Application.Exit()

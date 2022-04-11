@@ -75,6 +75,8 @@ Partial Class frmPayPoint
         Me.btn2 = New System.Windows.Forms.Button()
         Me.btn1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.txtOther = New System.Windows.Forms.TextBox()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.Panel3.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -170,6 +172,8 @@ Partial Class frmPayPoint
         '
         'Panel2
         '
+        Me.Panel2.Controls.Add(Me.txtOther)
+        Me.Panel2.Controls.Add(Me.Label2)
         Me.Panel2.Controls.Add(Me.Panel5)
         Me.Panel2.Controls.Add(Me.txtCheque)
         Me.Panel2.Controls.Add(Me.Label10)
@@ -676,12 +680,32 @@ Partial Class frmPayPoint
         Me.Button2.Text = "Key Board"
         Me.Button2.UseVisualStyleBackColor = True
         '
+        'txtOther
+        '
+        Me.txtOther.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtOther.Location = New System.Drawing.Point(449, 210)
+        Me.txtOther.Name = "txtOther"
+        Me.txtOther.ReadOnly = True
+        Me.txtOther.Size = New System.Drawing.Size(212, 27)
+        Me.txtOther.TabIndex = 32
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(353, 213)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(51, 20)
+        Me.Label2.TabIndex = 31
+        Me.Label2.Text = "Other"
+        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'frmPayPoint
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnBack
-        Me.ClientSize = New System.Drawing.Size(913, 592)
+        Me.ClientSize = New System.Drawing.Size(909, 588)
         Me.ControlBox = False
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Panel4)
@@ -758,4 +782,6 @@ Partial Class frmPayPoint
     Friend WithEvents Panel5 As Panel
     Friend WithEvents Button1 As Button
     Friend WithEvents Button2 As Button
+    Friend WithEvents txtOther As TextBox
+    Friend WithEvents Label2 As Label
 End Class

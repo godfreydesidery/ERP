@@ -4,16 +4,7 @@
         unlock()
     End Sub
     Private Function unlock()
-        Dim username As String = User.USERNAME_
-        Dim password As String = User.PASSWORD_
-        If txtUsername.Text = username And Hash.check(txtPassword.Text, password) = True Then
-            Me.Dispose()
-        Else
-            MessageBox.Show("Unlock failed. Wrong username and password", "Error: Unlock fail", MessageBoxButtons.OK)
-            txtUsername.Text = ""
-            txtPassword.Text = ""
-            txtUsername.Focus()
-        End If
+        MessageBox.Show("Please Login afresh", "Unlock System", MessageBoxButtons.OK)
         Return vbNull
     End Function
 
@@ -24,33 +15,13 @@
         End If
     End Sub
 
-    Private Sub txtUsername_GotFocus(sender As Object, e As EventArgs) Handles txtUsername.GotFocus
-        txtPassword.Text = ""
-    End Sub
-
-    Private Sub txtUsername_KeyDown(sender As Object, e As KeyEventArgs) Handles txtUsername.KeyDown
-        If e.KeyCode = Keys.Enter Then
-            txtPassword.Text = ""
-            txtPassword.Focus()
-        End If
-        If e.KeyCode = Keys.Down Or e.KeyCode = Keys.Up Then
-            txtPassword.Text = ""
-            txtPassword.Focus()
-        End If
-    End Sub
-
-
-    Private Sub txtPassword_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPassword.KeyDown
+    Private Sub txtPassword_KeyDown(sender As Object, e As KeyEventArgs)
         If e.KeyCode = Keys.Enter Then
             unlock()
         End If
-        If e.KeyCode = Keys.Down Or e.KeyCode = Keys.Up Then
-            txtPassword.Text = ""
-            txtUsername.Focus()
-        End If
     End Sub
 
-    Private Sub txtPassword_TextChanged(sender As Object, e As EventArgs) Handles txtPassword.TextChanged
+    Private Sub txtPassword_TextChanged(sender As Object, e As EventArgs)
 
     End Sub
 
@@ -58,11 +29,11 @@
 
     End Sub
 
-    Private Sub txtUsername_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtUsername.KeyPress
+    Private Sub txtUsername_KeyPress(sender As Object, e As KeyPressEventArgs)
 
     End Sub
 
-    Private Sub txtUsername_TextChanged(sender As Object, e As EventArgs) Handles txtUsername.TextChanged
+    Private Sub txtUsername_TextChanged(sender As Object, e As EventArgs)
 
     End Sub
 End Class

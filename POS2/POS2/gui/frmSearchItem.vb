@@ -31,40 +31,7 @@ Public Class frmSearchItem
         Dim found As Boolean = False
         Dim query As String = "SELECT `bar_code`, `item_code`, `description`, `short_description`,`pck` ,`cost_price`, `selling_price`, `discount`, `stock`, `vat` FROM `inventory` WHERE `bar_code`=@barcode"
         Dim command As New MySqlCommand()
-        Dim conn As New MySqlConnection(Database.conString)
-        Try
-            conn.Open()
-            command.CommandText = query
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            command.Parameters.AddWithValue("@barcode", barcode)
-            Dim reader As MySqlDataReader = command.ExecuteReader()
-            Dim no As Integer = 0
-            If reader.HasRows = True Then
-                While reader.Read
-                    Dim bar_code As String = reader.GetString("bar_code")
-                    Dim itemcode As String = reader.GetString("item_code")
-                    Dim description As String = reader.GetString("description")
-                    Dim short_description As String = reader.GetString("short_description")
-                    Dim pck As String = reader.GetString("pck")
-                    Dim costPrice As String = reader.GetString("cost_price")
-                    Dim sellingPrice As String = reader.GetString("selling_price")
-                    Dim discount As String = reader.GetString("discount")
-                    Dim stock As String = reader.GetString("stock")
-                    Dim vat As String = reader.GetString("vat")
-                    Dim qty As Integer = 1
-                    Dim amount As Double = (Val(qty) * sellingPrice) * (1 - Val(discount) / 100)
-                    Exit While
-                End While
-                found = True
-            Else
-                MsgBox("Item not found", vbCritical + vbOKOnly, "Error: Not found")
-            End If
-        Catch ex As Devart.Data.MySql.MySqlException
-            LError.databaseConnection()
-            Return vbNull
-            Exit Function
-        End Try
+
 
         Return found
     End Function
@@ -99,40 +66,7 @@ Public Class frmSearchItem
         Dim found As Boolean = False
         Dim query As String = "SELECT `items`.`item_code`, `bar_codes`.`item_scan_code`, `items`.`item_description`,`items`.`item_long_description`,`items`.`pck`, `items`.`retail_price`,`items`.`discount`,`items`.`vat`,`inventorys`.`item_code` FROM `items`,`inventorys`,`bar_codes` WHERE `items`.`item_code`=`inventorys`.`item_code` AND `items`.`item_scan_code` =@item_scan_code AND `bar_codes`.`item_code`=`items`.`item_code`"
         Dim command As New MySqlCommand()
-        Dim conn As New MySqlConnection(Database.conString)
-        Try
-            conn.Open()
-            command.CommandText = query
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            command.Parameters.AddWithValue("@item_scan_code", bar_code)
-            Dim reader As MySqlDataReader = command.ExecuteReader()
-            Dim no As Integer = 0
-            If reader.HasRows = True Then
-                While reader.Read
-                    itemCode = reader.GetString("item_code")
-                    barCode = reader.GetString("item_scan_code")
-                    description = reader.GetString("item_long_description")
-                    pck = reader.GetString("pck")
-                    price = reader.GetString("retail_price")
-                    discount = reader.GetString("discount")
-                    vat = reader.GetString("vat")
-                    short_description = reader.GetString("item_description")
-                    qty = 1
-                    amount = (Val(qty) * price) * (1 - Val(discount) / 100)
-                    Exit While
-                End While
-                found = True
-                displayValues()
-            Else
-                clearValues()
-                MsgBox("Item not found", vbCritical + vbOKOnly)
-            End If
-        Catch ex As Devart.Data.MySql.MySqlException
-            LError.databaseConnection()
-            Return vbNull
-            Exit Function
-        End Try
+
 
         Return found
     End Function
@@ -140,40 +74,7 @@ Public Class frmSearchItem
         Dim found As Boolean = False
         Dim query As String = "SELECT `items`.`item_code`, `items`.`item_description`,`items`.`item_long_description`,`items`.`pck`, `items`.`retail_price`,`items`.`discount`,`items`.`vat`,`inventorys`.`item_code` FROM `items`,`inventorys` WHERE `items`.`item_code`=`inventorys`.`item_code` AND `items`.`item_code` =@item_code"
         Dim command As New MySqlCommand()
-        Dim conn As New MySqlConnection(Database.conString)
-        Try
-            conn.Open()
-            command.CommandText = query
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            command.Parameters.AddWithValue("@item_code", item_Code)
-            Dim reader As MySqlDataReader = command.ExecuteReader()
-            Dim no As Integer = 0
-            If reader.HasRows = True Then
-                While reader.Read
-                    itemCode = reader.GetString("item_code")
-                    'barCode = reader.GetString("item_scan_code")
-                    description = reader.GetString("item_long_description")
-                    short_description = reader.GetString("item_description")
-                    pck = reader.GetString("pck")
-                    price = reader.GetString("retail_price")
-                    discount = reader.GetString("discount")
-                    vat = reader.GetString("vat")
-                    qty = 1
-                    amount = (Val(qty) * price) * (1 - Val(discount) / 100)
-                    Exit While
-                End While
-                found = True
-                displayValues()
-            Else
-                clearValues()
-                MsgBox("Item not found", vbExclamation + vbOKOnly, "Error: Not found")
-            End If
-        Catch ex As Devart.Data.MySql.MySqlException
-            LError.databaseConnection()
-            Return vbNull
-            Exit Function
-        End Try
+
 
         Return found
     End Function
@@ -182,40 +83,7 @@ Public Class frmSearchItem
         Dim found As Boolean = False
         Dim query As String = "SELECT `items`.`item_code`,`items`.`item_description`, `items`.`item_long_description`,`items`.`pck`, `items`.`retail_price`,`items`.`discount`,`items`.`vat`,`inventorys`.`item_code` FROM `items`,`inventorys` WHERE `items`.`item_code`=`inventorys`.`item_code` AND `items`.`item_long_description` =@long_description"
         Dim command As New MySqlCommand()
-        Dim conn As New MySqlConnection(Database.conString)
-        Try
-            conn.Open()
-            command.CommandText = query
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            command.Parameters.AddWithValue("@long_description", descr)
-            Dim reader As MySqlDataReader = command.ExecuteReader()
-            Dim no As Integer = 0
-            If reader.HasRows = True Then
-                While reader.Read
-                    itemCode = reader.GetString("item_code")
-                    'barCode = reader.GetString("item_scan_code")
-                    description = reader.GetString("item_long_description")
-                    short_description = reader.GetString("item_description")
-                    pck = reader.GetString("pck")
-                    price = reader.GetString("retail_price")
-                    discount = reader.GetString("discount")
-                    vat = reader.GetString("vat")
-                    qty = 1
-                    amount = (Val(qty) * price) * (1 - Val(discount) / 100)
-                    Exit While
-                End While
-                found = True
-                displayValues()
-            Else
-                clearValues()
-                MsgBox("Item not found", vbExclamation + vbOKOnly, "Error: Not found")
-            End If
-        Catch ex As Devart.Data.MySql.MySqlException
-            LError.databaseConnection()
-            Return vbNull
-            Exit Function
-        End Try
+
 
         Return vbNull
     End Function
@@ -318,28 +186,7 @@ Public Class frmSearchItem
             Try
                 Dim query As String = "SELECT `items`.`item_code`,`items`.`item_long_description`, `inventorys`.`item_code`FROM `items`,`inventorys` WHERE `items`.`item_code`=`inventorys`.`item_code`" ' AND `items`.`item_long_description` LIKE '%" + txtSearch.Text + "%' LIMIT 1,10000"
                 Dim command As New MySqlCommand()
-                Dim conn As New MySqlConnection(Database.conString)
-                Try
-                    conn.Open()
-                    command.CommandText = query
-                    command.Connection = conn
-                    command.CommandType = CommandType.Text
-                    Dim itemreader As MySqlDataReader = command.ExecuteReader()
-                    If itemreader.HasRows = True Then
-                        While itemreader.Read
-                            list.Add(itemreader("item_long_description").ToString)
-                        End While
-                    Else
-                        Exit Sub
-                    End If
-                    mySource.AddRange(list.ToArray)
-                    txtSearch.AutoCompleteCustomSource = mySource
-                    txtSearch.AutoCompleteMode = AutoCompleteMode.Suggest
-                    txtSearch.AutoCompleteSource = AutoCompleteSource.CustomSource
-                Catch ex As Devart.Data.MySql.MySqlException
-                    LError.databaseConnection()
-                    Exit Sub
-                End Try
+
 
             Catch ex As Exception
                 MsgBox(ex.Message.ToString)

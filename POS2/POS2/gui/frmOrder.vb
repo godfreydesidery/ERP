@@ -23,7 +23,7 @@ Public Class frmOrder
             Dim users_ As List(Of User) = JsonConvert.DeserializeObject(Of List(Of User))(response.ToString)
 
             For Each user In users_
-                cmbWaiters.Items.Add(user.rollNo)
+                'cmbWaiters.Items.Add(user.rollNo)
             Next
         Catch ex As Exception
             MsgBox(ex.ToString)
@@ -40,182 +40,19 @@ Public Class frmOrder
         'loads orders to orders table
 
         dtgrdOrders.Rows.Clear()
-        Try
-            Dim conn As New MySqlConnection(Database.conString)
-            Dim command As New MySqlCommand()
-            Dim codeQuery As String = "SELECT `order_no`, `waiter_id`, `time_ordered`, `status`, `time_completed` FROM `cust_orders`"
-            conn.Open()
-            command.CommandText = codeQuery
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            Dim reader As MySqlDataReader = command.ExecuteReader()
-            Dim orderNo As String = ""
-            Dim waiterID As String = ""
-            Dim timeOrdered As String = ""
-            Dim status As String = ""
-            Dim timeCompleted As String = ""
 
-            While reader.Read
-                Dim item As New Item
-                orderNo = reader.GetString("order_no")
-                waiterID = reader.GetString("waiter_id")
-                timeOrdered = reader.GetString("time_ordered")
-                status = reader.GetString("status")
-                timeCompleted = reader.GetString("time_completed")
-
-                Dim dtgrdRow As New DataGridViewRow
-                Dim dtgrdCell As DataGridViewCell
-
-                dtgrdCell = New DataGridViewTextBoxCell()
-                dtgrdCell.Value = orderNo
-                dtgrdRow.Cells.Add(dtgrdCell)
-
-                dtgrdCell = New DataGridViewTextBoxCell()
-                dtgrdCell.Value = (New User).getAlias(waiterID)
-                dtgrdRow.Cells.Add(dtgrdCell)
-
-                dtgrdCell = New DataGridViewTextBoxCell()
-                dtgrdCell.Value = "ORDERED " + timeOrdered + " " + status + " COMPLETED " + timeCompleted
-                dtgrdRow.Cells.Add(dtgrdCell)
-
-                dtgrdOrders.Rows.Add(dtgrdRow)
-            End While
-            conn.Close()
-        Catch ex As Exception
-            MsgBox(ex.Message)
-        End Try
     End Sub
     Private Function getOrderStatus(orderNo As String)
         Dim status As String = ""
-        Try
-            Dim conn As New MySqlConnection(Database.conString)
-            Dim command As New MySqlCommand()
-            Dim codeQuery As String = "SELECT `status` FROM `cust_orders` WHERE `order_no`='" + orderNo + "'"
-            conn.Open()
-            command.CommandText = codeQuery
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            Dim reader As MySqlDataReader = command.ExecuteReader()
-            While reader.Read
-                status = reader.GetString("status")
-            End While
-            conn.Close()
-        Catch ex As Exception
-            MsgBox(ex.Message)
-        End Try
+
         Return status
     End Function
     Private Sub getOrder(orderNo As String)
-        Try
-            Dim conn As New MySqlConnection(Database.conString)
-            Dim command As New MySqlCommand()
-            Dim codeQuery As String = "SELECT `order_no`, `waiter_id`, `time_ordered`, `status`, `time_completed` FROM `cust_orders` WHERE `order_no`='" + orderNo + "'"
-            conn.Open()
-            command.CommandText = codeQuery
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            Dim reader As MySqlDataReader = command.ExecuteReader()
-            While reader.Read
-                txtOrderNo.Text = reader.GetString("order_no")
-                txtStatus.Text = reader.GetString("status")
-                txtWaiterID.Text = reader.GetString("waiter_id")
-                cmbWaiters.Text = (New User).getAlias(reader.GetString("waiter_id"))
-                btnDelete.Enabled = True
-            End While
-            conn.Close()
-        Catch ex As Exception
-            MsgBox(ex.Message)
-        End Try
+
     End Sub
     Private Sub loadOrderDetails(orderNo As String)
         dtgrdItemList.Rows.Clear()
-        Try
-            Dim conn As New MySqlConnection(Database.conString)
-            Dim command As New MySqlCommand()
-            Dim codeQuery As String = "SELECT `sn`, `order_no`, `barcode`, `item_code`, `description`, `qty`, `price` FROM `cust_order_details` WHERE `order_no`='" + orderNo + "'"
-            conn.Open()
-            command.CommandText = codeQuery
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            Dim reader As MySqlDataReader = command.ExecuteReader()
-            Dim sn As String = ""
-            Dim barcode As String = ""
-            Dim itemCode As String = ""
-            Dim description As String = ""
-            Dim quantity As String = ""
-            Dim price As String = ""
-            Dim amount As String = ""
 
-            txtStatus.Text = getOrderStatus(orderNo)
-
-            While reader.Read
-                Dim item As New Item
-                sn = reader.GetString("sn")
-                barcode = reader.GetString("barcode")
-                itemCode = reader.GetString("item_code")
-                description = reader.GetString("description")
-                quantity = reader.GetString("qty")
-                price = LCurrency.displayValue(reader.GetString("price"))
-                amount = LCurrency.displayValue((Val(quantity) * Val(reader.GetString("price"))).ToString)
-
-                Dim dtgrdRow As New DataGridViewRow
-                Dim dtgrdCell As DataGridViewCell
-
-                dtgrdCell = New DataGridViewTextBoxCell()
-                dtgrdCell.Value = barcode
-                dtgrdRow.Cells.Add(dtgrdCell)
-
-                dtgrdCell = New DataGridViewTextBoxCell()
-                dtgrdCell.Value = itemCode.ToString
-                dtgrdRow.Cells.Add(dtgrdCell)
-
-                dtgrdCell = New DataGridViewTextBoxCell()
-                dtgrdCell.Value = description.ToString
-                dtgrdRow.Cells.Add(dtgrdCell)
-
-                dtgrdCell = New DataGridViewTextBoxCell()
-                dtgrdCell.Value = ""
-                dtgrdRow.Cells.Add(dtgrdCell)
-
-                dtgrdCell = New DataGridViewTextBoxCell()
-                dtgrdCell.Value = price
-                dtgrdRow.Cells.Add(dtgrdCell)
-
-                dtgrdCell = New DataGridViewTextBoxCell()
-                dtgrdCell.Value = vat
-                dtgrdRow.Cells.Add(dtgrdCell)
-
-                dtgrdCell = New DataGridViewTextBoxCell()
-                dtgrdCell.Value = ""
-                dtgrdRow.Cells.Add(dtgrdCell)
-
-                dtgrdCell = New DataGridViewTextBoxCell()
-                dtgrdCell.Value = quantity
-                dtgrdRow.Cells.Add(dtgrdCell)
-
-                dtgrdCell = New DataGridViewTextBoxCell()
-                dtgrdCell.Value = amount
-                dtgrdRow.Cells.Add(dtgrdCell)
-
-                dtgrdCell = New DataGridViewTextBoxCell()
-                dtgrdCell.Value = ""
-                dtgrdRow.Cells.Add(dtgrdCell)
-
-                dtgrdCell = New DataGridViewTextBoxCell()
-                dtgrdCell.Value = ""
-                dtgrdRow.Cells.Add(dtgrdCell)
-
-                dtgrdCell = New DataGridViewTextBoxCell()
-                dtgrdCell.Value = sn.ToString
-                dtgrdRow.Cells.Add(dtgrdCell)
-
-                dtgrdItemList.Rows.Add(dtgrdRow)
-
-            End While
-            conn.Close()
-        Catch ex As Exception
-            MsgBox(ex.Message)
-        End Try
 
     End Sub
 
@@ -246,31 +83,7 @@ Public Class frmOrder
     End Sub
     Private Function search(orderNo As String)
         Dim found As Boolean = False
-        Try
-            Dim conn As New MySqlConnection(Database.conString)
-            Dim command As New MySqlCommand()
-            Dim codeQuery As String = "SELECT `order_no`, `waiter_id`, `time_ordered`, `status`, `time_completed` FROM `cust_orders` WHERE `order_no`='" + orderNo + "'"
-            conn.Open()
-            command.CommandText = codeQuery
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            Dim reader As MySqlDataReader = command.ExecuteReader()
-            While reader.Read
-                cmbWaiters.Text = (New User).getAlias(reader.GetString("waiter_id"))
-                txtStatus.Text = reader.GetString("status")
-                txtWaiterID.Text = reader.GetString("waiter_id")
-                found = True
-                txtOrderNo.ReadOnly = True
-                loadOrder(txtOrderNo.Text)
-                dtgrdItemList.ReadOnly = False
-                txtOrderNo.ReadOnly = True
-                btnDelete.Enabled = True
-                Exit While
-            End While
-            conn.Close()
-        Catch ex As Exception
-            MsgBox(ex.Message)
-        End Try
+
 
         Return found
     End Function
@@ -298,26 +111,7 @@ Public Class frmOrder
     End Sub
     Private Function createNewOrder(waiterID As String)
         Dim orderNo As Long = 0
-        Try
-            Dim conn As New MySqlConnection(Database.conString)
-            Dim command As New MySqlCommand()
-            'Dim reader As MySqlDataReader
-            'create bar code
-            Dim query As String = "INSERT INTO `cust_orders`(`waiter_id`, `time_ordered`, `status`) VALUES (@waiter_id,@time_ordered,@status)"
-            conn.Open()
-            command.CommandText = query
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            command.Parameters.AddWithValue("@waiter_id", waiterID)
-            command.Parameters.AddWithValue("@time_ordered", DateTime.Now)
-            command.Parameters.AddWithValue("@status", "PENDING")
-            command.ExecuteNonQuery()
-            orderNo = command.InsertId
-            txtOrderNo.Text = orderNo.ToString
-            conn.Close()
-        Catch ex As Exception
-            MsgBox(ex.Message)
-        End Try
+
         Return orderNo
     End Function
     Private Function save()
@@ -348,29 +142,7 @@ Public Class frmOrder
             Dim qty As String = Val(dtgrdItemList.Item(7, i).Value)
             Dim price As String = dtgrdItemList.Item(4, i).Value
 
-            Dim conn As New MySqlConnection(Database.conString)
-            Dim command As New MySqlCommand()
-            Try
-                conn.Open()
-                command.Connection = conn
-                If sn = "" Then
-                    command.CommandText = "INSERT INTO `cust_order_details`(`order_no`, `barcode`, `item_code`, `description`, `qty`, `price`) VALUES (@order_no,@barcode,@item_code,@description,@qty,@price)"
-                Else
-                    command.CommandText = "UPDATE `cust_order_details` SET`qty`='" + qty + "' WHERE `sn`='" + sn + "'"
-                End If
-                command.Prepare()
-                command.Parameters.AddWithValue("@order_no", currentOrder)
-                command.Parameters.AddWithValue("@barcode", barCode)
-                command.Parameters.AddWithValue("@item_code", itemCode)
-                command.Parameters.AddWithValue("@description", description)
-                command.Parameters.AddWithValue("@qty", qty)
-                command.Parameters.AddWithValue("@price", LCurrency.getValue(price))
-                command.ExecuteNonQuery()
-            Catch ex As Devart.Data.MySql.MySqlException
-                LError.databaseConnection()
-                Return vbNull
-                Exit Function
-            End Try
+
         Next
         saved = True
         loadOrderDetails(txtOrderNo.Text)
@@ -406,23 +178,7 @@ Public Class frmOrder
     End Sub
 
     Private Sub cmbWaiters_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbWaiters.SelectedIndexChanged
-        Try
-            Dim conn As New MySqlConnection(Database.conString)
-            Dim command As New MySqlCommand()
-            Dim codeQuery As String = "SELECT `id`, `first_name`, `second_name`, `last_name`, `pay_roll_no`, `username`, `password`, `biometric`, `role`, `alias`, `status` FROM `users` WHERE `alias`='" + cmbWaiters.Text + "'"
-            conn.Open()
-            command.CommandText = codeQuery
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            Dim reader As MySqlDataReader = command.ExecuteReader()
-            While reader.Read
-                txtWaiterID.Text = reader.GetString("id")
-                Exit While
-            End While
-            conn.Close()
-        Catch ex As Exception
-            MsgBox(ex.Message)
-        End Try
+
     End Sub
 
     Dim barCode As String = ""
@@ -651,16 +407,6 @@ Public Class frmOrder
         dtgrdItemList.Rows.Clear()
         Dim query As String = "SELECT `sn`, `order_no`, `barcode`, `item_code`, `description`, `qty`, `price` FROM `cust_order_details` WHERE `order_no`='" + orderNo + "'"
         Dim command As New MySqlCommand()
-        Dim conn As New MySqlConnection(Database.conString)
-        Try
-            conn.Open()
-            command.CommandText = query
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-        Catch ex As MySqlException
-            LError.databaseConnection()
-            Exit Sub
-        End Try
 
         Dim reader As MySqlDataReader = command.ExecuteReader()
         Try
@@ -761,18 +507,6 @@ Public Class frmOrder
         Dim found As Boolean = False
         Dim query As String = "SELECT `items`.`item_code`, `bar_codes`.`item_scan_code`, `items`.`item_description`,`items`.`item_long_description`,`items`.`pck`, `items`.`retail_price`,`items`.`discount`,`items`.`vat`,`inventorys`.`item_code` FROM `items`,`inventorys`,`bar_codes` WHERE `items`.`item_code`=`inventorys`.`item_code` AND `bar_codes`.`item_scan_code` =@item_scan_code AND `bar_codes`.`item_code`=`items`.`item_code`"
         Dim command As New MySqlCommand()
-        Dim conn As New MySqlConnection(Database.conString)
-        Try
-            conn.Open()
-            command.CommandText = query
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            command.Parameters.AddWithValue("@item_scan_code", barCode)
-        Catch ex As Devart.Data.MySql.MySqlException
-            LError.databaseConnection()
-            Return vbNull
-            Exit Function
-        End Try
 
         Dim reader As MySqlDataReader = command.ExecuteReader()
         Dim no As Integer = 0
@@ -835,48 +569,12 @@ Public Class frmOrder
     End Function
     Private Sub AddToOrder(sn As String, orderNo As String, barcode As String, itemCode As String, description As String, price As String, vat As String, discount As String, qty As String, amount As String, shortDescr As String)
 
-        Dim conn As New MySqlConnection(Database.conString)
-        Try
-            conn.Open()
-            Dim command As New MySqlCommand()
-            command.Connection = conn
-            command.CommandText = "INSERT INTO `cust_order_details`(`sn`, `order_no`, `barcode`, `item_code`, `description`, `qty`, `price`) VALUES (@sn,@order_no,@bar_code,@item_code,@description,@qty,@price)"
-            command.Prepare()
-            command.Parameters.AddWithValue("@sn", sn)
-            command.Parameters.AddWithValue("@order_no", orderNo)
-            command.Parameters.AddWithValue("@bar_code", barcode)
-            command.Parameters.AddWithValue("@item_code", itemCode)
-            command.Parameters.AddWithValue("@description", description)
-            command.Parameters.AddWithValue("@price", price)
-            command.Parameters.AddWithValue("@vat", vat)
-            command.Parameters.AddWithValue("@discount", discount)
-            command.Parameters.AddWithValue("@qty", qty)
-            command.Parameters.AddWithValue("@amount", amount)
-            command.Parameters.AddWithValue("@short_description", shortDescr)
-
-            command.ExecuteNonQuery()
-        Catch ex As Devart.Data.MySql.MySqlException
-            LError.databaseConnection()
-            Exit Sub
-        End Try
-
     End Sub
     Private Function searchByDescription(longDescr As String)
 
         Dim found As Boolean = False
         Dim query As String = "SELECT `sn`, `item_code`, `item_scan_code`, `item_long_description`, `item_description`, `pck`, `department_id`, `class_id`, `sub_class_id`, `supplier_id`, `unit_cost_price`, `retail_price`, `discount`, `vat`, `margin`, `standard_uom`, `active` FROM `items` WHERE `item_long_description`='" + longDescr + "'"
         Dim command As New MySqlCommand()
-        Dim conn As New MySqlConnection(Database.conString)
-        Try
-            conn.Open()
-            command.CommandText = query
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-        Catch ex As Devart.Data.MySql.MySqlException
-            LError.databaseConnection()
-            Return vbNull
-            Exit Function
-        End Try
 
         Dim reader As MySqlDataReader = command.ExecuteReader()
         Dim no As Integer = 0
@@ -941,18 +639,6 @@ Public Class frmOrder
         Dim found As Boolean = False
         Dim query As String = "SELECT `items`.`item_code`, `items`.`item_description`,`items`.`item_long_description`,`items`.`pck`, `items`.`retail_price`,`items`.`discount`,`items`.`vat`,`inventorys`.`item_code` FROM `items`,`inventorys` WHERE `items`.`item_code`=`inventorys`.`item_code` AND `items`.`item_code` =@item_code"
         Dim command As New MySqlCommand()
-        Dim conn As New MySqlConnection(Database.conString)
-        Try
-            conn.Open()
-            command.CommandText = query
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            command.Parameters.AddWithValue("@item_code", itemCode)
-        Catch ex As Devart.Data.MySql.MySqlException
-            LError.databaseConnection()
-            Return vbNull
-            Exit Function
-        End Try
 
         Dim reader As MySqlDataReader = command.ExecuteReader()
         Dim no As Integer = 0
@@ -1097,58 +783,14 @@ Public Class frmOrder
         Catch ex As Exception
 
         End Try
-        Dim conn As New MySqlConnection(Database.conString)
-        Try
-            conn.Open()
-            Dim command As New MySqlCommand()
-            command.Connection = conn
-            command.CommandText = "UPDATE `cust_order_details` SET `qty`=qty+1 WHERE `sn`='" + sn + "'"
-            command.Prepare()
-            command.ExecuteNonQuery()
-            conn.Close()
-            If sn <> "" Then
-                updated = True
-            End If
-        Catch ex As Exception
 
-            Return updated
-            Exit Function
-        End Try
         If barcode <> "" Then
-            Try
-                conn.Open()
-                Dim command As New MySqlCommand()
-                command.Connection = conn
-                command.CommandText = "UPDATE `cust_order_details` SET `bar_code`='" + barcode + "' WHERE `sn`='" + sn + "'"
-                command.Prepare()
-                command.ExecuteNonQuery()
-                conn.Close()
-            Catch ex As Exception
 
-            End Try
         End If
         Return updated
     End Function
     Private Function updateQty(qty As Integer, sn As String)
         Dim updated As Boolean = False
-
-        Dim conn As New MySqlConnection(Database.conString)
-        Try
-            conn.Open()
-            Dim command As New MySqlCommand()
-            command.Connection = conn
-            command.CommandText = "UPDATE `cust_order_details` SET `qty`='" + qty.ToString + "' WHERE `sn`='" + sn + "'"
-            command.Prepare()
-            command.ExecuteNonQuery()
-            conn.Close()
-            If sn <> "" Then
-                updated = True
-            End If
-        Catch ex As Exception
-            ' MsgBox(ex.Message)
-            Return updated
-            Exit Function
-        End Try
 
         Return updated
     End Function
@@ -1221,30 +863,6 @@ Public Class frmOrder
     End Sub
 
     Private Sub AddToOrderDetails(sn As String, orderNo As String, barcode As String, itemCode As String, description As String, price As String, vat As String, discount As String, qty As String, amount As String, shortDescr As String)
-        Dim conn As New MySqlConnection(Database.conString)
-        Try
-            conn.Open()
-            Dim command As New MySqlCommand()
-            command.Connection = conn
-            command.CommandText = "INSERT INTO `cust_order_details`(`sn`, `order_no`, `barcode`, `item_code`, `description`, `qty`, `price`) VALUES (@sn,@order_no,@bar_code,@item_code,@description,@qty,@price)"
-            command.Prepare()
-            command.Parameters.AddWithValue("@order_no", orderNo)
-            command.Parameters.AddWithValue("@bar_code", barcode)
-            command.Parameters.AddWithValue("@item_code", itemCode)
-            command.Parameters.AddWithValue("@description", description)
-            command.Parameters.AddWithValue("@price", price)
-            command.Parameters.AddWithValue("@vat", vat)
-            command.Parameters.AddWithValue("@discount", discount)
-            command.Parameters.AddWithValue("@qty", qty)
-            command.Parameters.AddWithValue("@amount", amount)
-            command.Parameters.AddWithValue("@sn", sn)
-            command.Parameters.AddWithValue("@short_description", shortDescr)
-
-            command.ExecuteNonQuery()
-        Catch ex As Devart.Data.MySql.MySqlException
-            LError.databaseConnection()
-            Exit Sub
-        End Try
 
     End Sub
 
@@ -1276,23 +894,7 @@ Public Class frmOrder
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
         Dim res As Integer = MsgBox("Are you sure you want to remove the selected order? This can not be undone.", vbQuestion + vbYesNo, "Delete order?")
         If res = DialogResult.Yes Then
-            Try
-                Dim conn As New MySqlConnection(Database.conString)
-                Dim command As New MySqlCommand()
-                'create bar code
-                Dim codeQuery As String = "DELETE FROM `cust_orders` WHERE `order_no`='" + txtOrderNo.Text + "';DELETE FROM `cust_order_details` WHERE `order_no`='" + txtOrderNo.Text + "'"
-                conn.Open()
-                command.CommandText = codeQuery
-                command.Connection = conn
-                command.CommandType = CommandType.Text
-                command.ExecuteNonQuery()
-                conn.Close()
-                btnDelete.Enabled = False
-                MsgBox("Order removed", vbInformation + vbOKOnly, "Success")
 
-            Catch ex As Exception
-                MsgBox(ex.ToString)
-            End Try
         End If
         clearFields()
         dtgrdOrders.Rows.Clear()

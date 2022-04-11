@@ -3,7 +3,7 @@ Imports Newtonsoft.Json.Linq
 
 Public Class Product
     Public Property id As String
-    Public Property primaryBarcode As String
+    Public Property barcode As String
     Public Property code As String
     Public Property description As String
     Public Property shortDescription As String
@@ -25,8 +25,8 @@ Public Class Product
     Public Property defaultReorderQty As Double
 
     Public Property status As String
-    Public Property sellable As Integer
-    Public Property returnable As Integer
+    Public Property sellable As Boolean
+    Public Property returnable As Boolean
 
 
     Public Function getDescriptions() As List(Of String)
@@ -35,7 +35,7 @@ Public Class Product
         Try
             Dim response As Object = New Object
             Dim json As JObject = New JObject
-            response = Web.get_("products/descriptions")
+            response = Web.get_("products/get_descriptions")
             list = JsonConvert.DeserializeObject(Of List(Of String))(response.ToString)
             Return list
         Catch ex As Exception

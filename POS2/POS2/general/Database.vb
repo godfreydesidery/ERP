@@ -5,5 +5,5 @@ Imports Devart.Data.MySql
 Imports Devart.Data.MySql.MySqlConnection
 
 Public Class Database
-    Public Shared conString As String = ""
+    'Public Shared conString As String = ""
 End Class

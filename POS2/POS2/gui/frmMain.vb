@@ -12,6 +12,8 @@ Public Class frmMain
         Me.Close()
     End Sub
 
+    Dim cart As Cart = New Cart
+
     Dim barCode As String = ""
     Dim code As String = ""
     Dim ShortDescription As String = ""
@@ -53,7 +55,7 @@ Public Class frmMain
             qty = Val(dtgrdViewItemList.Item(7, e.RowIndex).Value)
             sn = dtgrdViewItemList.Item(11, e.RowIndex).Value.ToString
         Catch ex As Exception
-
+            'MsgBox(ex.StackTrace)
         End Try
 
         If Val(dtgrdViewItemList.Item(7, e.RowIndex).Value) >= 0 And Val(dtgrdViewItemList.Item(7, e.RowIndex).Value) <= 1000 And dtgrdViewItemList.Item(11, e.RowIndex).Value <> "" Then
@@ -67,17 +69,11 @@ Public Class frmMain
             If Val(dtgrdViewItemList.Item(7, e.RowIndex).Value) <= 0 And dtgrdViewItemList.Item(1, e.RowIndex).Value <> "" Then
                 MsgBox("Invalid quantity value. Quantity value should be between 1 and 1000", vbOKOnly + vbCritical, "Error: Invalid entry")
                 dtgrdViewItemList.Item(7, e.RowIndex).Value = 1
+                refreshList()
                 calculateValues()
             End If
 
         End If
-        Try
-            If dtgrdViewItemList.CurrentCell.ColumnIndex = 2 Then
-                'search() 'do further research
-            End If
-        Catch ex As Exception
-            MsgBox(ex.Message)
-        End Try
     End Sub
 
     Protected Overrides Function ProcessCmdKey(ByRef msg As System.Windows.Forms.Message, ByVal keyData As System.Windows.Forms.Keys) As Boolean
@@ -213,13 +209,13 @@ Public Class frmMain
         ' refreshList()
         ' dtgrdViewItemList.Select()
     End Sub
-    Private Function searchByBarcode(barcode As String, q As Integer) As Boolean
+    Private Function searchByBarcode(barcode As String, q As Double) As Boolean
         Return search(barcode, "", "", q)
     End Function
-    Private Function searchByCode(code As String, q As Integer) As Boolean
+    Private Function searchByCode(code As String, q As Double) As Boolean
         Return search("", code, "", q)
     End Function
-    Private Function searchByDescription(description As String, q As Integer) As Boolean
+    Private Function searchByDescription(description As String, q As Double) As Boolean
         Return search("", "", description, q)
     End Function
 
@@ -240,7 +236,7 @@ Public Class frmMain
             json = JObject.Parse(response)
             Dim product As Product = JsonConvert.DeserializeObject(Of Product)(json.ToString)
 
-            barcode = product.primaryBarcode
+            barcode = product.barcode
             code = product.code
             description = product.description
             ShortDescription = product.shortDescription
@@ -252,9 +248,10 @@ Public Class frmMain
             amount = (Val(qty) * price) * (1 - Val(discountRatio) / 100)
             found = True
 
-            If barcode = "" Then
+            If code = "" Then
                 found = False
-                loadCart(txtId.Text, Till.TILLNO)
+                cart = loadCart(Till.TILLNO)
+                displayCart(cart)
             End If
 
             Try
@@ -265,7 +262,6 @@ Public Class frmMain
             End Try
 
             If found = True Then
-
                 dtgrdViewItemList.Item(0, row).Value = barcode
                 dtgrdViewItemList.Item(1, row).Value = code
                 dtgrdViewItemList.Item(2, row).Value = description
@@ -283,7 +279,7 @@ Public Class frmMain
                 seq = seq + 1
                 AddToCart("", Till.TILLNO, dtgrdViewItemList.Item(0, row).Value, dtgrdViewItemList.Item(1, row).Value, dtgrdViewItemList.Item(2, row).Value, dtgrdViewItemList.Item(4, row).Value, dtgrdViewItemList.Item(5, row).Value, dtgrdViewItemList.Item(6, row).Value, dtgrdViewItemList.Item(7, row).Value, dtgrdViewItemList.Item(8, row).Value, dtgrdViewItemList.Item(10, row).Value)
 
-                If dtgrdViewItemList.RowCount > 1 Then
+                If dtgrdViewItemList.RowCount > 2 Then
                     If dtgrdViewItemList.Item(7, row - 1).Value > 1 Then
                         SaleSequence.multiple = True
                     Else
@@ -291,9 +287,11 @@ Public Class frmMain
                     End If
                 End If
             Else
-                loadCart(txtId.Text, Till.TILLNO)
+                cart = loadCart(Till.TILLNO)
+                displayCart(cart)
             End If
         Catch ex As Exception
+            MsgBox(ex.ToString)
             dtgrdViewItemList.Item(0, row).Value = ""
             dtgrdViewItemList.Item(1, row).Value = ""
             dtgrdViewItemList.Item(2, row).Value = ""
@@ -312,27 +310,21 @@ Public Class frmMain
         refreshList()
         calculateValues()
 
-        loadCart(txtId.Text, Till.TILLNO)
+        cart = loadCart(Till.TILLNO)
+        displayCart(cart)
         Return found
     End Function
 
     Private Function refreshList()
-        If dtgrdViewItemList.RowCount > 0 Then
-            Dim max As Integer = dtgrdViewItemList.RowCount - 2
-            For i As Integer = max To 0 Step -1
-                If dtgrdViewItemList.Item(1, i).Value = "" Or Val(dtgrdViewItemList.Item(7, i).Value) <= 0 Then
-                    ' dtgrdViewItemList.Rows.RemoveAt(i)
-                End If
-            Next
-        End If
+
         Try
             dtgrdViewItemList.EndEdit()
             If voidRow > -1 Then
-                dtgrdViewItemList.Item(9, voidRow).Value = False
+                'dtgrdViewItemList.Item(9, voidRow).Value = False
                 If dtgrdViewItemList.Item(9, voidRow).Value = True Then
-                    dtgrdViewItemList.Item(9, voidRow).Value = False
+                    'dtgrdViewItemList.Item(9, voidRow).Value = False
                 Else
-                    dtgrdViewItemList.Item(9, voidRow).Value = True
+                    'dtgrdViewItemList.Item(9, voidRow).Value = True
                 End If
             End If
             voidRow = -1
@@ -356,7 +348,7 @@ Public Class frmMain
                 Dim price As Double = Val(LCurrency.getValue(dtgrdViewItemList.Item(4, i).Value))
                 Dim vat As Double = Val(LCurrency.getValue(dtgrdViewItemList.Item(5, i).Value))
                 Dim discountRatio As Double = Val(LCurrency.getValue(dtgrdViewItemList.Item(6, i).Value))
-                Dim qty As Integer = Val(dtgrdViewItemList.Item(7, i).Value)
+                Dim qty As Double = Val(dtgrdViewItemList.Item(7, i).Value)
 
                 Dim amount As Double = price * qty * (1 - discountRatio / 100)
                 dtgrdViewItemList.Item(8, i).Value = LCurrency.displayValue(amount.ToString)
@@ -386,7 +378,7 @@ Public Class frmMain
         Return vbNull
     End Function
 
-    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
+    Private Sub Button4_Click(sender As Object, e As EventArgs)
         refreshList()
         calculateValues()
     End Sub
@@ -394,46 +386,23 @@ Public Class frmMain
     Private Sub dtgrdViewItemList_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgrdViewItemList.CellContentClick
         Dim row As Integer = -1
         Dim col As Integer = -1
-
         Try
             row = dtgrdViewItemList.CurrentRow.Index
             col = dtgrdViewItemList.CurrentCell.ColumnIndex
         Catch ex As Exception
             row = -1
+            Exit Sub
         End Try
-
-        dtgrdViewItemList.EndEdit()
-
         If dtgrdViewItemList.CurrentCell.ColumnIndex = 9 Then
-            Dim sn As String = dtgrdViewItemList.Item(11, dtgrdViewItemList.CurrentCell.RowIndex).Value
-            loadCart(txtId.Text, Till.TILLNO)
-            Dim void As Boolean = checkVoid(Till.TILLNO, sn)
-            If allowVoid = False Then
-
-
-                If User.authorize("VOID") Then
-                    allowVoid = True
-                Else
-                    frmAllow.ShowDialog()
-                    If frmAllow.allowed = True Then
-                        allowVoid = True
-                    End If
-                End If
-
+            Dim sn As String = dtgrdViewItemList.Item(11, row).Value
+            If dtgrdViewItemList.Item(9, row).Value = False Then
+                _void(sn)
+            Else
+                unvoid(sn)
             End If
-
-            If allowVoid = True Then
-                If void = True Then
-                    unvoid(Till.TILLNO, sn)
-                Else
-                    _void(Till.TILLNO, sn)
-                End If
-            End If
-            loadCart(txtId.Text, Till.TILLNO)
+            cart = loadCart(Till.TILLNO)
+            displayCart(cart)
         End If
-
-        refreshList()
-        calculateValues()
     End Sub
     Dim discountDialog As frmDiscount
     Private Sub dtgrdViewItemList_CellClick1(sender As Object, e As DataGridViewCellEventArgs) Handles dtgrdViewItemList.CellClick
@@ -442,7 +411,6 @@ Public Class frmMain
         Dim amount = 0
         Dim item As String = ""
         Dim unitPrice As String = ""
-
         Try
             row = dtgrdViewItemList.CurrentRow.Index
             col = dtgrdViewItemList.CurrentCell.ColumnIndex
@@ -458,7 +426,8 @@ Public Class frmMain
 
         If dtgrdViewItemList.CurrentCell.ColumnIndex = 6 Then
             Dim sn As String = dtgrdViewItemList.Item(11, dtgrdViewItemList.CurrentCell.RowIndex).Value
-            loadCart(txtId.Text, Till.TILLNO)
+            cart = loadCart(Till.TILLNO)
+            displayCart(cart)
 
             'process discount
 
@@ -474,7 +443,7 @@ Public Class frmMain
 
                         Dim discPercentage = (Val(discount) / amount) * 100
 
-                        updateDiscount(Till.TILLNO, sn, discPercentage)
+                        updateDiscount(sn, discPercentage)
 
                     Else
                         MsgBox("Invalid Discount Amount. Discount should be less than Unit Price", vbOKOnly + vbCritical, "Invalid Amount")
@@ -489,23 +458,23 @@ Public Class frmMain
                 MsgBox("Operation denied!", vbOKOnly + vbExclamation)
             End If
 
-            loadCart(txtId.Text, Till.TILLNO)
+            cart = loadCart(Till.TILLNO)
+            displayCart(cart)
         End If
 
         refreshList()
         calculateValues()
     End Sub
-    Private Sub updateDiscount(tillNo As String, sn As String, discRatio As Double)
-        Dim detail As CartDetail = New CartDetail
+    Private Sub updateDiscount(sn As String, discount As Double)
+        Dim detail As New CartDetail
         detail.id = sn
-        detail.discountRatio = discRatio
-        Web.put(detail, "carts/update_discount?detail_id=" + sn + "&discount_ratio=" + discRatio.ToString)
-        '''''''''''
+        detail.discount = discount
+        Web.post(detail, "carts/update_discount")
     End Sub
 
     Dim dialog As frmSearchItem
 
-    Private Sub ToolStripButton6_Click(sender As Object, e As EventArgs) Handles tlstrDescription.Click
+    Private Sub ToolStripButton6_Click(sender As Object, e As EventArgs)
 
         Dim control As TextBox = DirectCast(dtgrdViewItemList.EditingControl, TextBox)
 
@@ -533,140 +502,118 @@ Public Class frmMain
         Return allVoid
     End Function
 
-    Private Function printReceipt(tillNo As String, receiptNo As String, date_ As String, TIN As String, VRN As String, cash As String, balance As String)
-        Dim printed As Boolean = False
+    Private Function printReceipt(receipt As Receipt, tender As Double, balance As Double)
         Dim size As Integer = -1
-        For i As Integer = 0 To dtgrdViewItemList.RowCount - 2
-            If dtgrdViewItemList.Item(9, i).Value = False Then
-                size = size + 1
-            End If
+        For i As Integer = 0 To receipt.receiptDetails.Count - 1
+            size = size + 1
         Next
-        Dim itemCode(size) As String
-        Dim descr(size) As String
-        Dim qty(size) As String
-        Dim price(size) As String
-        Dim tax(size) As String
-        Dim amount(size) As String
+        Dim code(size + 1) As String
+        Dim descr(size + 1) As String
+        Dim qty(size + 1) As String
+        Dim price(size + 1) As String
+        Dim tax(size + 1) As String
+        Dim amount(size + 1) As String
         Dim subTotal As String = txtTotal.Text
         Dim totalVat As String = txtVAT.Text
         Dim total As String = txtGrandTotal.Text
-        Dim discountRatio As String = txtDiscount.Text
+        Dim discount As String = txtDiscount.Text
         Dim count As Integer = 0
-
-        For i As Integer = 0 To dtgrdViewItemList.RowCount - 2
-            If dtgrdViewItemList.Item(9, i).Value = False Then
-                itemCode(count) = dtgrdViewItemList.Item(1, i).Value
-                'descr(count) = dtgrdViewItemList.Item(10, i).Value
-                descr(count) = (New Item).getShortDescription(itemCode(count))
-                qty(count) = dtgrdViewItemList.Item(7, i).Value
-                price(count) = dtgrdViewItemList.Item(4, i).Value
-                tax(count) = dtgrdViewItemList.Item(5, i).Value
-                amount(count) = dtgrdViewItemList.Item(8, i).Value
-                count = count + 1
-            End If
+        For i As Integer = 0 To receipt.receiptDetails.Count - 1
+            code(count) = receipt.receiptDetails(i).code
+            descr(count) = receipt.receiptDetails(i).description
+            qty(count) = receipt.receiptDetails(i).qty.ToString()
+            price(count) = LCurrency.displayValue(receipt.receiptDetails(i).sellingPriceVatIncl.ToString())
+            tax(count) = LCurrency.displayValue(receipt.receiptDetails(i).vat.ToString())
+            amount(count) = LCurrency.displayValue(receipt.receiptDetails(i).amount.ToString())
+            count = count + 1
         Next
-        If PointOfSale.printReceipt(tillNo, receiptNo, date_, TIN, VRN, itemCode, descr, qty, price, tax, amount, subTotal, totalVat, total, cash, balance) = True Then
-            printed = True
-        End If
-        Return printed
+        PointOfSale.printReceipt(Till.TILLNO, receipt.no, Day.bussinessDate, Company.TIN.ToString(), Company.VRN.ToString(), code, descr, qty, price, tax, amount, subTotal, totalVat, total, tender.ToString(), balance.ToString())
+        Return vbNull
     End Function
+
+
     Dim saleId As String = ""
     Private Sub btnPay_Click(sender As Object, e As EventArgs) Handles btnPay.Click
-        refreshList()
-        calculateValues()
-        If dtgrdViewItemList.RowCount > 0 And isAllVoid() = False Then
-            frmPayPoint.txtTotal.Text = FormatNumber(txtGrandTotal.Text, 2, , , TriState.True)
-            frmPayPoint.ShowDialog(Me)
-            If frmPayPoint.DialogResult = Windows.Forms.DialogResult.Cancel Then
-                calculateValues()
-            Else
-
-                Dim receipt As Receipt = New Receipt
-                receipt.cash = frmPayPoint.cashReceived
-                receipt.voucher = frmPayPoint.voucher
-                receipt.deposit = frmPayPoint.deposit
-                receipt.loyalty = frmPayPoint.loyalty
-                receipt.crCard = frmPayPoint.CRCard
-                receipt.cheque = frmPayPoint.cheque
-                receipt.cap = frmPayPoint.CAP
-                receipt.invoice = frmPayPoint.invoice
-                receipt.crNote = frmPayPoint.CRNote
-                receipt.mobile = frmPayPoint.mobile
-                receipt.other = frmPayPoint.other
-
-                Dim cashReceived As String = frmPayPoint.cashReceived
-                Dim balance As String = frmPayPoint.balance
-
-                receipt.no = "NA"
-
-                receipt.till.no = Till.TILLNO
-                receipt.issueDate = Day.systemDate
-
-                receipt.cart.id = txtId.Text
-
-                Dim response As Object = New Object
-                Dim json As JObject = New JObject
-                response = Web.post(receipt, "receipts/new")
-
-                Dim receiptToPrint = JsonConvert.DeserializeObject(Of Receipt)(response.ToString)
-
-                Dim tillNo As String = receiptToPrint.till.no
-                Dim date_ As String = Day.systemDate
-                Dim receiptNo As String = receiptToPrint.no
-                Dim TIN As String = Company.TIN
-                Dim VRN As String = Company.VRN
-
-                If printReceipt(tillNo, receiptNo, date_, TIN, VRN, cashReceived, balance) = True Then
-                    ''
+        Try
+            refreshList()
+            calculateValues()
+            If dtgrdViewItemList.RowCount > 0 And isAllVoid() = False Then
+                frmPayPoint.txtTotal.Text = FormatNumber(txtGrandTotal.Text, 2, , , TriState.True)
+                frmPayPoint.ShowDialog(Me)
+                If frmPayPoint.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                    calculateValues()
                 Else
-                    MsgBox("Payment canceled", vbOKOnly + vbInformation, "Canceled")
-                    Exit Sub
-                End If
-                loadCart(txtId.Text, Till.TILLNO)
-                calculateValues()
-                allowVoid = False
-                If dtgrdViewItemList.RowCount = 1 Then
-                    txtId.Text = ""
+                    If frmPayPoint.paid = True Then
+                        Dim receipt As Receipt = Receipt.CURRENT_RECEIPT
+                        printReceipt(receipt, frmPayPoint.cash, Convert.ToDouble(LCurrency.getValue(frmPayPoint.balance)))
+                        allowVoid = False
+                        cart = loadCart(Till.TILLNO)
+                        If IsNothing(cart) Then
+                            cart = createCart(Till.TILLNO)
+                        End If
+                        displayCart(cart)
+                    End If
                 End If
             End If
-        End If
+        Catch ex As Exception
+
+        End Try
+        txtGrandTotal.Text = ""
+        txtTotal.Text = ""
+        txtVAT.Text = ""
+        txtDiscount.Text = ""
+
     End Sub
 
     Private Function updateQty(qty As Double, sn As String)
-        Dim detail As CartDetail = New CartDetail
+        Dim detail As New CartDetail
         detail.id = sn
         detail.qty = qty
         Dim response As Object = New Object
         Dim json As JObject = New JObject
-        response = Web.put(detail, "carts/update_qty?detail_id=" + sn + "&qty=" + qty.ToString)
-        If response = True Then
+        Try
+            response = Web.post(detail, "carts/update_qty")
             Return True
-        Else
+        Catch ex As Exception
             Return False
-        End If
+        End Try
     End Function
     Private Sub tpsLock_Click(sender As Object, e As EventArgs) Handles tpsLock.Click
         frmLock.ShowDialog()
     End Sub
     Private Sub frmMain_Shown(sender As Object, e As EventArgs) Handles Me.Shown
-        RECEIPT_NO0 = (New Receipt).makeReceipt(Till.TILLNO, Day.systemDate)
-        loadCart(txtId.Text, Till.TILLNO)
+        RECEIPT_NO0 = (New Receipt).makeReceipt(Till.TILLNO, Day.bussinessDate)
+        ''cart = loadCart(Till.TILLNO)
+        ''displayCart(cart)
     End Sub
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         tspStatus.Text = tspStatus.Text + "Logged in"
         tspUser.Text = tspUser.Text + User.FIRST_NAME + " " + User.LAST_NAME
         tspLogginTime.Text = tspLogginTime.Text + User.LOGIN_TIME
-        tpsSystDate.Text = tpsSystDate.Text + Day.systemDate
-        If User.authorize("SELLING") Then
-            dtgrdViewItemList.Enabled = True
-            tlsrpItemcode.Enabled = True
-            tlstrDescription.Enabled = True
-            tlstrpBarcode.Enabled = True
-            btnPay.Enabled = True
+        tpsSystDate.Text = tpsSystDate.Text + Day.bussinessDate
 
+        dtgrdViewItemList.Enabled = True
+        btnPay.Enabled = True
+
+
+        ' If User.authorize("SELLING") Then
+        'dtgrdViewItemList.Enabled = True
+        'tlsrpItemcode.Enabled = True
+        'tlstrDescription.Enabled = True
+        'tlstrpBarcode.Enabled = True
+        'btnPay.Enabled = True
+
+        ' End If
+        Dim product As New Product
+        longProductList = product.getDescriptions()
+
+        cart = loadCart(Till.TILLNO)
+
+        If IsNothing(cart) Then
+            MsgBox("Check")
+            cart = createCart(Till.TILLNO)
         End If
-        Dim item As New Item
-        '  longList = item.getItemDescriptions()
+        displayCart(cart)
     End Sub
     Private Function loadUser(role As String)
 
@@ -702,7 +649,7 @@ Public Class frmMain
 
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles btnQuantity.Click
+    Private Sub Button1_Click(sender As Object, e As EventArgs)
         frmNumInput.Text = "Enter Quantity"
         Dim qty As String = ""
         Dim row As Integer = -1
@@ -732,6 +679,7 @@ Public Class frmMain
             qty = frmNumInput.txtValue.Text
             If IsNumeric(qty.ToString) And Val(qty.ToString) Mod 1 >= 0.0999 And Val(qty) > 0 And row >= 0 Then
                 dtgrdViewItemList.Item(7, row).Value = qty.ToString
+                refreshList()
                 calculateValues()
             Else
                 MsgBox("Invalid Quantity. Quantity should be a number", vbExclamation + vbOKOnly, "Error: Invalid Entry")
@@ -739,7 +687,7 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles btnDiscount.Click
+    Private Sub Button2_Click(sender As Object, e As EventArgs)
         frmNumInput.Text = "Enter Discount ratio 0%-100%"
         Dim disc As String = ""
         Dim row As Integer = -1
@@ -771,6 +719,7 @@ Public Class frmMain
                 frmAllow.ShowDialog()
                 If frmAllow.allowed = True Then
                     dtgrdViewItemList.Item(6, row).Value = LCurrency.displayValue(disc.ToString)
+                    refreshList()
                     calculateValues()
                 Else
                     Return
@@ -781,7 +730,7 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles btnPrice.Click
+    Private Sub Button3_Click(sender As Object, e As EventArgs)
         frmNumInput.Text = "Enter Price"
         Dim price As String = ""
         Dim row As Integer = -1
@@ -812,6 +761,7 @@ Public Class frmMain
                 frmAllow.ShowDialog()
                 If frmAllow.allowed = True Then
                     dtgrdViewItemList.Item(4, row).Value = LCurrency.displayValue(price.ToString)
+                    refreshList()
                     calculateValues()
                 Else
                     Return
@@ -819,42 +769,6 @@ Public Class frmMain
             Else
                 MsgBox("Invalid Value. Price should be a number ie.200, 1000, 3500.00 etc", vbExclamation + vbOKOnly, "Error: Invalid Entry")
             End If
-        End If
-    End Sub
-
-    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-        frmAllow.ShowDialog()
-        If frmAllow.allowed = True Then
-            Try
-                dtgrdViewItemList.Rows.RemoveAt(dtgrdViewItemList.CurrentRow.Index)
-            Catch ex As Exception
-                MsgBox("No item selected", vbOKOnly + vbExclamation, "Error: No selection")
-            End Try
-            calculateValues()
-        Else
-            Return
-        End If
-
-    End Sub
-
-    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
-        frmAllow.ShowDialog()
-        If frmAllow.allowed = True Then
-            If dtgrdViewItemList.RowCount < 2 Then
-                MsgBox("List empty!", vbOKOnly + vbExclamation, "Error: List empty")
-                Exit Sub
-            End If
-            Try
-                Dim res As Integer = MsgBox("Clear item list? This can not be undone. Proceed any way?", vbYesNo + vbQuestion, "Clear List")
-                If res = 6 Then
-                    dtgrdViewItemList.Rows.Clear()
-                    calculateValues()
-                End If
-            Catch ex As Exception
-                '
-            End Try
-        Else
-            Return
         End If
     End Sub
 
@@ -983,31 +897,6 @@ Public Class frmMain
     Dim _isAdded As Boolean
     Dim _values As String()
     Dim _formerValue As String = String.Empty
-
-    Private Sub dtgrdViewItemList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgrdViewItemList.CellClick
-        Try
-            If dtgrdViewItemList.CurrentCell.ColumnIndex = 2 Then
-                Dim control As New TextBox
-
-                control = DirectCast(dtgrdViewItemList.EditingControl, TextBox)
-                Dim list As New List(Of String)
-                Dim mySource As New AutoCompleteStringCollection
-                Dim product_ As New Product
-                list = product_.getDescriptions
-
-                mySource.AddRange(list.ToArray)
-                control.AutoCompleteCustomSource = mySource
-                control.AutoCompleteMode = AutoCompleteMode.Suggest
-                control.AutoCompleteSource = AutoCompleteSource.CustomSource
-
-            End If
-        Catch ex As Exception
-            MsgBox(ex.StackTrace)
-        End Try
-    End Sub
-    Dim longList As New List(Of String)
-    Dim shortList As New List(Of String)
-
 
     Private Sub Button43_Click(sender As Object, e As EventArgs) Handles Button43.Click
         pnlKeyBoard.Visible = False
@@ -1208,9 +1097,7 @@ Public Class frmMain
     Declare Function Wow64DisableWow64FsRedirection Lib "kernel32" (ByRef oldvalue As Long) As Boolean
     Declare Function Wow64EnableWow64FsRedirection Lib "kernel32" (ByRef oldvalue As Long) As Boolean
     Private osk As String = "C:\Windows\System32\osk.exe"
-    Private Sub ToolStripButton8_Click(sender As Object, e As EventArgs) Handles ToolStripButton8.Click
 
-    End Sub
     Private Sub startOSK()
         Dim old As Long
         If Environment.Is64BitOperatingSystem Then
@@ -1226,77 +1113,83 @@ Public Class frmMain
         startOSK()
     End Sub
 
-    Private Sub AddToCart(sn As String, tillNo As String, barcode As String, code As String, description As String, sellingPriceVatIncl As Double, vat As Double, discountRatio As Double, qty As Double, amount As Double, shortDescr As String)
+    Private Sub AddToCart(sn As String, tillNo As String, barcode As String, code As String, description As String, sellingPriceVatIncl As Double, vat As Double, discount As Double, qty As Double, amount As Double, shortDescr As String)
+
         Dim cart As New Cart
-        cart.id = txtId.Text
-        cart.till.no = tillNo
-        Dim cartDetail As CartDetail = New CartDetail
-        cartDetail.id = sn
+        cart.no = Cart.NO_
+        cart.till.no = Till.TILLNO
+        Dim cartDetail = New CartDetail
+        cartDetail.cart = cart
         cartDetail.barcode = barcode
         cartDetail.code = code
         cartDetail.description = description
         cartDetail.sellingPriceVatIncl = sellingPriceVatIncl
+        cartDetail.discount = discount
         cartDetail.vat = vat
-        cartDetail.discountRatio = discountRatio
         cartDetail.qty = qty
-        cart.cartDetails.Add(cartDetail)
+        cartDetail.amount = amount
 
-        Dim response As Object = New Object
-        Dim json As JObject = New JObject
-        If txtId.Text = "" Then
-            response = Web.post(cart, "carts/new")
-        Else
-            response = Web.put(cart, "carts/update_by_id?id=" + txtId.Text)
-        End If
-        json = JObject.Parse(response)
-        If txtId.Text = "" Then
-            txtId.Text = json.SelectToken("id")
-        End If
-    End Sub
-    Private Function checkVoid(tillNo As String, sn As String)
-        Dim response As Object = New Object
-        Dim json As JObject = New JObject
-        response = Web.get_("carts/check_voided?detail_id=" + sn)
-        If response = True Then
-            Return True
-        Else
-            Return False
-        End If
-    End Function
-    Private Sub _void(tillNo As String, id As String)
-        Dim cartDetail As New CartDetail
-        cartDetail.id = id
-        cartDetail.cart.id = txtId.Text
-
-        Dim response As Object = New Object
-        Dim json As JObject = New JObject
-        response = Web.put(cartDetail, "carts/void?detail_id=" + id)
-        loadCart(txtId.Text, Till.TILLNO)
-
-    End Sub
-    Private Sub unvoid(tillNo As String, id As String)
-        Dim cartDetail As New CartDetail
-        cartDetail.id = id
-        cartDetail.cart.id = txtId.Text
-
-        Dim response As Object = New Object
-        Dim json As JObject = New JObject
-        response = Web.put(cartDetail, "carts/unvoid?detail_id=" + id)
-        loadCart(txtId.Text, Till.TILLNO)
-    End Sub
-    Private Sub loadCart(id As String, tillNo As String)
-        dtgrdViewItemList.Rows.Clear()
-
-        Dim response As Object = New Object
-        Dim json As JObject = New JObject
+        Dim response As New Object
+        Dim json As New JObject
         Try
-            response = Web.get_("carts/get_by_id_and_till_no?id=" + id + "&till_no=" + tillNo)
-            json = JObject.Parse(response)
+            Web.post(cartDetail, "carts/add_detail")
         Catch ex As Exception
-            Exit Sub
+            MsgBox("Could not add product", "Error: Process failed", vbOKOnly)
         End Try
+        cart = loadCart(Till.TILLNO)
+        displayCart(cart)
 
-        Dim cart As Cart = JsonConvert.DeserializeObject(Of Cart)(json.ToString)
+    End Sub
+
+    Private Sub _void(id As String)
+        Dim cartDetail As CartDetail = New CartDetail()
+        cartDetail.id = id
+        Dim response As New Object()
+        Dim json As New JObject()
+        response = Web.post(cartDetail, "carts/void")
+    End Sub
+
+    Private Sub unvoid(id As String)
+        Dim cartDetail As CartDetail = New CartDetail()
+        cartDetail.id = id
+        Dim response As New Object()
+        Dim json As New JObject()
+        response = Web.post(cartDetail, "carts/unvoid")
+    End Sub
+
+    Private Function loadCart(tillNo As String) As Cart
+        dtgrdViewItemList.Rows.Clear()
+        Dim response As New Object
+        Dim json As New JObject
+        Try
+            response = Web.get_("carts/load?till_no=" + tillNo)
+            json = JObject.Parse(response.ToString)
+            cart.NO_ = json.SelectToken("no").ToString()
+            cart = JsonConvert.DeserializeObject(Of Cart)(json.ToString)
+            Return cart
+        Catch ex As Exception
+            Return Nothing
+        End Try
+    End Function
+
+    Private Function createCart(tillNo As String) As Cart
+        Dim response As New Object
+        Dim json As New JObject
+        Try
+            response = Web.get_("carts/create?till_no=" + tillNo)
+            json = JObject.Parse(response.ToString())
+            cart.NO_ = json.SelectToken("no").ToString()
+            cart = JsonConvert.DeserializeObject(Of Cart)(json.ToString())
+        Catch ex As Exception
+            MsgBox("Could not create workspace, Application will close")
+            Application.Exit()
+            Return New Cart
+        End Try
+        Return cart
+    End Function
+
+    Private Function displayCart(cart As Cart)
+        dtgrdViewItemList.Rows.Clear()
 
         If Not IsNothing(cart.cartDetails) Then
             Dim i As Integer = 0
@@ -1329,7 +1222,7 @@ Public Class frmMain
                 dtgrdRow.Cells.Add(dtgrdCell)
 
                 dtgrdCell = New DataGridViewTextBoxCell()
-                dtgrdCell.Value = detail.discountRatio
+                dtgrdCell.Value = detail.discount
                 dtgrdRow.Cells.Add(dtgrdCell)
 
                 dtgrdCell = New DataGridViewTextBoxCell()
@@ -1341,7 +1234,7 @@ Public Class frmMain
                 dtgrdRow.Cells.Add(dtgrdCell)
 
                 dtgrdCell = New DataGridViewCheckBoxCell()
-                If detail.voided = 1 Then
+                If detail.voided = True Then
                     dtgrdCell.Value = True
                 Else
                     dtgrdCell.Value = False
@@ -1368,39 +1261,72 @@ Public Class frmMain
             calculateValues()
             dtgrdViewItemList.CurrentCell = dtgrdViewItemList(0, dtgrdViewItemList.RowCount - 1)
         End If
-    End Sub
+
+        Return vbNull
+    End Function
 
     Dim order As frmOrder
-    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
-        Try
-            order = New frmOrder()
-            order.ShowDialog(Me)
-            If order.DialogResult = Windows.Forms.DialogResult.OK Then
-                Dim size As Integer = frmOrder.length
-                Dim bcodes(size) As String
-                Dim icodes(size) As String
-                Dim qtys(size) As Integer
-                For i As Integer = 0 To size - 1
-                    bcodes(i) = frmOrder.barcodes(i)
-                    icodes(i) = frmOrder.itemcodes(i)
-                    qtys(i) = frmOrder.quantitys(i)
-                    If (bcodes(i)) <> "" Then
-                        searchByBarcode(bcodes(i), qtys(i))
-                    Else
-                        searchByCode(icodes(i), qtys(i))
-                    End If
-                Next
-                order.Dispose()
-            Else
-                order.Dispose()
-            End If
 
-        Catch ex As Exception
-            MsgBox(ex.ToString)
-        End Try
-        If frmOrder.showAgain = True Then
-            order = New frmOrder()
-            order.ShowDialog(Me)
+    Dim longProductList As List(Of String)
+    Dim shortProductList As List(Of String) = New List(Of String)
+    Dim control As TextBox
+    Dim c As Integer = -1
+    Dim r As Integer = -1
+    Private Sub dtgrdViewItemList_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dtgrdViewItemList.CellEnter, dtgrdViewItemList.CellClick
+        Dim rowHeight As Integer = dtgrdViewItemList.RowTemplate.Height
+        Dim x As Integer = 340
+        Dim y As Integer = 90 + (dtgrdViewItemList.RowCount - 1) * rowHeight
+        If y > dtgrdViewItemList.Size().Height + 90 Then
+            y = dtgrdViewItemList.Size.Height + 25
         End If
+        cmbProducts.SetBounds(x, y, 300, rowHeight)
+        If dtgrdViewItemList.CurrentCell.ColumnIndex = 2 Then
+            r = dtgrdViewItemList.CurrentCell.RowIndex
+            c = 2
+            shortProductList.Clear()
+            If dtgrdViewItemList.Item(c, r).Value = "" And r = dtgrdViewItemList.RowCount - 1 Then
+                cmbProducts.Visible = True
+                cmbProducts.Focus()
+            Else
+                cmbProducts.Visible = False
+                cmbProducts.Items.Clear()
+                c = -1
+                r = -1
+            End If
+        Else
+            cmbProducts.Visible = False
+            cmbProducts.Items.Clear()
+            c = -1
+            r = -1
+        End If
+    End Sub
+    Private Sub cmbDescription_KeyUp(sender As Object, e As EventArgs) Handles cmbProducts.KeyUp
+        If Not c = 2 Then
+            Exit Sub
+        End If
+        Dim currentText As String = cmbProducts.Text
+        shortProductList.Clear()
+        cmbProducts.Items.Clear()
+        cmbProducts.Items.Add(currentText)
+        cmbProducts.DroppedDown = True
+        For Each text As String In longProductList
+            Dim formattedText As String = text.ToUpper()
+            If formattedText.Contains(cmbProducts.Text.ToUpper()) Then
+                shortProductList.Add(text)
+            End If
+        Next
+        cmbProducts.Items.AddRange(shortProductList.ToArray())
+        cmbProducts.SelectionStart = cmbProducts.Text.Length
+        Cursor.Current = Cursors.Default
+    End Sub
+    Private Sub cmbProducts_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbProducts.SelectedValueChanged
+        Try
+            Dim value As String = cmbProducts.Text
+            dtgrdViewItemList.Item(c, r).Value = value
+            cmbProducts.Visible = False
+            searchByDescription(value, 1)
+        Catch ex As Exception
+
+        End Try
     End Sub
 End Class

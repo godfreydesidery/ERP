@@ -50,4 +50,11 @@ public class Till {
 	private double other = 0;
 	
 	private double floatBalance = 0;
+	
+	private String operatorName = "";
+	private String operatorPassword = "";
+	private String port = "";
+	private boolean fiscalPrinterEnabled = false;
+	private String posPrinterLogicName = "";
+	private boolean posPrinterEnabled = false;
 }

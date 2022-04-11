@@ -1,6 +1,41 @@
-﻿Public Class frmPayPoint
+﻿Imports Newtonsoft.Json
+Imports Newtonsoft.Json.Linq
+Imports POS2
+
+Public Class frmPayPoint
     Public Shared cashReceived As Double = 0
     Public Shared balance As Double = 0
+
+    Public Shared cash As Double = 0
+    Public Shared voucher As Double = 0
+    Public Shared deposit As Double = 0
+    Public Shared loyalty As Double = 0
+    Public Shared CRCard As Double = 0
+    Public Shared CAP As Double = 0
+    Public Shared invoice As Double = 0
+    Public Shared CRNote As Double = 0
+    Public Shared mobile As Double = 0
+    Public Shared cheque As Double = 0
+    Public Shared other As Double = 0
+    Public Shared total As Double = 0
+
+    Private Shared prn As RawPrinterHelper = New RawPrinterHelper()
+
+    Public Shared posPrinterLogicName As String = ""
+    Public Shared posCashDrawerLogicName As String = ""
+    Public Shared posLineDisplayLogicName As String = ""
+    Public Shared posPrinterEnabled As Boolean = False
+
+
+    Public Shared strLogicalName As String = InstalledPPOSDevices.posLogicName  ' Get the available fiscal printer logical name
+    Public Shared fiscalPrinterDeviceName As String = ""
+    Public Shared operatorName As String = ""
+    Public Shared operatorPassword As String = ""
+    Public Shared port As String = ""
+    Public Shared drawer As String = ""
+    Public Shared fiscalPrinterEnabled As String = ""
+
+    Public Shared paid As Boolean = False
 
     Private Sub btnAccept_Click(sender As Object, e As EventArgs) Handles btnAccept.Click
         Dim amount As Double = txtTotal.Text
@@ -21,11 +56,14 @@
                 CRNote = Val(txtCRNote.Text)
                 mobile = Val(txtMobile.Text)
                 cheque = Val(txtCheque.Text)
-                Payment.setPayment(cash, voucher, deposit, loyalty, CRCard, CAP, invoice, CRNote, mobile)
+                other = Val(txtOther.Text)
+                ' Payment.setPayment(cash, voucher, deposit, loyalty, CRCard, CAP, invoice, CRNote, mobile)
 
-                'till register
-                'Till.tillTotalRegister(Till.TILLNO, cash, voucher, cheque, deposit, loyalty, CRCard, CAP, invoice, CRNote, mobile)
-                Me.Dispose()
+                Receipt.CURRENT_RECEIPT = pay(cash, voucher, deposit, loyalty, CRCard, CAP, invoice, CRNote, mobile, other)
+
+                If Not IsNothing(Receipt.CURRENT_RECEIPT) Then
+                    Me.Dispose()
+                End If
             Else
                 'dont commit payment
             End If
@@ -34,38 +72,57 @@
         End If
 
     End Sub
-    Public Shared cash As Double = 0
-    Public Shared voucher As Double = 0
-    Public Shared deposit As Double = 0
-    Public Shared loyalty As Double = 0
-    Public Shared CRCard As Double = 0
-    Public Shared CAP As Double = 0
-    Public Shared invoice As Double = 0
-    Public Shared CRNote As Double = 0
-    Public Shared mobile As Double = 0
-    Public Shared cheque As Double = 0
-    Public Shared other As Double = 0
-    Public Shared total As Double = 0
 
-    Public Shared Function updateTill()
-        SaleSequence.seqNo = SaleSequence.seqNo + 1
-        Till.tillTotalRegister(Till.TILLNO, cash, voucher, cheque, deposit, loyalty, CRCard, CAP, invoice, CRNote, mobile)
-        Return vbNull
+    Private Function pay(cash As Double, voucher As Double, deposit As Double, loyalty As Double, crCard As Double, cap As Double, invoice As Double, crNote As Double, mobile As Double, other As Double) As Receipt
+
+        Dim continue_ As Boolean = True
+        Try
+            prn.OpenPrint(posPrinterLogicName)
+        Catch ex As Exception
+
+        End Try
+        If prn.PrinterIsOpen = False And posPrinterEnabled = True Then
+            Dim res As DialogResult = MsgBox("Could Not connect to POS printer. Continue operation without printing POS receipt?", "Error: POS Printer not available", vbYesNo + vbQuestion)
+            If res = DialogResult.Yes Then
+                continue_ = True
+            Else
+                continue_ = False
+            End If
+        End If
+        If continue_ = True Then
+            Dim receipt As Receipt = New Receipt()
+            Dim payment As Payment = New Payment()
+            payment.cash = cash
+            payment.voucher = voucher
+            payment.deposit = deposit
+            payment.loyalty = loyalty
+            payment.crCard = crCard
+            payment.cap = cap
+            payment.invoice = invoice
+            payment.crNote = crNote
+            payment.mobile = mobile
+            payment.other = other
+
+            Dim response As New Object
+            Dim json As New JObject
+            Try
+                response = Web.post(payment, "carts/pay?till_no=" + Till.TILLNO + "&cart_no=" + Cart.NO_)
+                json = JObject.Parse(response.ToString())
+                receipt = JsonConvert.DeserializeObject(Of Receipt)(json.ToString())
+                paid = True
+                Return receipt
+            Catch ex As Exception
+                Return New Receipt
+            End Try
+        End If
+        Return New Receipt
     End Function
-
-    Private Function recordSale(saleId As String)
-        'sql for recording sale with the specified id
-
-        Return vbNull
-
-    End Function
-
 
     Private Function calculateTotal()
         Dim totalAmount As Double = Val(Replace(txtTotal.Text, ",", ""))
         Dim totalReceived As Double = 0
         Dim balance As Double
-        Dim cash As Double, voucher As Double, cheque As Double, deposit As Double, loyalty As Double, CRCard As Double, CAP As Double, invoice As Double, CRNote As Double, mobile As Double
+        Dim cash As Double, voucher As Double, cheque As Double, deposit As Double, loyalty As Double, CRCard As Double, CAP As Double, invoice As Double, CRNote As Double, mobile As Double, other As Double
 
         cash = Val(txtCash.Text)
         voucher = Val(txtVoucher.Text)
@@ -77,8 +134,9 @@
         invoice = Val(txtInvoice.Text)
         CRNote = Val(txtCRNote.Text)
         mobile = Val(txtMobile.Text)
+        other = Val(txtOther.Text)
 
-        totalReceived = cash + voucher + cheque + deposit + loyalty + CRCard + CAP + invoice + CRNote + mobile
+        totalReceived = cash + voucher + cheque + deposit + loyalty + CRCard + CAP + invoice + CRNote + mobile + other
         txtAmountReceived.Text = FormatNumber(totalReceived.ToString, 2, , , TriState.True)
         balance = totalReceived - totalAmount
         txtBalance.Text = FormatNumber(balance.ToString, 2, , , TriState.True)
@@ -161,6 +219,12 @@
         End If
         calculateTotal()
     End Sub
+    Private Sub txtOther_TextChanged(sender As Object, e As EventArgs) Handles txtOther.TextChanged
+        If validateInput(txtOther.Text) = False Then
+            txtOther.Text = ""
+        End If
+        calculateTotal()
+    End Sub
     Private Function clearAll()
         'clears all the fields
         txtCash.Text = ""
@@ -197,6 +261,8 @@
     End Sub
 
     Private Sub frmPayPoint_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        paid = False
 
         clearAll()
 

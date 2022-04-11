@@ -536,8 +536,7 @@ namespace POS
             if (dtgrdProductList.CurrentCell.ColumnIndex == 8 && dtgrdProductList.CurrentCell.RowIndex != dtgrdProductList.RowCount - 1)
             {
                 string sn = dtgrdProductList[9, dtgrdProductList.CurrentCell.RowIndex].Value.ToString();
-                cart = loadCart(Till.TILLNO);
-                
+               
                 if ((bool)dtgrdProductList[8, dtgrdProductList.CurrentCell.RowIndex].Value == false)
                 {
                     _void(sn);

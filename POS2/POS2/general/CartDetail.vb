@@ -9,7 +9,8 @@
     Public Property costPriceVatExcl As Double
     Public Property sellingPriceVatIncl As Double
     Public Property sellingPriceVatExcl As Double
-    Public Property discountRatio As Double
-    Public Property voided As Integer
+    Public Property discount As Double
+    Public Property amount As Double
+    Public Property voided As Boolean
     Public Property cart As Cart = New Cart
 End Class

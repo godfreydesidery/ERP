@@ -189,7 +189,7 @@ public class CartServiceImpl implements CartService {
 			throw new NotFoundException("Detail not found");
 		}		
 		d.get().setVoided(true);
-		cartDetailRepository.saveAndFlush(d.get());
+		cartDetailRepository.save(d.get());
 		voidedService.createVoid(d.get().getCart().getTill(), d.get().getBarcode(), d.get().getCode(), d.get().getDescription(), d.get().getQty(), d.get().getSellingPriceVatIncl(), request, dayRepository.getCurrentBussinessDay().getId(), d.get().getId());
 		return true;
 	}
@@ -210,7 +210,7 @@ public class CartServiceImpl implements CartService {
 			d.get().setVoided(false);
 			cartDetailRepository.saveAndFlush(d.get());
 		}		
-		voidedService.deleteVoid(dId);
+		voidedService.deleteVoid(dId);		
 		return true;
 	}
 	

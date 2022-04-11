@@ -39,9 +39,6 @@ namespace POS.general
             JObject json = new JObject();
             try
             {
-                var user_ = new JObject();
-                user_.Add("username", username);
-                user_.Add("password", password);
                 response = Web.login(username, password);         
                 json = JObject.Parse(response.ToString());
             }

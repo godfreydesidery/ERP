@@ -54,6 +54,7 @@ namespace POS
         public static string balance = "";
 
         string MODE = "";
+
         public static bool paid = false;
         public FormPayPoint()
         {

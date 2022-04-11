@@ -20,31 +20,7 @@ Public Class frmAllow
         Dim allwd As Boolean = False
         'verify managers password
         Dim query As String = "SELECT `username`, `password`, `role`, `alias`, `status` FROM `users` WHERE `username`='" + uname + "' AND (`role`='MANAGER' OR `role`='CHIEF CASHIER')"
-        Try
-            Dim command As New MySqlCommand()
-            Dim conn As New MySqlConnection(Database.conString)
-            conn.Open()
-            command.CommandText = query
-            command.Connection = conn
-            command.CommandType = CommandType.Text
-            Dim reader As MySqlDataReader = command.ExecuteReader()
-            Dim username As String = ""
-            Dim password As String = ""
-            Dim status As String = ""
-            While reader.Read
-                username = reader.GetString("username")
-                password = reader.GetString("password")
-                status = reader.GetString("status")
-                MsgBox(reader.GetString("role"))
-            End While
-            If Hash.check(pword, password) Then ' password = pword Then
-                allwd = True
-            End If
-        Catch ex As Devart.Data.MySql.MySqlException
-            LError.databaseConnection()
-            Return vbNull
-            Exit Function
-        End Try
+
         Return allwd
     End Function
 
