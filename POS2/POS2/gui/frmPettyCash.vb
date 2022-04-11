@@ -30,14 +30,16 @@ Public Class frmPettyCash
         Dim json As JObject = New JObject
 
         Try
-            response = Web.get_("tills/get_till_position_by_no?no=" + Till.TILLNO)
+            Cursor.Current = Cursors.WaitCursor
+            response = Web.get_("tills/get_cash?till_no=" + Till.TILLNO)
+            available = response
+            Cursor.Current = Cursors.Default
         Catch ex As Exception
+            Cursor.Current = Cursors.Default
+            available = 0
             MsgBox(ex.ToString)
         End Try
-        json = JObject.Parse(response)
-        Dim till_ As Till = JsonConvert.DeserializeObject(Of Till)(json.ToString)
-        available = till_.cash
-
+        Cursor.Current = Cursors.Default
         Return available
     End Function
     Private Function getCurrentFloat()
@@ -47,14 +49,16 @@ Public Class frmPettyCash
         Dim json As JObject = New JObject
 
         Try
-            response = Web.get_("tills/get_till_position_by_no?no=" + Till.TILLNO)
+            Cursor.Current = Cursors.WaitCursor
+            response = Web.get_("tills/get_float?till_no=" + Till.TILLNO)
+            Cursor.Current = Cursors.Default
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            Cursor.Current = Cursors.Default
+            available = 0
+            MsgBox(ex.Message)
         End Try
-        json = JObject.Parse(response)
-        Dim till_ As Till = JsonConvert.DeserializeObject(Of Till)(json.ToString)
-        available = till_.floatBalance
-
+        Cursor.Current = Cursors.Default
+        available = response
         Return available
     End Function
     Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
@@ -78,11 +82,15 @@ Public Class frmPettyCash
             Dim response As Object = New Object
             Dim json As JObject = New JObject
             Try
-                response = Web.post(pettyCash, "petty_cashs/collect_by_till_no?no=" + Till.TILLNO)
+                Cursor.Current = Cursors.WaitCursor
+                response = Web.post(pettyCash, "tills/petty_cash?till_no=" + Till.TILLNO)
+                Cursor.Current = Cursors.Default
             Catch ex As Exception
+                Cursor.Current = Cursors.Default
                 MsgBox(ex.ToString)
                 Exit Sub
             End Try
+            Cursor.Current = Cursors.Default
             MsgBox("Petty cash registered successifully")
             Me.Dispose()
         End If

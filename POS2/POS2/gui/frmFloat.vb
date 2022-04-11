@@ -14,15 +14,11 @@ Public Class frmFloat
         Dim json As JObject = New JObject
 
         Try
-            response = Web.get_("tills/get_float_by_no?no=" + Till.TILLNO)
+            response = Web.get_("tills/get_float?till_no=" + Till.TILLNO)
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            MsgBox(ex.Message)
         End Try
-        json = JObject.Parse(response)
-        Dim till_ As Till = JsonConvert.DeserializeObject(Of Till)(json.ToString)
-        currentFloat = till_.floatBalance
-        txtCurrentFloat.Text = LCurrency.displayValue(currentFloat.ToString)
-
+        txtCurrentFloat.Text = LCurrency.displayValue(response.ToString)
     End Sub
 
     Private Sub txtAddFloat_GotFocus(sender As Object, e As EventArgs) Handles txtAddFloat.GotFocus
@@ -32,7 +28,7 @@ Public Class frmFloat
     Private Sub txtAddFloat_TextChanged(sender As Object, e As EventArgs) Handles txtAddFloat.TextChanged
         Dim amount As String = txtAddFloat.Text
         If IsNumeric(amount) And Val(amount) >= 0 Then
-            newFloat = currentFloat + Val(amount)
+            newFloat = LCurrency.getValue(txtCurrentFloat.Text) + Val(amount)
             txtNewFloat.Text = LCurrency.displayValue(newFloat.ToString)
         Else
             txtAddFloat.Text = ""
@@ -68,17 +64,36 @@ Public Class frmFloat
             till.name = "NA"
             till.floatBalance = currentFloat
 
+            Dim float_ As Floatt = New Floatt
+            float_.till = till
+            float_.addition = Val(txtAddFloat.Text)
+            float_.deduction = Val(txtDeductFloat.Text)
+
             Dim response As Object = New Object
             Dim json As JObject = New JObject
             Try
-                response = Web.put(till, "tills/update_float_by_no?no=" + Till.TILLNO)
+                Cursor.Current = Cursors.WaitCursor
+                response = Web.post(float_, "tills/update_float")
+                Cursor.Current = Cursors.Default
+                MsgBox("Float updated successifully")
             Catch ex As Exception
+                Cursor.Current = Cursors.Default
+                MsgBox("Could not update float")
                 MsgBox(ex.ToString)
                 Exit Sub
             End Try
+            Try
+                Cursor.Current = Cursors.WaitCursor
+                response = Web.get_("tills/get_float?till_no=" + Till.TILLNO)
+                Cursor.Current = Cursors.Default
+            Catch ex As Exception
+                Cursor.Current = Cursors.Default
+                MsgBox(ex.Message)
+            End Try
+            Cursor.Current = Cursors.Default
+            txtCurrentFloat.Text = LCurrency.displayValue(response.ToString)
             txtAddFloat.Text = ""
             txtDeductFloat.Text = ""
-            MsgBox("Float updated successifully")
         End If
     End Sub
 
@@ -96,8 +111,8 @@ Public Class frmFloat
 
     Private Sub txtDeductFloat_TextChanged(sender As Object, e As EventArgs) Handles txtDeductFloat.TextChanged
         Dim amount As String = txtDeductFloat.Text
-        If IsNumeric(amount) And Val(amount) >= 0 And Val(amount) <= Val(currentFloat) Then
-            newFloat = currentFloat - Val(amount)
+        If IsNumeric(amount) And Val(amount) >= 0 And Val(amount) <= Val(LCurrency.getValue(txtCurrentFloat.Text)) Then
+            newFloat = LCurrency.getValue(txtCurrentFloat.Text) - Val(amount)
             txtNewFloat.Text = LCurrency.displayValue(newFloat.ToString)
         Else
             txtDeductFloat.Text = ""

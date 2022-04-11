@@ -31,6 +31,8 @@ Partial Class frmPayPoint
         Me.txtBalance = New System.Windows.Forms.TextBox()
         Me.btnBack = New System.Windows.Forms.Button()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.txtOther = New System.Windows.Forms.TextBox()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.txtCheque = New System.Windows.Forms.TextBox()
         Me.Label10 = New System.Windows.Forms.Label()
@@ -75,8 +77,6 @@ Partial Class frmPayPoint
         Me.btn2 = New System.Windows.Forms.Button()
         Me.btn1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.txtOther = New System.Windows.Forms.TextBox()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.Panel3.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -93,7 +93,7 @@ Partial Class frmPayPoint
         Me.Panel3.Controls.Add(Me.txtBalance)
         Me.Panel3.Location = New System.Drawing.Point(12, 379)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(685, 178)
+        Me.Panel3.Size = New System.Drawing.Size(685, 167)
         Me.Panel3.TabIndex = 15
         '
         'txtValidBalance
@@ -101,16 +101,16 @@ Partial Class frmPayPoint
         Me.txtValidBalance.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtValidBalance.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtValidBalance.ForeColor = System.Drawing.Color.Red
-        Me.txtValidBalance.Location = New System.Drawing.Point(399, 64)
+        Me.txtValidBalance.Location = New System.Drawing.Point(175, 82)
         Me.txtValidBalance.Name = "txtValidBalance"
         Me.txtValidBalance.ReadOnly = True
-        Me.txtValidBalance.Size = New System.Drawing.Size(262, 15)
+        Me.txtValidBalance.Size = New System.Drawing.Size(321, 15)
         Me.txtValidBalance.TabIndex = 10
         '
         'btnAccept
         '
         Me.btnAccept.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnAccept.Location = New System.Drawing.Point(213, 114)
+        Me.btnAccept.Location = New System.Drawing.Point(126, 109)
         Me.btnAccept.Name = "btnAccept"
         Me.btnAccept.Size = New System.Drawing.Size(109, 54)
         Me.btnAccept.TabIndex = 7
@@ -142,7 +142,7 @@ Partial Class frmPayPoint
         '
         Me.Label9.AutoSize = True
         Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(122, 59)
+        Me.Label9.Location = New System.Drawing.Point(122, 41)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(70, 20)
         Me.Label9.TabIndex = 5
@@ -152,10 +152,10 @@ Partial Class frmPayPoint
         '
         Me.txtBalance.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtBalance.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtBalance.Location = New System.Drawing.Point(213, 59)
+        Me.txtBalance.Location = New System.Drawing.Point(213, 41)
         Me.txtBalance.Name = "txtBalance"
         Me.txtBalance.ReadOnly = True
-        Me.txtBalance.Size = New System.Drawing.Size(188, 20)
+        Me.txtBalance.Size = New System.Drawing.Size(283, 20)
         Me.txtBalance.TabIndex = 6
         Me.txtBalance.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -163,7 +163,7 @@ Partial Class frmPayPoint
         '
         Me.btnBack.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnBack.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnBack.Location = New System.Drawing.Point(800, 503)
+        Me.btnBack.Location = New System.Drawing.Point(800, 492)
         Me.btnBack.Name = "btnBack"
         Me.btnBack.Size = New System.Drawing.Size(96, 54)
         Me.btnBack.TabIndex = 9
@@ -199,6 +199,26 @@ Partial Class frmPayPoint
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(685, 248)
         Me.Panel2.TabIndex = 14
+        '
+        'txtOther
+        '
+        Me.txtOther.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtOther.Location = New System.Drawing.Point(449, 210)
+        Me.txtOther.Name = "txtOther"
+        Me.txtOther.ReadOnly = True
+        Me.txtOther.Size = New System.Drawing.Size(212, 27)
+        Me.txtOther.TabIndex = 32
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(353, 213)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(51, 20)
+        Me.Label2.TabIndex = 31
+        Me.Label2.Text = "Other"
+        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Panel5
         '
@@ -443,8 +463,6 @@ Partial Class frmPayPoint
         '
         'Panel4
         '
-        Me.Panel4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel4.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.Panel4.Controls.Add(Me.Button1)
         Me.Panel4.Controls.Add(Me.btnClear)
@@ -673,39 +691,19 @@ Partial Class frmPayPoint
         '
         Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.Button2.Font = New System.Drawing.Font("MS Reference Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button2.Location = New System.Drawing.Point(706, 503)
+        Me.Button2.Location = New System.Drawing.Point(706, 492)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(88, 52)
         Me.Button2.TabIndex = 32
         Me.Button2.Text = "Key Board"
         Me.Button2.UseVisualStyleBackColor = True
         '
-        'txtOther
-        '
-        Me.txtOther.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtOther.Location = New System.Drawing.Point(449, 210)
-        Me.txtOther.Name = "txtOther"
-        Me.txtOther.ReadOnly = True
-        Me.txtOther.Size = New System.Drawing.Size(212, 27)
-        Me.txtOther.TabIndex = 32
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(353, 213)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(51, 20)
-        Me.Label2.TabIndex = 31
-        Me.Label2.Text = "Other"
-        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
         'frmPayPoint
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnBack
-        Me.ClientSize = New System.Drawing.Size(909, 588)
+        Me.ClientSize = New System.Drawing.Size(905, 584)
         Me.ControlBox = False
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Panel4)
@@ -713,7 +711,6 @@ Partial Class frmPayPoint
         Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Panel1)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Name = "frmPayPoint"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False

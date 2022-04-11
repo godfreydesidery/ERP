@@ -163,6 +163,7 @@
     <Compile Include="general\CRNote.vb" />
     <Compile Include="general\Crypt.vb" />
     <Compile Include="general\Error.vb" />
+    <Compile Include="general\Floatt.vb" />
     <Compile Include="general\InstalledPOSDevices.vb" />
     <Compile Include="general\Hash.vb" />
     <Compile Include="general\Company.vb" />

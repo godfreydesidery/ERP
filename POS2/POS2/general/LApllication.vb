@@ -48,11 +48,7 @@ Public Class LApllication
         Return document
     End Function
     Public Shared localAppDataDir As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & My.Application.Info.Title + "." + My.Application.Info.Version.Major.ToString + "." + My.Application.Info.Version.Minor.ToString
-    'Public Shared localAppDataDir As String = "C:\" + My.Application.Info.Title + "." + My.Application.Info.Version.Major.ToString + "." + My.Application.Info.Version.Minor.ToString
-    Dim databaseAddress As String = ""
-    Dim databasePassword As String = ""
-    Dim databaseUserID As String = ""
-    Dim databaseName As String = ""
+
     Public Function loadSettings()
         Dim computerName As String = ""
         Try
@@ -123,7 +119,7 @@ Public Class LApllication
         End Try
 
         Try
-            Day.bussinessDate = Day.getCurrentDay.ToString("yyyy-MM-dd") 'settings.SelectSingleNode("Settings/Day/Date").InnerText
+            Day.bussinessDate = Day.getCurrentDate()  'settings.SelectSingleNode("Settings/Day/Date").InnerText
         Catch ex As Exception
             MsgBox("Could not load Day Information. Day not set.", vbExclamation + vbOKOnly, "Error: Day error")
             Application.Exit()

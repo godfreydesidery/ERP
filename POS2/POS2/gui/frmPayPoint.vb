@@ -21,26 +21,25 @@ Public Class frmPayPoint
 
     Private Shared prn As RawPrinterHelper = New RawPrinterHelper()
 
-    Public Shared posPrinterLogicName As String = ""
-    Public Shared posCashDrawerLogicName As String = ""
-    Public Shared posLineDisplayLogicName As String = ""
-    Public Shared posPrinterEnabled As Boolean = False
+    Public Shared posPrinterLogicName As String = PointOfSale.posPrinterLogicName
+    Public Shared posCashDrawerLogicName As String = PointOfSale.posCashDrawerLogicName
+    Public Shared posLineDisplayLogicName As String = PointOfSale.posLineDisplayLogicName
+    Public Shared posPrinterEnabled As Boolean = PointOfSale.posPrinterEnabled
 
 
     Public Shared strLogicalName As String = InstalledPPOSDevices.posLogicName  ' Get the available fiscal printer logical name
-    Public Shared fiscalPrinterDeviceName As String = ""
-    Public Shared operatorName As String = ""
-    Public Shared operatorPassword As String = ""
-    Public Shared port As String = ""
-    Public Shared drawer As String = ""
-    Public Shared fiscalPrinterEnabled As String = ""
+    Public Shared fiscalPrinterDeviceName As String = PointOfSale.fiscalPrinterDeviceName
+    Public Shared operatorName As String = PointOfSale.operatorName
+    Public Shared operatorPassword As String = PointOfSale.operatorPassword
+    Public Shared port As String = PointOfSale.port
+    Public Shared drawer As String = PointOfSale.drawer
+    Public Shared fiscalPrinterEnabled As String = PointOfSale.fiscalPrinterEnabled
 
     Public Shared paid As Boolean = False
 
     Private Sub btnAccept_Click(sender As Object, e As EventArgs) Handles btnAccept.Click
         Dim amount As Double = txtTotal.Text
         If Val(txtBalance.Text) >= 0 Then
-            'Dim confirm As Integer = MessageBox.Show("Total amount payable is " + LCurrency.displayValue(amount.ToString) + ". Confirm payment?", "Confirm payment", MessageBoxButtons.YesNo)
             Dim confirm As Integer = MsgBox("Total amount payable is " + LCurrency.displayValue(amount.ToString) + ". Confirm payment?", vbQuestion + vbYesNo, "Confirm Payment: " + LCurrency.displayValue(amount.ToString))
             If confirm = DialogResult.Yes Then
                 cashReceived = LCurrency.displayValue(txtAmountReceived.Text)
@@ -57,7 +56,6 @@ Public Class frmPayPoint
                 mobile = Val(txtMobile.Text)
                 cheque = Val(txtCheque.Text)
                 other = Val(txtOther.Text)
-                ' Payment.setPayment(cash, voucher, deposit, loyalty, CRCard, CAP, invoice, CRNote, mobile)
 
                 Receipt.CURRENT_RECEIPT = pay(cash, voucher, deposit, loyalty, CRCard, CAP, invoice, CRNote, mobile, other)
 
@@ -82,7 +80,7 @@ Public Class frmPayPoint
 
         End Try
         If prn.PrinterIsOpen = False And posPrinterEnabled = True Then
-            Dim res As DialogResult = MsgBox("Could Not connect to POS printer. Continue operation without printing POS receipt?", "Error: POS Printer not available", vbYesNo + vbQuestion)
+            Dim res As Integer = MsgBox("Could Not connect to POS printer. Continue operation without printing POS receipt?", vbYesNo + vbQuestion, "Error: POS Printer not available")
             If res = DialogResult.Yes Then
                 continue_ = True
             Else
@@ -106,15 +104,19 @@ Public Class frmPayPoint
             Dim response As New Object
             Dim json As New JObject
             Try
+                Cursor.Current = Cursors.WaitCursor
                 response = Web.post(payment, "carts/pay?till_no=" + Till.TILLNO + "&cart_no=" + Cart.NO_)
                 json = JObject.Parse(response.ToString())
                 receipt = JsonConvert.DeserializeObject(Of Receipt)(json.ToString())
                 paid = True
+                Cursor.Current = Cursors.Default
                 Return receipt
             Catch ex As Exception
+                Cursor.Current = Cursors.Default
                 Return New Receipt
             End Try
         End If
+        Cursor.Current = Cursors.Default
         Return New Receipt
     End Function
 
@@ -282,7 +284,7 @@ Public Class frmPayPoint
             RandomKey = KeyGen.Generate()
         Next
         calculateTotal()
-        txtCash.Focus()
+        txtCash.Select()
     End Sub
 
     Private Sub btnEq_Click(sender As Object, e As EventArgs)

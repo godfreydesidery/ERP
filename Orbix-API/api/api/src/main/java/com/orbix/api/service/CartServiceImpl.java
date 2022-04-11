@@ -138,15 +138,28 @@ public class CartServiceImpl implements CartService {
 			d.get().setQty(d.get().getQty() + cartDetail.getQty());
 			cartDetailRepository.saveAndFlush(d.get());
 			return true;
-		}else {			
+		}else {	
+			double cpIncl = 0;
+			double cpExcl = 0;			
+			double spExcl = 0;
+			Optional<Product> p = productRepository.findByCode(cartDetail.getCode());
+			if(p.isPresent()) {
+				/**
+				 * This values are fetched from product file since they are not provided in the cart
+				 * It can be removed once that option is included
+				 */
+				cpIncl = p.get().getCostPriceVatIncl();
+				cpExcl = p.get().getCostPriceVatExcl();
+				spExcl = p.get().getSellingPriceVatExcl();
+			}		
 			CartDetail detail = new CartDetail();
 			detail.setCart(c.get());
 			detail.setBarcode(cartDetail.getBarcode());
 			detail.setCode(cartDetail.getCode());
 			detail.setDescription(cartDetail.getDescription());
-			detail.setCostPriceVatExcl(cartDetail.getCostPriceVatExcl());
-			detail.setCostPriceVatIncl(cartDetail.getCostPriceVatIncl());
-			detail.setSellingPriceVatExcl(cartDetail.getSellingPriceVatExcl());
+			detail.setCostPriceVatExcl(cpExcl);
+			detail.setCostPriceVatIncl(cpIncl);
+			detail.setSellingPriceVatExcl(spExcl);
 			detail.setSellingPriceVatIncl(cartDetail.getSellingPriceVatIncl());
 			detail.setQty(cartDetail.getQty());
 			detail.setDiscount(cartDetail.getDiscount());

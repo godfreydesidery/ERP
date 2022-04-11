@@ -9,23 +9,18 @@ Public Class frmCashPickUp
     Dim currentFloat As Double = 0
 
     Private Sub frmCashPickUp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
         Dim response As Object = New Object
         Dim json As JObject = New JObject
-
         Try
-            response = Web.get_("tills/get_till_position_by_no?no=" + Till.TILLNO)
+            Cursor.Current = Cursors.WaitCursor
+            response = Web.get_("tills/get_cash?till_no=" + Till.TILLNO)
+            Cursor.Current = Cursors.Default
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            Cursor.Current = Cursors.Default
+            MsgBox(ex.Message)
         End Try
-        json = JObject.Parse(response)
-        Dim till_ As Till = JsonConvert.DeserializeObject(Of Till)(json.ToString)
-        currentAmount = till_.cash
-        currentFloat = till_.floatBalance
-        txtAvailable.Text = LCurrency.displayValue(currentAmount.ToString)
-        txtPickUp.Text = ""
-        txtRemaining.Text = ""
-
+        Cursor.Current = Cursors.Default
+        txtAvailable.Text = LCurrency.displayValue(response.ToString)
     End Sub
 
     Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
@@ -39,7 +34,7 @@ Public Class frmCashPickUp
     Private Sub txtPickUp_TextChanged(sender As Object, e As EventArgs) Handles txtPickUp.TextChanged
         Dim amount As String = txtPickUp.Text
         If IsNumeric(amount) And Val(amount) >= 0 Then 'And Val(amount) <= currentAmount Then
-            newCashAmount = currentAmount - Val(amount)
+            newCashAmount = LCurrency.getValue(txtAvailable.Text) - Val(amount)
             txtRemaining.Text = LCurrency.displayValue(newCashAmount.ToString)
         Else
             txtPickUp.Text = ""
@@ -54,19 +49,20 @@ Public Class frmCashPickUp
         Dim json As JObject = New JObject
 
         Try
-            response = Web.get_("tills/get_till_position_by_no?no=" + Till.TILLNO)
+            Cursor.Current = Cursors.WaitCursor
+            response = Web.get_("tills/get_cash?till_no=" + Till.TILLNO)
+            available = response
+            Cursor.Current = Cursors.Default
         Catch ex As Exception
+            Cursor.Current = Cursors.Default
+            available = 0
             MsgBox(ex.ToString)
         End Try
-        json = JObject.Parse(response)
-        Dim till_ As Till = JsonConvert.DeserializeObject(Of Till)(json.ToString)
-        available = till_.cash
-
+        Cursor.Current = Cursors.Default
         Return available
     End Function
 
     Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
-
         Dim amount As String = txtPickUp.Text
         'Dim detail As String = txtDetails.Text
 
@@ -76,22 +72,23 @@ Public Class frmCashPickUp
         End If
         Dim res As Integer = MessageBox.Show("Pick up amount: " + LCurrency.displayValue(txtPickUp.Text) + " Confirm?", "Confirm Cash Pick up", MessageBoxButtons.YesNo)
         If res = DialogResult.Yes Then
-            'record petty cash
 
             Dim cashPickUp As New CashPickUp
             cashPickUp.amount = amount
-            '     pettyCash.details = txtDetails.Text
             cashPickUp.till.no = Till.TILLNO
-
 
             Dim response As Object = New Object
             Dim json As JObject = New JObject
             Try
-                response = Web.post(cashPickUp, "cash_pick_ups/pick_up_by_till_no?no=" + Till.TILLNO)
+                Cursor.Current = Cursors.WaitCursor
+                response = Web.post(cashPickUp, "tills/cash_pick_up?till_no=" + Till.TILLNO)
+                Cursor.Current = Cursors.Default
             Catch ex As Exception
+                Cursor.Current = Cursors.Default
                 MsgBox(ex.ToString)
                 Exit Sub
             End Try
+            Cursor.Current = Cursors.Default
             MsgBox("Cash Pick up registered successifully")
             Me.Dispose()
         End If

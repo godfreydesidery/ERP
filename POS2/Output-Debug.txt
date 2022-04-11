@@ -1,0 +1,45 @@
+﻿'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_32\mscorlib\v4.0_4.0.0.0__b77a5c561934e089\mscorlib.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\assembly\GAC_MSIL\Microsoft.VisualStudio.HostingProcess.Utilities\14.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualStudio.HostingProcess.Utilities.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Windows.Forms\v4.0_4.0.0.0__b77a5c561934e089\System.Windows.Forms.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System\v4.0_4.0.0.0__b77a5c561934e089\System.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Drawing\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Drawing.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\assembly\GAC_MSIL\Microsoft.VisualStudio.HostingProcess.Utilities.Sync\14.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualStudio.HostingProcess.Utilities.Sync.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\assembly\GAC_MSIL\Microsoft.VisualStudio.Debugger.Runtime\14.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualStudio.Debugger.Runtime.dll'. 
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'D:\My Works\Orbix\ERP\POS2\POS2\bin\Debug\POS2.vshost.exe'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\WindowsBase\v4.0_4.0.0.0__31bf3856ad364e35\WindowsBase.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Core\v4.0_4.0.0.0__b77a5c561934e089\System.Core.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Configuration\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Configuration.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_32\System.Data\v4.0_4.0.0.0__b77a5c561934e089\System.Data.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Deployment\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Deployment.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Device\v4.0_4.0.0.0__b77a5c561934e089\System.Device.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Web.Extensions\v4.0_4.0.0.0__31bf3856ad364e35\System.Web.Extensions.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Xml\v4.0_4.0.0.0__b77a5c561934e089\System.Xml.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Xml.Linq\v4.0_4.0.0.0__b77a5c561934e089\System.Xml.Linq.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Data.DataSetExtensions\v4.0_4.0.0.0__b77a5c561934e089\System.Data.DataSetExtensions.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\Microsoft.VisualBasic\v4.0_10.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualBasic.dll'. Cannot find or open the PDB file.
+The thread 0x2414 has exited with code 0 (0x0).
+The thread 0x1dd4 has exited with code 0 (0x0).
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_32\mscorlib\v4.0_4.0.0.0__b77a5c561934e089\mscorlib.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\assembly\GAC_MSIL\Microsoft.VisualStudio.HostingProcess.Utilities\14.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualStudio.HostingProcess.Utilities.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Windows.Forms\v4.0_4.0.0.0__b77a5c561934e089\System.Windows.Forms.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System\v4.0_4.0.0.0__b77a5c561934e089\System.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Drawing\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Drawing.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\assembly\GAC_MSIL\Microsoft.VisualStudio.HostingProcess.Utilities.Sync\14.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualStudio.HostingProcess.Utilities.Sync.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\assembly\GAC_MSIL\Microsoft.VisualStudio.Debugger.Runtime\14.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualStudio.Debugger.Runtime.dll'. 
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'D:\My Works\Orbix\ERP\POS2\POS2\bin\Debug\POS2.vshost.exe'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\WindowsBase\v4.0_4.0.0.0__31bf3856ad364e35\WindowsBase.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Core\v4.0_4.0.0.0__b77a5c561934e089\System.Core.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Configuration\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Configuration.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_32\System.Data\v4.0_4.0.0.0__b77a5c561934e089\System.Data.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Deployment\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Deployment.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Device\v4.0_4.0.0.0__b77a5c561934e089\System.Device.dll'. Cannot find or open the PDB file.
+The thread 0x3334 has exited with code 0 (0x0).
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'D:\My Works\Orbix\ERP\POS2\POS2\bin\Debug\POS2.exe'. Symbols loaded.
+The program '[1112] POS2.vshost.exe' has exited with code 0 (0x0).
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\Microsoft.VisualBasic\v4.0_10.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualBasic.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Xml\v4.0_4.0.0.0__b77a5c561934e089\System.Xml.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Runtime.Remoting\v4.0_4.0.0.0__b77a5c561934e089\System.Runtime.Remoting.dll'. Cannot find or open the PDB file.
+The thread 0x1740 has exited with code 0 (0x0).
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'D:\My Works\Orbix\ERP\POS2\POS2\bin\Debug\Newtonsoft.Json.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Numerics\v4.0_4.0.0.0__b77a5c561934e089\System.Numerics.dll'. Cannot find or open the PDB file.
+'POS2.vshost.exe' (CLR v4.0.30319: POS2.vshost.exe): Loaded 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Runtime.Serialization\v4.0_4.0.0.0__b77a5c561934e089\System.Runtime.Serialization.dll'. Cannot find or open the PDB file.

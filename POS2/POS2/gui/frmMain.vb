@@ -7,7 +7,6 @@ Imports Newtonsoft.Json.Linq
 Imports Newtonsoft.Json
 
 Public Class frmMain
-
     Private Sub ExitToolsStripMenuItem_Click(ByVal sender As Object, ByVal e As EventArgs) Handles ExitToolStripMenuItem.Click
         Me.Close()
     End Sub
@@ -72,7 +71,6 @@ Public Class frmMain
                 refreshList()
                 calculateValues()
             End If
-
         End If
     End Sub
 
@@ -466,10 +464,12 @@ Public Class frmMain
         calculateValues()
     End Sub
     Private Sub updateDiscount(sn As String, discount As Double)
+        Cursor.Current = Cursors.WaitCursor
         Dim detail As New CartDetail
         detail.id = sn
         detail.discount = discount
         Web.post(detail, "carts/update_discount")
+        Cursor.Current = Cursors.Default
     End Sub
 
     Dim dialog As frmSearchItem
@@ -531,8 +531,6 @@ Public Class frmMain
         Return vbNull
     End Function
 
-
-    Dim saleId As String = ""
     Private Sub btnPay_Click(sender As Object, e As EventArgs) Handles btnPay.Click
         Try
             refreshList()
@@ -562,7 +560,8 @@ Public Class frmMain
         txtTotal.Text = ""
         txtVAT.Text = ""
         txtDiscount.Text = ""
-
+        refreshList()
+        calculateValues()
     End Sub
 
     Private Function updateQty(qty As Double, sn As String)
@@ -571,12 +570,14 @@ Public Class frmMain
         detail.qty = qty
         Dim response As Object = New Object
         Dim json As JObject = New JObject
+        Cursor.Current = Cursors.WaitCursor
         Try
             response = Web.post(detail, "carts/update_qty")
             Return True
         Catch ex As Exception
             Return False
         End Try
+        Cursor.Current = Cursors.Default
     End Function
     Private Sub tpsLock_Click(sender As Object, e As EventArgs) Handles tpsLock.Click
         frmLock.ShowDialog()
@@ -588,7 +589,7 @@ Public Class frmMain
     End Sub
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         tspStatus.Text = tspStatus.Text + "Logged in"
-        tspUser.Text = tspUser.Text + User.FIRST_NAME + " " + User.LAST_NAME
+        tspUser.Text = tspUser.Text + User.AALIAS
         tspLogginTime.Text = tspLogginTime.Text + User.LOGIN_TIME
         tpsSystDate.Text = tpsSystDate.Text + Day.bussinessDate
 
@@ -1132,13 +1133,16 @@ Public Class frmMain
         Dim response As New Object
         Dim json As New JObject
         Try
+            Cursor.Current = Cursors.WaitCursor
             Web.post(cartDetail, "carts/add_detail")
+            Cursor.Current = Cursors.Default
         Catch ex As Exception
+            Cursor.Current = Cursors.Default
             MsgBox("Could not add product", "Error: Process failed", vbOKOnly)
         End Try
         cart = loadCart(Till.TILLNO)
         displayCart(cart)
-
+        Cursor.Current = Cursors.Default
     End Sub
 
     Private Sub _void(id As String)
@@ -1146,7 +1150,9 @@ Public Class frmMain
         cartDetail.id = id
         Dim response As New Object()
         Dim json As New JObject()
+        Cursor.Current = Cursors.WaitCursor
         response = Web.post(cartDetail, "carts/void")
+        Cursor.Current = Cursors.Default
     End Sub
 
     Private Sub unvoid(id As String)
@@ -1154,37 +1160,47 @@ Public Class frmMain
         cartDetail.id = id
         Dim response As New Object()
         Dim json As New JObject()
+        Cursor.Current = Cursors.WaitCursor
         response = Web.post(cartDetail, "carts/unvoid")
+        Cursor.Current = Cursors.Default
     End Sub
 
     Private Function loadCart(tillNo As String) As Cart
         dtgrdViewItemList.Rows.Clear()
         Dim response As New Object
         Dim json As New JObject
+        Cursor.Current = Cursors.WaitCursor
         Try
             response = Web.get_("carts/load?till_no=" + tillNo)
             json = JObject.Parse(response.ToString)
-            cart.NO_ = json.SelectToken("no").ToString()
+            Cart.NO_ = json.SelectToken("no").ToString()
             cart = JsonConvert.DeserializeObject(Of Cart)(json.ToString)
+            Cursor.Current = Cursors.Default
             Return cart
         Catch ex As Exception
+            Cursor.Current = Cursors.Default
             Return Nothing
         End Try
+        Cursor.Current = Cursors.Default
     End Function
 
     Private Function createCart(tillNo As String) As Cart
         Dim response As New Object
         Dim json As New JObject
         Try
+            Cursor.Current = Cursors.WaitCursor
             response = Web.get_("carts/create?till_no=" + tillNo)
             json = JObject.Parse(response.ToString())
-            cart.NO_ = json.SelectToken("no").ToString()
+            Cart.NO_ = json.SelectToken("no").ToString()
             cart = JsonConvert.DeserializeObject(Of Cart)(json.ToString())
+            Cursor.Current = Cursors.Default
         Catch ex As Exception
+            Cursor.Current = Cursors.Default
             MsgBox("Could not create workspace, Application will close")
             Application.Exit()
             Return New Cart
         End Try
+        Cursor.Current = Cursors.Default
         Return cart
     End Function
 

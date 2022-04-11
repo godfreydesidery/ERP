@@ -139,7 +139,29 @@ public class TillResource {
 		return null;		
 	}
 	
-	@PostMapping("/tills/float")
+	@GetMapping("/tills/get_float")
+	public double getFloatByTill(
+			@RequestParam(name = "till_no") String tillNo){
+		Optional<Till> t = tillRepository.findByNo(tillNo);
+		if(t.isPresent()) {
+			return t.get().getFloatBalance();
+		}else {
+			return 0;
+		}
+	}
+	
+	@GetMapping("/tills/get_cash")
+	public double getCashByTill(
+			@RequestParam(name = "till_no") String tillNo){
+		Optional<Till> t = tillRepository.findByNo(tillNo);
+		if(t.isPresent()) {
+			return t.get().getCash();
+		}else {
+			return 0;
+		}
+	}
+	
+	@PostMapping("/tills/update_float")
 	//@PreAuthorize("hasAnyAuthority('TILL-CREATE')")
 	public ResponseEntity<Void>float_(
 			@RequestBody Floatt float_,

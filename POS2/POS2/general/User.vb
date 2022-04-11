@@ -26,12 +26,16 @@ Public Class User
         Dim tok As String = ""
 
         Try
+            Cursor.Current = Cursors.WaitCursor
             response = Web.login(username, password)
             json = JObject.Parse(response.ToString)
             tok = json.SelectToken("access_token").ToString
+            Cursor.Current = Cursors.Default
         Catch ex As NullReferenceException
+            Cursor.Current = Cursors.Default
             MsgBox("Could not log in, invalid username and password", "Error: Invalid Username and Password", vbOKOnly)
         Catch ex As Exception
+            Cursor.Current = Cursors.Default
             MsgBox("Could not log in")
             auth = 2
         End Try
@@ -50,17 +54,20 @@ Public Class User
             Dim jres As JObject = New JObject
 
             Try
-                Dim user_ = New Object
+                Cursor.Current = Cursors.WaitCursor
                 res = Web.get_("users/load_user?username=" + username)
                 jres = JObject.Parse(res.ToString)
                 user = JsonConvert.DeserializeObject(Of User)(jres.ToString)
-                User.AALIAS = json.SelectToken("alias")
+                User.AALIAS = jres.SelectToken("alias")
+                Cursor.Current = Cursors.Default
             Catch ex As Exception
+                Cursor.Current = Cursors.Default
                 User.TOKEN = ""
                 MsgBox("Could not log in")
                 auth = 2
             End Try
         End If
+        Cursor.Current = Cursors.Default
         Return auth
     End Function
 
