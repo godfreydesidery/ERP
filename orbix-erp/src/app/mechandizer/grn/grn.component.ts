@@ -187,6 +187,12 @@ export class GrnComponent implements OnInit {
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
+    if(this.id == '' || this.id == null){
+      //Create GRN with the specific LPO
+      this.save();
+      return
+    }
+
     this.spinner.show()
     await this.http.get<IGrn>(API_URL+'/grns/get_by_no?no='+no, options)
     .pipe(finalize(() => this.spinner.hide()))

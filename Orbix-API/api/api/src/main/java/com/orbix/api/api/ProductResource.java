@@ -24,6 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.orbix.api.domain.Product;
 import com.orbix.api.exceptions.NotFoundException;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.ProductRepository;
 import com.orbix.api.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -65,6 +66,15 @@ private final ProductRepository productRepository;
 	public ResponseEntity<Product> getProductByBarcode(
 			@RequestParam(name = "barcode") String barcode){
 		return ResponseEntity.ok().body(productService.getByBarcode(barcode));
+		
+		
+	}
+	
+	
+	@GetMapping("/products/request_code")
+	//@PreAuthorize("hasAnyAuthority('LPO-READ')")
+	public ResponseEntity<RecordModel> requestCode(){
+		return ResponseEntity.ok().body(productService.requestProductCode());
 	}
 	
 	@GetMapping("/products/get_by_code")

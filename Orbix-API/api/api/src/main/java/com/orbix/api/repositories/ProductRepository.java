@@ -21,6 +21,10 @@ import com.orbix.api.reports.models.SupplierStockStatusReport;
  *
  */
 public interface ProductRepository extends JpaRepository<Product, Long> {
+	
+	@Query("SELECT MAX(p.id) FROM Product p")
+	Long getLastId();
+	
 	/**
 	 * @param barcode
 	 * @return

@@ -11,11 +11,13 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.orbix.api.accessories.Formater;
 import com.orbix.api.domain.Category;
 import com.orbix.api.domain.Material;
 import com.orbix.api.domain.SubCategory;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.CategoryRepository;
 import com.orbix.api.repositories.MaterialRepository;
 import com.orbix.api.repositories.SubCategoryRepository;
@@ -115,5 +117,16 @@ public class MaterialServiceImpl implements MaterialService {
 	public List<String> getActiveDescriptions() {
 		return materialRepository.getActiveDescriptions();	
 	}
+	
+	@Override
+	public RecordModel requestMaterialCode() {
+		Long id = 1L;
+		try {
+			id = materialRepository.getLastId() + 1;
+		}catch(Exception e) {}
+		RecordModel model = new RecordModel();
+		model.setCode("MC"+Formater.formatNine(id.toString()));
+		return model;
+	}	
 
 }

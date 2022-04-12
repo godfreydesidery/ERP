@@ -1,101 +1,87 @@
 <div class="row">
-    <div class="col">
-        <table style="width: 100%;">
-            <tr style="width: 100%;">
-                <td style="width: 100mm; vertical-align: top;"><p class="h6">Inventory / Sub-Class</p></td>
-                <td></td>                                   
-            </tr>
-        </table>
-        <table style="width: 100%;">
-            <tr style="width: 100%;">
-                <td style="vertical-align: top; height: 75vh;">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <input type="hidden" name="id" [(ngModel)]="id">
-                            <div class="col-9">
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;">
-                                        <label>Sub-Class Name</label>                               
-                                    </div>
-                                    <div class="col-5">
-                                        <input type="text" [(ngModel)]="name" name="name" required class="form-control input-sm special" autocomplete="off" [readonly]="inputsLocked">   
-                                    </div>
-                                    <!--<datalist id="role_names" style="padding: 0px;">
-                                        <option *ngFor="let role of roles" [ngValue]="role">{{role.name}}</option>
-                                    </datalist>-->
-                                    <div class="col-3">
-                                        <button class="btn btn-success form-control">Search</button>                               
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;">
-                                        <label>Department</label>                               
-                                    </div>
-                                    <div class="col-5">
-                                        <select [(ngModel)]="departmentName" (ngModelChange)="loadClassNames(departmentName)" class="form-control input-sm" [disabled]="inputsLocked">
-                                            <option></option>
-                                            <option *ngFor="let d of departmentNames">{{d}}</option>
-                                        </select>
-                                    </div>
-                                    <!--<datalist id="role_names" style="padding: 0px;">
-                                        <option *ngFor="let role of roles" [ngValue]="role">{{role.name}}</option>
-                                    </datalist>-->
-                                </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;">
-                                        <label>Class</label>                               
-                                    </div>
-                                    <div class="col-5">
-                                        <select [(ngModel)]="className" class="form-control input-sm" [disabled]="inputsLocked">
-                                            <option>{{className}}</option>
-                                            <option></option>
-                                            <option *ngFor="let c of classNames">{{c}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <br>
-                                <br>
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;">
-                                        <label>Sub-Class List</label>                               
-                                    </div>
-                                    <div class="col-8">
-                                        <table class="table table-sm table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <td>Sub Class</td>
-                                                    <td>Department</td>
-                                                    <td>Class</td>
-                                                    <td>Select</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let s of subClasses">
-                                                    <td style="vertical-align: top;">{{s.name}}</td>
-                                                    <td style="vertical-align: top;">{{s.class_.department.name}}</td>
-                                                    <td style="vertical-align: top;">{{s.class_.name}}</td>
-                                                    <td style="vertical-align: top;"><font (click)="get(s.id)" style="cursor: pointer; color: rgb(35, 32, 224);">Select</font></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="row">
-                                    <div class="col-8">
-                                        <button (click)="clearData()" class="btn btn-success" style="margin: 2px; width: 25mm;">New</button><br>
-                                        <button (click)="unlockAll()" class="btn btn-secondary"  style="margin: 2px; width: 25mm;">Edit</button><br>
-                                        <button (click)="delete(id)" class="btn btn-danger" style="margin: 2px; width: 25mm;">Delete</button><br>
-                                        <button (click)="save()" class="btn btn-primary" style="margin: 2px; width: 25mm;">Save</button>
-                                    </div>
-                                </div>
-                            </div>                                              
-                        </div>
-                    </div>                   
-                </td>
-            </tr>
-        </table>
+
+    <div class="col-sm-12" style="text-align: center;">
+        <h6>Inventory | Classes</h6>
+    </div>
+    <div class="col-sm-12" style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
+        <div class="row">
+            <div class="col-sm-6">
+                <a routerLink="/home"><button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+                <button class="btn" (click)="clearData()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new Product"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
+                <button class="btn" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing LPO"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
+                <button (click)="delete(id)" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing LPO"><i class="fa-solid fa-trash"></i><br>Delete</button>
+                <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing LPO"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <br>
+        <div class="row">
+            <input type="hidden" name="id" [(ngModel)]="id">
+            <div class="col-4 float-end" style="text-align: right;">
+                <label>Sub-Class Name</label>                               
+            </div>
+            <div class="col-5">
+                <input type="text" [(ngModel)]="name" name="name" required class="form-control input-sm special" autocomplete="off" [readonly]="inputsLocked">   
+            </div>
+            <!--<datalist id="role_names" style="padding: 0px;">
+                <option *ngFor="let role of roles" [ngValue]="role">{{role.name}}</option>
+            </datalist>-->
+            <div class="col-3">
+                <button class="btn btn-success form-control"><i class="fas fa-search"></i>Search</button>                               
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4 float-end" style="text-align: right;">
+                <label>Department</label>                               
+            </div>
+            <div class="col-5">
+                <select [(ngModel)]="departmentName" (ngModelChange)="loadClassNames(departmentName)" class="form-control input-sm" [disabled]="inputsLocked">
+                    <option></option>
+                    <option *ngFor="let d of departmentNames">{{d}}</option>
+                </select>
+            </div>
+            <!--<datalist id="role_names" style="padding: 0px;">
+                <option *ngFor="let role of roles" [ngValue]="role">{{role.name}}</option>
+            </datalist>-->
+        </div>
+        <div class="row">
+            <div class="col-4 float-end" style="text-align: right;">
+                <label>Class</label>                               
+            </div>
+            <div class="col-5">
+                <select [(ngModel)]="className" class="form-control input-sm" [disabled]="inputsLocked">
+                    <option>{{className}}</option>
+                    <option></option>
+                    <option *ngFor="let c of classNames">{{c}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <br>
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <td>Sub Class</td>
+                            <td>Department</td>
+                            <td>Class</td>
+                            <td>Select</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let s of subClasses">
+                            <td style="vertical-align: top;">{{s.name}}</td>
+                            <td style="vertical-align: top;">{{s.class_.department.name}}</td>
+                            <td style="vertical-align: top;">{{s.class_.name}}</td>
+                            <td style="vertical-align: top;"><font (click)="get(s.id)" style="cursor: pointer; color: rgb(35, 32, 224);">Select</font></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>

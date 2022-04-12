@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { finalize, firstValueFrom } from 'rxjs';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/auth.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { ShortCutHandlerService } from 'src/app/services/short-cut-handler.service';
@@ -15,6 +16,8 @@ const API_URL = environment.apiUrl;
   styleUrls: ['./product-material-ratio.component.scss']
 })
 export class ProductMaterialRatioComponent implements OnInit {
+
+  closeResult    : string = ''
 
   id        : any
   product!  : IProduct
@@ -44,6 +47,7 @@ export class ProductMaterialRatioComponent implements OnInit {
 
   constructor(private auth : AuthService,
               private http :HttpClient,
+              private modalService: NgbModal,
               private shortcut : ShortCutHandlerService,
               private spinner: NgxSpinnerService) {
 
@@ -374,6 +378,17 @@ export class ProductMaterialRatioComponent implements OnInit {
     if(confirm('Create shortcut for this page?')){
       this.shortcut.createShortCut(shortCutName, link)
     }
+  }
+
+  showList(listContent: any) {
+    
+    this.modalService.open(listContent, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  getDismissReason(reason: any) {
+    throw new Error('Method not implemented.');
   }
 
 }

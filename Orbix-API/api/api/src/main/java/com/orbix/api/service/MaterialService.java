@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.orbix.api.domain.Material;
+import com.orbix.api.models.RecordModel;
 
 /**
  * @author GODFREY
@@ -21,4 +22,5 @@ public interface MaterialService {
 	boolean delete(Material material);
 	List<Material>getAll();	
 	List<String> getActiveDescriptions();
+	RecordModel requestMaterialCode();
 }

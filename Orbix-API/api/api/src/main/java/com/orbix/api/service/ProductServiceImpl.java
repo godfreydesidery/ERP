@@ -28,6 +28,7 @@ import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.MissingInformationException;
 import com.orbix.api.exceptions.NotFoundException;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.CategoryRepository;
 import com.orbix.api.repositories.ClassRepository;
 import com.orbix.api.repositories.DayRepository;
@@ -306,4 +307,15 @@ public class ProductServiceImpl implements ProductService {
 	public List<String> getSellableDescriptions() {
 		return productRepository.getSellableProductDescriptions();	
 	}
+	
+	@Override
+	public RecordModel requestProductCode() {
+		Long id = 1L;
+		try {
+			id = productRepository.getLastId() + 1;
+		}catch(Exception e) {}
+		RecordModel model = new RecordModel();
+		model.setCode("PC"+Formater.formatNine(id.toString()));		
+		return model;
+	}	
 }

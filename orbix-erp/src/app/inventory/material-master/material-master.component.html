@@ -1,192 +1,185 @@
-<div class="row">
-    <div class="col">
-        <table style="width: 100%;">
-            <tr style="width: 100%;">
-                <td style="width: 100mm; vertical-align: top;"><p class="h6">Inventory / Material Master</p></td>
-                <td>[<a routerLink="/home">Home</a>][<span class="short-cut" (click)="createShortCut('Material Master', 'material-master')">Create Shortcut</span>]</td>                                   
-            </tr>
-        </table>
-        <table style="width: 100%;">
-            <tr style="width: 100%;">
-                <td style="vertical-align: top; height: 75vh;">
-                    <div class="container-fluid">
+<div class="row" [@fadeInOut]>
+
+    <div class="col-sm-12" style="text-align: center;">
+        <h6>Inventory | Material Master</h6>
+    </div>
+    <div class="col-sm-12" style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
+        <div class="row">
+            <div class="col-sm-6">
+                <a routerLink="/home"><button class="btn" (click)="clear()" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+                <button class="btn" (click)="clear()" (click)="unlockAll()" (click)="requestCode()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new Product"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
+                <button class="btn" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing LPO"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
+                <button (click)="delete(id)" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing LPO"><i class="fa-solid fa-trash"></i><br>Delete</button>
+                <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing LPO"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
+                <button class="btn"style="margin: 2px; width: 30mm;" (click)="createShortCut('LPO', 'lpo')" data-mdb-toggle="tooltip" title="Create a page shortcut on user's Dashboard"><i class="fas fa-external-link-alt"></i><br>Shortcut</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-8">
                         <div class="row">
-                            <input type="hidden" name="id" [(ngModel)]="id">
-                            <div class="col-5">
-                                <div class="row">
-                                    <div class="col-8">
-                                        <div class="row">
-                                            <div class="col-6 float-end" style="text-align: right;">
-                                                <label>Code*</label>                               
-                                            </div>
-                                            <div class="col-6">
-                                                <input type="text" [(ngModel)]="code" name="username" list="users" required class="form-control input-sm special" autocomplete="off" [readonly]="codeLocked">                               
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <button (click)="search()" class="btn btn-success form-control">Search</button>                               
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;">
-                                        <label>Description*</label>                               
-                                    </div>
-                                    <div class="col-8">
-                                        <input type="text" [(ngModel)]="description" name="description" list="descriptions" required class="form-control input-sm special" [readonly]="descriptionLocked" autocomplete="off">   
-                                        <datalist id="descriptions" style="padding: 0px;">
-                                            <option *ngFor="let d of descriptions" [ngValue]="d">{{d}}</option>
-                                        </datalist>                            
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;">
-                                        <label>Short Description*</label>                               
-                                    </div>
-                                    <div class="col-8">
-                                        <input type="text" [(ngModel)]="shortDescription" name="description" required class="form-control input-sm special" [readonly]="inputsLocked" autocomplete="off">                                                      
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;"></div>
-                                    <div class="col-8">
-                                        <input type="checkbox" [(ngModel)]="active"><label>Active</label>                               
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;">
-                                        <label>Category</label>                               
-                                    </div>
-                                    <div class="col-8">
-                                        <select [(ngModel)]="categoryName" (ngModelChange)="loadSubCategoryNames(categoryName)" class="form-control" [disabled]="inputsLocked">
-                                            <option></option>
-                                            <option *ngFor="let c of categoryNames">{{c}}</option>
-                                        </select>                                
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;">
-                                        <label>Sub Category</label>                               
-                                    </div>
-                                    <div class="col-8">
-                                        <select [(ngModel)]="subCategoryName" class="form-control" [disabled]="inputsLocked">
-                                            <option>{{subCategoryName}}</option>
-                                            <option></option>
-                                            <option *ngFor="let c of subCategoryNames">{{c}}</option>
-                                        </select>                               
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;">
-                                        <label>VAT %</label>                               
-                                    </div>
-                                    <div class="col-8">
-                                        <input type="text" [(ngModel)]="vat" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;">
-                                        <label>Cost Price VAT-Incl</label>                               
-                                    </div>
-                                    <div class="col-8">
-                                        <input type="text" [(ngModel)]="costPriceVatIncl" name="rollNo" required class="form-control input-sm special" style="text-align: right;" [readonly]="inputsLocked">                               
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;">
-                                        <label>Cost Price VAT-Excl</label>                               
-                                    </div>
-                                    <div class="col-8">
-                                        <input type="text" [(ngModel)]="costPriceVatExcl" name="rollNo" required class="form-control input-sm special" style="text-align: right;" [readonly]="inputsLocked">                               
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;">
-                                        <label>Stock</label>                               
-                                    </div>
-                                    <div class="col-8">
-                                        <input type="text" [(ngModel)]="stock" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;">
-                                        <label>UOM</label>                               
-                                    </div>
-                                    <div class="col-8">
-                                        <input type="text" [(ngModel)]="uom" name="uom" required class="form-control input-sm special" [readonly]="inputsLocked">                               
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;">
-                                        <label>Minimum Inventory</label>                               
-                                    </div>
-                                    <div class="col-8">
-                                        <input type="text" [(ngModel)]="minimumInventory" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;">
-                                        <label>Maximum Inventory</label>                               
-                                    </div>
-                                    <div class="col-8">
-                                        <input type="text" [(ngModel)]="maximumInventory" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;">
-                                        <label>Default Reorder Level</label>                               
-                                    </div>
-                                    <div class="col-8">
-                                        <input type="text" [(ngModel)]="defaultReorderLevel" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-4 float-end" style="text-align: right;">
-                                        <label>Default Reorder Qty</label>                               
-                                    </div>
-                                    <div class="col-8">
-                                        <input type="text" [(ngModel)]="defaultReorderQty" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
-                                    </div>
-                                </div>
-                                <hr>
+                            <div class="col-6 float-end" style="text-align: right;">
+                                <label>Code*</label>                               
                             </div>
-                            <div class="col-7">
-                                <div class="row">
-                                    <div class="col-2">
-                                        <button (click)="clear()" class="btn btn-success" style="margin: 2px; width: 25mm;">New</button><br>
-                                        <button (click)="unlockAll()" class="btn btn-secondary" style="margin: 2px; width: 25mm;">Edit</button><br>
-                                        <button (click)="delete(id)" class="btn btn-danger" style="margin: 2px; width: 25mm;">Delete</button><br>
-                                        <button (click)="save()" class="btn btn-primary" style="margin: 2px; width: 25mm;">Save</button>
-                                    </div>
-                                    <div class="col-10">
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <td>Code</td>
-                                                    <td>Description</td>
-                                                    <td>Select</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let m of materials">
-                                                    <td>{{m.code}}</td>
-                                                    <td>{{m.description}}</td>
-                                                    <td><span (click)="get(m.id)" style="cursor: pointer;">[Select]</span></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>  
+                            <div class="col-6">
+                                <input type="text" [(ngModel)]="code" name="username" list="users" required class="form-control input-sm special" autocomplete="off" [readonly]="codeLocked">                               
+                            </div>
                         </div>
-                    </div>                   
-                </td>
-            </tr>
+                    </div>
+                    <div class="col-4">
+                        <button (click)="search()" class="btn btn-success form-control"><i class="fas fa-search"></i>Search</button>                               
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 float-end" style="text-align: right;">
+                        <label>Description*</label>                               
+                    </div>
+                    <div class="col-8">
+                        <input type="text" [(ngModel)]="description" name="description" list="descriptions" required class="form-control input-sm special" [readonly]="descriptionLocked" autocomplete="off">   
+                        <datalist id="descriptions" style="padding: 0px;">
+                            <option *ngFor="let d of descriptions" [ngValue]="d">{{d}}</option>
+                        </datalist>                            
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 float-end" style="text-align: right;">
+                        <label>Short Description*</label>                               
+                    </div>
+                    <div class="col-8">
+                        <input type="text" [(ngModel)]="shortDescription" name="description" required class="form-control input-sm special" [readonly]="inputsLocked" autocomplete="off">                                                      
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 float-end" style="text-align: right;"></div>
+                    <div class="col-8">
+                        <input type="checkbox" [(ngModel)]="active"><label>Active</label>                               
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-4 float-end" style="text-align: right;">
+                        <label>Category</label>                               
+                    </div>
+                    <div class="col-8">
+                        <select [(ngModel)]="categoryName" (ngModelChange)="loadSubCategoryNames(categoryName)" class="form-control" [disabled]="inputsLocked">
+                            <option></option>
+                            <option *ngFor="let c of categoryNames">{{c}}</option>
+                        </select>                                
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 float-end" style="text-align: right;">
+                        <label>Sub Category</label>                               
+                    </div>
+                    <div class="col-8">
+                        <select [(ngModel)]="subCategoryName" class="form-control" [disabled]="inputsLocked">
+                            <option>{{subCategoryName}}</option>
+                            <option></option>
+                            <option *ngFor="let c of subCategoryNames">{{c}}</option>
+                        </select>                               
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-4 float-end" style="text-align: right;">
+                        <label>VAT %</label>                               
+                    </div>
+                    <div class="col-8">
+                        <input type="text" [(ngModel)]="vat" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 float-end" style="text-align: right;">
+                        <label>Cost Price VAT-Incl</label>                               
+                    </div>
+                    <div class="col-8">
+                        <input type="text" [(ngModel)]="costPriceVatIncl" name="rollNo" required class="form-control input-sm special" style="text-align: right;" [readonly]="inputsLocked">                               
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 float-end" style="text-align: right;">
+                        <label>Cost Price VAT-Excl</label>                               
+                    </div>
+                    <div class="col-8">
+                        <input type="text" [(ngModel)]="costPriceVatExcl" name="rollNo" required class="form-control input-sm special" style="text-align: right;" [readonly]="inputsLocked">                               
+                    </div>
+                </div>
+                
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-4 float-end" style="text-align: right;">
+                        <label>Stock</label>                               
+                    </div>
+                    <div class="col-8">
+                        <input type="text" [(ngModel)]="stock" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 float-end" style="text-align: right;">
+                        <label>UOM</label>                               
+                    </div>
+                    <div class="col-8">
+                        <input type="text" [(ngModel)]="uom" name="uom" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 float-end" style="text-align: right;">
+                        <label>Minimum Inventory</label>                               
+                    </div>
+                    <div class="col-8">
+                        <input type="text" [(ngModel)]="minimumInventory" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 float-end" style="text-align: right;">
+                        <label>Maximum Inventory</label>                               
+                    </div>
+                    <div class="col-8">
+                        <input type="text" [(ngModel)]="maximumInventory" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 float-end" style="text-align: right;">
+                        <label>Default Reorder Level</label>                               
+                    </div>
+                    <div class="col-8">
+                        <input type="text" [(ngModel)]="defaultReorderLevel" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 float-end" style="text-align: right;">
+                        <label>Default Reorder Qty</label>                               
+                    </div>
+                    <div class="col-8">
+                        <input type="text" [(ngModel)]="defaultReorderQty" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>Code</td>
+                    <td>Description</td>
+                    <td>Select</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let m of materials">
+                    <td>{{m.code}}</td>
+                    <td>{{m.description}}</td>
+                    <td><span (click)="get(m.id)" style="cursor: pointer;">[Select]</span></td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </div>

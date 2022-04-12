@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ConnectionResource {
 	@GetMapping("/ping")
-	public boolean loadCart(){
+	public boolean ping(){
 		return true;
 	}
 }

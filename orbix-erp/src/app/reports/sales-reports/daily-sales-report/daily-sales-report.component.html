@@ -1,11 +1,8 @@
-<div class="row">
+<div class="row" [@fadeInOut]>
+    <div class="col-sm-12" style="text-align: center;">
+        <h6>Reports | Sales | Daily Sales Report</h6>
+    </div>
     <div class="col">
-        <table style="width: 100%;">
-            <tr style="width: 100%;">
-                <td style="width: 100mm; vertical-align: top;"><p class="h6">Reports / Sales / Daily Sales Report</p></td>
-                <td></td>                                   
-            </tr>
-        </table>
         <table style="width: 100%;">
             <tr style="width: 100%;">
                 <td style="vertical-align: top; height: 75vh;">
@@ -34,12 +31,12 @@
                             </div>  
                             <div class="col-12">
                                 <table class="table table-bordered">
-                                    <thead>
+                                    <thead style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
                                         <tr>
-                                            <td>Date</td>
-                                            <td>Amount</td>
-                                            <td>Discounts</td>
-                                            <td>Tax</td>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Discounts</th>
+                                            <th>Tax</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -49,11 +46,11 @@
                                             <td style="text-align: right;">{{r.discount | currency:'':''}}</td>
                                             <td style="text-align: right;">{{r.tax | currency:'':''}}</td>
                                         </tr>               
-                                        <tr style="background-color: rgb(211, 211, 211);">
-                                            <td></td>
-                                            <td style="text-align: right;">{{totalAmount | currency:'':''}}</td>
-                                            <td style="text-align: right;">{{totalDiscount | currency:'':''}}</td>
-                                            <td style="text-align: right;">{{totalTax | currency:'':''}}</td>
+                                        <tr>
+                                            <th></th>
+                                            <th style="text-align: right;">{{totalAmount | currency:'':''}}</th>
+                                            <th style="text-align: right;">{{totalDiscount | currency:'':''}}</th>
+                                            <th style="text-align: right;">{{totalTax | currency:'':''}}</th>
                                         </tr>
                                     </tbody>
                                 </table>

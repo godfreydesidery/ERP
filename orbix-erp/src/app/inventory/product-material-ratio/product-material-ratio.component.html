@@ -1,11 +1,22 @@
-<div class="row">
+<div class="row" [@fadeInOut]>
+    <div class="col-sm-12" style="text-align: center;">
+        <h6>Inventory | Conversion | Product-Material Ratio</h6>
+    </div>
+    <div class="col-sm-12" style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
+        <div class="row">
+            <div class="col-sm-4">
+                <a routerLink="/home"><button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+                <button class="btn" (click)="new()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new LPO"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
+                <button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing LPO"><i class="fa-solid fa-times fa-fw"></i><br>Delete</button>
+                <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing LPO"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
+            </div>
+            <div class="col-sm-4">
+                <button class="btn"style="margin: 2px; width: 30mm;" (click)="createShortCut('LPO', 'lpo')" data-mdb-toggle="tooltip" title="Create a page shortcut on user's Dashboard"><i class="fas fa-external-link-alt"></i><br>Shortcut</button>
+            </div>
+        </div>
+    </div>
+
     <div class="col">
-        <table style="width: 100%;">
-            <tr style="width: 100%;">
-                <td style="width: 100mm; vertical-align: top;"><p class="h6">Inventory / Settings / Product-Material Ratio</p></td>
-                <td>[<a routerLink="/home">Home</a>][<span class="short-cut" (click)="createShortCut('Product-Material Ratio', 'product-material-ratio')">Create Shortcut</span>]</td>                                   
-            </tr>
-        </table>
         <table style="width: 100%;">
             <tr style="width: 100%;">
                 <td style="vertical-align: top; height: 75vh;">
@@ -92,20 +103,6 @@
                             </div>                                      
                         </div>
                         
-                        <div class="row">
-                            <div class="co-12">
-                                <br>
-                                <div class="row">
-                                    <div  class="col-12">
-                                        <button (click)="new()" class="btn btn-success" style="margin: 1mm;">New Ratio</button>
-                                        <button (click)="save()" class="btn btn-success" style="margin: 1mm;">Save Ratio</button>
-                                        <button class="btn btn-danger">Delete Ratio</button>
-                                    </div>                                    
-                                </div>
-                                <br>
-                            </div>
-                        </div>
-
                         <div class="row">
                             <div class="col-12">
                                 <table class="table table-bordered">

@@ -201,7 +201,7 @@
     </div>
     <div class="modal-footer">
       <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>-->
-      <button type="button" (click)="saveDetail()" class="btn btn-outline-dark">Add/Update</button>
+      <button type="button" (click)="saveDetail()" (click)="modal.close('Save click')" class="btn btn-outline-dark">Add/Update</button>
     </div>
 </ng-template>
 
@@ -225,7 +225,7 @@
                         <tr *ngFor="let lpo of lpos">
                             <td>{{lpo.no}}</td>
                             <td>{{lpo.status}}</td>
-                            <td><span (click)="get(lpo.id)" style="cursor: pointer;">[Select]</span></td>
+                            <td><span (click)="get(lpo.id)" (click)="modal.close('Select click')" style="cursor: pointer;">[Select]</span></td>
                         </tr>
                     </tbody>
                 </table>

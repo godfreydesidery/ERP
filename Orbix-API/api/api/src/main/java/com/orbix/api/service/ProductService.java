@@ -6,6 +6,7 @@ package com.orbix.api.service;
 import java.util.List;
 
 import com.orbix.api.domain.Product;
+import com.orbix.api.models.RecordModel;
 
 /**
  * @author GODFREY
@@ -21,4 +22,5 @@ public interface ProductService {
 	boolean delete(Product product);
 	List<Product>getAll();	
 	List<String> getSellableDescriptions();
+	RecordModel requestProductCode();
 }

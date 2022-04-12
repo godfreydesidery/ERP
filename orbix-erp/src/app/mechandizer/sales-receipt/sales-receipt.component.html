@@ -143,7 +143,7 @@
                         <tr *ngFor="let rec of receipts">
                             <td>{{rec.no}}</td>
                             <td>{{rec.status}}</td>
-                            <td><span (click)="get(rec.id)" style="cursor: pointer;">[Select]</span></td>
+                            <td><span (click)="get(rec.id)" (click)="modal.close('Select click')" style="cursor: pointer;">[Select]</span></td>
                         </tr>
                     </tbody>
                 </table>

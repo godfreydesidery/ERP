@@ -24,6 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.orbix.api.domain.Material;
 import com.orbix.api.exceptions.NotFoundException;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.MaterialRepository;
 import com.orbix.api.service.MaterialService;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,12 @@ private final MaterialRepository materialRepository;
 	public ResponseEntity<Material> getMaterial(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(materialService.get(id));
+	}
+	
+	@GetMapping("/materials/request_code")
+	//@PreAuthorize("hasAnyAuthority('LPO-READ')")
+	public ResponseEntity<RecordModel> requestCode(){
+		return ResponseEntity.ok().body(materialService.requestMaterialCode());
 	}
 	
 	@GetMapping("/materials/get_descriptions")

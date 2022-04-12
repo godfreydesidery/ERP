@@ -16,6 +16,9 @@ import com.orbix.api.domain.Material;
  *
  */
 public interface MaterialRepository extends JpaRepository<Material, Long> {
+	
+	@Query("SELECT MAX(m.id) FROM Material m")
+	Long getLastId();
 
 	/**
 	 * @param code

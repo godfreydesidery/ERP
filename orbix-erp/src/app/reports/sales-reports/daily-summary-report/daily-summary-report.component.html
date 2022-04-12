@@ -35,16 +35,16 @@
                             </div>  
                             <div class="col-12">
                                 <table class="table table-bordered">
-                                    <thead>
+                                    <thead style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
                                         <tr>
-                                            <td>Date</td>
-                                            <td>Opening Stock</td>
-                                            <td>Purchase(Credit)</td>
-                                            <td>Amount Paid</td>
-                                            <td>Cash Sales</td>
-                                            <td>Gross Margin</td>
-                                            <td>Credit Sales</td>
-                                            <td>Closing Stock</td>
+                                            <th>Date</th>
+                                            <th>Opening Stock</th>
+                                            <th>Purchase(Credit)</th>
+                                            <th>Amount Paid</th>
+                                            <th>Cash Sales</th>
+                                            <th>Gross Margin</th>
+                                            <th>Credit Sales</th>
+                                            <th>Closing Stock</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -58,15 +58,15 @@
                                             <td style="text-align: right;">{{r.creditSales | currency:'':''}}</td>
                                             <td style="text-align: right;">{{r.closingStockValue | currency:'':''}}</td>
                                         </tr>               
-                                        <tr style="background-color: rgb(211, 211, 211);">
-                                            <td></td>
-                                            <td></td>
-                                            <td style="text-align: right;">{{totalPurchaseOnCredit | currency:'':''}}</td>
-                                            <td style="text-align: right;">{{totalAmountPaid | currency:'':''}}</td>
-                                            <td style="text-align: right;">{{totalCashSales | currency:'':''}}</td>
-                                            <td style="text-align: right;">{{totalGrossMargin | currency:'':''}}</td>
-                                            <td style="text-align: right;">{{totalCreditSales | currency:'':''}}</td>
-                                            <td></td>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th style="text-align: right;">{{totalPurchaseOnCredit | currency:'':''}}</th>
+                                            <th style="text-align: right;">{{totalAmountPaid | currency:'':''}}</th>
+                                            <th style="text-align: right;">{{totalCashSales | currency:'':''}}</th>
+                                            <th style="text-align: right;">{{totalGrossMargin | currency:'':''}}</th>
+                                            <th style="text-align: right;">{{totalCreditSales | currency:'':''}}</th>
+                                            <th></th>
                                         </tr>
                                     </tbody>
                                 </table>

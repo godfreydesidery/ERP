@@ -32,6 +32,7 @@ export class AppComponent implements OnInit{
   }
    
   async ngOnInit(): Promise<void> {
+    this.ping()
     try{
       await this.loadDay()
     }catch(e:any){}    
@@ -46,6 +47,20 @@ export class AppComponent implements OnInit{
       localStorage.setItem('logged-in', 'false')
       await this.router.navigate([''])
     }
+  }
+
+  async ping() {   
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    await this.http.get(API_URL+'/ping', options)
+    .toPromise()
+    .then(
+      ()=>{}
+    )
+    .catch(
+      ()=>{}
+    )
   }
 
   async loadDay(){
@@ -70,3 +85,7 @@ interface IDayData{
 interface ISupplier{
   name : string
 }
+function finalize(arg0: () => Promise<unknown>): import("rxjs").OperatorFunction<Object, unknown> {
+  throw new Error('Function not implemented.');
+}
+

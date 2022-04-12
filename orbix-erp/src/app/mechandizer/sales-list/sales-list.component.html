@@ -281,7 +281,7 @@
                         <tr *ngFor="let slst of salesLists">
                             <td>{{slst.no}}</td>
                             <td>{{slst.status}}</td>
-                            <td><span (click)="get(slst.id)" style="cursor: pointer;">[Select]</span></td>
+                            <td><span (click)="get(slst.id)" (click)="modal.close('Select click')" style="cursor: pointer;">[Select]</span></td>
                         </tr>
                     </tbody>
                 </table>

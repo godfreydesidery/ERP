@@ -261,7 +261,7 @@
                             <td>{{pcl.no}}</td>
                             <td>{{pcl.salesListNo}}</td>
                             <td>{{pcl.status}}</td>
-                            <td><span (click)="get(pcl.id)" style="cursor: pointer;">[Select]</span></td>
+                            <td><span (click)="get(pcl.id)" (click)="modal.close('Select click')" style="cursor: pointer;">[Select]</span></td>
                         </tr>
                     </tbody>
                 </table>

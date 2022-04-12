@@ -173,7 +173,7 @@
     </div>
     <div class="modal-footer">
       <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>-->
-      <button type="button" (click)="saveDetail()" class="btn btn-outline-dark">Save</button>
+      <button type="button" (click)="saveDetail()" (click)="modal.close('Save click')" class="btn btn-outline-dark">Save</button>
     </div>
 </ng-template>
 
@@ -197,7 +197,7 @@
                         <tr *ngFor="let inv of invoices">
                             <td>{{inv.no}}</td>
                             <td>{{inv.status}}</td>
-                            <td><span (click)="get(inv.id)" style="cursor: pointer;">[Select]</span></td>
+                            <td><span (click)="get(inv.id)" (click)="modal.close('Select click')" style="cursor: pointer;">[Select]</span></td>
                         </tr>
                     </tbody>
                 </table>
