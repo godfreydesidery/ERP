@@ -1,11 +1,8 @@
-<div class="row">
+<div class="row" [@fadeInOut]>
+    <div class="col-sm-12" style="text-align: center;">
+        <h6>Reports | Inventory | Negative Stock Report</h6>
+    </div>
     <div class="col">
-        <table style="width: 100%;">
-            <tr style="width: 100%;">
-                <td style="width: 100mm; vertical-align: top;"><p class="h6">Reports / Inventory / Negative Stock Report</p></td>
-                <td></td>                                   
-            </tr>
-        </table>
         <table style="width: 100%;">
             <tr style="width: 100%;">
                 <td style="vertical-align: top; height: 75vh;">
@@ -27,7 +24,7 @@
                                     <div class="col-12">
                                         <button (click)="getProductStockCardReport(from, to)" class="btn btn-success" style="margin: 2px;">Run Report</button>
                                         <button (click)="exportToPdf()" class="btn btn-success" style="margin: 2px;">Export-PDF</button>
-                                        <button class="btn btn-danger" style="margin: 2px;">Clear</button>
+                                        <button class="btn btn-danger" (click)="clear()" style="margin: 2px;">Clear</button>
                                     </div>
                                 </div>
                                 <br>

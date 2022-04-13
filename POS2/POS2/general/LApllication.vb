@@ -47,7 +47,7 @@ Public Class LApllication
 
         Return document
     End Function
-    Public Shared localAppDataDir As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & My.Application.Info.Title + "." + My.Application.Info.Version.Major.ToString + "." + My.Application.Info.Version.Minor.ToString
+    Public Shared localAppDataDir As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & My.Application.Info.Title + "." + My.Application.Info.Version.Major.ToString + "." + My.Application.Info.Version.Minor.ToString + "-OrbitPOS-Orbix"
 
     Public Function loadSettings()
         Dim computerName As String = ""

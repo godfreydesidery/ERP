@@ -75,6 +75,10 @@ export class StockCardReportComponent implements OnInit {
       })
   }
 
+  clear(){
+    this.report = []
+  }
+
   exportToPdf = () => {
     var header = ''
     var footer = ''

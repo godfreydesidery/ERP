@@ -6,10 +6,10 @@
         <div class="row">
             <div class="col-sm-12">
                 <a routerLink="/home"><button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
-                <button class="btn" *ngIf="grant(['USER-CREATE'])" (click)="clearFields()" (click)="unlockInputs()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new LPO"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
-                <button class="btn" *ngIf="grant(['USER-UPDATE'])" (click)="unlockInputs()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing LPO"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
-                <button *ngIf="grant(['USER-DELETE'])" (click)="deleteUser()" [disabled]="enableSave === false" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing LPO"><i class="fa-solid fa-times"></i><br>Delete</button>
-                <button *ngIf="grant(['USER-CREATE','USER-UPDATE'])" (click)="saveUser()" [disabled]="enableSave === false" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing LPO"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
+                <button class="btn" *ngIf="grant(['USER-CREATE'])" (click)="clearFields()" (click)="unlockInputs()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new User"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
+                <button class="btn" *ngIf="grant(['USER-UPDATE'])" (click)="unlockInputs()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing User"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
+                <button *ngIf="grant(['USER-DELETE'])" (click)="deleteUser()" [disabled]="enableSave === false" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Delete an existing User"><i class="fa-solid fa-times"></i><br>Delete</button>
+                <button *ngIf="grant(['USER-CREATE','USER-UPDATE'])" (click)="saveUser()" [disabled]="enableSave === false" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing User"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
             </div>
         </div>
     </div>

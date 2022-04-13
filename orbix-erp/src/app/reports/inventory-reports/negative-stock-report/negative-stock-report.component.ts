@@ -74,6 +74,10 @@ export class NegativeStockReportComponent implements OnInit {
       })
   }
 
+  clear(){
+    this.report = []
+  }
+
   exportToPdf = () => {
     var header = ''
     var footer = ''

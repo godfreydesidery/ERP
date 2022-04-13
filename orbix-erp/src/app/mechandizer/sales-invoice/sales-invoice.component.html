@@ -6,19 +6,19 @@
         <div class="row">
             <div class="col-sm-4">
                 <a routerLink="/home"><button class="btn" (click)="clear()" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
-                <button class="btn" style="margin: 2px; width: 20mm;" (click)="showList(listContent)" data-mdb-toggle="tooltip" title="View LPO List for selection"><i class="fas fa-list"></i><br>List</button>
-                <button class="btn" (click)="clear()" (click)="unlockAll()" (click)="requestNo()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new LPO"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
-                <button class="btn" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing LPO"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
-                <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing LPO"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
+                <button class="btn" style="margin: 2px; width: 20mm;" (click)="showList(listContent)" data-mdb-toggle="tooltip" title="View List for selection"><i class="fas fa-list"></i><br>List</button>
+                <button class="btn" (click)="clear()" (click)="unlockAll()" (click)="requestNo()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new Sales Invoice"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
+                <button class="btn" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing Sales Invoice"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
+                <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing Sales Invoice"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
             </div>
             <div class="col-sm-4">
-                <button class="btn"style="margin: 2px; width: 20mm;" (click)="cancel(id)" data-mdb-toggle="tooltip" title="Cancel an LPO"><i class="fa-solid fa-times fa-fw"></i><br>Cancel</button>
-                <button class="btn"style="margin: 2px; width: 20mm;" (click)="approve(id)" data-mdb-toggle="tooltip" title="Approve a Pending LPO"><i class="fa-solid fa-check fa-fw"></i><br>Approve</button>
+                <button class="btn"style="margin: 2px; width: 20mm;" (click)="cancel(id)" data-mdb-toggle="tooltip" title="Cancel a Pending Sales Invoice"><i class="fa-solid fa-times fa-fw"></i><br>Cancel</button>
+                <button class="btn"style="margin: 2px; width: 20mm;" (click)="approve(id)" data-mdb-toggle="tooltip" title="Approve a Pending Sales Invoice"><i class="fa-solid fa-check fa-fw"></i><br>Approve</button>
                 <button class="btn"style="margin: 2px; width: 20mm;" (click)="exportToPdf()" data-mdb-toggle="tooltip" title="Export document to PDF"><i class="fas fa-file-pdf"></i><br>PDF</button>
             </div>
             <div class="col-sm-4">
-                <button (click)="archive(id)" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Send a Received LPO to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive</button>
-                <button (click)="archiveAll()" class="btn"style="margin: 2px; width: 30mm;" data-mdb-toggle="tooltip" title="Send all Received LPOs to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive All</button>
+                <button (click)="archive(id)" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Send a Paid Sales Invoice to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive</button>
+                <button (click)="archiveAll()" class="btn"style="margin: 2px; width: 30mm;" data-mdb-toggle="tooltip" title="Send all Paid Sales Invoices to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive All</button>
                 <button class="btn"style="margin: 2px; width: 30mm;" (click)="createShortCut('Packing List', 'packing-list')" data-mdb-toggle="tooltip" title="Create a page shortcut on user's Dashboard"><i class="fas fa-external-link-alt"></i><br>Shortcut</button>
             </div>
         </div>
@@ -100,12 +100,12 @@
         <table class="table table-bordered">
             <thead style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
                 <tr>
-                    <td>Code</td>
-                    <td>Description</td>
-                    <td>Qty</td>
-                    <td>Price(VAT Incl)</td>
-                    <td>Total Cost</td>
-                    <td>Action</td>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>Qty</th>
+                    <th>Price(VAT Incl)</th>
+                    <th>Total Cost</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -117,13 +117,13 @@
                     <td style="text-align: right;">{{d.qty*d.sellingPriceVatIncl | currency:'':''}}</td>
                     <td><span style="cursor: pointer;" (click)="deleteDetail(d.id)">[Remove]</span><span style="cursor: pointer;" (click)="open(content, d.product.id, d.id)">[Edit]</span></td>
                 </tr>
-                <tr style="background-color: rgb(211, 211, 211);">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>Total</td>
-                    <td style="text-align: right;">{{total | currency:'':''}}</td>
-                    <td></td>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Total</th>
+                    <th style="text-align: right;">{{total | currency:'':''}}</th>
+                    <th></th>
                 </tr>
             </tbody>
         </table>

@@ -29,9 +29,6 @@ export class SupplierStockStatusComponent implements OnInit {
   logo!    : any
   address  : any 
 
-  from! : Date
-  to!   : Date
-
   supplierNames : string[] = []
   supplierName : string = ''
 
@@ -104,6 +101,11 @@ export class SupplierStockStatusComponent implements OnInit {
       })
   }
 
+  clear(){
+    this.report = []
+    this.supplierName = ''
+  }
+
   exportToPdf = () => {
     var header = ''
     var footer = ''
@@ -150,9 +152,9 @@ export class SupplierStockStatusComponent implements OnInit {
             ]
           },
           '  ',
-          'Supplier : ',
-          '  ',
           {text : title, fontSize : 12, bold : true},
+          '  ',
+          'Supplier : ' + this.supplierName,
           '  ',
           {
             layout : 'noBorders',
