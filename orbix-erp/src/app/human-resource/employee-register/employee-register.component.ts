@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/auth.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { ShortCutHandlerService } from 'src/app/services/short-cut-handler.service';
 import { environment } from 'src/environments/environment';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const API_URL = environment.apiUrl;
 
@@ -243,7 +244,7 @@ export class EmployeeRegisterComponent implements OnInit {
         )
     } else {
       this.spinner.show()
-      await this.http.get(API_URL + '/employees/get_by_name?name=' + name, options)
+      await this.http.get(API_URL + '/employees/get_by_alias?alias=' + name, options)
         .pipe(finalize(() => this.spinner.hide()))
         .toPromise()
         .then(
@@ -306,7 +307,7 @@ export class EmployeeRegisterComponent implements OnInit {
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
-    await this.http.get<string[]>(API_URL+'/employees/get_names', options)
+    await this.http.get<string[]>(API_URL+'/employees/get_aliases', options)
     .toPromise()
     .then(
       data => {

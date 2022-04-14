@@ -38,6 +38,7 @@ Public Class frmPayPoint
     Public Shared paid As Boolean = False
 
     Private Sub btnAccept_Click(sender As Object, e As EventArgs) Handles btnAccept.Click
+        paid = False
         Dim amount As Double = txtTotal.Text
         If Val(txtBalance.Text) >= 0 Then
             Dim confirm As Integer = MsgBox("Total amount payable is " + LCurrency.displayValue(amount.ToString) + ". Confirm payment?", vbQuestion + vbYesNo, "Confirm Payment: " + LCurrency.displayValue(amount.ToString))
@@ -58,6 +59,7 @@ Public Class frmPayPoint
                 other = Val(txtOther.Text)
 
                 Receipt.CURRENT_RECEIPT = pay(cash, voucher, deposit, loyalty, CRCard, CAP, invoice, CRNote, mobile, other)
+                paid = True
 
                 If Not IsNothing(Receipt.CURRENT_RECEIPT) Then
                     Me.Dispose()

@@ -6,14 +6,14 @@
         <div class="row">
             <div class="col-sm-4">
                 <a routerLink="/home"><button class="btn" (click)="clear()" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
-                <button class="btn" style="margin: 2px; width: 20mm;" (click)="showList(listContent)" data-mdb-toggle="tooltip" title="View Quptation List for selection"><i class="fas fa-list"></i><br>List</button>
+                <button class="btn" style="margin: 2px; width: 20mm;" (click)="showList(listContent)" data-mdb-toggle="tooltip" title="View List for selection"><i class="fas fa-list"></i><br>List</button>
                 <button class="btn" (click)="clear()" (click)="unlockAll()" (click)="requestNo()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new Quotation"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
                 <button class="btn" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing Quotation"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
                 <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing Quotation"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
             </div>
             <div class="col-sm-4">
-                <button class="btn"style="margin: 2px; width: 20mm;" (click)="cancel(id)" data-mdb-toggle="tooltip" title="Cancel an LPO"><i class="fa-solid fa-times fa-fw"></i><br>Cancel</button>
-                <button class="btn"style="margin: 2px; width: 20mm;" (click)="approve(id)" data-mdb-toggle="tooltip" title="Approve a Pending LPO"><i class="fa-solid fa-check fa-fw"></i><br>Approve</button>
+                <button class="btn"style="margin: 2px; width: 20mm;" (click)="cancel(id)" data-mdb-toggle="tooltip" title="Cancel Pending Quotation"><i class="fa-solid fa-times fa-fw"></i><br>Cancel</button>
+                <button class="btn"style="margin: 2px; width: 20mm;" (click)="approve(id)" data-mdb-toggle="tooltip" title="Approve a Pending Quotation"><i class="fa-solid fa-check fa-fw"></i><br>Approve</button>
                 <button class="btn"style="margin: 2px; width: 20mm;" (click)="exportToPdf()" data-mdb-toggle="tooltip" title="Export document to PDF"><i class="fas fa-file-pdf"></i><br>PDF</button>
             </div>
             <div class="col-sm-4">
@@ -173,7 +173,7 @@
     </div>
     <div class="modal-footer">
       <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>-->
-      <button type="button" (click)="saveDetail()" (click)="modal.close('Save click')" class="btn btn-outline-dark">Save</button>
+      <button type="button" (click)="saveDetail()" (click)="modal.close('Save click')" class="btn btn-outline-dark">Add/Update</button>
     </div>
 </ng-template>
 

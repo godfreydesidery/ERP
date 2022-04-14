@@ -33,19 +33,19 @@ Public Class User
             Cursor.Current = Cursors.Default
         Catch ex As NullReferenceException
             Cursor.Current = Cursors.Default
-            MsgBox("Could not log in, invalid username and password", "Error: Invalid Username and Password", vbOKOnly)
+            'MsgBox("Could not log in, invalid username and password", "Error: Invalid Username and Password", vbOKOnly)
+            Return 1
         Catch ex As Exception
             Cursor.Current = Cursors.Default
-            MsgBox("Could not log in")
-            auth = 2
+            Return 2
         End Try
 
         'user = JsonConvert.DeserializeObject(Of User)(json.ToString)
 
         If String.Compare(tok, "") = -1 Then
             User.TOKEN = ""
-            MsgBox("Could not log in, invalid username and password", "Error: Invalid Username and Password", vbOKOnly)
-            auth = 1
+            'MsgBox("Could not log in, invalid username and password", "Error: Invalid Username and Password", vbOKOnly)
+            Return 1
         Else
             'Create a user session
             auth = 0
@@ -63,8 +63,8 @@ Public Class User
             Catch ex As Exception
                 Cursor.Current = Cursors.Default
                 User.TOKEN = ""
-                MsgBox("Could not log in")
-                auth = 2
+                'MsgBox("Could not log in")
+                Return 2
             End Try
         End If
         Cursor.Current = Cursors.Default

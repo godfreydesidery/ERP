@@ -543,7 +543,11 @@ Public Class frmMain
                 Else
                     If frmPayPoint.paid = True Then
                         Dim receipt As Receipt = Receipt.CURRENT_RECEIPT
-                        printReceipt(receipt, frmPayPoint.cash, Convert.ToDouble(LCurrency.getValue(frmPayPoint.balance)))
+                        Try
+                            printReceipt(receipt, frmPayPoint.cash, Convert.ToDouble(LCurrency.getValue(frmPayPoint.balance)))
+                        Catch ex As Exception
+                            'do nothing, check later
+                        End Try
                         allowVoid = False
                         cart = loadCart(Till.TILLNO)
                         If IsNothing(cart) Then
@@ -554,7 +558,7 @@ Public Class frmMain
                 End If
             End If
         Catch ex As Exception
-
+            'MsgBox(ex.ToString)
         End Try
         txtGrandTotal.Text = ""
         txtTotal.Text = ""
@@ -611,7 +615,6 @@ Public Class frmMain
         cart = loadCart(Till.TILLNO)
 
         If IsNothing(cart) Then
-            MsgBox("Check")
             cart = createCart(Till.TILLNO)
         End If
         displayCart(cart)

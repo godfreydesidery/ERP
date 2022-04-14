@@ -106,7 +106,16 @@ export class GrnComponent implements OnInit {
     this.logo = await this.data.getLogo() 
   }
 
-  async save() {   
+  async save() {  
+    if(this.orderNo == ''){
+      alert('Please enter Order No')
+      return
+    }
+    if(this.invoiceNo == ''){
+      alert('Invoice No is a required field')
+      return
+    }
+    
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
@@ -128,7 +137,7 @@ export class GrnComponent implements OnInit {
         data => {
           this.show(data!)
           this.loadGrns()
-          alert('GRN Created successifully')
+          alert('GRN Created successifully. Edit received quantities and prices to proceed')
         }
       )
       .catch(
@@ -182,17 +191,12 @@ export class GrnComponent implements OnInit {
 
   async getByNo(no: string) {
     if(no == ''){
+      alert('Enter GRN No to search')
       return
     }
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
-    if(this.id == '' || this.id == null){
-      //Create GRN with the specific LPO
-      this.save();
-      return
-    }
-
     this.spinner.show()
     await this.http.get<IGrn>(API_URL+'/grns/get_by_no?no='+no, options)
     .pipe(finalize(() => this.spinner.hide()))
@@ -210,6 +214,25 @@ export class GrnComponent implements OnInit {
     )
   }
 
+  createGrn(){
+    if(!(this.id == '' || this.id == null)){
+      return
+    }
+    if(this.no == ''){
+      alert('GRN No is required')
+        return
+    }
+    if(this.orderNo == ''){
+      alert('Please enter Order No')
+      return
+    }
+    if(this.invoiceNo == ''){
+      alert('Invoice No is a required field')
+      return
+    }
+    this.save()
+  }
+
   show(data : IGrn){
     this.id           = data?.id
     this.no           = data!.no
@@ -225,7 +248,11 @@ export class GrnComponent implements OnInit {
   }
 
   async approve(id: any) {
-    if(this.invoiceAmount != this.total){
+    if(this.total == 0){
+      alert('Receiption of Zero valued goods is not allowed in the system. Please cross-check received quantities with their respective prices.')
+      return
+    }
+    if(Math.abs(this.invoiceAmount - this.total) >= 1){
       alert('Can not approve. Invalid invoice amount. Invoice amount should be equal to total goods value')
       return
     }

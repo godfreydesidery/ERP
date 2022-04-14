@@ -43,12 +43,20 @@
                         </div>
                     </div>
                 </div>
+                <hr>
                 <div class="row">
                     <div class="col-sm-3">
                         <small>Order#</small>
                     </div>
                     <div class="col-sm-9">
-                        <input type="text" [(ngModel)]="orderNo" class="form-control special" [readonly]="inputsLocked">
+                        <div class="row">
+                            <div class="col-8">
+                                <input type="text" [(ngModel)]="orderNo" class="form-control special" [readonly]="inputsLocked">
+                            </div>
+                            <div class="col-4">
+                                <button *ngIf="id === '' || id === null" class="btn btn-success" (click)="createGrn()" style="margin: 2px; width: 26mm;"><i class="fa-solid fa-book-open"></i>Create</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
