@@ -67,6 +67,7 @@ import lombok.RequiredArgsConstructor;
 //@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserResource {
 	
 	private final RoleRepository roleRepository;

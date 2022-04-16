@@ -48,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 	protected void configure(HttpSecurity http) throws Exception {
 		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
 		customAuthenticationFilter.setFilterProcessesUrl("/api/login");
+		http.cors();
 		http.csrf().disable();
 		http.anonymous().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -57,8 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 		.antMatchers("/swagger-ui.html").permitAll()
 		.antMatchers("/swagger-ui").permitAll()
 		.antMatchers("/api/login/**").permitAll()
-		.antMatchers("/api/token/refresh/**").permitAll();
-		http.cors();
+		.antMatchers("/api/token/refresh/**").permitAll();		
 		//Private endpoints
 		//.anyRequest().authenticated();
 		
@@ -66,6 +66,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 		
 		http.addFilter(customAuthenticationFilter);
 		http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+	}
+	
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**")
+				.allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
+				.allowedHeaders("*")
+				.allowedOrigins("*");
+			}
+		};
 	}
 	
 	@Bean

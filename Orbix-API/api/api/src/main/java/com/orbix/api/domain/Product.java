@@ -36,7 +36,7 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(unique = true)
+	//@Column(unique = true)
 	private String barcode;
 	@NotBlank
 	@Column(unique = true)
@@ -46,7 +46,6 @@ public class Product {
 	private String description;
 	@Column(unique = true)
 	private String shortDescription;
-	@Column(unique = true)
 	private String commonName;
 	private double discount = 0;
 	private double vat = 0;
