@@ -71,23 +71,39 @@ public class ProductServiceImpl implements ProductService {
 	private final ProductPriceChangeService productPriceChangeService;
 
 	@Override
-	public Product save(Product product) {
-		Optional<Supplier> s = supplierRepository.findByName(product.getSupplier().getName());
+	public Product save(Product p) {
+		Product product;
+		if(p.getId() == null) {
+			//Add a new Product
+			product = p;
+		}else {
+			//Update an existing product
+			product = productRepository.findById(p.getId()).get();
+			product.setId(p.getId());
+			product.setBarcode(p.getBarcode());
+			product.setCode(p.getCode());
+			product.setDescription(p.getDescription());
+			product.setShortDescription(p.getShortDescription());
+			product.setCommonName(p.getCommonName());
+			product.setSellable(p.isSellable());
+			product.setActive(p.isActive());
+		}
+		Optional<Supplier> s = supplierRepository.findByName(p.getSupplier().getName());
 		if(!s.isPresent()) {
 			throw new MissingInformationException("Could not save product, supplier missing");
 		}else {
 			supplierRepository.save(s.get());
 			product.setSupplier(s.get());
 		}
-		Optional<Department> d = departmentRepository.findByName(product.getDepartment().getName());
+		Optional<Department> d = departmentRepository.findByName(p.getDepartment().getName());
 		if(d.isPresent()) {
 			departmentRepository.save(d.get());
 			product.setDepartment(d.get());
-			Optional<Class> c = classRepository.findByName(product.getClass_().getName());
+			Optional<Class> c = classRepository.findByName(p.getClass_().getName());
 			if(c.isPresent()) {
 				classRepository.save(c.get());
 				product.setClass_(c.get());
-				Optional<SubClass> sb = subClassRepository.findByName(product.getSubClass().getName());
+				Optional<SubClass> sb = subClassRepository.findByName(p.getSubClass().getName());
 				if(sb.isPresent()) {
 					subClassRepository.save(sb.get());
 					product.setSubClass(sb.get());
@@ -104,11 +120,11 @@ public class ProductServiceImpl implements ProductService {
 			product.setSubClass(null);
 		}
 		
-		Optional<Category> c = categoryRepository.findByName(product.getCategory().getName());
+		Optional<Category> c = categoryRepository.findByName(p.getCategory().getName());
 		if(c.isPresent()) {
 			categoryRepository.save(c.get());
 			product.setCategory(c.get());;
-			Optional<SubCategory> sc = subCategoryRepository.findByName(product.getSubCategory().getName());
+			Optional<SubCategory> sc = subCategoryRepository.findByName(p.getSubCategory().getName());
 			if(sc.isPresent()) {
 				subCategoryRepository.save(sc.get());
 				product.setSubCategory(sc.get());
@@ -120,7 +136,7 @@ public class ProductServiceImpl implements ProductService {
 			product.setSubCategory(null);
 		}
 		
-		Optional<LevelOne> one = levelOneRepository.findByName(product.getLevelOne().getName());
+		Optional<LevelOne> one = levelOneRepository.findByName(p.getLevelOne().getName());
 		if(one.isPresent()) {
 			levelOneRepository.save(one.get());
 			product.setLevelOne(one.get());
@@ -128,7 +144,7 @@ public class ProductServiceImpl implements ProductService {
 			product.setLevelOne(null);
 		}
 		
-		Optional<LevelTwo> two = levelTwoRepository.findByName(product.getLevelTwo().getName());
+		Optional<LevelTwo> two = levelTwoRepository.findByName(p.getLevelTwo().getName());
 		if(two.isPresent()) {
 			levelTwoRepository.save(two.get());
 			product.setLevelTwo(two.get());
@@ -136,7 +152,7 @@ public class ProductServiceImpl implements ProductService {
 			product.setLevelTwo(null);
 		}
 		
-		Optional<LevelThree> three = levelThreeRepository.findByName(product.getLevelThree().getName());
+		Optional<LevelThree> three = levelThreeRepository.findByName(p.getLevelThree().getName());
 		if(three.isPresent()) {
 			levelThreeRepository.save(three.get());
 			product.setLevelThree(three.get());
@@ -144,36 +160,12 @@ public class ProductServiceImpl implements ProductService {
 			product.setLevelThree(null);
 		}
 		
-		Optional<LevelFour> four = levelFourRepository.findByName(product.getLevelFour().getName());
+		Optional<LevelFour> four = levelFourRepository.findByName(p.getLevelFour().getName());
 		if(four.isPresent()) {
 			levelFourRepository.save(four.get());
 			product.setLevelFour(four.get());
 		}else {
 			product.setLevelFour(null);
-		}
-		
-		//Check if product exists, if no, stock card, put opening balance, else stock card put new updated balance
-		boolean existing = true;
-		double originalCostPriceVatIncl = 0;
-		double originalCostPriceVatExcl = 0;
-		double originalSellingPriceVatIncl = 0;
-		double originalSellingPriceVatExcl = 0;
-		double finalCostPriceVatIncl = 0;
-		double finalCostPriceVatExcl = 0;
-		double finalSellingPriceVatIncl = 0;
-		double finalSellingPriceVatExcl = 0;
-		if(product.getId() == null) {
-			existing = false;
-		}else {
-			Product pr = productRepository.findById(product.getId()).get();
-			originalCostPriceVatIncl = pr.getCostPriceVatIncl();
-			originalCostPriceVatExcl = pr.getCostPriceVatExcl();
-			originalSellingPriceVatIncl = pr.getSellingPriceVatIncl();
-			originalSellingPriceVatExcl = pr.getSellingPriceVatExcl();
-			finalCostPriceVatIncl = product.getCostPriceVatIncl();
-			finalCostPriceVatExcl = product.getCostPriceVatExcl();
-			finalSellingPriceVatIncl = product.getSellingPriceVatIncl();
-			finalSellingPriceVatExcl = product.getSellingPriceVatExcl();
 		}
 		
 		if(validate(product)) {
@@ -185,42 +177,118 @@ public class ProductServiceImpl implements ProductService {
 			product = productRepository.saveAndFlush(product);
 		}
 		
-		
-		ProductStockCard stockCard = new ProductStockCard();
-		stockCard.setQtyIn(product.getStock());
-		stockCard.setProduct(product);
-		stockCard.setBalance(product.getStock());
-		stockCard.setDay(dayRepository.getCurrentBussinessDay());
-		if(existing == false) {
+		if(product.getId() == null) {
+			ProductStockCard stockCard = new ProductStockCard();
+			stockCard.setQtyIn(product.getStock());
+			stockCard.setProduct(product);
+			stockCard.setBalance(product.getStock());
+			stockCard.setDay(dayRepository.getCurrentBussinessDay());
 			stockCard.setReference("Opening balance");
-		}else {
-			stockCard.setReference("Stock update");
-		}
-		
-		if(existing == true) {
-			if(originalCostPriceVatIncl != finalCostPriceVatIncl || originalCostPriceVatExcl != finalCostPriceVatExcl || originalSellingPriceVatIncl != finalSellingPriceVatIncl || originalSellingPriceVatExcl != finalSellingPriceVatExcl) {
-				ProductPriceChange productPriceChange = new ProductPriceChange();
-				productPriceChange.setOriginalCostPriceVatIncl(originalCostPriceVatIncl);
-				productPriceChange.setOriginalCostPriceVatExcl(originalCostPriceVatExcl);
-				productPriceChange.setOriginalSellingPriceVatIncl(originalSellingPriceVatIncl);
-				productPriceChange.setOriginalSellingPriceVatExcl(originalSellingPriceVatExcl);
-				
-				productPriceChange.setFinalCostPriceVatIncl(finalCostPriceVatIncl);
-				productPriceChange.setFinalCostPriceVatExcl(finalCostPriceVatExcl);
-				productPriceChange.setFinalSellingPriceVatIncl(finalSellingPriceVatIncl);
-				productPriceChange.setFinalSellingPriceVatExcl(finalSellingPriceVatExcl);
-				
-				productPriceChange.setProduct(product);
-				productPriceChange.setDay(dayRepository.getCurrentBussinessDay());
-				productPriceChange.setReference("Price changed in product update");
-				
-				productPriceChangeService.save(productPriceChange);
-			}
+			productStockCardService.save(stockCard);	
 		}		
-		productStockCardService.save(stockCard);		
-		return product;
-		
+		return product;		
 	}
+	
+	@Override
+	public Product updateInventory(Product p) {
+		Product product;
+		Optional<Product> prod = productRepository.findById(p.getId());
+		double initialStock = prod.get().getStock();
+		prod.get().setUom(p.getUom());
+		prod.get().setPackSize(p.getPackSize());
+		prod.get().setStock(p.getStock());
+		prod.get().setMinimumInventory(p.getMinimumInventory());
+		prod.get().setMaximumInventory(p.getMaximumInventory());
+		prod.get().setDefaultReorderLevel(p.getDefaultReorderLevel());
+		prod.get().setDefaultReorderQty(p.getDefaultReorderQty());
+		
+		product = productRepository.saveAndFlush(prod.get());
+		
+		if(p.getStock() != initialStock) {
+			ProductStockCard stockCard = new ProductStockCard();
+			stockCard.setQtyIn(product.getStock());
+			stockCard.setProduct(product);
+			stockCard.setBalance(product.getStock());
+			stockCard.setDay(dayRepository.getCurrentBussinessDay());
+			stockCard.setReference("Stock Update");
+			productStockCardService.save(stockCard);	
+		}		
+		return product;		
+	}
+	
+	
+	
+	@Override
+	public Product updatePrices(Product p) {		
+		Product product;
+		double originalDiscount = 0;
+		double originalVat = 0;
+		double originalProfitMargin = 0;
+		double originalCostPriceVatIncl = 0;
+		double originalCostPriceVatExcl = 0;
+		double originalSellingPriceVatIncl = 0;
+		double originalSellingPriceVatExcl = 0;
+		double finalDiscount = 0;
+		double finalVat = 0;
+		double finalProfitMargin = 0;
+		double finalCostPriceVatIncl = 0;
+		double finalCostPriceVatExcl = 0;
+		double finalSellingPriceVatIncl = 0;
+		double finalSellingPriceVatExcl = 0;
+		
+		Product pr = productRepository.findById(p.getId()).get();
+		originalDiscount = pr.getDiscount();
+		originalVat = pr.getVat();
+		originalProfitMargin = pr.getProfitMargin();
+		originalCostPriceVatIncl = Math.round(pr.getCostPriceVatIncl() *100.0)/100.0;
+		originalCostPriceVatExcl = Math.round(pr.getCostPriceVatExcl() *100.0)/100.0;
+		originalSellingPriceVatIncl = Math.round(pr.getSellingPriceVatIncl() *100.0)/100.0;
+		originalSellingPriceVatExcl = Math.round(pr.getSellingPriceVatExcl() *100.0)/100.0;
+		
+		//Math.round(a * 100.0) / 100.0;
+		
+		finalDiscount = p.getDiscount();
+		finalVat = p.getVat();
+		finalProfitMargin = p.getProfitMargin();
+		finalCostPriceVatIncl = Math.round(p.getCostPriceVatIncl() *100.0)/100.0;
+		finalCostPriceVatExcl = Math.round(p.getCostPriceVatExcl() *100.0)/100.0;
+		finalSellingPriceVatIncl = Math.round(p.getSellingPriceVatIncl() *100.0)/100.0;
+		finalSellingPriceVatExcl = Math.round(p.getSellingPriceVatExcl() *100.0)/100.0;
+		
+		pr.setDiscount(finalDiscount);
+		pr.setVat(finalVat);
+		pr.setProfitMargin(finalProfitMargin);
+		pr.setCostPriceVatIncl(finalCostPriceVatIncl);
+		pr.setCostPriceVatExcl(finalCostPriceVatExcl);
+		pr.setSellingPriceVatIncl(finalSellingPriceVatIncl);
+		pr.setSellingPriceVatExcl(finalSellingPriceVatExcl);
+		
+		product = productRepository.saveAndFlush(pr);
+		
+		if(originalCostPriceVatIncl != finalCostPriceVatIncl || originalCostPriceVatExcl != finalCostPriceVatExcl || originalSellingPriceVatIncl != finalSellingPriceVatIncl || originalSellingPriceVatExcl != finalSellingPriceVatExcl) {
+			ProductPriceChange productPriceChange = new ProductPriceChange();
+			productPriceChange.setOriginalCostPriceVatIncl(originalCostPriceVatIncl);
+			productPriceChange.setOriginalCostPriceVatExcl(originalCostPriceVatExcl);
+			productPriceChange.setOriginalSellingPriceVatIncl(originalSellingPriceVatIncl);
+			productPriceChange.setOriginalSellingPriceVatExcl(originalSellingPriceVatExcl);
+			
+			productPriceChange.setFinalCostPriceVatIncl(finalCostPriceVatIncl);
+			productPriceChange.setFinalCostPriceVatExcl(finalCostPriceVatExcl);
+			productPriceChange.setFinalSellingPriceVatIncl(finalSellingPriceVatIncl);
+			productPriceChange.setFinalSellingPriceVatExcl(finalSellingPriceVatExcl);
+			
+			productPriceChange.setProduct(product);
+			productPriceChange.setDay(dayRepository.getCurrentBussinessDay());
+			productPriceChange.setReference("Price changed in product update");
+			
+			productPriceChangeService.save(productPriceChange);
+		}		
+		return product;		
+	}
+	
+	
+	
+	
 
 	@Override
 	public Product get(Long id) {

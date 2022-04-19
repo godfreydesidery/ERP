@@ -166,6 +166,26 @@ public class TillResource {
 		return ResponseEntity.created(uri).body(tillService.saveTill(till));
 	}
 	
+	@PostMapping("/tills/enable_negative_sales")
+	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	public ResponseEntity<Till> enableNegativeSales(
+			@RequestParam(name = "id") Long id){
+		Till till = tillService.getTill(id);
+		till.setNegativeSalesEnabled(true);
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/tills/enable_negative_sales").toUriString());
+		return ResponseEntity.created(uri).body(tillService.saveTill(till));
+	}
+	
+	@PostMapping("/tills/disable_negative_sales")
+	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	public ResponseEntity<Till> disableNegativeSales(
+			@RequestParam(name = "id") Long id){
+		Till till = tillService.getTill(id);
+		till.setNegativeSalesEnabled(false);
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/tills/enable_negative_sales").toUriString());
+		return ResponseEntity.created(uri).body(tillService.saveTill(till));
+	}
+	
 	@PostMapping("/tills/cash_pick_up")
 	//@PreAuthorize("hasAnyAuthority('TILL-CREATE')")
 	public ResponseEntity<Void>cashPickUp(

@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/auth.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { ShortCutHandlerService } from 'src/app/services/short-cut-handler.service';
@@ -34,6 +35,8 @@ export class ProductMasterComponent implements OnInit, IProduct {
   public enableSearch : boolean = false
   public enableDelete : boolean = false
   public enableSave   : boolean = false
+
+  closeResult    : string = ''
 
   id                  : any
   barcode             : string
@@ -97,6 +100,7 @@ export class ProductMasterComponent implements OnInit, IProduct {
   constructor(private shortcut : ShortCutHandlerService,
               private auth : AuthService,
               private http : HttpClient,
+              private modalService: NgbModal,
               private spinner: NgxSpinnerService) {
     this.id               = ''
     this.barcode          = ''
@@ -251,6 +255,125 @@ export class ProductMasterComponent implements OnInit, IProduct {
       )
     }
 
+  }
+
+  public async updatePricingInformation() {
+    if(this.id == null || this.id == ''){
+      return
+    }
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    } 
+    var product = {
+      id                  : this.id,
+      barcode             : this.barcode,
+      code                : this.code,
+      description         : this.description,
+      shortDescription    : this.shortDescription,
+      commonName          : this.commonName,
+      sellable            : this.sellable,
+      active              : this.active,
+      supplier            : { name : this.supplierName},
+      department          : { name : this.departmentName},
+      class_              : { name : this.className},
+      subClass            : { name : this.subClassName},
+      category            : { name : this.categoryName},
+      subCategory         : { name : this.subCategoryName},
+      levelOne            : { name : this.levelOneName},
+      levelTwo            : { name : this.levelTwoName},
+      levelThree          : { name: this.levelThreeName },
+      levelFour           : { name : this.levelFourName},
+      discount            : this.discount,
+      vat                 : this.vat,
+      profitMargin        : this.profitMargin,
+      costPriceVatIncl    : this.costPriceVatIncl,
+      costPriceVatExcl    : this.costPriceVatExcl,
+      sellingPriceVatIncl : this.sellingPriceVatIncl,
+      sellingPriceVatExcl : this.sellingPriceVatExcl,
+      uom                 : this.uom,
+      packSize            : this.packSize,
+      stock               : this.stock,                  
+      minimumInventory    : this.minimumInventory,     
+      maximumInventory    : this.maximumInventory,   
+      defaultReorderLevel : this.defaultReorderLevel, 
+      defaultReorderQty   : this.defaultReorderQty    
+    }
+
+    this.spinner.show()
+    await this.http.put<IProduct>(API_URL + '/products/update_prices', product, options)
+      .pipe(finalize(() => this.spinner.hide()))
+      .toPromise()
+      .then(
+        data => {
+          this.lockAll()
+          alert('Product pricing information updated successifully')
+        }
+      )
+      .catch(
+        error => {
+          ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not update product pricing information')
+        }
+      )
+  }
+
+
+  public async updateInventoryInformation() {
+    if(this.id == null || this.id == ''){
+      return
+    }
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    var product = {
+      id                  : this.id,
+      barcode             : this.barcode,
+      code                : this.code,
+      description         : this.description,
+      shortDescription    : this.shortDescription,
+      commonName          : this.commonName,
+      sellable            : this.sellable,
+      active              : this.active,
+      supplier            : { name : this.supplierName},
+      department          : { name : this.departmentName},
+      class_              : { name : this.className},
+      subClass            : { name : this.subClassName},
+      category            : { name : this.categoryName},
+      subCategory         : { name : this.subCategoryName},
+      levelOne            : { name : this.levelOneName},
+      levelTwo            : { name : this.levelTwoName},
+      levelThree          : { name: this.levelThreeName },
+      levelFour           : { name : this.levelFourName},
+      discount            : this.discount,
+      vat                 : this.vat,
+      profitMargin        : this.profitMargin,
+      costPriceVatIncl    : this.costPriceVatIncl,
+      costPriceVatExcl    : this.costPriceVatExcl,
+      sellingPriceVatIncl : this.sellingPriceVatIncl,
+      sellingPriceVatExcl : this.sellingPriceVatExcl,
+      uom                 : this.uom,
+      packSize            : this.packSize,
+      stock               : this.stock,                  
+      minimumInventory    : this.minimumInventory,     
+      maximumInventory    : this.maximumInventory,   
+      defaultReorderLevel : this.defaultReorderLevel, 
+      defaultReorderQty   : this.defaultReorderQty    
+    }
+
+    this.spinner.show()
+    await this.http.put<IProduct>(API_URL + '/products/update_inventory', product, options)
+      .pipe(finalize(() => this.spinner.hide()))
+      .toPromise()
+      .then(
+        data => {
+          this.lockAll()
+          alert('Product inventory information updated successifully')
+        }
+      )
+      .catch(
+        error => {
+          ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not update product inventory information')
+        }
+      )
   }
 
   search(){
@@ -766,6 +889,38 @@ export class ProductMasterComponent implements OnInit, IProduct {
     this.inputsLocked      = true
   }
 
+
+  showPriceChange(content: any) {
+    
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  showInventoryChange(content: any) {
+    
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+   // this.clearDetail()
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+
+
+
+
   createShortCut(shortCutName : string, link : string){
     if(confirm('Create shortcut for this page?')){
       this.shortcut.createShortCut(shortCutName, link)
@@ -831,12 +986,12 @@ export interface IProduct{
   defaultReorderQty   : number
   
 
-  save() : void
-  get(id : any) : void
-  getByBarcode(barcode : string) : void
-  getByCode(code : string) : void
-  getByDescription(description : string) : void
-  delete(id : any) : void
-  show(data : any) : void
-  clear() : void
+  //save() : void
+  //get(id : any) : void
+  //getByBarcode(barcode : string) : void
+  //getByCode(code : string) : void
+  //getByDescription(description : string) : void
+  //delete(id : any) : void
+  //show(data : any) : void
+  //clear() : void
 }

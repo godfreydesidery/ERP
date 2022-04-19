@@ -112,6 +112,7 @@ Public Class LApllication
 
             PointOfSale.posPrinterLogicName = till.posPrinterLogicName
             PointOfSale.posPrinterEnabled = till.posPrinterEnabled
+            PointOfSale.negativeSalesEnabled = till.negativeSalesEnabled
 
         Catch ex As Exception
             MsgBox("Could not find till information. Application will close.", vbOKOnly + vbCritical, "Error: Till")

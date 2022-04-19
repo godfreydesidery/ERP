@@ -374,6 +374,55 @@ export class TillAdministrationComponent implements OnInit, ITill {
     }
   }
 
+  /**
+   * 
+   * @param id 
+   * @param enabled 
+   * Enable or disable negative sales for a particular till
+   */
+  public async changeSalesMode(id : any, enabled : boolean){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    if(enabled == false){
+      if (window.confirm('Enable Negative Sales?') == true) {
+        this.spinner.show()
+        await this.http.post(API_URL + '/tills/enable_negative_sales?id=' + id, options)
+          .pipe(finalize(() => this.spinner.hide()))
+          .toPromise()
+          .then(
+            data => {
+              alert('Negative Sales enabled succesifully for this till')
+              this.loadTills()
+            }
+          )
+          .catch(
+            error => {
+              ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not enable negative sales on this till')
+            }
+          )
+      }
+    }else{
+      if (window.confirm('Disable Negative Sales?') == true) {
+        this.spinner.show()
+        await this.http.post(API_URL + '/tills/disable_negative_sales?id=' + id, options)
+          .pipe(finalize(() => this.spinner.hide()))
+          .toPromise()
+          .then(
+            data => {
+              alert('Negative Sales disabled succesifully for this till')
+              this.loadTills()
+            }
+          )
+          .catch(
+            error => {
+              ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not disable negative sales on this till')
+            }
+          )
+      }
+    }
+  }
+
   async loadTills(){
     this.tills = []
     let options = {

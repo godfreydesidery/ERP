@@ -14,22 +14,34 @@
                                 <div class="alert alert-info" role="alert">
                                     <span>Progress: {{progressStatus}} {{currentRecord}} of {{totalRecords}}</span>
                                     <hr>
-                                    <div class="alert alert-info" role="alert">Upload Products from file
-                                        <input type="file" (change)="uploadProductFile($event)" multiple="false">
-                                    </div>
-                                    <hr>
-                                    <div class="alert alert-info" role="alert">Update Products from file
-                                        <input type="file" (change)="updateProductFile($event)" multiple="false">
-                                    </div>
-                                    <hr>
-                                    <div class="alert alert-info" role="alert">Download Products
-                                        <button (click)="exportProductToExcel()">Download</button>
-                                    </div>
-                                    <hr>
-                                    <div class="alert alert-info" role="alert">Download Product Template
-                                        <button (click)="exportTemplateToExcel()">Download</button>
-                                    </div>
-                                    <hr>
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td>Upload Products from file</td>
+                                                <td><input type="file" (change)="uploadProductFile($event)" multiple="false"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Update Products from file</td>
+                                                <td><input type="file" (change)="updateProductFile($event)" multiple="false"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Update Inventory from file</td>
+                                                <td><input type="file" (change)="updateInventoryFile($event)" multiple="false"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Update Prices from file</td>
+                                                <td><input type="file" (change)="updatePricingFile($event)" multiple="false"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Download Product file</td>
+                                                <td><button (click)="exportProductToExcel()">Download</button></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Download Product file Template</td>
+                                                <td><button (click)="exportTemplateToExcel()">Download</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <div class="col-2"></div>                                      

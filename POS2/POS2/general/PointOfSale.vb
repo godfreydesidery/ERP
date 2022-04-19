@@ -21,6 +21,7 @@ Public Class PointOfSale
     Public Shared port As String = ""
     Public Shared drawer As String = ""
     Public Shared fiscalPrinterEnabled As String = ""
+    Public Shared negativeSalesEnabled As Boolean = True
     ''' <summary>
     ''' function to print receipt
     ''' </summary>
@@ -238,7 +239,7 @@ Public Class PointOfSale
             strOutputData = strOutputData + "        You are Welcome !" + CRLF
             strOutputData = strOutputData + "Sale Date&Time : " + fDateTime + CRLF + CRLF
             strOutputData = strOutputData + CRLF
-            strOutputData = strOutputData + "  Served by: " + User.FIRST_NAME + " " + User.LAST_NAME + CRLF
+            strOutputData = strOutputData + "  Served by: " + User.AALIAS + CRLF
             strOutputData = strOutputData + (Chr(&H1D) & "V" & Chr(66) & Chr(0))
             Try
                 prn.OpenPrint(posPrinterLogicName)

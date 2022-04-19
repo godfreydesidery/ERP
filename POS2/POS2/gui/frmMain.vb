@@ -48,9 +48,13 @@ Public Class frmMain
     End Function
 
     Private Sub dtgrdViewItemList_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dtgrdViewItemList.CellEndEdit
+        Dim code As String = ""
+        Dim description As String = ""
         Dim qty As Double = 0
         Dim sn As String = ""
         Try
+            code = dtgrdViewItemList.Item(1, e.RowIndex).Value.ToString
+            description = dtgrdViewItemList.Item(2, e.RowIndex).Value.ToString
             qty = Val(dtgrdViewItemList.Item(7, e.RowIndex).Value)
             sn = dtgrdViewItemList.Item(11, e.RowIndex).Value.ToString
         Catch ex As Exception
@@ -58,14 +62,29 @@ Public Class frmMain
         End Try
 
         If Val(dtgrdViewItemList.Item(7, e.RowIndex).Value) >= 0 And Val(dtgrdViewItemList.Item(7, e.RowIndex).Value) <= 1000 And dtgrdViewItemList.Item(11, e.RowIndex).Value <> "" Then
-            If qty > 0 Then
-                updateQty(qty, sn)
+
+            If PointOfSale.negativeSalesEnabled = False Then
+                If getStock(code) < qty And qty > 0 Then
+                    dtgrdViewItemList.Item(7, e.RowIndex).Value = getCartQty(sn)
+                    dtgrdViewItemList.EndEdit()
+                    MsgBox("Insufficient stock count on [" + code + "] " + description + ", Negative sales are not allowed", vbOKOnly + vbExclamation, "Error: Insufficient product count")
+                Else
+                    If qty > 0 Then
+                        updateQty(qty, code, sn)
+                    Else
+                        updateQty(0, code, sn)
+                    End If
+                End If
             Else
-                updateQty(0, sn)
+                If qty > 0 Then
+                    updateQty(qty, code, sn)
+                Else
+                    updateQty(0, code, sn)
+                End If
             End If
             calculateValues()
         Else
-            If Val(dtgrdViewItemList.Item(7, e.RowIndex).Value) <= 0 And dtgrdViewItemList.Item(1, e.RowIndex).Value <> "" Then
+            If Val(dtgrdViewItemList.Item(7, e.RowIndex).Value) <= 0 And dtgrdViewItemList.Item(11, e.RowIndex).Value <> "" Then
                 MsgBox("Invalid quantity value. Quantity value should be between 1 and 1000", vbOKOnly + vbCritical, "Error: Invalid entry")
                 dtgrdViewItemList.Item(7, e.RowIndex).Value = 1
                 refreshList()
@@ -246,6 +265,13 @@ Public Class frmMain
             amount = (Val(qty) * price) * (1 - Val(discountRatio) / 100)
             found = True
 
+            If PointOfSale.negativeSalesEnabled = False And product.stock < q Then
+                MsgBox("Insufficient stock count on [" + code + "] " + description + ", Negative sales are not allowed", vbOKOnly + vbExclamation, "Error: Insufficient product count")
+                found = False
+                cart = loadCart(Till.TILLNO)
+                displayCart(cart)
+            End If
+
             If code = "" Then
                 found = False
                 cart = loadCart(Till.TILLNO)
@@ -289,7 +315,6 @@ Public Class frmMain
                 displayCart(cart)
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             dtgrdViewItemList.Item(0, row).Value = ""
             dtgrdViewItemList.Item(1, row).Value = ""
             dtgrdViewItemList.Item(2, row).Value = ""
@@ -298,7 +323,6 @@ Public Class frmMain
             dtgrdViewItemList.Item(6, row).Value = ""
             dtgrdViewItemList.Item(7, row).Value = ""
             dtgrdViewItemList.Item(8, row).Value = ""
-
             dtgrdViewItemList.EndEdit()
             refreshList()
             calculateValues()
@@ -456,7 +480,7 @@ Public Class frmMain
                 MsgBox("Operation denied!", vbOKOnly + vbExclamation)
             End If
 
-            cart = loadCart(Till.TILLNO)
+            loadCart(Till.TILLNO)
             displayCart(cart)
         End If
 
@@ -567,8 +591,8 @@ Public Class frmMain
         refreshList()
         calculateValues()
     End Sub
+    Private Function updateQty(qty As Double, code As String, sn As String)
 
-    Private Function updateQty(qty As Double, sn As String)
         Dim detail As New CartDetail
         detail.id = sn
         detail.qty = qty
@@ -577,9 +601,45 @@ Public Class frmMain
         Cursor.Current = Cursors.WaitCursor
         Try
             response = Web.post(detail, "carts/update_qty")
+            Cursor.Current = Cursors.Default
             Return True
         Catch ex As Exception
+            Cursor.Current = Cursors.Default
             Return False
+        End Try
+        Cursor.Current = Cursors.Default
+    End Function
+    Private Function getStock(code As String) As Double
+        Dim response As Object = New Object
+        Dim json As JObject = New JObject
+        Cursor.Current = Cursors.WaitCursor
+        Try
+            response = Web.get_("products/get_by_code?code=" + code)
+            json = JObject.Parse(response)
+            Dim product As Product = JsonConvert.DeserializeObject(Of Product)(json.ToString)
+            Cursor.Current = Cursors.Default
+            Return product.stock
+        Catch ex As Exception
+            Cursor.Current = Cursors.Default
+            Return 0
+        End Try
+        Cursor.Current = Cursors.Default
+    End Function
+
+    Private Function getCartQty(sn As String) As Double
+        Dim response As Object = New Object
+        Dim json As JObject = New JObject
+        Cursor.Current = Cursors.WaitCursor
+        Try
+            response = Web.get_("carts/get_qty?id=" + sn)
+            json = JObject.Parse(response)
+            Dim cartDetail As CartDetail = JsonConvert.DeserializeObject(Of CartDetail)(json.ToString)
+            Cursor.Current = Cursors.Default
+            Return cartDetail.qty
+        Catch ex As Exception
+            MsgBox (ex.Message )
+            Cursor.Current = Cursors.Default
+            Return 0
         End Try
         Cursor.Current = Cursors.Default
     End Function

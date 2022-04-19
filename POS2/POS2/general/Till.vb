@@ -32,6 +32,7 @@ Public Class Till
     Public Property fiscalPrinterEnabled As Boolean
     Public Property posPrinterLogicName As String
     Public Property posPrinterEnabled As Boolean
+    Public Property negativeSalesEnabled As Boolean
 
     Public Shared Function tillTotalRegister(tillNo As String, cash As Double, voucher As Double, cheque As Double, deposit As Double, loyalty As Double, CRCard As Double, CAP As Double, invoice As Double, CRNote As Double, mobile As Double)
         Dim commited As Boolean = False

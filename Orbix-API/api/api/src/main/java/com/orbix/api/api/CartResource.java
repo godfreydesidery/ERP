@@ -122,6 +122,13 @@ public class CartResource {
 		return ResponseEntity.created(uri).body(cartService.unvoid(d.get()));
 	}
 	
+	@GetMapping("/carts/get_qty")
+	public CartDetail getQty(
+			@RequestParam(name = "id") Long id){
+		CartDetail detail = cartDetailRepository.findById(id).get();
+		return detail;
+	}
+	
 	@PostMapping("/carts/pay")
 	//@PreAuthorize("hasAnyAuthority('PRODUCT-CREATE')")
 	public ResponseEntity<Receipt>pay(

@@ -305,6 +305,68 @@ export class ProductMassManagerComponent implements OnInit {
     reader.readAsBinaryString(target.files[0])
   }
 
+  updateInventoryFile(evt: any) {
+    var productData: [][]
+    if (this.progress == true) {
+      alert('Could not process, a mass operation going on')
+      return
+    }
+    const target: DataTransfer = <DataTransfer>(evt.target)
+    if (target.files.length !== 1) {
+      alert("Cannot use multiple files")
+      return
+    }
+    const reader: FileReader = new FileReader()
+    reader.onload = (e: any) => {
+      const bstr: string = e.target.result
+      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' })
+      const wsname: string = wb.SheetNames[0]
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname]
+      productData = (XLSX.utils.sheet_to_json(ws, { header: 1 }))
+
+      this.progress = true
+      if (this.validateProductMaster(productData) == true) {
+        this.progressStatus = 'Updating... please wait'
+        this.updateInventory(productData)
+      } else {
+        alert('Invalid product file')
+      }
+      this.progress = false
+    }
+    reader.readAsBinaryString(target.files[0])
+  }
+
+  updatePricingFile(evt: any) {
+    var productData: [][]
+    if (this.progress == true) {
+      alert('Could not process, a mass operation going on')
+      return
+    }
+    const target: DataTransfer = <DataTransfer>(evt.target)
+    if (target.files.length !== 1) {
+      alert("Cannot use multiple files")
+      return
+    }
+    const reader: FileReader = new FileReader()
+    reader.onload = (e: any) => {
+      const bstr: string = e.target.result
+      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' })
+      const wsname: string = wb.SheetNames[0]
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname]
+      productData = (XLSX.utils.sheet_to_json(ws, { header: 1 }))
+
+      this.progress = true
+      if (this.validateProductMaster(productData) == true) {
+        this.progressStatus = 'Updating... please wait'
+        this.updatePrices(productData)
+      } else {
+        alert('Invalid product file')
+      }
+      this.progress = false
+    }
+    reader.readAsBinaryString(target.files[0])
+  }
+
   validateProductMaster(data : any [][]) : boolean{
     this.clearProgress()
     var rows            = data.length
@@ -365,6 +427,8 @@ export class ProductMassManagerComponent implements OnInit {
     this.clearProgress()
     return valid;
   }
+
+  
   
   async uploadProducts(dt : any [][]){
     let options = {
@@ -483,6 +547,134 @@ export class ProductMassManagerComponent implements OnInit {
       }
       this.spinner.show()
       await this.http.put(API_URL+'/products/update_by_code', product, options)
+      .pipe(finalize(() => this.spinner.hide()))
+      .toPromise()
+      .catch(
+        error => {
+          console.log(error)
+        }
+      )
+      }
+    this.clearProgress()
+  }
+
+  async updatePrices(dt : any [][]){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.clearProgress()
+    var rows = dt.length
+    var cols = dt[0].length
+    this.progressStatus = 'Updating pricing information'
+    this.totalRecords = rows
+
+    for(let i = 1; i < dt.length; i++) {
+      this.currentRecord = i
+      var product = {
+        code                : dt[i][0],
+        barcode             : dt[i][1],
+        description         : dt[i][2],
+        shortDescription    : dt[i][3],
+        commonName          : dt[i][4],
+        discount            : dt[i][5],
+        vat                 : dt[i][6],
+        profitMargin        : dt[i][7],
+        costPriceVatIncl    : dt[i][8],
+        costPriceVatExcl    : dt[i][9],
+        sellingPriceVatIncl : dt[i][10],
+        sellingPriceVatExcl : dt[i][11],
+        uom                 : dt[i][12],
+        packSize            : dt[i][13],
+        stock               : dt[i][14],
+        minimumInventory    : dt[i][15],
+        maximumInventory    : dt[i][16],
+        defaultReorderQty   : dt[i][17],
+        defaultReorderLevel : dt[i][18],
+        active              : dt[i][19],
+        sellable            : dt[i][20],
+        ingredients         : dt[i][21],
+        supplier            : {name : dt[i][22]},
+        department          : {name : dt[i][23]},
+        class_              : {name : dt[i][24]},
+        subClass            : {name : dt[i][25]},
+        category            : {name : dt[i][26]},
+        subCategory         : {name : dt[i][27]},
+        levelOne            : {name : dt[i][28]},
+        levelTwo            : {name : dt[i][29]},
+        levelThree          : {name : dt[i][30]},
+        levelFour           : {name : dt[i][31]}
+      }
+
+      if(dt[i][0] == undefined){
+        alert('End of file reached')
+        return
+      }
+      this.spinner.show()
+      await this.http.put(API_URL+'/products/update_prices_by_code', product, options)
+      .pipe(finalize(() => this.spinner.hide()))
+      .toPromise()
+      .catch(
+        error => {
+          console.log(error)
+        }
+      )
+      }
+    this.clearProgress()
+  }
+
+  async updateInventory(dt : any [][]){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.clearProgress()
+    var rows = dt.length
+    var cols = dt[0].length
+    this.progressStatus = 'Updating inventory'
+    this.totalRecords = rows
+
+    for(let i = 1; i < dt.length; i++) {
+      this.currentRecord = i
+      var product = {
+        code                : dt[i][0],
+        barcode             : dt[i][1],
+        description         : dt[i][2],
+        shortDescription    : dt[i][3],
+        commonName          : dt[i][4],
+        discount            : dt[i][5],
+        vat                 : dt[i][6],
+        profitMargin        : dt[i][7],
+        costPriceVatIncl    : dt[i][8],
+        costPriceVatExcl    : dt[i][9],
+        sellingPriceVatIncl : dt[i][10],
+        sellingPriceVatExcl : dt[i][11],
+        uom                 : dt[i][12],
+        packSize            : dt[i][13],
+        stock               : dt[i][14],
+        minimumInventory    : dt[i][15],
+        maximumInventory    : dt[i][16],
+        defaultReorderQty   : dt[i][17],
+        defaultReorderLevel : dt[i][18],
+        active              : dt[i][19],
+        sellable            : dt[i][20],
+        ingredients         : dt[i][21],
+        supplier            : {name : dt[i][22]},
+        department          : {name : dt[i][23]},
+        class_              : {name : dt[i][24]},
+        subClass            : {name : dt[i][25]},
+        category            : {name : dt[i][26]},
+        subCategory         : {name : dt[i][27]},
+        levelOne            : {name : dt[i][28]},
+        levelTwo            : {name : dt[i][29]},
+        levelThree          : {name : dt[i][30]},
+        levelFour           : {name : dt[i][31]}
+      }
+
+      if(dt[i][0] == undefined){
+        alert('End of file reached')
+        return
+      }
+      this.spinner.show()
+      await this.http.put(API_URL+'/products/update_inventory_by_code', product, options)
       .pipe(finalize(() => this.spinner.hide()))
       .toPromise()
       .catch(

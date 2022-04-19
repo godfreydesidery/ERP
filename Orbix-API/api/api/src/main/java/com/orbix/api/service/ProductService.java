@@ -14,6 +14,8 @@ import com.orbix.api.models.RecordModel;
  */
 public interface ProductService {
 	Product save(Product product);
+	Product updateInventory(Product product);
+	Product updatePrices(Product product);
 	Product get(Long id);
 	Product getByBarcode(String barcode);
 	Product getByCode(String code);

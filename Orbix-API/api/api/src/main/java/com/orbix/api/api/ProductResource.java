@@ -114,10 +114,58 @@ private final ProductRepository productRepository;
 	@PutMapping("/products/update")
 	@PreAuthorize("hasAnyAuthority('PRODUCT-UPDATE')")
 	public ResponseEntity<Product>updateProduct(
-			@RequestBody Product product, 
-			HttpServletRequest request){
+			@RequestBody Product product, 			
+			HttpServletRequest request){		
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/products/update").toUriString());
 		return ResponseEntity.created(uri).body(productService.save(product));
+	}
+	
+	@PutMapping("/products/update_prices")
+	@PreAuthorize("hasAnyAuthority('PRODUCT-UPDATE')")
+	public ResponseEntity<Product>updateProductPrices(
+			@RequestBody Product product, 			
+			HttpServletRequest request){		
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/products/update_prices").toUriString());
+		return ResponseEntity.created(uri).body(productService.updatePrices(product));
+	}
+	
+	@PutMapping("/products/update_prices_by_code")
+	@PreAuthorize("hasAnyAuthority('PRODUCT-UPDATE')")
+	public ResponseEntity<Product>updateProductPricesByCode(
+			@RequestBody Product product, 			
+			HttpServletRequest request){
+		Optional<Product> prod = productRepository.findByCode(product.getCode());
+		if(prod.isPresent()) {
+			product.setId(prod.get().getId());
+		}else {
+			throw new NotFoundException("Product not found");
+		}
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/products/update_prices_by_code").toUriString());
+		return ResponseEntity.created(uri).body(productService.updatePrices(product));
+	}
+	
+	@PutMapping("/products/update_inventory")
+	@PreAuthorize("hasAnyAuthority('PRODUCT-UPDATE')")
+	public ResponseEntity<Product>updateProductInventory(
+			@RequestBody Product product, 			
+			HttpServletRequest request){		
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/products/update_inventory").toUriString());
+		return ResponseEntity.created(uri).body(productService.updateInventory(product));
+	}
+	
+	@PutMapping("/products/update_inventory_by_code")
+	@PreAuthorize("hasAnyAuthority('PRODUCT-UPDATE')")
+	public ResponseEntity<Product>updateProductInventoryByCode(
+			@RequestBody Product product, 			
+			HttpServletRequest request){
+		Optional<Product> prod = productRepository.findByCode(product.getCode());
+		if(prod.isPresent()) {
+			product.setId(prod.get().getId());
+		}else {
+			throw new NotFoundException("Product not found");
+		}
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/products/update_prices").toUriString());
+		return ResponseEntity.created(uri).body(productService.updateInventory(product));
 	}
 	
 	@PutMapping("/products/update_by_code")
