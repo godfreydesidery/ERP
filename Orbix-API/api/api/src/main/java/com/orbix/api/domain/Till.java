@@ -57,4 +57,5 @@ public class Till {
 	private boolean fiscalPrinterEnabled = false;
 	private String posPrinterLogicName = "";
 	private boolean posPrinterEnabled = false;
+	private boolean negativeSalesEnabled = true;
 }

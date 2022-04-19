@@ -39,6 +39,7 @@ export class TillAdministrationComponent implements OnInit, ITill {
   public fiscalPrinterEnabled : boolean
   public posPrinterLogicName : string
   public posPrinterEnabled : boolean
+  public negativeSalesEnabled : boolean
 
   public tills : ITill[]
   
@@ -59,6 +60,7 @@ export class TillAdministrationComponent implements OnInit, ITill {
     this.fiscalPrinterEnabled = false
     this.posPrinterLogicName = ''
     this.posPrinterEnabled = false
+    this.negativeSalesEnabled = true
 
 
     this.tills        = []
@@ -80,7 +82,8 @@ export class TillAdministrationComponent implements OnInit, ITill {
       operatorName : this.operatorName,
       operatorPassword : this.operatorPassword,
       port             : this.port,
-      posPrinterLogicName : this.posPrinterLogicName
+      posPrinterLogicName : this.posPrinterLogicName,
+      negativeSalesEnabled : this.negativeSalesEnabled
     }
     if(this.id == null || this.id == ''){
       //save a new till
@@ -100,6 +103,7 @@ export class TillAdministrationComponent implements OnInit, ITill {
           this.fiscalPrinterEnabled = data!.fiscalPrinterEnabled
           this.posPrinterLogicName = data!.posPrinterLogicName
           this.posPrinterEnabled = data!.posPrinterEnabled
+          this.negativeSalesEnabled = data!.negativeSalesEnabled
           alert('Till created successifully')
           this.loadTills()
           this.clearData()
@@ -129,6 +133,7 @@ export class TillAdministrationComponent implements OnInit, ITill {
           this.fiscalPrinterEnabled = data!.fiscalPrinterEnabled
           this.posPrinterLogicName = data!.posPrinterLogicName
           this.posPrinterEnabled = data!.posPrinterEnabled
+          this.negativeSalesEnabled = data!.negativeSalesEnabled
           alert('Till updated successifully')
           this.loadTills()
         }
@@ -152,6 +157,7 @@ export class TillAdministrationComponent implements OnInit, ITill {
     this.fiscalPrinterEnabled = false
     this.posPrinterLogicName = ''
     this.posPrinterEnabled = false
+    this.negativeSalesEnabled = true
   }
 
   public async deleteTill(id : any){
@@ -322,6 +328,52 @@ export class TillAdministrationComponent implements OnInit, ITill {
     }
   }
 
+  public async changeStatus(id : any, active : boolean){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    if(active == false){
+      //activate
+      if (window.confirm('Activate Till?') == true) {
+        this.spinner.show()
+        await this.http.post(API_URL + '/tills/activate?id=' + id, options)
+          .pipe(finalize(() => this.spinner.hide()))
+          .toPromise()
+          .then(
+            data => {
+              alert('Till activated succesifully')
+              this.loadTills()
+            }
+          )
+          .catch(
+            error => {
+              ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not activate till')
+            }
+          )
+      }
+    }else{
+      //deactivate
+      if (window.confirm('Deactivate till?') == true) {
+        this.spinner.show()
+        await this.http.post(API_URL + '/tills/deactivate?id=' + id, options)
+          .pipe(finalize(() => this.spinner.hide()))
+          .toPromise()
+          .then(
+            data => {
+              alert('Till deactivated succesifully')
+              this.loadTills()
+            }
+          )
+          .catch(
+            error => {
+              ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not deactivate till')
+            }
+          )
+    }
+    
+    }
+  }
+
   async loadTills(){
     this.tills = []
     let options = {
@@ -395,6 +447,7 @@ export class TillAdministrationComponent implements OnInit, ITill {
         this.fiscalPrinterEnabled = data!.fiscalPrinterEnabled
         this.posPrinterLogicName = data!.posPrinterLogicName
         this.posPrinterEnabled = data!.posPrinterEnabled
+        this.negativeSalesEnabled = data!.negativeSalesEnabled
       }
     )
     .catch(
@@ -419,6 +472,7 @@ export interface ITill{
   fiscalPrinterEnabled : boolean
   posPrinterLogicName : string
   posPrinterEnabled : boolean
+  negativeSalesEnabled : boolean
 
 
   saveTill() : void

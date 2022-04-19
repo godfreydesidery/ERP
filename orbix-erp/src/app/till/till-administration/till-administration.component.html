@@ -11,9 +11,7 @@
                 <td style="vertical-align: top; height: 75vh;">
                     <div class="container-fluid">
                         <div class="row">
-                            
-                            <div class="col-1"></div>
-                            <div class="col-10">
+                            <div class="col-12">
                                 <br>
                                 <br>
                                 <button class="btn btn-sm btn-success" (click)="open(content, '')" style="margin-left: 2mm;">Add New Till</button>
@@ -34,9 +32,9 @@
                                             <td>{{till.active}}</td>
                                             <td>
                                                 <button class="btn btn-sm btn-outline-primary" (click)="open(content, till.id)" style="margin-left: 2mm;">Edit</button>
-                                                <button class="btn btn-sm btn-outline-primary" (click)="activateTill(till.id, till.active)" style="margin-left: 2mm;">Activate</button>
-                                                <button class="btn btn-sm btn-outline-primary" (click)="deactivateTill(till.id, till.active)" style="margin-left: 2mm;">Deactivate</button>  
+                                                <button class="btn btn-sm btn-outline-primary" (click)="changeStatus(till.id, till.active)" style="margin-left: 2mm;">{{till.active == true ? 'Deactivate Till' : 'ActivateTill'}}</button>
                                                 <button class="btn btn-sm btn-outline-primary" (click)="changePosPrinter(till.id, till.posPrinterEnabled)" style="margin-left: 2mm;">{{till.posPrinterEnabled == true ? 'Disable POS printer' : 'Enable POS printer'}}</button>
+                                                <button class="btn btn-sm btn-outline-primary" (click)="changeFiscalPrinter(till.id, till.posPrinterEnabled)" style="margin-left: 2mm;">{{till.fiscalPrinterEnabled == true ? 'Disable Fiscal printer' : 'Enable Fiscal printer'}}</button>
                                                 <button class="btn btn-sm btn-outline-primary" (click)="changeFiscalPrinter(till.id, till.posPrinterEnabled)" style="margin-left: 2mm;">{{till.fiscalPrinterEnabled == true ? 'Disable Fiscal printer' : 'Enable Fiscal printer'}}</button>
                                                 <button class="btn btn-sm btn-outline-danger" (click)="deleteTill(till.id)" style="margin-left: 2mm;">Delete</button>
                                             </td>
@@ -44,7 +42,6 @@
                                     </tbody>
                                 </table>
                             </div> 
-                            <div class="col-1"></div>                                      
                         </div>
                     </div>
                 </td>
