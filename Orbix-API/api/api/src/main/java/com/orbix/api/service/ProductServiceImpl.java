@@ -73,9 +73,15 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Product save(Product p) {
 		Product product;
+		boolean isNew = false;
 		if(p.getId() == null) {
+			isNew = true;
 			//Add a new Product
 			product = p;
+			product.setCostPriceVatExcl(Math.round(product.getCostPriceVatExcl() *100.0)/100.0);
+			product.setCostPriceVatIncl(Math.round(product.getCostPriceVatIncl() *100.0)/100.0);
+			product.setSellingPriceVatExcl(Math.round(product.getSellingPriceVatExcl() *100.0)/100.0);
+			product.setSellingPriceVatIncl(Math.round(product.getSellingPriceVatIncl() *100.0)/100.0);			
 		}else {
 			//Update an existing product
 			product = productRepository.findById(p.getId()).get();
@@ -177,7 +183,7 @@ public class ProductServiceImpl implements ProductService {
 			product = productRepository.saveAndFlush(product);
 		}
 		
-		if(product.getId() == null) {
+		if(isNew == true) {
 			ProductStockCard stockCard = new ProductStockCard();
 			stockCard.setQtyIn(product.getStock());
 			stockCard.setProduct(product);

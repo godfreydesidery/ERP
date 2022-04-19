@@ -2,6 +2,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Workbook } from 'exceljs';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import { finalize } from 'rxjs';
 import { AuthService } from 'src/app/auth.service';
@@ -9,6 +10,7 @@ import { DataService } from 'src/app/services/data.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { ShortCutHandlerService } from 'src/app/services/short-cut-handler.service';
 import { environment } from 'src/environments/environment';
+const fs = require('file-saver');
 
 const API_URL = environment.apiUrl;
 
@@ -29,9 +31,6 @@ export class NegativeStockReportComponent implements OnInit {
   logo!    : any
   address  : any 
 
-  from! : Date
-  to!   : Date
-
   report : INegativeStockReport[] = []
 
   constructor(private auth : AuthService,
@@ -51,16 +50,13 @@ export class NegativeStockReportComponent implements OnInit {
     }
   }
 
-  async getProductStockCardReport(from: Date, to: Date) {
+  async getNegativeStockReport() {
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer ' + this.auth.user.access_token)
     }
-    var args = {
-      from : from,
-      to   : to
-    }
+   
     this.spinner.show()
-    await this.http.post<INegativeStockReport[]>(API_URL + '/reports/negative_stock_report', args, options)
+    await this.http.post<INegativeStockReport[]>(API_URL + '/reports/negative_stock_report', options)
       .pipe(finalize(() => this.spinner.hide()))
       .toPromise()
       .then(
@@ -139,10 +135,43 @@ export class NegativeStockReportComponent implements OnInit {
     };
     pdfMake.createPdf(docDefinition).open(); 
   }
+
+  async exportToSpreadsheet() {
+    let workbook = new Workbook();
+    let worksheet = workbook.addWorksheet('Negative Stock Report')
+   
+    worksheet.columns = [
+      { header: 'CODE', key: 'CODE'},
+      { header: 'DESCRIPTION', key: 'DESCRIPTION'},
+      { header: 'STOCK', key: 'STOCK'}
+      
+    ];
+    this.spinner.show()
+    this.report.forEach(element => {
+      worksheet.addRow(
+        {
+          CODE         : element.code,
+          DESCRIPTION  : element.description,
+          STOCK        : element.stock
+        },"n"
+      )
+    })
+   
+    
+
+    this.spinner.hide()
+    workbook.xlsx.writeBuffer().then((data) => {
+      let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      fs.saveAs(blob, 'Negative Stock Report.xlsx');
+    })
+   
+  }
 }
 
 export interface INegativeStockReport {
   code        : string
   description : string
+  costPriceVatIncl : number
+  sellingPriceVatIncl : number
   stock       : number
 }

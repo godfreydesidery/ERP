@@ -22,8 +22,9 @@
                                 <br>
                                 <div class="row">
                                     <div class="col-12">
-                                        <button (click)="getProductStockCardReport(from, to)" class="btn btn-success" style="margin: 2px;">Run Report</button>
+                                        <button (click)="getNegativeStockReport()" class="btn btn-success" style="margin: 2px;">Run Report</button>
                                         <button (click)="exportToPdf()" class="btn btn-success" style="margin: 2px;">Export-PDF</button>
+                                        <button (click)="exportToSpreadsheet()" class="btn btn-success" style="margin: 2px;">Export-Spreadsheet</button>
                                         <button class="btn btn-danger" (click)="clear()" style="margin: 2px;">Clear</button>
                                     </div>
                                 </div>

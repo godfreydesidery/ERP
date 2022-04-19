@@ -1,6 +1,7 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Workbook } from 'exceljs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import { finalize } from 'rxjs';
@@ -9,6 +10,7 @@ import { DataService } from 'src/app/services/data.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { ShortCutHandlerService } from 'src/app/services/short-cut-handler.service';
 import { environment } from 'src/environments/environment';
+const fs = require('file-saver');
 
 const API_URL = environment.apiUrl;
 
@@ -31,6 +33,8 @@ export class SupplierStockStatusComponent implements OnInit {
 
   supplierNames : string[] = []
   supplierName : string = ''
+  totalCost : number = 0
+  totalValue : number = 0
 
   report : ISupplierStockStatusReport[] = []
 
@@ -91,14 +95,26 @@ export class SupplierStockStatusComponent implements OnInit {
       .pipe(finalize(() => this.spinner.hide()))
       .toPromise()
       .then(
-        data => {
+        async data => {          
           this.report = data!
+          await this.getTotal()
         }
       )
       .catch(error => {
         console.log(error)
         ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load report')
       })
+  }
+
+  async getTotal(){
+    this.totalCost = 0
+    this.totalValue = 0
+    this.report.forEach(element => {
+      if(element.stock > 0){
+        this.totalCost = this.totalCost + element.stock * element.costPriceVatIncl
+        this.totalValue = this.totalValue + element.stock * element.sellingPriceVatIncl
+      }
+    })
   }
 
   clear(){
@@ -124,6 +140,8 @@ export class SupplierStockStatusComponent implements OnInit {
         {text : 'Code', fontSize : 9, fillColor : '#bdc6c7'},
         {text : 'Description', fontSize : 9, fillColor : '#bdc6c7'},
         {text : 'Qty', fontSize : 9, fillColor : '#bdc6c7'},
+        {text : 'Stock Cost', fontSize : 9, fillColor : '#bdc6c7'},
+        {text : 'Stock Value', fontSize : 9, fillColor : '#bdc6c7'},
       ]
     ]    
     this.report.forEach((element) => {
@@ -131,9 +149,19 @@ export class SupplierStockStatusComponent implements OnInit {
         {text : element.code.toString(), fontSize : 9, fillColor : '#ffffff'}, 
         {text : element.description.toString(), fontSize : 9, fillColor : '#ffffff'}, 
         {text : element.stock.toString(), fontSize : 9, fillColor : '#ffffff'},
+        {text : (element.stock*element.costPriceVatIncl).toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right', fillColor : '#ffffff'},
+        {text : (element.stock*element.sellingPriceVatIncl).toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right', fillColor : '#ffffff'},
       ]
       report.push(detail)
     })
+    var summary = [
+      {text : '', fontSize : 9, fillColor : '#bdc6c7'},
+      {text : '', fontSize : 9, fillColor : '#bdc6c7'},
+      {text : 'Total', fontSize : 9, fillColor : '#bdc6c7'},
+      {text : this.totalCost.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right', fillColor : '#bdc6c7'},
+      {text : this.totalValue.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right', fillColor : '#bdc6c7'},
+      ]
+    report.push(summary)
     const docDefinition = {
       header: '',
       watermark : { text : '', color: 'blue', opacity: 0.1, bold: true, italics: false },
@@ -160,18 +188,75 @@ export class SupplierStockStatusComponent implements OnInit {
             layout : 'noBorders',
             table : {
                 headerRows : 1,
-                widths : [50, 300, 50],
+                widths : [50, 270, 30, 65, 65],
                 body : report
             }
-        },                   
+        },
+        'NB: Negative stocks are excluded',                   
       ]     
     };
     pdfMake.createPdf(docDefinition).open(); 
   }
+
+
+  async exportToSpreadsheet() {
+    let workbook = new Workbook();
+    let worksheet = workbook.addWorksheet('Supplier Stock Status')
+   
+    worksheet.columns = [
+      { header: 'CODE', key: 'CODE'},
+      { header: 'DESCRIPTION', key: 'DESCRIPTION'},
+      { header: 'STOCK', key: 'STOCK'},
+      { header: 'TOTAL_COST', key: 'TOTAL_COST'},
+      { header: 'TOTAL_VALUE', key: 'TOTAL_VALUE'}
+    ];
+    this.spinner.show()
+    this.report.forEach(element => {
+      worksheet.addRow(
+        {
+          CODE         : element.code,
+          DESCRIPTION  : element.description,
+          STOCK        : element.stock,
+          TOTAL_COST   : element.costPriceVatIncl*element.stock,
+          TOTAL_VALUE  : element.sellingPriceVatIncl*element.stock
+        },"n"
+      )
+    })
+    worksheet.addRow(
+      {
+        CODE         : '',
+        DESCRIPTION  : '',
+        STOCK        : 'Total',
+        TOTAL_COST   : this.totalCost,
+        TOTAL_VALUE  : this.totalValue
+      },"n"
+    )
+    worksheet.addRow(
+      {
+        CODE         : 'NB: Negetive stocks are excluded',
+        DESCRIPTION  : '',
+        STOCK        : '',
+        TOTAL_COST   : '',
+        TOTAL_VALUE  : ''
+      },"n"
+    )
+
+    this.spinner.hide()
+    workbook.xlsx.writeBuffer().then((data) => {
+      let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      fs.saveAs(blob, 'Supplier Stock Status.xlsx');
+    })
+   
+  }
+
+
+
 }
 
 export interface ISupplierStockStatusReport {
   code        : string
   description : string
+  costPriceVatIncl : number
+  sellingPriceVatIncl : number
   stock       : number
 }

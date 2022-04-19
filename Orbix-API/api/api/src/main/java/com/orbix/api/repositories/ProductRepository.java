@@ -73,7 +73,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 					"`suppliers`.`name` AS `supplierName`,\r\n" + 
 					"`products`.`code` AS `code`,\r\n" +
 					"`products`.`description` AS `description`,\r\n" +
-					"`products`.`stock` AS `stock`\r\n" +
+					"`products`.`stock` AS `stock`,\r\n" +
+					"`products`.`cost_price_vat_incl` AS `costPriceVatIncl`,\r\n" +
+					"`products`.`selling_price_vat_incl` AS `sellingPriceVatIncl`\r\n" +
 					"FROM\r\n" + 
 					"(SELECT * FROM `suppliers` WHERE `name`=:name)`suppliers`\r\n" + 
 					"JOIN\r\n" + 

@@ -23,6 +23,7 @@
                                     <div class="col-12">
                                         <button (click)="getSupplierStockStatusReport(supplierName)" class="btn btn-success" style="margin: 2px;">Run Report</button>
                                         <button (click)="exportToPdf()" class="btn btn-success" style="margin: 2px;">Export-PDF</button>
+                                        <button (click)="exportToSpreadsheet()" class="btn btn-success" style="margin: 2px;">Export-Spreadsheet</button>
                                         <button class="btn btn-danger" (click)="clear()" style="margin: 2px;">Clear</button>
                                     </div>
                                 </div>
@@ -35,6 +36,8 @@
                                             <th>Code</th>
                                             <th>Description</th>
                                             <th>Qty</th>
+                                            <th>Cost Price</th>
+                                            <th>Selling Price</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -42,10 +45,22 @@
                                             <td>{{r.code}}</td>
                                             <td>{{r.description}}</td>
                                             <td>{{r.stock}}</td>
-                                        </tr>               
+                                            <td style="text-align: right;">{{r.costPriceVatIncl*r.stock | currency:'':''}}</td>
+                                            <td style="text-align: right;">{{r.sellingPriceVatIncl*r.stock | currency:'':''}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Total</th>
+                                            <th style="text-align: right;">{{totalCost | currency:'':''}}</th>
+                                            <th style="text-align: right;">{{totalValue | currency:'':''}}</th>
+                                        </tr>     
                                     </tbody>
                                 </table>
-                            </div>                                      
+                            </div> 
+                            <div class="col-12" *ngIf="report">
+                                <span>NB: Negative stocks are excluded</span>
+                            </div>                                     
                         </div>
                     </div>                   
                 </td>

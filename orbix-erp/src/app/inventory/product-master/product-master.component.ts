@@ -306,6 +306,7 @@ export class ProductMasterComponent implements OnInit, IProduct {
       .then(
         data => {
           this.lockAll()
+          this.get(this.id)
           alert('Product pricing information updated successifully')
         }
       )
@@ -366,6 +367,7 @@ export class ProductMasterComponent implements OnInit, IProduct {
       .then(
         data => {
           this.lockAll()
+          this.get(this.id)
           alert('Product inventory information updated successifully')
         }
       )
