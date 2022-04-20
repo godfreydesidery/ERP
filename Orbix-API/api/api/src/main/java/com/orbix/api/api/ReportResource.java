@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.orbix.api.domain.Supplier;
+import com.orbix.api.reports.models.DailyPurchaseReport;
 import com.orbix.api.reports.models.DailySalesReport;
 import com.orbix.api.reports.models.DailySummaryReport;
 import com.orbix.api.reports.models.FastMovingProductsReport;
@@ -29,6 +30,7 @@ import com.orbix.api.reports.service.NegativeStockReportService;
 import com.orbix.api.reports.service.ProductListingReportService;
 import com.orbix.api.reports.service.ProductStockCardReportService;
 import com.orbix.api.reports.service.ProductionReportService;
+import com.orbix.api.reports.service.PurchaseReportService;
 import com.orbix.api.reports.service.SalesReportService;
 import com.orbix.api.reports.service.SlowMovingProductsReportService;
 import com.orbix.api.reports.service.SupplierStockStatusReportService;
@@ -48,6 +50,7 @@ public class ReportResource {
 	
 	private final ProductStockCardReportService productStockCardServiceReport;
 	private final SalesReportService salesReportService;
+	private final PurchaseReportService purchaseReportService;
 	private final ProductionReportService productionReportService;
 	private final NegativeStockReportService negativeStockReportService;
 	private final SupplierStockStatusReportService supplierStockStatusReportService;
@@ -60,7 +63,14 @@ public class ReportResource {
 	public ResponseEntity<List<DailySalesReport>> dailySalesReport(
 			@RequestBody DailySalesReportArgs args){
 		return ResponseEntity.ok().body(salesReportService.getDailySalesReport(args.from, args.to, null, null, null, null, null, null, null, null, null));
-	}	
+	}
+	
+	@PostMapping("/reports/daily_purchase_report")
+	//@PreAuthorize("hasAnyAuthority('CUSTOMER-READ')")
+	public ResponseEntity<List<DailyPurchaseReport>> dailyPurchaseReport(
+			@RequestBody DailyPurchaseReportArgs args){
+		return ResponseEntity.ok().body(purchaseReportService.getDailyPurchaseReport(args.from, args.to, null, null, null, null, null, null, null, null, null));
+	}
 	
 	@PostMapping("/reports/daily_summary_report")
 	//@PreAuthorize("hasAnyAuthority('CUSTOMER-READ')")
@@ -133,6 +143,13 @@ class DailySalesReportArgs {
 }
 
 @Data
+class DailyPurchaseReportArgs {
+	LocalDate from;
+	LocalDate to;
+	
+}
+
+@Data
 class DailySummaryReportArgs {
 	LocalDate from;
 	LocalDate to;
@@ -188,3 +205,5 @@ class ProductListingReportArgs {
 	LocalDate from;
 	LocalDate to;
 }
+
+

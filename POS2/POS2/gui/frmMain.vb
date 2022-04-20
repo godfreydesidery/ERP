@@ -93,6 +93,36 @@ Public Class frmMain
         End If
     End Sub
 
+
+
+
+
+
+    Private Sub ComboBox1_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles cmbProducts.KeyDown
+        Dim items As Integer = cmbProducts.Items.Count
+        Dim i As Integer
+
+        i = cmbProducts.SelectedIndex
+
+        If e.KeyCode = Keys.Down Then
+            cmbProducts.Text = cmbProducts.Items.Item(i + 1).ToString
+        End If
+
+        If e.KeyCode = Keys.Up Then
+            cmbProducts.Text = cmbProducts.Items.Item(i - 1).ToString
+        End If
+    End Sub
+
+
+
+
+
+
+
+
+
+
+
     Protected Overrides Function ProcessCmdKey(ByRef msg As System.Windows.Forms.Message, ByVal keyData As System.Windows.Forms.Keys) As Boolean
         If msg.WParam.ToInt32() = Keys.Enter Then
             dtgrdViewItemList.EndEdit()
@@ -1383,6 +1413,7 @@ Public Class frmMain
         If Not c = 2 Then
             Exit Sub
         End If
+
         Dim currentText As String = cmbProducts.Text
         shortProductList.Clear()
         cmbProducts.Items.Clear()
@@ -1398,7 +1429,7 @@ Public Class frmMain
         cmbProducts.SelectionStart = cmbProducts.Text.Length
         Cursor.Current = Cursors.Default
     End Sub
-    Private Sub cmbProducts_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbProducts.SelectedValueChanged
+    Private Sub cmbProducts_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbProducts.SelectedIndexChanged
         Try
             Dim value As String = cmbProducts.Text
             dtgrdViewItemList.Item(c, r).Value = value

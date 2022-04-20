@@ -78,6 +78,7 @@ public class ProductServiceImpl implements ProductService {
 			isNew = true;
 			//Add a new Product
 			product = p;
+			product.setDescription(product.getDescription().replace("+", " "));
 			product.setCostPriceVatExcl(Math.round(product.getCostPriceVatExcl() *100.0)/100.0);
 			product.setCostPriceVatIncl(Math.round(product.getCostPriceVatIncl() *100.0)/100.0);
 			product.setSellingPriceVatExcl(Math.round(product.getSellingPriceVatExcl() *100.0)/100.0);
@@ -88,7 +89,7 @@ public class ProductServiceImpl implements ProductService {
 			product.setId(p.getId());
 			product.setBarcode(p.getBarcode());
 			product.setCode(p.getCode());
-			product.setDescription(p.getDescription());
+			product.setDescription(p.getDescription().replace("+", " "));
 			product.setShortDescription(p.getShortDescription());
 			product.setCommonName(p.getCommonName());
 			product.setSellable(p.isSellable());

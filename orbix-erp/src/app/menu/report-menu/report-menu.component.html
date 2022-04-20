@@ -1,6 +1,6 @@
 <div class="EnclosureBox">
     <div class="SectionEnclosureBox">
-        <div class="SectionOnBoxSubHeading" (click)="salesReports.toggle()" mdbWavesEffect>Sales Reports</div>
+        <div class="SectionOnBoxSubHeading" (click)="salesReports.toggle()" mdbWavesEffect>Purchases & Sales</div>
         <div mdbCollapse #salesReports="bs-collapse">
             <a routerLink="/daily-sales-report"><div class="SectionOnBox">Daily Sales Report</div></a>
             <a routerLink="/z-history"><div class="SectionOnBox">Z History</div></a>
@@ -9,6 +9,8 @@
             <a routerLink="/fast-moving-items"><div class="SectionOnBox">Fast Moving Items</div></a>
             <a routerLink="/slow-moving-items"><div class="SectionOnBox">Slow Moving Items</div></a>
             <a routerLink="/daily-summary-report"><div class="SectionOnBox">Daily Summary Report</div></a>
+            <hr>
+            <a routerLink="/daily-purchases-report"><div class="SectionOnBox">Daily Purchases Report</div></a>
         </div> 
         <div class="SectionOnBoxSubHeading" (click)="inventoryReports.toggle()" mdbWavesEffect>Inventory Reports</div>
         <div mdbCollapse #inventoryReports="bs-collapse">

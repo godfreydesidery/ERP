@@ -71,6 +71,7 @@ import { DailySummaryReportComponent } from './reports/sales-reports/daily-summa
 import { NegativeStockReportComponent } from './reports/inventory-reports/negative-stock-report/negative-stock-report.component';
 import { SupplierStockStatusComponent } from './reports/inventory-reports/supplier-stock-status/supplier-stock-status.component';
 import { SupplierMassManagerComponent } from './supplier/supplier-mass-manager/supplier-mass-manager.component';
+import { DailyPurchasesReportComponent } from './reports/purchases-reports/daily-purchases-report/daily-purchases-report.component';
 
 const routes: Routes = [
   {path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard]},
@@ -130,6 +131,7 @@ const routes: Routes = [
   {path: 'debt-receipts', component: DebtReceiptComponent, canActivate: [AuthGuard]},
   {path: 'debt-allocations', component: DebtAllocationComponent, canActivate: [AuthGuard]},
   {path: 'daily-sales-report', component: DailySalesReportComponent, canActivate: [AuthGuard]},
+  {path: 'daily-purchases-report', component: DailyPurchasesReportComponent, canActivate: [AuthGuard]},
   {path: 'daily-summary-report', component: DailySummaryReportComponent, canActivate: [AuthGuard]},
   {path: 'z-history', component: ZHistoryComponent, canActivate: [AuthGuard]},
   {path: 'product-listing-report', component: ProductListingReportComponent, canActivate: [AuthGuard]},

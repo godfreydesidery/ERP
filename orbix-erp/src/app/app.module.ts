@@ -99,6 +99,7 @@ import { NegativeStockReportComponent } from './reports/inventory-reports/negati
 import { SupplierStockStatusComponent } from './reports/inventory-reports/supplier-stock-status/supplier-stock-status.component';
 import { SupplierMassManagerComponent } from './supplier/supplier-mass-manager/supplier-mass-manager.component';
 import { MyShortcutsMenuComponent } from './my-shortcuts-menu/my-shortcuts-menu.component';
+import { DailyPurchasesReportComponent } from './reports/purchases-reports/daily-purchases-report/daily-purchases-report.component';
 
 
 @NgModule({
@@ -188,6 +189,7 @@ import { MyShortcutsMenuComponent } from './my-shortcuts-menu/my-shortcuts-menu.
     SupplierStockStatusComponent,
     SupplierMassManagerComponent,
     MyShortcutsMenuComponent,
+    DailyPurchasesReportComponent,
     //BatchProductionComponent,
     //CustomProductionComponent,
   ],
@@ -262,6 +264,7 @@ import { MyShortcutsMenuComponent } from './my-shortcuts-menu/my-shortcuts-menu.
       {path : 'debt-allocations', component: DebtAllocationComponent},
       {path : 'debt-tracker', component: DebtTrackerComponent},
       {path : 'daily-sales-report', component: DailySalesReportComponent},
+      {path : 'daily-purchases-report', component: DailyPurchasesReportComponent},
       {path : 'daily-summary-report', component: DailySummaryReportComponent},
       {path : 'z-history', component: ZHistoryComponent},
       {path : 'product-listing-report', component: ProductListingReportComponent},

@@ -18,6 +18,8 @@ import com.orbix.api.domain.Lpo;
 import com.orbix.api.domain.LpoDetail;
 import com.orbix.api.domain.Product;
 import com.orbix.api.domain.ProductStockCard;
+import com.orbix.api.domain.Purchase;
+import com.orbix.api.domain.PurchaseDetail;
 import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
@@ -30,6 +32,8 @@ import com.orbix.api.repositories.GrnRepository;
 import com.orbix.api.repositories.LpoDetailRepository;
 import com.orbix.api.repositories.LpoRepository;
 import com.orbix.api.repositories.ProductRepository;
+import com.orbix.api.repositories.PurchaseDetailRepository;
+import com.orbix.api.repositories.PurchaseRepository;
 import com.orbix.api.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -52,6 +56,8 @@ public class GrnServiceImpl implements GrnService {
 	private final UserRepository userRepository;
 	private final DayRepository dayRepository;
 	private final ProductRepository productRepository;
+	private final PurchaseRepository purchaseRepository;
+	private final PurchaseDetailRepository purchaseDetailRepository;
 	
 	private final ProductStockCardService stockCardService;
 
@@ -400,6 +406,18 @@ public class GrnServiceImpl implements GrnService {
 		}		
 		grn.setStatus("RECEIVED");
 		grnRepository.saveAndFlush(grn);
+		//Create Purchase
+		Purchase purchase = new Purchase();
+		purchase.setCreatedBy(grn.getCreatedBy());
+		purchase.setCreatedAt(grn.getCreatedAt());
+		purchase.setApprovedBy(grn.getApprovedBy());
+		purchase.setApprovedAt(grn.getApprovedAt());
+		purchase.setDay(dayRepository.getCurrentBussinessDay());
+		purchase.setReference("Purchase on credit from GRN: "+grn.getNo());
+		purchase.setType("Credit");
+		purchase.setStatus("APPROVED");
+		purchase = purchaseRepository.saveAndFlush(purchase);
+		
 		for(GrnDetail d : details) {
 			/**
 			 * Update stocks
@@ -426,6 +444,17 @@ public class GrnServiceImpl implements GrnService {
 			stockCard.setDay(dayRepository.getCurrentBussinessDay());
 			stockCard.setReference("Goods received. Ref #: "+grn.getNo());
 			stockCardService.save(stockCard);
+			
+			//Create purchase detail
+			if(d.getQtyReceived() > 0) {
+				PurchaseDetail purchaseDetail = new PurchaseDetail();
+				purchaseDetail.setPurchase(purchase);
+				purchaseDetail.setProduct(product);
+				purchaseDetail.setQty(d.getQtyReceived());
+				purchaseDetail.setCostPriceVatExcl(d.getSupplierPriceVatExcl());
+				purchaseDetail.setCostPriceVatIncl(d.getSupplierPriceVatIncl());
+				purchaseDetail = purchaseDetailRepository.saveAndFlush(purchaseDetail);
+			}			
 		}
 		
 		
