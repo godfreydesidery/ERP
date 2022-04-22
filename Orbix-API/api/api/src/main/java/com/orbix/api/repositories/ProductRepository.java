@@ -84,6 +84,24 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 					"`products`.`supplier_id`=`suppliers`.`id`\r\n",
 					nativeQuery = true					
 			)
-	List<SupplierStockStatusReport> getSupplySalesReport(String name);
+	List<SupplierStockStatusReport> getSupplierStockStatusReport(String name);
+	
+	@Query(
+			value = "SELECT\r\n" + 
+					"`suppliers`.`name` AS `supplierName`,\r\n" + 
+					"`products`.`code` AS `code`,\r\n" +
+					"`products`.`description` AS `description`,\r\n" +
+					"`products`.`stock` AS `stock`,\r\n" +
+					"`products`.`cost_price_vat_incl` AS `costPriceVatIncl`,\r\n" +
+					"`products`.`selling_price_vat_incl` AS `sellingPriceVatIncl`\r\n" +
+					"FROM\r\n" + 
+					"(SELECT * FROM `suppliers`)`suppliers`\r\n" + 
+					"JOIN\r\n" + 
+					"`products`\r\n" + 
+					"ON\r\n" + 
+					"`products`.`supplier_id`=`suppliers`.`id`\r\n",
+					nativeQuery = true					
+			)
+	List<SupplierStockStatusReport> getSupplierStockStatusReportAll();
 
 }

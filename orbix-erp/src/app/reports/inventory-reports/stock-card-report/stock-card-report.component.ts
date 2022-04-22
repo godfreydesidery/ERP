@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { finalize } from 'rxjs';
 import { AuthService } from 'src/app/auth.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
@@ -33,11 +33,14 @@ export class StockCardReportComponent implements OnInit {
   from! : Date
   to!   : Date
 
+  closeResult    : string = ''
+
   report : IProductStockCardReport[] = []
 
   constructor(private auth : AuthService,
               private http :HttpClient,
               private shortcut : ShortCutHandlerService,
+              private modalService: NgbModal,
               private spinner: NgxSpinnerService,
               private data : DataService) { }
 
@@ -77,6 +80,24 @@ export class StockCardReportComponent implements OnInit {
 
   clear(){
     this.report = []
+  }
+
+  showRunOptions(content: any) {
+    
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   exportToPdf = () => {

@@ -2,6 +2,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Workbook } from 'exceljs';
+import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import { finalize } from 'rxjs';
@@ -31,6 +32,8 @@ export class SupplierStockStatusComponent implements OnInit {
   logo!    : any
   address  : any 
 
+  closeResult    : string = ''
+
   supplierNames : string[] = []
   supplierName : string = ''
   totalCost : number = 0
@@ -41,6 +44,7 @@ export class SupplierStockStatusComponent implements OnInit {
   constructor(private auth : AuthService,
               private http :HttpClient,
               private shortcut : ShortCutHandlerService,
+              private modalService: NgbModal,
               private spinner: NgxSpinnerService,
               private data : DataService) { }
 
@@ -79,11 +83,7 @@ export class SupplierStockStatusComponent implements OnInit {
   }
 
   async getSupplierStockStatusReport(name : string) {
-     this.report = []
-    if(name == ''){
-      alert('Please select supplier')
-      return
-    }
+    this.report = []
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer ' + this.auth.user.access_token)
     }
@@ -120,6 +120,27 @@ export class SupplierStockStatusComponent implements OnInit {
   clear(){
     this.report = []
     this.supplierName = ''
+    this.totalCost    = 0
+    this.totalValue   = 0
+  }
+
+
+  showRunOptions(content: any) {
+    
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   exportToPdf = () => {

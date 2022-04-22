@@ -1,8 +1,8 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import { finalize } from 'rxjs';
 import { AuthService } from 'src/app/auth.service';
@@ -33,6 +33,8 @@ export class SupplySalesReportComponent implements OnInit {
 
   from! : Date
   to!   : Date
+
+  closeResult    : string = ''
 
   supplierId     : any
   supplierCode!  : string
@@ -117,6 +119,31 @@ export class SupplySalesReportComponent implements OnInit {
         ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load report')
       })
   }
+
+  clear(){
+    this.report = []
+    this.refresh()
+  }
+
+  showRunOptions(content: any) {
+    
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+
   exportToPdf = () => {
     var header = ''
     var footer = ''

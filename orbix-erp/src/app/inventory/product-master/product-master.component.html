@@ -3,17 +3,13 @@
         <h6>Inventory | Product Master</h6>
     </div>
     <div class="col-sm-12" style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
-        <div class="row">
-            <div class="col-sm-12">
-                <a routerLink="/home"><button class="btn" (click)="clear()" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
-                <button class="btn" (click)="clear()" (click)="unlockAll()" (click)="requestCode()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new Product"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
-                <button class="btn" (click)="clear()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new Product"><i class="fa-solid fa-cancel fa-fw"></i><br>Clear</button>
-                <button class="btn" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing Product"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
-                <button (click)="delete(id)" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Delete an existing Product"><i class="fa-solid fa-trash"></i><br>Delete</button>
-                <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing Product"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
-                <button class="btn"style="margin: 2px; width: 30mm;" (click)="createShortCut('Product Master', 'product-master')" data-mdb-toggle="tooltip" title="Create a page shortcut on user's Dashboard"><i class="fas fa-external-link-alt"></i><br>Shortcut</button>
-            </div>
-        </div>
+        <a routerLink="/home"><button class="btn" (click)="clear()" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+        <button class="btn" (click)="clear()" (click)="unlockAll()" (click)="requestCode()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new Product"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
+        <button class="btn" (click)="clear()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Clear entries"><i class="fa-solid fa-times fa-fw"></i><br>Clear</button>
+        <button class="btn" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing Product"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
+        <button (click)="delete(id)" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Delete an existing Product"><i class="fa-solid fa-trash"></i><br>Delete</button>
+        <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing Product"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
+        <button class="btn"style="margin: 2px; width: 30mm;" (click)="createShortCut('Product Master', 'product-master')" data-mdb-toggle="tooltip" title="Create a page shortcut on user's Dashboard"><i class="fas fa-external-link-alt"></i><br>Shortcut</button>
     </div>
     <div class="col-md-6">
         <br>
@@ -211,60 +207,62 @@
                 <button *ngIf="id" class="form-control btn-success" (click)="showPriceChange(updatePrices)">Change Price Values</button>                             
             </div>
         </div>
-        <div class="row">
-            <div class="col-4 float-end" style="text-align: right;">
-                <label>Discount %</label>                               
+        <div *ngIf="!id">
+            <div class="row">
+                <div class="col-4 float-end" style="text-align: right;">
+                    <label>Discount %</label>                               
+                </div>
+                <div class="col-8">
+                    <input type="text" [(ngModel)]="discount" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                </div>
             </div>
-            <div class="col-8">
-                <input type="text" [(ngModel)]="discount" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+            <div class="row">
+                <div class="col-4 float-end" style="text-align: right;">
+                    <label>VAT %</label>                               
+                </div>
+                <div class="col-8">
+                    <input type="text" [(ngModel)]="vat" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-4 float-end" style="text-align: right;">
-                <label>VAT %</label>                               
+            <div class="row">
+                <div class="col-4 float-end" style="text-align: right;">
+                    <label>Profit Margin %</label>                               
+                </div>
+                <div class="col-8">
+                    <input type="text" [(ngModel)]="profitMargin" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                </div>
             </div>
-            <div class="col-8">
-                <input type="text" [(ngModel)]="vat" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+            <div class="row">
+                <div class="col-4 float-end" style="text-align: right;">
+                    <label>Cost Price VAT-Incl</label>                               
+                </div>
+                <div class="col-8">
+                    <input type="text" [(ngModel)]="costPriceVatIncl" name="rollNo" required class="form-control input-sm special" style="text-align: right;" [readonly]="inputsLocked">                               
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-4 float-end" style="text-align: right;">
-                <label>Profit Margin %</label>                               
+            <div class="row">
+                <div class="col-4 float-end" style="text-align: right;">
+                    <label>Cost Price VAT-Excl</label>                               
+                </div>
+                <div class="col-8">
+                    <input type="text" [(ngModel)]="costPriceVatExcl" name="rollNo" required class="form-control input-sm special" style="text-align: right;" [readonly]="inputsLocked">                               
+                </div>
             </div>
-            <div class="col-8">
-                <input type="text" [(ngModel)]="profitMargin" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+            <div class="row">
+                <div class="col-4 float-end" style="text-align: right;">
+                    <label>Selling Price VAT-Incl</label>                               
+                </div>
+                <div class="col-8">
+                    <input type="text" [(ngModel)]="sellingPriceVatIncl" name="rollNo" required class="form-control input-sm special" style="text-align: right;" [readonly]="inputsLocked">                               
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-4 float-end" style="text-align: right;">
-                <label>Cost Price VAT-Incl</label>                               
-            </div>
-            <div class="col-8">
-                <input type="text" [(ngModel)]="costPriceVatIncl" name="rollNo" required class="form-control input-sm special" style="text-align: right;" [readonly]="inputsLocked">                               
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-4 float-end" style="text-align: right;">
-                <label>Cost Price VAT-Excl</label>                               
-            </div>
-            <div class="col-8">
-                <input type="text" [(ngModel)]="costPriceVatExcl" name="rollNo" required class="form-control input-sm special" style="text-align: right;" [readonly]="inputsLocked">                               
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-4 float-end" style="text-align: right;">
-                <label>Selling Price VAT-Incl</label>                               
-            </div>
-            <div class="col-8">
-                <input type="text" [(ngModel)]="sellingPriceVatIncl" name="rollNo" required class="form-control input-sm special" style="text-align: right;" [readonly]="inputsLocked">                               
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-4 float-end" style="text-align: right;">
-                <label>Selling Price VAT-Excl</label>                               
-            </div>
-            <div class="col-8">
-                <input type="text" [(ngModel)]="sellingPriceVatExcl" name="rollNo" required class="form-control input-sm special" style="text-align: right;" [readonly]="inputsLocked">                               
+            <div class="row">
+                <div class="col-4 float-end" style="text-align: right;">
+                    <label>Selling Price VAT-Excl</label>                               
+                </div>
+                <div class="col-8">
+                    <input type="text" [(ngModel)]="sellingPriceVatExcl" name="rollNo" required class="form-control input-sm special" style="text-align: right;" [readonly]="inputsLocked">                               
+                </div>
             </div>
         </div>
     </div>
@@ -278,60 +276,62 @@
                 <button *ngIf="id" class="form-control btn-success" (click)="showPriceChange(updateInventory)">Change Inventory Values</button>                             
             </div>
         </div>
-        <div class="row">
-            <div class="col-4 float-end" style="text-align: right;">
-                <label>UOM</label>                               
+        <div *ngIf="!id">
+            <div class="row">
+                <div class="col-4 float-end" style="text-align: right;">
+                    <label>UOM</label>                               
+                </div>
+                <div class="col-8">
+                    <input type="text" [(ngModel)]="uom" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                </div>
             </div>
-            <div class="col-8">
-                <input type="text" [(ngModel)]="uom" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+            <div class="row">
+                <div class="col-4 float-end" style="text-align: right;">
+                    <label>Pack Size</label>                               
+                </div>
+                <div class="col-8">
+                    <input type="text" [(ngModel)]="packSize" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-4 float-end" style="text-align: right;">
-                <label>Pack Size</label>                               
+            <div class="row">
+                <div class="col-4 float-end" style="text-align: right;">
+                    <label>Stock</label>                               
+                </div>
+                <div class="col-8">
+                    <input type="text" [(ngModel)]="stock" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                </div>
             </div>
-            <div class="col-8">
-                <input type="text" [(ngModel)]="packSize" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+            <div class="row">
+                <div class="col-4 float-end" style="text-align: right;">
+                    <label>Minimum Inventory</label>                               
+                </div>
+                <div class="col-8">
+                    <input type="text" [(ngModel)]="minimumInventory" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-4 float-end" style="text-align: right;">
-                <label>Stock</label>                               
+            <div class="row">
+                <div class="col-4 float-end" style="text-align: right;">
+                    <label>Maximum Inventory</label>                               
+                </div>
+                <div class="col-8">
+                    <input type="text" [(ngModel)]="maximumInventory" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                </div>
             </div>
-            <div class="col-8">
-                <input type="text" [(ngModel)]="stock" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+            <div class="row">
+                <div class="col-4 float-end" style="text-align: right;">
+                    <label>Default Reorder Level</label>                               
+                </div>
+                <div class="col-8">
+                    <input type="text" [(ngModel)]="defaultReorderLevel" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-4 float-end" style="text-align: right;">
-                <label>Minimum Inventory</label>                               
-            </div>
-            <div class="col-8">
-                <input type="text" [(ngModel)]="minimumInventory" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-4 float-end" style="text-align: right;">
-                <label>Maximum Inventory</label>                               
-            </div>
-            <div class="col-8">
-                <input type="text" [(ngModel)]="maximumInventory" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-4 float-end" style="text-align: right;">
-                <label>Default Reorder Level</label>                               
-            </div>
-            <div class="col-8">
-                <input type="text" [(ngModel)]="defaultReorderLevel" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-4 float-end" style="text-align: right;">
-                <label>Default Reorder Qty</label>                               
-            </div>
-            <div class="col-8">
-                <input type="text" [(ngModel)]="defaultReorderQty" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+            <div class="row">
+                <div class="col-4 float-end" style="text-align: right;">
+                    <label>Default Reorder Qty</label>                               
+                </div>
+                <div class="col-8">
+                    <input type="text" [(ngModel)]="defaultReorderQty" name="rollNo" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                </div>
             </div>
         </div>
     </div>

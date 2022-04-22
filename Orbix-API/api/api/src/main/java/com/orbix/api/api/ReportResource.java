@@ -104,7 +104,11 @@ public class ReportResource {
 	//@PreAuthorize("hasAnyAuthority('CUSTOMER-READ')")
 	public ResponseEntity<List<SupplierStockStatusReport>> supplierStockStatusReport(
 			@RequestBody SupplierStockStatusReportArgs args){
-		return ResponseEntity.ok().body(supplierStockStatusReportService.getSupplierStockStatusReport(args.name));
+		if(args.name.equals("")) {
+			return ResponseEntity.ok().body(supplierStockStatusReportService.getSupplierStockStatusReportAll());
+		}else {
+			return ResponseEntity.ok().body(supplierStockStatusReportService.getSupplierStockStatusReport(args.name));
+		}		
 	}	
 	
 	@PostMapping("/reports/production_report")

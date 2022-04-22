@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { Workbook } from 'exceljs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { finalize } from 'rxjs';
@@ -36,6 +36,8 @@ export class DailyPurchasesReportComponent implements OnInit {
   from! : Date
   to!   : Date
 
+  closeResult    : string = ''
+
   report : IDailyPurchaseReport[] = []
 
   totalAmount : number = 0
@@ -43,6 +45,7 @@ export class DailyPurchasesReportComponent implements OnInit {
   constructor(private auth : AuthService,
               private http :HttpClient,
               private shortcut : ShortCutHandlerService,
+              private modalService: NgbModal,
               private spinner: NgxSpinnerService,
               private data : DataService) { }
 
@@ -88,6 +91,28 @@ export class DailyPurchasesReportComponent implements OnInit {
         console.log(error)
         ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load report')
       })
+  }
+
+  clear(){
+    this.report = []
+  }
+
+  showRunOptions(content: any) {
+    
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   exportToPdf = () => {
@@ -206,6 +231,8 @@ export class DailyPurchasesReportComponent implements OnInit {
    
   }
 }
+
+
 
 export interface IDailyPurchaseReport {
   date     : Date

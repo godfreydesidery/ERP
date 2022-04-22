@@ -390,7 +390,7 @@ public class ProductServiceImpl implements ProductService {
 			id = productRepository.getLastId() + 1;
 		}catch(Exception e) {}
 		RecordModel model = new RecordModel();
-		model.setCode("PC"+Formater.formatNine(id.toString()));		
+		model.setCode("P"+id.toString());		
 		return model;
 	}	
 }

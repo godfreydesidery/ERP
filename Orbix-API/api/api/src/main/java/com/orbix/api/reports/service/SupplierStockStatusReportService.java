@@ -24,4 +24,5 @@ import com.orbix.api.reports.models.SupplierStockStatusReport;
  */
 public interface SupplierStockStatusReportService {
 	List<SupplierStockStatusReport> getSupplierStockStatusReport(String name);
+	List<SupplierStockStatusReport> getSupplierStockStatusReportAll();
 }

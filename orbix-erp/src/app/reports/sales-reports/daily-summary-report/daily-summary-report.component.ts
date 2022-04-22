@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Workbook } from 'exceljs';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import { finalize } from 'rxjs';
 import { AuthService } from 'src/app/auth.service';
@@ -28,6 +29,8 @@ export class DailySummaryReportComponent implements OnInit {
   from! : Date
   to!   : Date
 
+  closeResult    : string = ''
+
   report : IDailySummaryReport[] = []
 
   //totalPurchaseOnCash        : number = 0
@@ -40,6 +43,7 @@ export class DailySummaryReportComponent implements OnInit {
   constructor(private auth : AuthService,
               private http :HttpClient,
               private shortcut : ShortCutHandlerService,
+              private modalService: NgbModal,
               private spinner: NgxSpinnerService,
               private data : DataService,
               private datePipe : DatePipe) { }
@@ -73,7 +77,7 @@ export class DailySummaryReportComponent implements OnInit {
   }
 
 
-  async getDailySalesReport(from: Date, to: Date) {
+  async getDailySummaryReport(from: Date, to: Date) {
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer ' + this.auth.user.access_token)
     }
@@ -96,6 +100,28 @@ export class DailySummaryReportComponent implements OnInit {
         console.log(error)
         ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load report')
       })
+  }
+
+  clear(){
+    this.report = []
+  }
+
+  showRunOptions(content: any) {
+    
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   exportToPdf = () => {

@@ -2,69 +2,70 @@
     <div class="col-sm-12" style="text-align: center;">
         <h6>Reports | Inventory | Supplier Stock Status Report</h6>
     </div>
-    <div class="col">
-        <table style="width: 100%;">
-            <tr style="width: 100%;">
-                <td style="vertical-align: top; height: 75vh;">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <h6>Select Supplier</h6>
-                                        <select [(ngModel)]="supplierName" class="form-control">
-                                            <option></option>
-                                            <option *ngFor="let n of supplierNames">{{n}}</option>
-                                        </select>                             
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <button (click)="getSupplierStockStatusReport(supplierName)" class="btn btn-success" style="margin: 2px;">Run Report</button>
-                                        <button (click)="exportToPdf()" class="btn btn-success" style="margin: 2px;">Export-PDF</button>
-                                        <button (click)="exportToSpreadsheet()" class="btn btn-success" style="margin: 2px;">Export-Spreadsheet</button>
-                                        <button class="btn btn-danger" (click)="clear()" style="margin: 2px;">Clear</button>
-                                    </div>
-                                </div>
-                                <br>
-                            </div>  
-                            <div class="col-12">
-                                <table class="table table-bordered">
-                                    <thead style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
-                                        <tr>
-                                            <th>Code</th>
-                                            <th>Description</th>
-                                            <th>Qty</th>
-                                            <th>Cost Price</th>
-                                            <th>Selling Price</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let r of report">
-                                            <td>{{r.code}}</td>
-                                            <td>{{r.description}}</td>
-                                            <td>{{r.stock}}</td>
-                                            <td style="text-align: right;">{{r.costPriceVatIncl*r.stock | currency:'':''}}</td>
-                                            <td style="text-align: right;">{{r.sellingPriceVatIncl*r.stock | currency:'':''}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th></th>
-                                            <th></th>
-                                            <th>Total</th>
-                                            <th style="text-align: right;">{{totalCost | currency:'':''}}</th>
-                                            <th style="text-align: right;">{{totalValue | currency:'':''}}</th>
-                                        </tr>     
-                                    </tbody>
-                                </table>
-                            </div> 
-                            <div class="col-12" *ngIf="report">
-                                <span>NB: Negative stocks are excluded</span>
-                            </div>                                     
-                        </div>
-                    </div>                   
-                </td>
-            </tr>
+    <div class="col-sm-12" style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
+        <a routerLink="/home"><button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+        <button class="btn" (click)="showRunOptions(runOptions)" style="margin: 2px; width: 30mm;" data-mdb-toggle="tooltip" title="Enter Run options to run report"><mdb-icon fas icon="sync"></mdb-icon><br>Run Options</button>
+        <button class="btn" (click)="exportToPdf()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Export report to PDF"><mdb-icon fas icon="file-pdf"></mdb-icon><br>PDF</button>
+        <button class="btn" (click)="exportToSpreadsheet()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Export report to Spreadsheet"><mdb-icon fas icon="file-excel"></mdb-icon><br>Excel</button>
+        <button class="btn" (click)="clear()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Clear entries"><i class="fa-solid fa-times fa-fw"></i><br>Clear</button>
+    </div>
+    <div class="col-12">
+        <br>
+        <p>Supplier: {{supplierName}}</p>
+        <br>
+    </div>
+    <div class="col-12">
+        <table class="table table-bordered">
+            <thead style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
+                <tr>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>Qty</th>
+                    <th>Cost Price</th>
+                    <th>Selling Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let r of report">
+                    <td>{{r.code}}</td>
+                    <td>{{r.description}}</td>
+                    <td>{{r.stock}}</td>
+                    <td style="text-align: right;">{{r.costPriceVatIncl*r.stock | currency:'':''}}</td>
+                    <td style="text-align: right;">{{r.sellingPriceVatIncl*r.stock | currency:'':''}}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Total</th>
+                    <th style="text-align: right;">{{totalCost | currency:'':''}}</th>
+                    <th style="text-align: right;">{{totalValue | currency:'':''}}</th>
+                </tr>     
+            </tbody>
         </table>
     </div>
+    <div class="col-12" *ngIf="report">
+        <span>NB: Negative stocks are excluded</span>
+    </div> 
 </div>
+
+
+<ng-template #runOptions let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title" id="modal-basic-title">Enter options to run Supplier Stock Status Report</h6>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <h6>Select Supplier</h6>
+                <select [(ngModel)]="supplierName" class="form-control">
+                    <option></option>
+                    <option *ngFor="let n of supplierNames">{{n}}</option>
+                </select>                             
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button (click)="getSupplierStockStatusReport(supplierName)" (click)="modal.close('Run click')" class="btn btn-success" style="margin: 2px;">Run Report</button>
+    </div>
+</ng-template>
