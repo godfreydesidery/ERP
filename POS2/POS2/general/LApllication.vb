@@ -93,6 +93,7 @@ Public Class LApllication
             If res = DialogResult.Yes Then
                 frmServSetup.ShowDialog()
             Else
+
                 MsgBox("Could not load settings. Application will close.", vbExclamation + vbOKOnly, ex.Message.ToString)
             End If
             Application.Exit()
@@ -115,7 +116,7 @@ Public Class LApllication
             PointOfSale.negativeSalesEnabled = till.negativeSalesEnabled
 
         Catch ex As Exception
-            MsgBox("Could not find till information. Application will close.", vbOKOnly + vbCritical, "Error: Till")
+            MsgBox("Could not find till information. Application will close. Please contact System Administrator", vbOKOnly + vbCritical, "Error: Failed to load Till Information")
             Application.Exit()
         End Try
 

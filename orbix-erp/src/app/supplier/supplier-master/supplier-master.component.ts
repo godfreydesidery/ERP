@@ -373,6 +373,30 @@ export class SupplierMasterComponent implements OnInit, ISupplier {
     }
   }
 
+
+  async requestCode(){
+    if(this.code != ''){
+      return
+    }
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<any>(API_URL+'/suppliers/request_code', options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        console.log(data)
+        this.code = data!['code']
+      },
+      error => {
+        console.log(error)
+        alert('Could not request Product Code')
+      }
+    )
+  }
+
 }
 
 export interface ISupplier {

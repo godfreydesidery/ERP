@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { trigger,state,style,animate,transition} from '@angular/animations'; 
 import { Observable } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Title } from '@angular/platform-browser';
 
 const API_URL = environment.apiUrl;
 
@@ -28,11 +29,14 @@ export class AppComponent implements OnInit{
   constructor(private http  : HttpClient,
     private auth : AuthService,
     private router: Router,
+    private titleService: Title,
     private spinner: NgxSpinnerService){   
   }
    
   async ngOnInit(): Promise<void> {
     this.ping()
+    this.loadCompanyName()
+    this.titleService.setTitle('Orbix ERP - '+localStorage.getItem('company-name'))
     try{
       await this.loadDay()
     }catch(e:any){}    
@@ -76,10 +80,28 @@ export class AppComponent implements OnInit{
     )
     .catch(error => {})
   }
+
+  async loadCompanyName(){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    await this.http.get<ICompanyData>(API_URL+'/company_profile/get', options)
+    .toPromise()
+    .then(
+      data => {
+        localStorage.setItem('company-name', data?.companyName!+'')        
+      }
+    )
+    .catch(error => {})
+  }
   
 }
 interface IDayData{
   bussinessDate : String
+}
+
+interface ICompanyData{
+  companyName : String
 }
 
 interface ISupplier{

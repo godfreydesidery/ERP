@@ -26,12 +26,15 @@ const API_URL = environment.apiUrl;
 })
 export class DashboardComponent implements OnInit {
 
+  companyName = ''
+
   public shortcuts: IShortcut[] = [];
 
   constructor(private auth : AuthService, private http : HttpClient, private shortcut : ShortCutHandlerService, private router : Router) { }
 
   ngOnInit(): void {
     this.loadShortcuts()
+    this.companyName = localStorage.getItem('company-name') + ''
   }
 
   async loadShortcuts(){

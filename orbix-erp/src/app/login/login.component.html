@@ -2,14 +2,14 @@
 <div class="col-sm-4 offset-sm-4" style="margin-top: 2cm; background-color: rgb(215, 219, 223); border-radius: 3mm;">
     
     <!-- Default form login -->
-    <form class="text-center border p-5">
+    <form class="text-center border p-5" autocomplete="off">
         <p class="h4 mb-4" style="color: rgb(6, 6, 143);">ORBIX-ERP</p>
         <p class="h4 mb-4">User Login</p>
         <font color="blue" style="font-size: larger;">{{status}}</font>
         <!-- Email -->
-        <input type="email" [(ngModel)]="username" name="username" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="E-mail">
+        <input type="email" [(ngModel)]="username" name="username" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="Username" autocomplete="new-password">
         <!-- Password -->
-        <input type="password" [(ngModel)]="password" name="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Password">
+        <input type="password" [(ngModel)]="password" name="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Password" autocomplete="new-password">
         <div class="d-flex justify-content-around">
           <div>
             <!-- Remember me -->

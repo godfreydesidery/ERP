@@ -375,6 +375,9 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	private boolean allowDelete(Product product) {
+		/**
+		 * Check product if it can be deleted
+		 */
 		return false;
 	}
 

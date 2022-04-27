@@ -13,9 +13,12 @@ import org.springframework.stereotype.Service;
 import com.orbix.api.accessories.Formater;
 import com.orbix.api.domain.SalesInvoice;
 import com.orbix.api.domain.Supplier;
+import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.SupplierRepository;
 
+import io.swagger.models.properties.StringProperty.Format;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -68,12 +71,12 @@ public class SupplierServiceImpl implements SupplierService {
 
 	@Override
 	public boolean delete(Supplier supplier) {
-		if(allowDelete(supplier)) {
+		if(allowDelete(supplier) == true) {
 			supplierRepository.delete(supplier);
+			return true;
 		}else {
-			return false;
+			throw new InvalidOperationException("Deleting this Supplier is not allowed");
 		}
-		return true;
 	}
 
 	@Override
@@ -93,8 +96,8 @@ public class SupplierServiceImpl implements SupplierService {
 	private boolean allowDelete(Supplier supplier) {
 		/**
 		 * Put logic to allow till deletion, return false if not allowed, else return true
-		 */
-		return true;
+		 */		
+		return false;
 	}
 
 	@Override
@@ -107,6 +110,18 @@ public class SupplierServiceImpl implements SupplierService {
 		String sNumber = number.toString();
 		return "SPL-"+Formater.formatSix(sNumber);
 	}
+	
+	
+	@Override
+	public RecordModel requestSupplierCode() {
+		Long id = 1L;
+		try {
+			id = supplierRepository.getLastId() + 1;
+		}catch(Exception e) {}
+		RecordModel model = new RecordModel();
+		model.setCode("S"+Formater.formatSix(id.toString()));		
+		return model;
+	}	
 
 
 }

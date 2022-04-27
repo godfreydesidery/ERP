@@ -1383,12 +1383,12 @@ Public Class frmMain
     Dim r As Integer = -1
     Private Sub dtgrdViewItemList_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dtgrdViewItemList.CellEnter, dtgrdViewItemList.CellClick
         Dim rowHeight As Integer = dtgrdViewItemList.RowTemplate.Height
-        Dim x As Integer = 340
+        Dim x As Integer = 320
         Dim y As Integer = 90 + (dtgrdViewItemList.RowCount - 1) * rowHeight
         If y > dtgrdViewItemList.Size().Height + 90 Then
             y = dtgrdViewItemList.Size.Height + 25
         End If
-        cmbProducts.SetBounds(x, y, 300, rowHeight)
+        cmbProducts.SetBounds(x, y, 440, rowHeight)
         If dtgrdViewItemList.CurrentCell.ColumnIndex = 2 Then
             r = dtgrdViewItemList.CurrentCell.RowIndex
             c = 2
@@ -1438,5 +1438,13 @@ Public Class frmMain
         Catch ex As Exception
 
         End Try
+    End Sub
+
+    Private Sub OpenCashDrawerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenCashDrawerToolStripMenuItem.Click
+        openCashDrawer()
+    End Sub
+
+    Private Sub ToolStripButton8_Click(sender As Object, e As EventArgs) Handles ToolStripButton8.Click
+
     End Sub
 End Class

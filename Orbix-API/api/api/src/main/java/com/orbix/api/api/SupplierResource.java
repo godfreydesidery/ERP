@@ -27,6 +27,7 @@ import com.orbix.api.domain.Customer;
 import com.orbix.api.domain.Product;
 import com.orbix.api.domain.Supplier;
 import com.orbix.api.exceptions.NotFoundException;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.SupplierRepository;
 import com.orbix.api.service.SupplierService;
 
@@ -49,6 +50,11 @@ public class SupplierResource {
 	@PreAuthorize("hasAnyAuthority('SUPPLIER-READ')")
 	public ResponseEntity<List<Supplier>>getSuppliers(){
 		return ResponseEntity.ok().body(supplierService.getAll());
+	}
+	
+	@GetMapping("/suppliers/request_code")
+	public ResponseEntity<RecordModel> requestCode(){
+		return ResponseEntity.ok().body(supplierService.requestSupplierCode());
 	}
 	
 	@GetMapping("/suppliers/get_names")

@@ -17,6 +17,10 @@ import com.orbix.api.domain.Supplier;
  */
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
 
+	@Query("SELECT MAX(s.id) FROM Supplier s")
+	Long getLastId();
+	
+	
 	/**
 	 * @param name
 	 * @return

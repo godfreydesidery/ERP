@@ -6,6 +6,7 @@ package com.orbix.api.service;
 import java.util.List;
 
 import com.orbix.api.domain.Supplier;
+import com.orbix.api.models.RecordModel;
 
 /**
  * @author GODFREY
@@ -19,4 +20,5 @@ public interface SupplierService {
 	boolean delete(Supplier supplier);
 	List<Supplier>getAll(); //edit this to limit the number, for perfomance.
 	List<String> getNames();
+	RecordModel requestSupplierCode();
 }
