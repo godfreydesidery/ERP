@@ -80,6 +80,10 @@ export class LoginComponent implements OnInit {
     alert("Please contact System Administrator")
   }
 
+  clearCredentials(event : any){
+    event.target.value = ''
+  }
+
 }
 
 export interface User{

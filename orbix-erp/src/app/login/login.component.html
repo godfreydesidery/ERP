@@ -7,14 +7,10 @@
         <p class="h4 mb-4">User Login</p>
         <font color="blue" style="font-size: larger;">{{status}}</font>
         <!-- Email -->
-        <input type="email" [(ngModel)]="username" name="username" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="Username" autocomplete="new-password">
+        <input type="search" [(ngModel)]="username" name="username" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="Username" autocomplete="new-password" (focus)="clearCredentials($event)">
         <!-- Password -->
-        <input type="password" [(ngModel)]="password" name="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Password" autocomplete="new-password">
+        <input type="password" [(ngModel)]="password" name="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Password" autocomplete="new-password" (focus)="clearCredentials($event)">
         <div class="d-flex justify-content-around">
-          <div>
-            <!-- Remember me -->
-            <mdb-checkbox [default]="true">Remember me</mdb-checkbox>
-          </div>
           <div>
             <!-- Forgot password -->
             <a href="#" (click)="contactAdministrator()">Forgot password?</a>
@@ -26,7 +22,7 @@
         
       </form>
       <!-- Default form login -->
-      <div style="text-align: center;">
-        <span style="width: 100%; text-align: right;"><font style="font-size: smaller;" color="black">Copyright &copy; 2021, Orbix. All Rights Reserved.</font></span>
-    </div>
+        <div style="text-align: center;">
+          <span style="width: 100%; text-align: right;"><font style="font-size: smaller;" color="black">Copyright &copy; 2021, Orbix. All Rights Reserved.</font></span>
+        </div>
       </div>

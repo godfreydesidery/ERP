@@ -10,6 +10,9 @@ import { DataService } from 'src/app/services/data.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { ShortCutHandlerService } from 'src/app/services/short-cut-handler.service';
 import { environment } from 'src/environments/environment';
+import { Workbook } from 'exceljs';
+import { formatDate } from '@angular/common';
+const fs = require('file-saver');
 
 const API_URL = environment.apiUrl;
 
@@ -34,11 +37,14 @@ export class SupplySalesReportComponent implements OnInit {
   from! : Date
   to!   : Date
 
+  descriptions : string[] = []
+  products : IProduct[] = []
+
   closeResult    : string = ''
 
-  supplierId     : any
-  supplierCode!  : string
-  supplierName!  : string
+  supplierId    : any
+  supplierCode  : string = ''
+  supplierName  : string = ''
 
   supplierNames : string[] = []
 
@@ -47,6 +53,12 @@ export class SupplySalesReportComponent implements OnInit {
   totalAmount : number = 0
   totalDiscount : number = 0
   totalTax : number = 0
+
+
+  id : any
+  barcode : string = ''
+  code : string = ''
+  description : string = ''
 
 
   constructor(private auth : AuthService,
@@ -60,6 +72,7 @@ export class SupplySalesReportComponent implements OnInit {
     this.logo = await this.data.getLogo() 
     this.address = await this.data.getAddress()
     this.loadSupplierNames()
+    this.loadProductDescriptions()
   }
   
   async loadSupplierNames(){
@@ -93,6 +106,14 @@ export class SupplySalesReportComponent implements OnInit {
 
 
   async getSupplySalesReport(from: Date, to: Date, supplierName : string) {
+    if(from == null || to == null){
+      alert('Could not run report, please select date range')
+      return
+    }
+    if(from > to){
+      alert('Could not run report, invalid date range, final date must be later or same as the initial date')
+      return
+    }
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer ' + this.auth.user.access_token)
     }
@@ -101,7 +122,8 @@ export class SupplySalesReportComponent implements OnInit {
       to   : to,
       supplier : {
         name : supplierName
-      }
+      },
+      products : this.products
     }
     this.spinner.show()
     await this.http.post<ISupplySalesReport[]>(API_URL + '/reports/supply_sales_report', args, options)
@@ -118,6 +140,37 @@ export class SupplySalesReportComponent implements OnInit {
         console.log(error)
         ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load report')
       })
+  }
+
+  addProduct(){
+    var product = {
+      id : this.id,
+      barcode : this.barcode,
+      code : this.code,
+      description : this.description
+    }
+    var exists = false
+    this.products.forEach(element => {
+      if(element.id == product.id){
+        exists = true
+      }
+    })
+    if(!exists){
+      this.products.push(product)
+    }
+    this.clearProduct()
+  }
+
+  clearProduct(){
+    this.id = null
+    this.barcode = ''
+    this.code = ''
+    this.description = ''
+  }
+
+  clearList(){
+    this.clearProduct()
+    this.products = []
   }
 
   clear(){
@@ -143,10 +196,120 @@ export class SupplySalesReportComponent implements OnInit {
     }
   }
 
+  async search(){
+    this.supplierName = ''   
+    if(this.barcode != ''){
+      await this.getByBarcode(this.barcode)
+    }else if(this.code != ''){
+      await this.getByCode(this.code)
+    }else if(this.description != ''){
+      await this.getByDescription(this.description)
+    }else{
+      alert('Please enter a search key')
+    }
+  }
+
+  async getByBarcode(barcode: string): Promise<void> {
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<IProduct>(API_URL+'/products/get_by_barcode?barcode='+barcode, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        this.id = data?.id
+        this.barcode = data!.barcode
+        this.code = data!.code
+        this.description = data!.description
+      }
+    )
+    .catch(
+      error => {
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Requested Product not found')
+      }
+    )
+  }
+  async getByCode(code: string): Promise<void> {
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<IProduct>(API_URL+'/products/get_by_code?code='+code, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        this.id = data?.id
+        this.barcode = data!.barcode
+        this.code = data!.code
+        this.description = data!.description
+      }
+    )
+    .catch(
+      error => {
+        console.log(error)
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Requested Product not found')
+      }
+    )
+  }
+  async getByDescription(description: string): Promise<void> {
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<IProduct>(API_URL+'/products/get_by_description?description='+description, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        this.id = data?.id
+        this.barcode = data!.barcode
+        this.code = data!.code
+        this.description = data!.description
+      }
+    )
+    .catch(
+      error => {
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Requested Product not found')
+      }
+    )
+  }
+
+  async loadProductDescriptions(){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<string[]>(API_URL+'/products/get_descriptions', options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        console.log(data)
+        this.descriptions = []
+        data?.forEach(element => {
+          this.descriptions.push(element)
+        })
+      },
+      error => {
+        console.log(error)
+        alert('Could not load product descriptions')
+      }
+    )
+  }
+
 
   exportToPdf = () => {
     var header = ''
     var footer = ''
+    var supp = ''
+    if(this.supplierName == ''){
+      supp = 'All Suppliers'
+    }else{
+      supp = this.supplierName
+    }
     var title  = 'Supply Sales Report'
     var logo : any = ''
     var total : number = 0
@@ -218,7 +381,7 @@ export class SupplySalesReportComponent implements OnInit {
                 ],
                 [
                   {text : 'Supplier', fontSize : 9}, 
-                  {text : this.supplierName, fontSize : 9} 
+                  {text : supp, fontSize : 9} 
                 ],
               ]
             },
@@ -236,6 +399,49 @@ export class SupplySalesReportComponent implements OnInit {
     };
     pdfMake.createPdf(docDefinition).open(); 
   }
+
+
+  async exportToSpreadsheet() {
+    let workbook = new Workbook();
+    let worksheet = workbook.addWorksheet('Supply Sales Report Report')
+   
+    worksheet.columns = [
+      { header: 'CODE', key: 'CODE'},
+      { header: 'DESCRIPTION', key: 'DESCRIPTION'},
+      { header: 'QTY', key: 'QTY'},
+      { header: 'AMOUNT', key: 'AMOUNT'}
+      
+    ];
+    this.spinner.show()
+    this.report.forEach(element => {
+      worksheet.addRow(
+        {
+          CODE         : element.code,
+          DESCRIPTION         : element.description,
+          QTY         : element.qty,
+          AMOUNT       : element.amount
+        },"n"
+      )
+    })
+    worksheet.addRow(
+      {
+        CODE         : '',
+        DESCRIPTION         : '',
+        QTY         : 'Total',
+        AMOUNT       : this.totalAmount
+      },"n"
+    )
+    
+    this.spinner.hide()
+    workbook.xlsx.writeBuffer().then((data) => {
+      let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      fs.saveAs(blob, 'Supply Sales Report '+this.from+' to '+this.to+'.xlsx');
+    })
+   
+  }
+
+
+
 }
 
 export interface ISupplySalesReport {
@@ -246,9 +452,16 @@ export interface ISupplySalesReport {
   amount      : number
 }
 
-export interface ISupplier{
+export interface ISupplier {
   id   : any
   code : string
   name : string
+}
+
+export interface IProduct {
+  id : any
+  barcode : string
+  code : string
+  description : string
 }
 

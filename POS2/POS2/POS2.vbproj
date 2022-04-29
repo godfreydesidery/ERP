@@ -27,7 +27,7 @@
     <PublisherName>Orbit Retail</PublisherName>
     <SuiteName>Retail</SuiteName>
     <DisallowUrlActivation>true</DisallowUrlActivation>
-    <ApplicationRevision>69</ApplicationRevision>
+    <ApplicationRevision>70</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

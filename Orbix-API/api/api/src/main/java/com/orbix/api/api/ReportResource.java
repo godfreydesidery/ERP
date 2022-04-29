@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.orbix.api.domain.Product;
 import com.orbix.api.domain.Supplier;
 import com.orbix.api.reports.models.DailyPurchaseReport;
 import com.orbix.api.reports.models.DailySalesReport;
@@ -97,7 +98,7 @@ public class ReportResource {
 	//@PreAuthorize("hasAnyAuthority('CUSTOMER-READ')")
 	public ResponseEntity<List<SupplySalesReport>> supplySalesReport(
 			@RequestBody SupplySalesReportArgs args){
-		return ResponseEntity.ok().body(salesReportService.getSupplySalesReport(args.from, args.to, args.supplier));
+		return ResponseEntity.ok().body(salesReportService.getSupplySalesReport(args.from, args.to, args.supplier, args.products));
 	}	
 	
 	@PostMapping("/reports/supplier_stock_status_report")
@@ -179,6 +180,7 @@ class SupplySalesReportArgs {
 	LocalDate from;
 	LocalDate to;
 	Supplier supplier;
+	List<Product> products;
 }
 
 @Data

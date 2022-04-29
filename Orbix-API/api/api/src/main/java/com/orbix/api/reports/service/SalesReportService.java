@@ -11,6 +11,7 @@ import com.orbix.api.domain.LevelFour;
 import com.orbix.api.domain.LevelOne;
 import com.orbix.api.domain.LevelThree;
 import com.orbix.api.domain.LevelTwo;
+import com.orbix.api.domain.Product;
 import com.orbix.api.domain.SubCategory;
 import com.orbix.api.domain.SubClass;
 import com.orbix.api.domain.Supplier;
@@ -46,6 +47,7 @@ public interface SalesReportService {
 	List<SupplySalesReport> getSupplySalesReport(
 			LocalDate from,
 			LocalDate to,
-			Supplier supplier);
+			Supplier supplier,
+			List<Product> products);
 	
 }

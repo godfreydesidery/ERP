@@ -19,6 +19,7 @@ import com.orbix.api.domain.LevelFour;
 import com.orbix.api.domain.LevelOne;
 import com.orbix.api.domain.LevelThree;
 import com.orbix.api.domain.LevelTwo;
+import com.orbix.api.domain.Product;
 import com.orbix.api.domain.SubCategory;
 import com.orbix.api.domain.SubClass;
 import com.orbix.api.domain.Supplier;
@@ -92,12 +93,23 @@ public class SalesReportServiceImpl implements SalesReportService {
 	public List<SupplySalesReport> getSupplySalesReport(
 			LocalDate from,
 			LocalDate to,
-			Supplier supplier) {
-		Optional<Supplier> s = supplierRepository.findByName(supplier.getName());
-		if(!s.isPresent()) {
-			throw new NotFoundException("Supplier not found");
+			Supplier supplier,
+			List<Product> products) {
+		if(!supplier.getName().equals("")) {
+			Optional<Supplier> s = supplierRepository.findByName(supplier.getName());
+			if(!s.isPresent()) {
+				throw new NotFoundException("Supplier not found");
+			}
+			return saleRepository.getSupplySalesReport(from, to, supplier.getName());
+		}else if(!products.isEmpty()) {
+			List<String> codes = new ArrayList<>();
+			for(Product product : products) {
+				codes.add(product.getCode());
+			}
+			return saleRepository.getSupplySalesReportByProducts(from, to, codes);
+		}else {
+			return saleRepository.getSupplySalesReportAll(from, to);
 		}
-		return saleRepository.getSupplySalesReport(from, to, supplier.getName());
 	}
 
 	@Override

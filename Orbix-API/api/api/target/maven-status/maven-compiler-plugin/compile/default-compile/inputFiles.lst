@@ -163,6 +163,7 @@ D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\reports\serv
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\SubClassRepository.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\Quotation.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\DayServiceImpl.java
+D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\reports\service\SupplierStockStatusReportServiceImpl.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\SalesReceiptService.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\exceptions\MissingInformationException.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\ProductServiceImpl.java
@@ -298,7 +299,6 @@ D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\Sale
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\Payment.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\MainApplication.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\exceptions\NotFoundException.java
-D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\reports\service\SupplySalesReportServiceImpl.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\SubCategoryRepository.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\PettyCashServiceImpl.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\reports\service\SupplierStockStatusReportService.java

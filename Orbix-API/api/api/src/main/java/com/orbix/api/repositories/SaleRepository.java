@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.orbix.api.domain.Product;
 import com.orbix.api.domain.Sale;
 import com.orbix.api.reports.models.DailySalesReport;
 import com.orbix.api.reports.models.DailySummaryReport;
@@ -163,6 +164,61 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 					nativeQuery = true					
 			)
 	List<SupplySalesReport> getSupplySalesReport(LocalDate from, LocalDate to, String supplierName);
+	
+	@Query(
+			value = "SELECT \r\n" +
+					"`products`.`code` AS `code`,\r\n" + 
+					"`products`.`description` AS `description`,\r\n" + 
+					"`products`.`stock` AS `stock`,\r\n" + 
+					"SUM(`sale_details`.`qty`) AS `qty`,\r\n" + 
+					"SUM(`sale_details`.`qty`*(`sale_details`.`selling_price_vat_incl`-`sale_details`.`discount`)) AS `amount`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`discount`) AS `discount`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`tax`) AS `tax`,\r\n" + 
+					"SUM(`sale_details`.`qty`*(`sale_details`.`selling_price_vat_incl`-`sale_details`.`cost_price_vat_incl`-`sale_details`.`discount`)) AS `profit`\r\n" + 
+					"FROM\r\n" + 
+					"`sales`\r\n" + 
+					"JOIN `days` ON\r\n" + 
+					"`days`.`id`=`sales`.`day_id`\r\n" + 
+					"JOIN `sale_details` ON\r\n" + 
+					"`sale_details`.`sale_id`=`sales`.`id`\r\n" + 
+					"JOIN `products` ON\r\n" + 
+					"`sale_details`.`product_id`=`products`.`id`\r\n" + 
+					"JOIN `suppliers` ON\r\n" + 
+					"`suppliers`.`id`=`products`.`supplier_id`\r\n" + 
+					"WHERE\r\n" + 
+					"`days`.`bussiness_date` BETWEEN :from AND :to AND `products`.`code` IN (:codes)\r\n" + 
+					"GROUP BY `code`",
+					nativeQuery = true					
+			)
+	List<SupplySalesReport> getSupplySalesReportByProducts(LocalDate from, LocalDate to, List<String> codes);
+	
+	
+	@Query(
+			value = "SELECT \r\n" +
+					"`products`.`code` AS `code`,\r\n" + 
+					"`products`.`description` AS `description`,\r\n" + 
+					"`products`.`stock` AS `stock`,\r\n" + 
+					"SUM(`sale_details`.`qty`) AS `qty`,\r\n" + 
+					"SUM(`sale_details`.`qty`*(`sale_details`.`selling_price_vat_incl`-`sale_details`.`discount`)) AS `amount`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`discount`) AS `discount`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`tax`) AS `tax`,\r\n" + 
+					"SUM(`sale_details`.`qty`*(`sale_details`.`selling_price_vat_incl`-`sale_details`.`cost_price_vat_incl`-`sale_details`.`discount`)) AS `profit`\r\n" + 
+					"FROM\r\n" + 
+					"`sales`\r\n" + 
+					"JOIN `days` ON\r\n" + 
+					"`days`.`id`=`sales`.`day_id`\r\n" + 
+					"JOIN `sale_details` ON\r\n" + 
+					"`sale_details`.`sale_id`=`sales`.`id`\r\n" + 
+					"JOIN `products` ON\r\n" + 
+					"`sale_details`.`product_id`=`products`.`id`\r\n" + 
+					"JOIN `suppliers` ON\r\n" + 
+					"`suppliers`.`id`=`products`.`supplier_id`\r\n" + 
+					"WHERE\r\n" + 
+					"`days`.`bussiness_date` BETWEEN :from AND :to \r\n" + 
+					"GROUP BY `code`",
+					nativeQuery = true					
+			)
+	List<SupplySalesReport> getSupplySalesReportAll(LocalDate from, LocalDate to);
 	
 	
 	@Query(
