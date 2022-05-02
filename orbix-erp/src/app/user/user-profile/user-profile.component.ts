@@ -13,11 +13,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 
 const API_URL = environment.apiUrl;
 
-interface IiRole{
-  name: string 
-  granted: boolean 
-}
-
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
@@ -88,7 +83,7 @@ export class UserProfileComponent implements OnInit, IUser {
   }  
   getUserData(): any {
     var userRoles : IRole[] = []
-    this.roles.forEach(role => { //Get the roles
+    this.roles.forEach(role => { /**Get the roles */
       if(role.granted == true){
         userRoles.push(role)
       }
@@ -114,9 +109,9 @@ export class UserProfileComponent implements OnInit, IUser {
 
   async saveUser(){
     /**
-      * Create a single user
+      * Create a single user:
+      * First, validate inputs, then create user
       */
-    //validate inputs
     if(this.validateInputs() == false){
       return
     }
@@ -126,7 +121,7 @@ export class UserProfileComponent implements OnInit, IUser {
     }
     
     if (this.id == null || this.id == ''){
-      //create a new user 
+      /**Create a new user */
       this.spinner.show()  
       await this.http.post(API_URL+'/users/create', this.getUserData(), options)
       .pipe(finalize(() => this.spinner.hide()))
@@ -145,7 +140,7 @@ export class UserProfileComponent implements OnInit, IUser {
         }
       )   
     }else{
-      //update an existing user
+      /**Update an existing user */
       this.spinner.show()
       await this.http.put(API_URL+'/users/update', this.getUserData(), options)
       .pipe(finalize(() => this.spinner.hide()))
@@ -166,10 +161,8 @@ export class UserProfileComponent implements OnInit, IUser {
     }
   }
  
-  async getRoles(){
-   /**
-    * Get all the roles
-    */  
+  async getRoles(){  
+   /**Get all roles */
     let options = {
       headers : new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
@@ -259,14 +252,14 @@ export class UserProfileComponent implements OnInit, IUser {
     .then(
       () => {
         this.clearFields()
-        alert('Record deleted succesifully')
+        alert('User deleted succesifully')
         return true
       }
     )
     .catch(
       error => {
         console.log(error)
-        ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not delete user profile')
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not delete user')
         return false
       }
     )
@@ -293,9 +286,9 @@ export class UserProfileComponent implements OnInit, IUser {
      * Display user roles, the roles for that particular user are checked
      * args: roles-global user roles, userRoles-roles for a specific user
      */
-    //first uncheck all roles
+    /** First uncheck all roles */
     this.clearRoles()
-    //Now, check the respective  roles
+    /** Now, check the respective  roles */
     userRoles.forEach(userRole => {
       roles.forEach(role => {        
         if(role.name === userRole.name){
@@ -307,25 +300,21 @@ export class UserProfileComponent implements OnInit, IUser {
   }
 
   clearRoles(){
-    /**
-     * Uncheck all the roles
-     */
+    /**Uncheck all roles */
     this.roles.forEach(role => {
       role.granted = false
     })
   }
 
-  
-
   validateInputs() : boolean{
     let valid : boolean = true
-    //validate username
+    /**Validate username */
     if(this.username == ''){
       alert('Empty username not allowed, please fill in the username field')
       return false
     }
 
-    //validate passwords
+    /**Validate Password */
     if(this.id == null || this.id == ''){
       if(this.password == ''){
         alert('Empty password not allowed for new user')
@@ -342,7 +331,7 @@ export class UserProfileComponent implements OnInit, IUser {
       }
     }
     if(this.firstName == '' || this.lastName == '' || this.alias == ''){
-      alert('First name, last name and alias are required fields')
+      alert('First name, last name and nickname are required fields')
       return false
     }
     return valid
@@ -353,9 +342,7 @@ export class UserProfileComponent implements OnInit, IUser {
       alert('Access denied')
       return
     }
-    /**
-     * Clear all the fields
-     */
+    /**Clear the specified fields */
     this.id               = ''
     this.username         = ''
     this.password         = ''
@@ -371,6 +358,7 @@ export class UserProfileComponent implements OnInit, IUser {
   }
 
   unlockInputs(){
+    /**Unlock the specified fields */
     this.usernameLocked      = false
     this.passwordLocked      = false
     this.passwordConfLocked  = false
@@ -382,6 +370,7 @@ export class UserProfileComponent implements OnInit, IUser {
   }
 
   lockInputs(){
+    /**Lock the specified fields */
     this.usernameLocked      = true
     this.passwordLocked      = true
     this.passwordConfLocked  = true
@@ -393,9 +382,7 @@ export class UserProfileComponent implements OnInit, IUser {
   }
 
   public grant(privilege : string[]) : boolean{
-    /**
-     * Allows a user to perform an action if the user has that privilege
-     */
+    /**Allow user to perform an action if the user has that priviledge */
     var granted : boolean = false
     privilege.forEach(
       element => {
@@ -405,6 +392,5 @@ export class UserProfileComponent implements OnInit, IUser {
       }
     )
     return granted
-    
   }
 }

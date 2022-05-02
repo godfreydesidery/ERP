@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { delay } from 'rxjs';
 import { first } from 'rxjs/internal/operators/first';
@@ -16,17 +17,23 @@ const API_URL = environment.apiUrl;
 })
 export class LoginComponent implements OnInit {
 
-  submitted : boolean  = false;
-  returnUrl : string   = '';
-
-  status : string = ''
-
+  /**Login credentials */
   username  : string
   password  : string
+
+  /**Checks the login status */
+  status : string = ''
+
+  /**User alert message */
+  message : any = ''
+
+  /**For modal display */
+  closeResult : string = ''
 
   constructor(
     private http :HttpClient,
     private auth : AuthService, 
+    private modalService: NgbModal,
     private router: Router, 
     private authService: AuthService) {  
     
@@ -36,8 +43,10 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.status = ''
-    console.log(API_URL)
+    this.status   = ''
+    this.message  = ''
+    this.username = ''
+    this.password = '' 
   }
 
   async loginUser(){
@@ -45,7 +54,7 @@ export class LoginComponent implements OnInit {
     localStorage.removeItem('system-date')
 
     if(this.username == '' || this.password == ''){ 
-      alert('Please fill in the required fields')
+      this.showMessage('Please fill in your username and password')
       return
     }
     this.status = 'Loading... Please wait.'
@@ -57,35 +66,54 @@ export class LoginComponent implements OnInit {
           this.status = 'Loading User... Please wait.'
           await this.auth.loadUserSession(this.username)
           this.status = 'Authenticated'
-          console.log(data);
-          console.log('Login success')
           window.location.reload()
         }
       )
       .catch(error => {
         this.status = ''
-        console.log(error)
         localStorage.removeItem('current-user')
         ErrorHandlerService.showHttpErrorMessage(error, '', 'Invalid username and password')
         return
       })    
   }
   
+  /**Clear credential fields to allow new entry */
   clearFields(){
     this.username = ''
     this.password = ''
   }
 
+  /** */
   contactAdministrator(){
-    alert("Please contact System Administrator")
+    this.showMessage('Please contact System Administrator for password recovery')
   }
 
   clearCredentials(event : any){
     event.target.value = ''
   }
 
+
+  /**This is a pop up intended to display messages to the user. It has been used as a pilot. To be implemented to other components */
+  showMessage(message: any) {
+    this.modalService.open(message, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    this.message = ''
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 }
 
+/**A user model */
 export interface User{
   firstName   : string
   secondName  : string

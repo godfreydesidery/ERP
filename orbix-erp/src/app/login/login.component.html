@@ -26,3 +26,23 @@
           <span style="width: 100%; text-align: right;"><font style="font-size: smaller;" color="black">Copyright &copy; 2021, Orbix. All Rights Reserved.</font></span>
         </div>
       </div>
+
+
+
+
+      <ng-template #showMessage let-modal>
+        <div class="modal-header">
+          <h6 class="modal-title" id="modal-basic-title"></h6>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    {{message}}
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button (click)="modal.close('Run click')" class="btn btn-success" style="margin: 2px;">OK</button>
+        </div>
+    </ng-template>

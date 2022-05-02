@@ -27,7 +27,7 @@
     <PublisherName>Orbit Retail</PublisherName>
     <SuiteName>Retail</SuiteName>
     <DisallowUrlActivation>true</DisallowUrlActivation>
-    <ApplicationRevision>70</ApplicationRevision>
+    <ApplicationRevision>72</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -79,13 +79,13 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>4AFD974CFFA48008DCE83632176A040EC4E72CFE</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>9C3A47249FDA78659BA53C1C8ABDBA5D4C59F695</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>POS2_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>POS2_2_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
@@ -94,7 +94,10 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetZone>LocalIntranet</TargetZone>
+    <TargetZone>Custom</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Devart.Data, Version=5.0.2045.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
@@ -392,6 +395,8 @@
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="POS2_1_TemporaryKey.pfx" />
+    <None Include="POS2_2_TemporaryKey.pfx" />
     <None Include="POS2_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

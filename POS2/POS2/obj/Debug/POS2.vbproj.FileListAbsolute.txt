@@ -121,8 +121,6 @@ D:\My Works\Orbix\ERP\POS2\POS2\obj\Debug\POS2.frmXReport.resources
 D:\My Works\Orbix\ERP\POS2\POS2\obj\Debug\POS2.frmZReport.resources
 D:\My Works\Orbix\ERP\POS2\POS2\obj\Debug\POS2.Resources.resources
 D:\My Works\Orbix\ERP\POS2\POS2\obj\Debug\POS2.vbproj.GenerateResource.Cache
-D:\My Works\Orbix\ERP\POS2\POS2\bin\Debug\POS2.exe.manifest
-D:\My Works\Orbix\ERP\POS2\POS2\bin\Debug\POS2.application
 D:\My Works\Orbix\ERP\POS2\POS2\bin\Debug\POS2.exe
 D:\My Works\Orbix\ERP\POS2\POS2\bin\Debug\POS2.pdb
 D:\My Works\Orbix\ERP\POS2\POS2\bin\Debug\POS2.xml
@@ -136,6 +134,3 @@ D:\My Works\Orbix\ERP\POS2\POS2\bin\Debug\stdole.dll
 D:\My Works\Orbix\ERP\POS2\POS2\bin\Debug\Newtonsoft.Json.xml
 D:\My Works\Orbix\ERP\POS2\POS2\bin\Debug\EnvDTE.xml
 D:\My Works\Orbix\ERP\POS2\POS2\bin\Debug\VSLangProj.xml
-D:\My Works\Orbix\ERP\POS2\POS2\obj\Debug\POS2.exe.manifest
-D:\My Works\Orbix\ERP\POS2\POS2\obj\Debug\POS2.application
-D:\My Works\Orbix\ERP\POS2\POS2\obj\Debug\POS2.TrustInfo.xml

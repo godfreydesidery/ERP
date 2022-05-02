@@ -32,16 +32,17 @@ export class RoleManagerComponent implements OnInit, IRole {
   enableDelete : boolean = false
 
   searchKey : any
-  id        : any;
-  name      : string;
-  granted   : boolean;
+  id        : any
+  name      : string
+  granted   : boolean
   active    : boolean
 
   public roles : IRole[]
 
   constructor(private http : HttpClient, 
-    private auth : AuthService,
-    private spinner : NgxSpinnerService) {
+              private auth : AuthService,
+              private spinner : NgxSpinnerService) 
+              {
     this.id      = ''
     this.name    = ''
     this.granted = false
@@ -54,9 +55,6 @@ export class RoleManagerComponent implements OnInit, IRole {
   }
   
   async saveRole(): Promise<void> {
-    /**
-      * Create a single role
-      */
     if(this.validateInputs() == false){//validate inputs
       return
     }
@@ -65,7 +63,7 @@ export class RoleManagerComponent implements OnInit, IRole {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
     if (this.id == null || this.id == ''){
-      //create a new role
+      /**Create a new role */
       this.spinner.show()
       await this.http.post(API_URL+'/roles/create', this.getRoleData(), options)
       .pipe(finalize(() => this.spinner.hide()))
@@ -87,7 +85,7 @@ export class RoleManagerComponent implements OnInit, IRole {
         }
       )   
     }else{
-      //update an existing role
+      /**Update an existing role */
       this.spinner.show()
       await this.http.put(API_URL+'/roles/update', this.getRoleData(), options)
       .pipe(finalize(() => this.spinner.hide()))
@@ -165,8 +163,8 @@ export class RoleManagerComponent implements OnInit, IRole {
     await this.http.delete<IRole[]>(API_URL + '/roles/delete?id=' + id, options)
       .toPromise()
       .then(data => {
-        this.id = ''
-        this.name = ''
+        this.id    = ''
+        this.name  = ''
         this.roles = []
         this.nameLocked = true
         this.getRoles()
@@ -183,7 +181,7 @@ export class RoleManagerComponent implements OnInit, IRole {
 
   validateInputs() : boolean{
     let valid : boolean = true
-    //validate rolename
+    /**Validate role */
     if(this.name == ''){
       alert('Empty name not allowed, please fill in the name field')
       return false
@@ -209,9 +207,7 @@ export class RoleManagerComponent implements OnInit, IRole {
   }
 
   clearFields(){
-    /**
-     * Clear all the fields
-     */
+    /**Clear all the fields */
     this.id   = ''
     this.name = ''
     this.enableSave = true
@@ -223,10 +219,8 @@ export class RoleManagerComponent implements OnInit, IRole {
     this.nameLocked = false
   }
 
-  public grant(privilege : string[]) : boolean{
-    /**
-     * Allows a user to perform an action if the user has that privilege
-     */
+  public grant(privilege : string[]) : boolean{  
+    /**Allows a user to perform an action if the user has that privilege */
     var granted : boolean = false
     privilege.forEach(
       element => {

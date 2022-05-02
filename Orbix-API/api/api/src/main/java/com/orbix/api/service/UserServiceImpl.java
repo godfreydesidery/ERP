@@ -98,8 +98,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		/**
 		 * Validate Username, username should be >=6 and <=16 in length
 		 */
-		if((user.getUsername().length() < 6 || user.getUsername().length() > 15) && !user.getUsername().equalsIgnoreCase("root")) {
-			throw new InvalidEntryException("Length of username should be more than 5 and less than 17");
+		if((user.getUsername().length() < 6 || user.getUsername().length() > 50) && !user.getUsername().equalsIgnoreCase("root")) {
+			throw new InvalidEntryException("Length of username should be more than 5 and less than 51");
 		}
 		/**
 		 * Validate password, password should have a valid length
@@ -107,12 +107,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		if(user.getId() == null) {
 			if(user.getPassword().equals("")) {
 				throw new MissingInformationException("The password field is required");
-			}else if(user.getPassword().length() < 6 || user.getPassword().length() > 20) {
-				throw new InvalidEntryException("Password length should be more than 5 and less than 21..");
+			}else if(user.getPassword().length() < 6 || user.getPassword().length() >50) {
+				throw new InvalidEntryException("Password length should be more than 5 and less than 51");
 			}
 		}else {
-			if(user.getPassword().length() > 0 && (user.getPassword().length() < 6 || user.getPassword().length() > 20)){
-				throw new InvalidEntryException("Password length should be more than 5 and less than 21");
+			if(user.getPassword().length() > 0 && (user.getPassword().length() < 6 || user.getPassword().length() > 50)){
+				throw new InvalidEntryException("Password length should be more than 5 and less than 51");
 			}
 		}
 		/**
@@ -123,10 +123,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		}
 		/**
 		 * Validate alias, alias field should be present
-		 * Alias is a unique flag name that visually identifies a user in the system
+		 * Alias is a unique flag name that visually identifies a user in the system, also identified as Nickname
 		 */
 		if(user.getAlias().equals("")) {
-			throw new MissingInformationException("The alias field is missing");
+			throw new MissingInformationException("The nickname field is missing");
 		}		
 		return true;
 	}
@@ -202,8 +202,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public boolean deleteUser(User user) {
+		/**
+		 * Delete a user if a user is deletable
+		 */
+		if(allowDeleteUser(user) == false) {
+			throw new InvalidOperationException("Deleting this user is not allowed");
+		}
 		userRepository.delete(user);
 		return true;
+	}
+	
+	private boolean allowDeleteUser(User user) {
+		
+		return false;
 	}
 
 	@Override
@@ -280,8 +291,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public boolean deleteRole(Role role) {
+		/**
+		 * Delete a role if a role is deletable
+		 */
+		if(allowDeleteRole(role) == false) {
+			throw new InvalidOperationException("Deleting this role is not allowed");
+		}
 		roleRepository.delete(role);
 		return true;
+	}
+	
+	private boolean allowDeleteRole(Role role) {
+		/**
+		 * Code to check if a role is deletable
+		 * Returns false if not
+		 */
+		return false;
 	}
 
 	@Override
