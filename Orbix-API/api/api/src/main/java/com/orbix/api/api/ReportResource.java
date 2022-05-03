@@ -91,7 +91,7 @@ public class ReportResource {
 	//@PreAuthorize("hasAnyAuthority('CUSTOMER-READ')")
 	public ResponseEntity<List<ProductStockCardReport>> productStockCardReport(
 			@RequestBody ProductStockCardReportArgs args){
-		return ResponseEntity.ok().body(productStockCardServiceReport.getProductStockCardReport(args.from, args.to));
+		return ResponseEntity.ok().body(productStockCardServiceReport.getProductStockCardReport(args.from, args.to, args.supplier, args.products));
 	}
 	
 	@PostMapping("/reports/supply_sales_report")
@@ -105,11 +105,7 @@ public class ReportResource {
 	//@PreAuthorize("hasAnyAuthority('CUSTOMER-READ')")
 	public ResponseEntity<List<SupplierStockStatusReport>> supplierStockStatusReport(
 			@RequestBody SupplierStockStatusReportArgs args){
-		if(args.name.equals("")) {
-			return ResponseEntity.ok().body(supplierStockStatusReportService.getSupplierStockStatusReportAll());
-		}else {
-			return ResponseEntity.ok().body(supplierStockStatusReportService.getSupplierStockStatusReport(args.name));
-		}		
+		return ResponseEntity.ok().body(supplierStockStatusReportService.getSupplierStockStatusReport(args.supplier, args.products));			
 	}	
 	
 	@PostMapping("/reports/production_report")
@@ -172,7 +168,8 @@ class NegativeStockReportArgs {
 class ProductStockCardReportArgs {
 	LocalDate from;
 	LocalDate to;
-	
+	Supplier supplier;
+	List<Product> products;
 }
 
 @Data
@@ -185,7 +182,8 @@ class SupplySalesReportArgs {
 
 @Data
 class SupplierStockStatusReportArgs {
-	String name;
+	Supplier supplier;
+	List<Product> products;
 }
 
 @Data

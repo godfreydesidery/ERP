@@ -13,9 +13,12 @@ import com.orbix.api.domain.LevelFour;
 import com.orbix.api.domain.LevelOne;
 import com.orbix.api.domain.LevelThree;
 import com.orbix.api.domain.LevelTwo;
+import com.orbix.api.domain.Product;
 import com.orbix.api.domain.SubCategory;
 import com.orbix.api.domain.SubClass;
+import com.orbix.api.domain.Supplier;
 import com.orbix.api.reports.models.DailySalesReport;
+import com.orbix.api.reports.models.ProductStockCardReport;
 import com.orbix.api.reports.models.SupplierStockStatusReport;
 
 /**
@@ -23,6 +26,13 @@ import com.orbix.api.reports.models.SupplierStockStatusReport;
  *
  */
 public interface SupplierStockStatusReportService {
-	List<SupplierStockStatusReport> getSupplierStockStatusReport(String name);
-	List<SupplierStockStatusReport> getSupplierStockStatusReportAll();
+	List<SupplierStockStatusReport> getSupplierStockStatusReport(
+			Supplier supplier,
+			List<Product> products);
+	
+	
+	
+	//List<SupplierStockStatusReport> getSupplierStockStatusReportBySupplier(String name);
+	//List<SupplierStockStatusReport> getSupplierStockStatusReportByProducts(List<Product> products);
+	//List<SupplierStockStatusReport> getSupplierStockStatusReportAll();
 }

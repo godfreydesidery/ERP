@@ -135,7 +135,7 @@
                                             <td style="text-align: right;">{{d.clientPriceVatIncl | currency:'':''}}</td>
                                             <td style="text-align: right;">{{d.supplierPriceVatIncl | currency:'':''}}</td>
                                             <td style="text-align: right;">{{d.qtyReceived*d.supplierPriceVatIncl | currency:'':''}}</td>
-                                            <td style="text-align: center;"><span style="cursor: pointer;" (click)="open(content, d.id)">[Edit]</span></td>
+                                            <td style="text-align: center;"><span *ngIf="status==='PENDING'" style="cursor: pointer;" (click)="open(content, d.id)"><i class="fas fa-pencil"></i></span></td>
                                         </tr>
                                         <tr>
                                             <th></th>

@@ -58,10 +58,50 @@
         <div class="row">
             <div class="col-sm-12">
                 <h6>Select Supplier</h6>
-                <select [(ngModel)]="supplierName" class="form-control">
+                <select [(ngModel)]="supplierName" class="form-control" (ngModelChange)="clearList()">
                     <option></option>
                     <option *ngFor="let n of supplierNames">{{n}}</option>
                 </select>                             
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-12">
+                <p><u>Select Product</u></p>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input type="search" [(ngModel)]="barcode" class="form-control" (focus)="clearProduct()" placeholder="Barcode">
+                    </div>
+                    <div class="col-sm-6">
+                        <button class="btn btn-success form-control" (click)="search()">Search Product</button>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input type="search" [(ngModel)]="code" class="form-control" (focus)="clearProduct()" placeholder="Code">
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row"  *ngIf="id">
+                            <div class="col-8">
+                                <button class="btn btn-success form-control" (click)="addProduct()">Add Product</button>
+                            </div>
+                            <div class="col-4">
+                                <button class="btn btn-danger" (click)="clearProduct()">X</button>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <br>
+                <input type="search" [(ngModel)]="description" class="form-control" list="descriptions" (focus)="clearProduct()" placeholder="Description"><br>  
+                <datalist id="descriptions" style="padding: 0px;">
+                    <option *ngFor="let d of descriptions" [ngValue]="d">{{d}}</option>
+                </datalist> 
+                <span>Double click to remove Product <u style="cursor: pointer;" (click)="clearList()"><font color="red">Remove All Products</font></u></span><br><br>               
+                <select name="products" id="products" size="5" class="form-control">
+                    <option *ngFor="let p of products" (dblclick)="removeProduct(p.id)" >{{p.description}}</option>
+                </select>
             </div>
         </div>
     </div>

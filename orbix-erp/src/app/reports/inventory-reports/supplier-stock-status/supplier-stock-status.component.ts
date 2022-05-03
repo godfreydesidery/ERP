@@ -30,16 +30,30 @@ const API_URL = environment.apiUrl;
 })
 export class SupplierStockStatusComponent implements OnInit {
   logo!    : any
-  address  : any 
+  address  : any
+  
+  descriptions : string[] = []
+  products : IProduct[] = []
+
+  supplierId    : any
+  supplierCode  : string = ''
+  supplierName  : string = ''
+
+  supplierNames : string[] = []
+
 
   closeResult    : string = ''
 
-  supplierNames : string[] = []
-  supplierName : string = ''
   totalCost : number = 0
   totalValue : number = 0
 
   report : ISupplierStockStatusReport[] = []
+
+
+  id : any
+  barcode : string = ''
+  code : string = ''
+  description : string = ''
 
   constructor(private auth : AuthService,
               private http :HttpClient,
@@ -52,6 +66,7 @@ export class SupplierStockStatusComponent implements OnInit {
     this.logo = await this.data.getLogo() 
     this.address = await this.data.getAddress()
     this.loadSupplierNames();
+    this.loadProductDescriptions()
   }
 
   createShortCut(shortCutName : string, link : string){
@@ -82,13 +97,25 @@ export class SupplierStockStatusComponent implements OnInit {
     )
   }
 
-  async getSupplierStockStatusReport(name : string) {
+  refresh(){
+    this.totalCost = 0
+    this.totalValue = 0
+    this.report.forEach(element => {
+      this.totalCost = this.totalCost + element.costPriceVatIncl
+      this.totalValue = this.totalValue + element.sellingPriceVatIncl
+    })
+  }
+
+  async getSupplierStockStatusReport(supplierName : string) {
     this.report = []
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer ' + this.auth.user.access_token)
     }
     var args = {
-      name : name
+      supplier : {
+        name : supplierName
+      },
+      products : this.products
     }
     this.spinner.show()
     await this.http.post<ISupplierStockStatusReport[]>(API_URL + '/reports/supplier_stock_status_report', args, options)
@@ -104,6 +131,48 @@ export class SupplierStockStatusComponent implements OnInit {
         console.log(error)
         ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load report')
       })
+  }
+
+  addProduct(){
+    var product = {
+      id : this.id,
+      barcode : this.barcode,
+      code : this.code,
+      description : this.description
+    }
+    var exists = false
+    this.products.forEach(element => {
+      if(element.id == product.id){
+        exists = true
+      }
+    })
+    if(!exists){
+      this.products.push(product)
+    }
+    this.clearProduct()
+  }
+
+  clearProduct(){
+    this.id = null
+    this.barcode = ''
+    this.code = ''
+    this.description = ''
+  }
+
+  removeProduct(id : any){
+    /**Remove a single product from product list */
+    var ps : IProduct[] = []
+    this.products.forEach(element => {
+      if(element.id != id){
+        ps.push(element)
+      }
+    })
+    this.products = ps
+  }
+
+  clearList(){
+    this.clearProduct()
+    this.products = []
   }
 
   async getTotal(){
@@ -124,7 +193,6 @@ export class SupplierStockStatusComponent implements OnInit {
     this.totalValue   = 0
   }
 
-
   showRunOptions(content: any) {
     
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
@@ -141,6 +209,110 @@ export class SupplierStockStatusComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  async search(){
+    this.supplierName = ''   
+    if(this.barcode != ''){
+      await this.getByBarcode(this.barcode)
+    }else if(this.code != ''){
+      await this.getByCode(this.code)
+    }else if(this.description != ''){
+      await this.getByDescription(this.description)
+    }else{
+      alert('Please enter a search key')
+    }
+  }
+
+  async getByBarcode(barcode: string): Promise<void> {
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<IProduct>(API_URL+'/products/get_by_barcode?barcode='+barcode, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        this.id = data?.id
+        this.barcode = data!.barcode
+        this.code = data!.code
+        this.description = data!.description
+      }
+    )
+    .catch(
+      error => {
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Requested Product not found')
+      }
+    )
+  }
+  async getByCode(code: string): Promise<void> {
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<IProduct>(API_URL+'/products/get_by_code?code='+code, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        this.id = data?.id
+        this.barcode = data!.barcode
+        this.code = data!.code
+        this.description = data!.description
+      }
+    )
+    .catch(
+      error => {
+        console.log(error)
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Requested Product not found')
+      }
+    )
+  }
+  async getByDescription(description: string): Promise<void> {
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<IProduct>(API_URL+'/products/get_by_description?description='+description, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        this.id = data?.id
+        this.barcode = data!.barcode
+        this.code = data!.code
+        this.description = data!.description
+      }
+    )
+    .catch(
+      error => {
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Requested Product not found')
+      }
+    )
+  }
+
+  async loadProductDescriptions(){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<string[]>(API_URL+'/products/get_descriptions', options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        console.log(data)
+        this.descriptions = []
+        data?.forEach(element => {
+          this.descriptions.push(element)
+        })
+      },
+      error => {
+        console.log(error)
+        alert('Could not load product descriptions')
+      }
+    )
   }
 
   exportToPdf = () => {
@@ -280,4 +452,11 @@ export interface ISupplierStockStatusReport {
   costPriceVatIncl : number
   sellingPriceVatIncl : number
   stock       : number
+}
+
+export interface IProduct {
+  id : any
+  barcode : string
+  code : string
+  description : string
 }

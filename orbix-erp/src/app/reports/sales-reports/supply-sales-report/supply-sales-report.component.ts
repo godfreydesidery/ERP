@@ -168,6 +168,17 @@ export class SupplySalesReportComponent implements OnInit {
     this.description = ''
   }
 
+  removeProduct(id : any){
+    /**Remove a single product from product list */
+    var ps : IProduct[] = []
+    this.products.forEach(element => {
+      if(element.id != id){
+        ps.push(element)
+      }
+    })
+    this.products = ps
+  }
+
   clearList(){
     this.clearProduct()
     this.products = []
@@ -178,8 +189,7 @@ export class SupplySalesReportComponent implements OnInit {
     this.refresh()
   }
 
-  showRunOptions(content: any) {
-    
+  showRunOptions(content: any) { 
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
