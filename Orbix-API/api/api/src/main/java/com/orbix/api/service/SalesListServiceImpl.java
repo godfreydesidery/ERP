@@ -404,7 +404,7 @@ public class SalesListServiceImpl implements SalesListService {
 
 	@Override
 	public boolean archive(SalesList salesList) {
-		if(!salesList.getStatus().equals("POSTED")) {
+		if(!salesList.getStatus().equals("APPROVED")) {
 			throw new InvalidOperationException("Could not process, only a posted sales list can be archived");
 		}
 		if(salesList.getTotalDeficit() > 0) {
@@ -417,7 +417,7 @@ public class SalesListServiceImpl implements SalesListService {
 
 	@Override
 	public boolean archiveAll() {
-		List<SalesList> salesLists = salesListRepository.findAllPosted("POSTED");
+		List<SalesList> salesLists = salesListRepository.findAllPosted("APPROVED");
 		if(salesLists.isEmpty()) {
 			throw new NotFoundException("No Sales List to archive");
 		}

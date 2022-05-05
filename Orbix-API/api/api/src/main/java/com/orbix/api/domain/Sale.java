@@ -55,6 +55,40 @@ public class Sale {
     @OnDelete(action = OnDeleteAction.NO_ACTION)	
     private Till till;
 	
+	
+	
+	
+	
+	
+	
+	@ManyToOne(targetEntity = Receipt.class, fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "receipt_id", nullable = true , updatable = true)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)	
+    private Receipt receipt;
+	
+	
+	@ManyToOne(targetEntity = SalesInvoice.class, fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "sales_invoice_id", nullable = true , updatable = true)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)	
+    private SalesInvoice salesInvoice;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@OneToMany(targetEntity = SaleDetail.class, mappedBy = "sale", fetch = FetchType.EAGER, orphanRemoval = true)
     @Valid
     @JsonIgnoreProperties("sale")

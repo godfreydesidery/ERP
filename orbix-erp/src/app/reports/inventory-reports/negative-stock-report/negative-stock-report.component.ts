@@ -111,6 +111,7 @@ export class NegativeStockReportComponent implements OnInit {
     }
     var report = [
       [
+        {text : 'Barcode', fontSize : 9, fillColor : '#bdc6c7'},
         {text : 'Code', fontSize : 9, fillColor : '#bdc6c7'},
         {text : 'Description', fontSize : 9, fillColor : '#bdc6c7'},
         {text : 'Qty', fontSize : 9, fillColor : '#bdc6c7'},
@@ -118,6 +119,7 @@ export class NegativeStockReportComponent implements OnInit {
     ]    
     this.report.forEach((element) => {
       var detail = [
+        {text : element.barcode.toString(), fontSize : 9, fillColor : '#ffffff'}, 
         {text : element.code.toString(), fontSize : 9, fillColor : '#ffffff'}, 
         {text : element.description.toString(), fontSize : 9, fillColor : '#ffffff'}, 
         {text : element.stock.toString(), fontSize : 9, fillColor : '#ffffff'},
@@ -149,7 +151,7 @@ export class NegativeStockReportComponent implements OnInit {
             layout : 'noBorders',
             table : {
                 headerRows : 1,
-                widths : [50, 300, 50],
+                widths : [50, 50, 250, 50],
                 body : report
             }
         },                   
@@ -163,6 +165,7 @@ export class NegativeStockReportComponent implements OnInit {
     let worksheet = workbook.addWorksheet('Negative Stock Report')
    
     worksheet.columns = [
+      { header: 'BARCODE', key: 'BARCODE'},
       { header: 'CODE', key: 'CODE'},
       { header: 'DESCRIPTION', key: 'DESCRIPTION'},
       { header: 'STOCK', key: 'STOCK'}
@@ -172,6 +175,7 @@ export class NegativeStockReportComponent implements OnInit {
     this.report.forEach(element => {
       worksheet.addRow(
         {
+          BARCODE      : element.barcode,
           CODE         : element.code,
           DESCRIPTION  : element.description,
           STOCK        : element.stock
@@ -191,6 +195,7 @@ export class NegativeStockReportComponent implements OnInit {
 }
 
 export interface INegativeStockReport {
+  barcode : string
   code        : string
   description : string
   costPriceVatIncl : number

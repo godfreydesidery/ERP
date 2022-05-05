@@ -56,6 +56,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	
 	@Query(
 			value = "SELECT\r\n" + 
+					"`products`.`barcode` AS `barcode`,\r\n" +
 					"`products`.`code` AS `code`,\r\n" +
 					"`products`.`description` AS `description`,\r\n" +
 					"`products`.`stock` AS `stock`\r\n" +

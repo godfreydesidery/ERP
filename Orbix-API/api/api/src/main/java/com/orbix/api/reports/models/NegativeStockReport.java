@@ -8,6 +8,7 @@ package com.orbix.api.reports.models;
  *
  */
 public interface NegativeStockReport {
+	String getBarcode();
 	String getCode();
 	String getDescription();
 	double getStock();

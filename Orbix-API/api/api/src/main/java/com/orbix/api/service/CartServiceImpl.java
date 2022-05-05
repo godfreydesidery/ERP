@@ -296,6 +296,8 @@ public class CartServiceImpl implements CartService {
 		sale.setDay(dayRepository.getCurrentBussinessDay());
 		sale.setReference("POS sales Receipt# "+receipt.getNo());
 		sale.setTill(till);
+		receiptRepository.saveAndFlush(returnReceipt);
+		sale.setReceipt(returnReceipt);
 		sale = saleRepository.saveAndFlush(sale);
 		for(CartDetail cartDetail : cartDetails) {
 			if(cartDetail.isVoided() == false) {

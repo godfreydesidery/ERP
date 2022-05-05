@@ -413,7 +413,7 @@ export class SupplySalesReportComponent implements OnInit {
 
   async exportToSpreadsheet() {
     let workbook = new Workbook();
-    let worksheet = workbook.addWorksheet('Supply Sales Report Report')
+    let worksheet = workbook.addWorksheet('Supply Sales Report')
    
     worksheet.columns = [
       { header: 'CODE', key: 'CODE'},

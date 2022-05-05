@@ -10,6 +10,9 @@ import { ShortCutHandlerService } from 'src/app/services/short-cut-handler.servi
 import { environment } from 'src/environments/environment';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import { DataService } from 'src/app/services/data.service';
+import { Workbook } from 'exceljs';
+import { formatDate } from '@angular/common';
+const fs = require('file-saver');
 
 const API_URL = environment.apiUrl;
 
@@ -73,6 +76,14 @@ export class DailySalesReportComponent implements OnInit {
 
 
   async getDailySalesReport(from: Date, to: Date) {
+    if(from == null || to == null){
+      alert('Could not run report, please select date range')
+      return
+    }
+    if(from > to){
+      alert('Could not run report, invalid date range, final date must be later or same as the initial date')
+      return
+    }
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer ' + this.auth.user.access_token)
     }
@@ -146,7 +157,7 @@ export class DailySalesReportComponent implements OnInit {
       discount = discount + element.discount
       tax = tax + element.tax
       var detail = [
-        {text : element.date.toString(), fontSize : 9, fillColor : '#ffffff'}, 
+        {text : formatDate(element.date, 'yyyy-MM-dd', 'en-US'), fontSize : 9, fillColor : '#ffffff'}, 
         {text : element.amount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right', fillColor : '#ffffff'},
         {text : element.discount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right', fillColor : '#ffffff'},  
         {text : element.tax.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right', fillColor : '#ffffff'},
@@ -210,6 +221,46 @@ export class DailySalesReportComponent implements OnInit {
     };
     pdfMake.createPdf(docDefinition).open(); 
   }
+
+  async exportToSpreadsheet() {
+    let workbook = new Workbook();
+    let worksheet = workbook.addWorksheet('Daily Sales Report')
+   
+    worksheet.columns = [
+      { header: 'DATE', key: 'DATE'},
+      { header: 'AMOUNT', key: 'AMOUNT'},
+      { header: 'DISCOUNT', key: 'DISCOUNT'},
+      { header: 'TAX', key: 'TAX'}
+      
+    ];
+    this.spinner.show()
+    this.report.forEach(element => {
+      worksheet.addRow(
+        {
+          DATE      : formatDate(element.date, 'yyyy-MM-dd', 'en-US'),
+          AMOUNT    : element.amount,
+          DISCOUNT  : element.discount,
+          TAX       : element.tax
+        },"n"
+      )
+    })
+    worksheet.addRow(
+      {
+        CODE         : '',
+        DESCRIPTION         : '',
+        QTY         : 'Total',
+        AMOUNT       : this.totalAmount
+      },"n"
+    )
+    
+    this.spinner.hide()
+    workbook.xlsx.writeBuffer().then((data) => {
+      let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      fs.saveAs(blob, 'Daily Sales Report '+this.from+' to '+this.to+'.xlsx');
+    })
+   
+  }
+
 }
 
 export interface IDailySalesReport {

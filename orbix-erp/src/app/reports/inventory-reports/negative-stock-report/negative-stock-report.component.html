@@ -15,6 +15,7 @@
         <table class="table table-bordered">
             <thead style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
                 <tr>
+                    <th>Barcode</th>
                     <th>Code</th>
                     <th>Description</th>
                     <th>Qty</th>
@@ -22,6 +23,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let r of report">
+                    <td>{{r.barcode}}</td>
                     <td>{{r.code}}</td>
                     <td>{{r.description}}</td>
                     <td>{{r.stock}}</td>

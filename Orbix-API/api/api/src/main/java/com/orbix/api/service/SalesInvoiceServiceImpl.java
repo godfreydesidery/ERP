@@ -332,6 +332,7 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 		 * Update stock cards
 		 */
 		SalesInvoice inv = salesInvoiceRepository.saveAndFlush(salesInvoice);
+		
 		List<SalesInvoiceDetail> details = inv.getSalesInvoiceDetails();
 		double amount = 0;
 		
@@ -341,6 +342,9 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 		sale.setCreatedBy(userService.getUserId(request));
 		sale.setDay(dayRepository.getCurrentBussinessDay());
 		sale.setReference("Credit sales Ref# "+salesInvoice.getNo());
+		//SalesInvoice sinc = inv;
+		//sinc = salesInvoiceRepository.saveAndFlush(sinc);
+		sale.setSalesInvoice(inv);
 		sale = saleRepository.saveAndFlush(sale);
 		
 		for(SalesInvoiceDetail d : details) {

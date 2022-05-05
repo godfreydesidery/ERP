@@ -416,11 +416,10 @@ export class ProductMassManagerComponent implements OnInit {
       this.currentRecord = i
       //checks for empty code and name
       if( data[i][0] == '' ||
-          data[i][2] == '' ||
-          data[i][3] == ''      
+          data[i][2] == ''
         )
       {
-        alert(i)
+        alert('Error in record no '+ i)
         valid = false
       }
     }

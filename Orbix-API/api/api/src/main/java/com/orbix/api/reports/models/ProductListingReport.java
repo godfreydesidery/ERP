@@ -15,11 +15,12 @@ public interface ProductListingReport {
 	LocalDate getDate();
 	String getCode();
 	String getDescription();
+	double getQty();
 	double getAmount();
-	//String getCashier();
-	//String getReceiptNo();
-	//String getInvoiceNo();
-	//String getTillNo();
+	String getCashier();
+	String getReceiptNo();
+	String getInvoiceNo();
+	String getTillNo();
 	//double getDiscount();
 	//double getTax();
 }

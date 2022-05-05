@@ -76,15 +76,47 @@ public class ProductServiceImpl implements ProductService {
 		boolean isNew = false;
 		if(p.getId() == null) {
 			isNew = true;
-			//Add a new Product
+			if(!p.getBarcode().equals("")) {
+				Optional<Product> pr = productRepository.findByBarcode(p.getBarcode());				
+				if(!pr.isEmpty()) {
+					throw new InvalidEntryException("Could not save. A product with similar barcode already exists");															
+				}
+			}
+			
+			/**
+			 * Add a new Product
+			 */
 			product = p;
 			product.setDescription(product.getDescription().replace("+", " "));
-			product.setCostPriceVatExcl(Math.round(product.getCostPriceVatExcl() *100.0)/100.0);
+			/**
+			 * Validate pricing information
+			 */
+			if(product.getVat() < 0 || product.getVat() > 100) {
+				throw new InvalidEntryException("Invalid VAT % value. VAT should between 0 and 100");
+			}
+			if(product.getDiscount() < 0 || product.getDiscount() > 100) {
+				throw new InvalidEntryException("Invalid Discount % value. Discount should between 0 and 100");
+			}
+			if(product.getProfitMargin() < 0 ) {
+				throw new InvalidEntryException("Invalid Profit Margin % value. Profit Margin should 0 or more");
+			}
+			
 			product.setCostPriceVatIncl(Math.round(product.getCostPriceVatIncl() *100.0)/100.0);
-			product.setSellingPriceVatExcl(Math.round(product.getSellingPriceVatExcl() *100.0)/100.0);
-			product.setSellingPriceVatIncl(Math.round(product.getSellingPriceVatIncl() *100.0)/100.0);			
+			product.setCostPriceVatExcl(Math.round((product.getCostPriceVatIncl() * (100 - product.getVat()) / 100) *100.0) / 100.0);
+			product.setSellingPriceVatIncl(Math.round(product.getSellingPriceVatIncl() *100.0)/100.0);
+			product.setSellingPriceVatExcl(Math.round((product.getSellingPriceVatIncl() * (100 - product.getVat()) / 100) *100.0) / 100.0);			
 		}else {
-			//Update an existing product
+			if(!p.getBarcode().equals("")) {
+				Optional<Product> pr = productRepository.findByBarcode(p.getBarcode());				
+				if(!pr.isEmpty()) {
+					if(pr.get().getBarcode().equals(p.getBarcode()) && pr.get().getId() != p.getId()) {
+						throw new InvalidEntryException("Could not save. A product with similar barcode already exists");
+					}										
+				}
+			}
+			/**
+			 * Update an existing Product
+			 */
 			product = productRepository.findById(p.getId()).get();
 			product.setId(p.getId());
 			product.setBarcode(p.getBarcode());
@@ -97,7 +129,7 @@ public class ProductServiceImpl implements ProductService {
 		}
 		Optional<Supplier> s = supplierRepository.findByName(p.getSupplier().getName());
 		if(!s.isPresent()) {
-			throw new MissingInformationException("Could not save product, supplier missing");
+			throw new MissingInformationException("Could not save product, supplier information missing");
 		}else {
 			supplierRepository.save(s.get());
 			product.setSupplier(s.get());
@@ -176,7 +208,9 @@ public class ProductServiceImpl implements ProductService {
 		}
 		
 		if(validate(product)) {
-			//Continue, else throw validation error
+			/**
+			 * Continue, else throw validation error
+			 */
 		}		
 		product = productRepository.saveAndFlush(product);
 		if(product.getCode().equals("NA")) {
@@ -251,16 +285,14 @@ public class ProductServiceImpl implements ProductService {
 		originalCostPriceVatExcl = Math.round(pr.getCostPriceVatExcl() *100.0)/100.0;
 		originalSellingPriceVatIncl = Math.round(pr.getSellingPriceVatIncl() *100.0)/100.0;
 		originalSellingPriceVatExcl = Math.round(pr.getSellingPriceVatExcl() *100.0)/100.0;
-		
-		//Math.round(a * 100.0) / 100.0;
-		
+				
 		finalDiscount = p.getDiscount();
 		finalVat = p.getVat();
 		finalProfitMargin = p.getProfitMargin();
 		finalCostPriceVatIncl = Math.round(p.getCostPriceVatIncl() *100.0)/100.0;
-		finalCostPriceVatExcl = Math.round(p.getCostPriceVatExcl() *100.0)/100.0;
+		finalCostPriceVatExcl = Math.round(((p.getCostPriceVatIncl() * (100 - p.getVat()) / 100)) *100.0)/100.0;
 		finalSellingPriceVatIncl = Math.round(p.getSellingPriceVatIncl() *100.0)/100.0;
-		finalSellingPriceVatExcl = Math.round(p.getSellingPriceVatExcl() *100.0)/100.0;
+		finalSellingPriceVatExcl = Math.round(((p.getSellingPriceVatIncl() * (100 - p.getVat()) / 100)) *100.0)/100.0;
 		
 		pr.setDiscount(finalDiscount);
 		pr.setVat(finalVat);
@@ -269,6 +301,19 @@ public class ProductServiceImpl implements ProductService {
 		pr.setCostPriceVatExcl(finalCostPriceVatExcl);
 		pr.setSellingPriceVatIncl(finalSellingPriceVatIncl);
 		pr.setSellingPriceVatExcl(finalSellingPriceVatExcl);
+		
+		/**
+		 * Validate pricing information
+		 */
+		if(finalVat < 0 || finalVat > 100) {
+			throw new InvalidEntryException("Invalid VAT % value. VAT should between 0 and 100");
+		}
+		if(finalDiscount < 0 || finalDiscount > 100) {
+			throw new InvalidEntryException("Invalid Discount % value. Discount should between 0 and 100");
+		}
+		if(finalProfitMargin < 0 ) {
+			throw new InvalidEntryException("Invalid Profit Margin % value. Profit Margin should 0 or more");
+		}
 		
 		product = productRepository.saveAndFlush(pr);
 		

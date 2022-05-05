@@ -107,11 +107,12 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 					"`days`.`bussiness_date` AS `date`,\r\n" + 
 					"`products`.`code` AS `code`,\r\n" + 
 					"`products`.`description` AS `description`,\r\n" + 
+					"`sale_details`.`qty` AS `qty`,\r\n" + 
 					"`sale_details`.`qty`*`sale_details`.`selling_price_vat_incl` AS `amount`,\r\n" + 
-					"`users`.`alias` AS `cashier`\r\n" + 
-					//"`receipts`.`no` AS `receiptNo`,\r\n" + 
-					//"`sales_invoices`.`no` as `invoiceNo`,\r\n" + 
-					//"`tills`.`no` AS `tillNo`\r\n" + 
+					"`users`.`alias` AS `cashier`,\r\n" + 
+					"`receipts`.`no` AS `receiptNo`,\r\n" + 
+					"`sales_invoices`.`no` as `invoiceNo`,\r\n" + 
+					"`tills`.`no` AS `tillNo`\r\n" + 
 					"FROM\r\n" + 
 					"`sales`\r\n" + 
 					"JOIN `days` ON\r\n" + 
@@ -120,18 +121,18 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 					"`sale_details`.`sale_id`=`sales`.`id`\r\n" + 
 					"LEFT JOIN `users` ON\r\n" + 
 					"`users`.`id`=`sales`.`created_by`\r\n" + 
-					//"LEFT JOIN `receipts` ON\r\n" + 
-					//"`receipts`.`id`=`sales`.`receipt_id`\r\n" + 
-					//"LEFT JOIN `sales_invoices` ON\r\n" + 
-					//"`sales_invoices`.`id` =`sales`.`sales_invoice_id`\r\n" + 
-					//"LEFT JOIN `tills` ON\r\n" + 
-					//"`tills`.`id`=`receipts`.`till_id`\r\n" + 
+					"LEFT JOIN `receipts` ON\r\n" + 
+					"`receipts`.`id`=`sales`.`receipt_id`\r\n" + 
+					"LEFT JOIN `sales_invoices` ON\r\n" + 
+					"`sales_invoices`.`id` =`sales`.`sales_invoice_id`\r\n" + 
+					"LEFT JOIN `tills` ON\r\n" + 
+					"`tills`.`id`=`sales`.`till_id`\r\n" + 
 					"JOIN `products` ON\r\n" + 
 					"`products`.`id`=`sale_details`.`product_id`\r\n" +
 					"WHERE\r\n" +
 					"`days`.`bussiness_date` BETWEEN :from AND :to\r\n" + 
 					//"GROUP BY `date`,`code`,`description`,`receiptNo`,`cashier`,`tillNo`\r\n" + 
-					"GROUP BY `date`,`code`,`description`\r\n" + 
+					//"GROUP BY `date`,`code`,`description`\r\n" + 
 					"ORDER BY\r\n" + 
 					"`date` ASC",
 					nativeQuery = true					
