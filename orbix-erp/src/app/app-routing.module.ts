@@ -72,6 +72,8 @@ import { NegativeStockReportComponent } from './reports/inventory-reports/negati
 import { SupplierStockStatusComponent } from './reports/inventory-reports/supplier-stock-status/supplier-stock-status.component';
 import { SupplierMassManagerComponent } from './supplier/supplier-mass-manager/supplier-mass-manager.component';
 import { DailyPurchasesReportComponent } from './reports/purchases-reports/daily-purchases-report/daily-purchases-report.component';
+import { LpoReportComponent } from './reports/purchases-reports/lpo-report/lpo-report.component';
+import { GrnReportComponent } from './reports/purchases-reports/grn-report/grn-report.component';
 
 const routes: Routes = [
   {path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard]},
@@ -142,6 +144,8 @@ const routes: Routes = [
   {path: 'stock-card-report', component: StockCardReportComponent, canActivate: [AuthGuard]},
   {path: 'negative-stock-report', component: NegativeStockReportComponent, canActivate: [AuthGuard]},
   {path: 'supplier-stock-status', component: SupplierStockStatusComponent, canActivate: [AuthGuard]},
+  {path: 'lpo-report', component: LpoReportComponent, canActivate: [AuthGuard]},
+  {path: 'grn-report', component: GrnReportComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({

@@ -4,7 +4,7 @@
     </div>
     <div class="col-sm-12" style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
         <a routerLink="/home"><button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
-        <button class="btn" (click)="showRunOptions(runOptions)" style="margin: 2px; width: 30mm;" data-mdb-toggle="tooltip" title="Enter Run options to run report"><mdb-icon fas icon="sync"></mdb-icon><br>Run Options</button>
+        <button class="btn" (click)="showRunOptions(runOptions)" style="margin: 2px; width: 35mm;" data-mdb-toggle="tooltip" title="Enter Run options to run report"><mdb-icon fas icon="sync"></mdb-icon><br>Run Options</button>
         <button class="btn" (click)="exportToPdf()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Export report to PDF"><mdb-icon fas icon="file-pdf"></mdb-icon><br>PDF</button>
         <button class="btn" (click)="exportToSpreadsheet()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Export report to Spreadsheet"><mdb-icon fas icon="file-excel"></mdb-icon><br>Excel</button>
         <button class="btn" (click)="clear()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Clear entries"><i class="fa-solid fa-times fa-fw"></i><br>Clear</button>
@@ -45,7 +45,7 @@
 
 <ng-template #runOptions let-modal>
     <div class="modal-header">
-      <h6 class="modal-title" id="modal-basic-title">Enter options to run Daily Sales Report</h6>
+      <h6 class="modal-title" id="modal-basic-title">Enter options to run Product Listing Report</h6>
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
     </div>
     <div class="modal-body">

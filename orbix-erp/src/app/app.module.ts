@@ -100,6 +100,8 @@ import { SupplierStockStatusComponent } from './reports/inventory-reports/suppli
 import { SupplierMassManagerComponent } from './supplier/supplier-mass-manager/supplier-mass-manager.component';
 import { MyShortcutsMenuComponent } from './my-shortcuts-menu/my-shortcuts-menu.component';
 import { DailyPurchasesReportComponent } from './reports/purchases-reports/daily-purchases-report/daily-purchases-report.component';
+import { LpoReportComponent } from './reports/purchases-reports/lpo-report/lpo-report.component';
+import { GrnReportComponent } from './reports/purchases-reports/grn-report/grn-report.component';
 
 
 @NgModule({
@@ -190,6 +192,8 @@ import { DailyPurchasesReportComponent } from './reports/purchases-reports/daily
     SupplierMassManagerComponent,
     MyShortcutsMenuComponent,
     DailyPurchasesReportComponent,
+    LpoReportComponent,
+    GrnReportComponent,
     //BatchProductionComponent,
     //CustomProductionComponent,
   ],
@@ -275,6 +279,8 @@ import { DailyPurchasesReportComponent } from './reports/purchases-reports/daily
       {path : 'stock-card-report', component: StockCardReportComponent},
       {path : 'negative-stock-report', component: NegativeStockReportComponent},
       {path : 'supplier-stock-status', component: SupplierStockStatusComponent},
+      {path : 'lpo-report', component: LpoReportComponent},
+      {path : 'grn-report', component: GrnReportComponent},
     ]),
     BrowserAnimationsModule,
   ],

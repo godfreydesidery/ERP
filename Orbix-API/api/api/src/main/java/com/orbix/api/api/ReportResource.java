@@ -19,6 +19,8 @@ import com.orbix.api.reports.models.DailyPurchaseReport;
 import com.orbix.api.reports.models.DailySalesReport;
 import com.orbix.api.reports.models.DailySummaryReport;
 import com.orbix.api.reports.models.FastMovingProductsReport;
+import com.orbix.api.reports.models.GrnReport;
+import com.orbix.api.reports.models.LpoReport;
 import com.orbix.api.reports.models.NegativeStockReport;
 import com.orbix.api.reports.models.ProductListingReport;
 import com.orbix.api.reports.models.ProductStockCardReport;
@@ -27,6 +29,8 @@ import com.orbix.api.reports.models.SlowMovingProductsReport;
 import com.orbix.api.reports.models.SupplierStockStatusReport;
 import com.orbix.api.reports.models.SupplySalesReport;
 import com.orbix.api.reports.service.FastMovingProductsReportService;
+import com.orbix.api.reports.service.GrnReportService;
+import com.orbix.api.reports.service.LpoReportService;
 import com.orbix.api.reports.service.NegativeStockReportService;
 import com.orbix.api.reports.service.ProductListingReportService;
 import com.orbix.api.reports.service.ProductStockCardReportService;
@@ -58,6 +62,8 @@ public class ReportResource {
 	private final ProductListingReportService productListingReportService;
 	private final FastMovingProductsReportService fastMovingProductsReportService;
 	private final SlowMovingProductsReportService slowMovingProductsReportService;
+	private final LpoReportService lpoReportService;
+	private final GrnReportService grnReportService;
 	
 	@PostMapping("/reports/daily_sales_report")
 	//@PreAuthorize("hasAnyAuthority('CUSTOMER-READ')")
@@ -133,7 +139,21 @@ public class ReportResource {
 	public ResponseEntity<List<SlowMovingProductsReport>> slowMovingProductsReport(
 			@RequestBody SlowMovingProductsReportArgs args){
 		return ResponseEntity.ok().body(slowMovingProductsReportService.getSlowMovingProductsReport(args.from, args.to));
-	}	
+	}
+	
+	@PostMapping("/reports/lpo_report")
+	//@PreAuthorize("hasAnyAuthority('CUSTOMER-READ')")
+	public ResponseEntity<List<LpoReport>> lpoReport(
+			@RequestBody LpoReportArgs args){
+		return ResponseEntity.ok().body(lpoReportService.getLpoReport(args.from, args.to, args.supplier, args.products));
+	}
+	
+	@PostMapping("/reports/grn_report")
+	//@PreAuthorize("hasAnyAuthority('CUSTOMER-READ')")
+	public ResponseEntity<List<GrnReport>> grnReport(
+			@RequestBody GrnReportArgs args){
+		return ResponseEntity.ok().body(grnReportService.getGrnReport(args.from, args.to, args.supplier, args.products));
+	}
 }
 
 @Data
@@ -208,6 +228,22 @@ class SlowMovingProductsReportArgs {
 class ProductListingReportArgs {
 	LocalDate from;
 	LocalDate to;
+}
+
+@Data
+class LpoReportArgs {
+	LocalDate from;
+	LocalDate to;
+	Supplier supplier;
+	List<Product> products;
+}
+
+@Data
+class GrnReportArgs {
+	LocalDate from;
+	LocalDate to;
+	Supplier supplier;
+	List<Product> products;
 }
 
 

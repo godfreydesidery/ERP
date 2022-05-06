@@ -1,5 +1,5 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import * as pdfMake from 'pdfmake/build/pdfmake';
@@ -15,25 +15,40 @@ const fs = require('file-saver');
 
 const API_URL = environment.apiUrl;
 
+
 @Component({
-  selector: 'app-product-listing-report',
-  templateUrl: './product-listing-report.component.html',
-  styleUrls: ['./product-listing-report.component.scss']
+  selector: 'app-grn-report',
+  templateUrl: './grn-report.component.html',
+  styleUrls: ['./grn-report.component.scss']
 })
-export class ProductListingReportComponent implements OnInit {
+export class GrnReportComponent implements OnInit {
   logo!    : any
   address  : any 
 
   from! : Date
   to!   : Date
 
+  supplierId    : any
+  supplierCode  : string = ''
+  supplierName  : string = ''
+
+  descriptions : string[] = []
+  products : IProduct[] = []
+
+  supplierNames : string[] = []
+
   closeResult    : string = ''
 
-  report : IProductListingReport[] = []
+  report : IGrnReport[] = []
 
   totalAmount : number = 0
   totalDiscount : number = 0
   totalTax : number = 0
+
+  id : any
+  barcode : string = ''
+  code : string = ''
+  description : string = ''
 
   constructor(private auth : AuthService,
               private http :HttpClient,
@@ -45,12 +60,36 @@ export class ProductListingReportComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.logo = await this.data.getLogo() 
     this.address = await this.data.getAddress()
+    this.loadSupplierNames();
+    this.loadProductDescriptions()
   }
 
   createShortCut(shortCutName : string, link : string){
     if(confirm('Create shortcut for this page?')){
       this.shortcut.createShortCut(shortCutName, link)
     }
+  }
+
+  loadSupplierNames(){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    this.http.get<string[]>(API_URL+'/suppliers/get_names', options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        data?.forEach(element => {
+          this.supplierNames.push(element)
+        })
+      }
+    )
+    .catch(
+      error => {
+        console.log(error)
+      }
+    )
   }
 
   refresh(){
@@ -62,7 +101,7 @@ export class ProductListingReportComponent implements OnInit {
     })
   }
 
-  async getProductListingReport(from: Date, to: Date) {
+  async getGrnReport(from: Date, to: Date) {
     if(from == null || to == null){
       alert('Could not run report, please select date range')
       return
@@ -77,10 +116,14 @@ export class ProductListingReportComponent implements OnInit {
     }
     var args = {
       from : from,
-      to   : to
+      to   : to,
+      supplier : {
+        name : this.supplierName
+      },
+      products : this.products
     }
     this.spinner.show()
-    await this.http.post<IProductListingReport[]>(API_URL + '/reports/product_listing_report', args, options)
+    await this.http.post<IGrnReport[]>(API_URL + '/reports/grn_report', args, options)
       .pipe(finalize(() => this.spinner.hide()))
       .toPromise()
       .then(
@@ -92,6 +135,48 @@ export class ProductListingReportComponent implements OnInit {
         console.log(error)
         ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load report')
       })
+  }
+
+  addProduct(){
+    var product = {
+      id : this.id,
+      barcode : this.barcode,
+      code : this.code,
+      description : this.description
+    }
+    var exists = false
+    this.products.forEach(element => {
+      if(element.id == product.id){
+        exists = true
+      }
+    })
+    if(!exists){
+      this.products.push(product)
+    }
+    this.clearProduct()
+  }
+
+  clearProduct(){
+    this.id = null
+    this.barcode = ''
+    this.code = ''
+    this.description = ''
+  }
+
+  removeProduct(id : any){
+    /**Remove a single product from product list */
+    var ps : IProduct[] = []
+    this.products.forEach(element => {
+      if(element.id != id){
+        ps.push(element)
+      }
+    })
+    this.products = ps
+  }
+
+  clearList(){
+    this.clearProduct()
+    this.products = []
   }
 
   clear(){
@@ -117,10 +202,114 @@ export class ProductListingReportComponent implements OnInit {
     }
   }
 
+  async search(){
+    this.supplierName = ''   
+    if(this.barcode != ''){
+      await this.getByBarcode(this.barcode)
+    }else if(this.code != ''){
+      await this.getByCode(this.code)
+    }else if(this.description != ''){
+      await this.getByDescription(this.description)
+    }else{
+      alert('Please enter a search key')
+    }
+  }
+
+  async getByBarcode(barcode: string): Promise<void> {
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<IProduct>(API_URL+'/products/get_by_barcode?barcode='+barcode, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        this.id = data?.id
+        this.barcode = data!.barcode
+        this.code = data!.code
+        this.description = data!.description
+      }
+    )
+    .catch(
+      error => {
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Requested Product not found')
+      }
+    )
+  }
+  async getByCode(code: string): Promise<void> {
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<IProduct>(API_URL+'/products/get_by_code?code='+code, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        this.id = data?.id
+        this.barcode = data!.barcode
+        this.code = data!.code
+        this.description = data!.description
+      }
+    )
+    .catch(
+      error => {
+        console.log(error)
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Requested Product not found')
+      }
+    )
+  }
+  async getByDescription(description: string): Promise<void> {
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<IProduct>(API_URL+'/products/get_by_description?description='+description, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        this.id = data?.id
+        this.barcode = data!.barcode
+        this.code = data!.code
+        this.description = data!.description
+      }
+    )
+    .catch(
+      error => {
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Requested Product not found')
+      }
+    )
+  }
+
+  async loadProductDescriptions(){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<string[]>(API_URL+'/products/get_descriptions', options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        console.log(data)
+        this.descriptions = []
+        data?.forEach(element => {
+          this.descriptions.push(element)
+        })
+      },
+      error => {
+        console.log(error)
+        alert('Could not load product descriptions')
+      }
+    )
+  }
+
   exportToPdf = () => {
     var header = ''
     var footer = ''
-    var title  = 'Product Listing Report'
+    var title  = 'GRN Report'
     var logo : any = ''
     var total : number = 0
     var discount : number = 0
@@ -137,24 +326,16 @@ export class ProductListingReportComponent implements OnInit {
         {text : 'Description', fontSize : 8, fillColor : '#bdc6c7'}, 
         {text : 'Qty', fontSize : 8, fillColor : '#bdc6c7'}, 
         {text : 'Amount', fontSize : 8, fillColor : '#bdc6c7'}, 
-        {text : 'Cashier', fontSize : 8, fillColor : '#bdc6c7'}, 
-        {text : 'Receipt#', fontSize : 8, fillColor : '#bdc6c7'},
-        {text : 'Invoice#', fontSize : 8, fillColor : '#bdc6c7'},
-        {text : 'Till#', fontSize : 8, fillColor : '#bdc6c7'},
+        {text : 'Supplier', fontSize : 8, fillColor : '#bdc6c7'}, 
+        {text : 'GRN#', fontSize : 8, fillColor : '#bdc6c7'},
       ]
     ]    
     this.report.forEach((element) => {
-      if(element.cashier == null){
-        element.cashier = ''
+      if(element.supplierName == null){
+        element.supplierName = ''
       }
-      if(element.receiptNo == null){
-        element.receiptNo = ''
-      }
-      if(element.invoiceNo == null){
-        element.invoiceNo = ''
-      }
-      if(element.tillNo == null){
-        element.tillNo = ''
+      if(element.grnNo == null){
+        element.grnNo = ''
       }
       var detail = [
         {text : formatDate(element.date, 'yyyy-MM-dd', 'en-US'), fontSize : 8, fillColor : '#ffffff'}, 
@@ -162,10 +343,8 @@ export class ProductListingReportComponent implements OnInit {
         {text : element.description.toString(), fontSize : 8, fillColor : '#ffffff'}, 
         {text : element.qty.toString(), fontSize : 8, fillColor : '#ffffff'}, 
         {text : element.amount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right', fillColor : '#ffffff'},
-        {text : element.cashier.toString(), fontSize : 8, fillColor : '#ffffff'}, 
-        {text : element.receiptNo.toString(), fontSize : 8, fillColor : '#ffffff'}, 
-        {text : element.invoiceNo.toString(), fontSize : 8, fillColor : '#ffffff'}, 
-        {text : element.tillNo.toString(), fontSize : 8, fillColor : '#ffffff'}, 
+        {text : element.supplierName.toString(), fontSize : 8, fillColor : '#ffffff'}, 
+        {text : element.grnNo.toString(), fontSize : 8, fillColor : '#ffffff'}, 
       ]
       report.push(detail)
     })
@@ -211,7 +390,7 @@ export class ProductListingReportComponent implements OnInit {
             layout : 'noBorders',
             table : {
                 headerRows : 1,
-                widths : [50, 40, 110, 50, 50, 50, 50, 50, 50],
+                widths : [50, 40, 110, 50, 50, 100, 50],
                 body : report
             }
         },                   
@@ -223,7 +402,7 @@ export class ProductListingReportComponent implements OnInit {
 
   async exportToSpreadsheet() {
     let workbook = new Workbook();
-    let worksheet = workbook.addWorksheet('Product Listing Report')
+    let worksheet = workbook.addWorksheet('GRN Report')
    
     worksheet.columns = [
       { header: 'DATE', key: 'DATE'},
@@ -231,11 +410,8 @@ export class ProductListingReportComponent implements OnInit {
       { header: 'DESCRIPTION', key: 'DESCRIPTION'},
       { header: 'QTY', key: 'QTY'},
       { header: 'AMOUNT', key: 'AMOUNT'},
-      { header: 'CASHIER', key: 'CASHIER'},
-      { header: 'RECEIPT_NO', key: 'RECEIPT_NO'},
-      { header: 'INVOICE_NO', key: 'INVOICE_NO'},
-      { header: 'TILL_NO', key: 'TILL_NO'}
-      
+      { header: 'SUPPLIER', key: 'SUPPLIER'},
+      { header: 'GRN_NO', key: 'GRN_NO'}
     ];
     this.spinner.show()
     this.report.forEach(element => {
@@ -246,10 +422,8 @@ export class ProductListingReportComponent implements OnInit {
           DESCRIPTION : element.description,
           QTY         : element.qty,
           AMOUNT      : element.amount,
-          CASHIER     : element.cashier,
-          RECEIPT_NO  : element.receiptNo,
-          INVOICE_NO  : element.invoiceNo,
-          TILL_NO     : element.tillNo
+          SUPPLIER    : element.supplierName,
+          GRN_NO      : element.grnNo
         },"n"
       )
     })
@@ -258,7 +432,7 @@ export class ProductListingReportComponent implements OnInit {
     this.spinner.hide()
     workbook.xlsx.writeBuffer().then((data) => {
       let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      fs.saveAs(blob, 'Product Listing Report '+this.from+' to '+this.to+'.xlsx');
+      fs.saveAs(blob, 'GRN Report '+this.from+' to '+this.to+'.xlsx');
     })
    
   }
@@ -267,14 +441,20 @@ export class ProductListingReportComponent implements OnInit {
 
 }
 
-export interface IProductListingReport {
-  date        : Date
-  code        : string
+export interface IGrnReport {
+  date         : Date
+  code         : string
+  description  : string
+  qty          : number
+  amount       : number
+  supplierName : string
+  grnNo        : string
+}
+
+
+export interface IProduct {
+  id : any
+  barcode : string
+  code : string
   description : string
-  qty         : number
-  amount      : number
-  cashier     : string
-  receiptNo   : string
-  invoiceNo   : string
-  tillNo      : string
 }

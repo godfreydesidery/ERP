@@ -1,15 +1,15 @@
 <div class="row" [@fadeInOut]>
     <div class="col-sm-12" style="text-align: center;">
-        <h6>Reports | Inventory | Stock Card Report</h6>
+        <h6>Reports | Purchases | LPO Report</h6>
     </div>
     <div class="col-sm-12" style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
         <a routerLink="/home"><button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
         <button class="btn" (click)="showRunOptions(runOptions)" style="margin: 2px; width: 35mm;" data-mdb-toggle="tooltip" title="Enter Run options to run report"><mdb-icon fas icon="sync"></mdb-icon><br>Run Options</button>
         <button class="btn" (click)="exportToPdf()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Export report to PDF"><mdb-icon fas icon="file-pdf"></mdb-icon><br>PDF</button>
-        <!--<button class="btn" (click)="exportToSpreadsheet()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Export report to Spreadsheet"><mdb-icon fas icon="file-excel"></mdb-icon><br>Excel</button>-->
+        <button class="btn" (click)="exportToSpreadsheet()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Export report to Spreadsheet"><mdb-icon fas icon="file-excel"></mdb-icon><br>Excel</button>
         <button class="btn" (click)="clear()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Clear entries"><i class="fa-solid fa-times fa-fw"></i><br>Clear</button>
     </div>
-    <div class="col-12" style="height: 80vh; overflow-y: auto;">
+    <div class="col-12">
         <br>
         <table class="table table-bordered">
             <thead style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
@@ -17,10 +17,10 @@
                     <th>Date</th>
                     <th>Code</th>
                     <th>Description</th>
-                    <th>Qty In</th>
-                    <th>Qty Out</th>
-                    <th>Balance</th>
-                    <th>Reference</th>
+                    <th>Qty</th>
+                    <th>Amount</th>
+                    <th>Supplier</th>
+                    <th>LPO#</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,19 +28,20 @@
                     <td>{{r.date | date: 'yyyy-MM-dd'}}</td>
                     <td>{{r.code}}</td>
                     <td>{{r.description}}</td>
-                    <td>{{r.qtyIn}}</td>
-                    <td>{{r.qtyOut}}</td>
-                    <td>{{r.balance}}</td>
-                    <td>{{r.reference}}</td>
+                    <td>{{r.qty}}</td>
+                    <td style="text-align: right;">{{r.amount | currency:'':''}}</td>
+                    <td>{{r.supplierName}}</td>
+                    <td>{{r.lpoNo}}</td>
                 </tr>               
             </tbody>
         </table>
     </div>
 </div>
 
+
 <ng-template #runOptions let-modal>
     <div class="modal-header">
-      <h6 class="modal-title" id="modal-basic-title">Enter options to run Product Stock Card Report</h6>
+      <h6 class="modal-title" id="modal-basic-title">Enter options to run LPO Report</h6>
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
     </div>
     <div class="modal-body">
@@ -111,6 +112,6 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button (click)="getProductStockCardReport(from, to, supplierName)" (click)="modal.close('Run click')" class="btn btn-success" style="margin: 2px;">Run Report</button>
+        <button (click)="getLpoReport(from, to)" (click)="modal.close('Run click')" class="btn btn-success" style="margin: 2px;">Run Report</button>
     </div>
 </ng-template>
