@@ -1,5 +1,189 @@
 <div class="row" [@fadeInOut]>
-    <div class="col">
+    <div class="col-sm-12" style="text-align: center;">
+        <h6>Production | Batch Production</h6>
+    </div>
+    <div class="col-sm-12" style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
+        <a routerLink="/home"><button class="btn" (click)="clear()" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+        <button class="btn" style="margin: 2px; width: 20mm;" (click)="showList(listContent)" data-mdb-toggle="tooltip" title="View LPO List for selection"><i class="fas fa-list"></i><br>List</button>
+        <button class="btn" (click)="clear()" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new Production"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
+        <button class="btn" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing Production"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
+        <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing Production"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
+        <button class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Cancel a Production"><i class="fa-solid fa-times fa-fw"></i><br>Cancel</button>
+        
+        <button class="btn"style="margin: 2px; width: 20mm;" (click)="closeBatch(id)" data-mdb-toggle="tooltip" title="Approve a Pending Production"><i class="fa-solid fa-check fa-fw"></i><br>Close</button>
+
+        <button class="btn"style="margin: 2px; width: 20mm;" (click)="exportToPdf()" data-mdb-toggle="tooltip" title="Export document to PDF"><i class="fas fa-file-pdf"></i><br>PDF</button>
+        <button class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Send a closed Production to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive</button>
+        <button class="btn"style="margin: 2px; width: 30mm;" data-mdb-toggle="tooltip" title="Send all closed Productions to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive All</button>
+        <button class="btn"style="margin: 2px; width: 30mm;" (click)="createShortCut('Batch Production', 'batch-production')" data-mdb-toggle="tooltip" title="Create a page shortcut on user's Dashboard"><i class="fas fa-external-link-alt"></i><br>Shortcut</button>
+    </div>
+    <div class="col-sm-12">
+        <br><br>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <small>Production#</small>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="row">
+                            <div class="col-8">
+                                <input type="hidden" [(ngModel)]="id">
+                                <input type="text" [(ngModel)]="no" class="form-control special" [readonly]="noLocked">
+                            </div>
+                            <div class="col-4">
+                                <button class="btn btn-success" (click)="getByNo(no)" style="margin: 2px; width: 26mm;"><i class="fas fa-search"></i>Search</button>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <small>Production Name</small>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" [(ngModel)]="productionName" class="form-control special" [readonly]="inputsLocked">                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <small>Batch No</small>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" [(ngModel)]="batchNo" class="form-control special" [readonly]="inputsLocked">                       
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <small>Batch Size</small>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" [(ngModel)]="batchSize" class="form-control special" [readonly]="inputsLocked">                       
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <small>Units</small>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text"  [(ngModel)]="uom" class="form-control special" [readonly]="inputsLocked">                       
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <small>Comments</small>
+                        <textarea [(ngModel)]="comments" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="row">
+                    <div class="col-3">
+                        <small>Status</small>
+                    </div>
+                    <div class="col-9">
+                        <small>{{status}}</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <small>Created</small>
+                    </div>
+                    <div class="col-9">
+                        <small>{{created}}</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <small>Opened</small>
+                    </div>
+                    <div class="col-9">
+                        <small>{{opened}}</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <small>Closed</small>
+                    </div>
+                    <div class="col-9">
+                        <small>{{closed}}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+    </div>
+    <hr>
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-2" style="background-color: antiquewhite;">
+                <span>Material List </span><button (click)="addSelected()">Add Selected</button><br>
+                <input type="text" [(ngModel)]="materialFilter" (input)="refreshVisible(materialFilter)" class="form-control" placeholder="Type to filter">
+                <span *ngFor="let m of visibleMaterials"><span><input type="checkbox" (change)="selectMaterial($event, m.id, m.code, m.description)" style="height: 5mm; width: 5mm;"><span>{{m.description}}</span></span><br></span>
+            </div>
+            <div class="col-5" style="background-color: rgb(247, 244, 238);">
+                <span style="font-size: large;">Selected materials to use</span><br>
+                <br>
+                <span style="font-size: large;"><u><i>Unverified Materials</i></u></span><span style="cursor: pointer;"><font style="color: blue;">  [Verify all]</font></span><span style="cursor: pointer;"><font style="color: rgb(243, 11, 11);">  [Remove all]</font></span><br>
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr *ngFor="let m of unverifiedMaterials">
+                            <td>{{m.description}}</td><td>{{m.qty}} Kg</td><td><span (click)="openMaterialModal(materialModal, m.id, m.code, m.description, m.qty)" style="cursor: pointer;"><font style="color: blue;">  [Edit]</font></span><span (click)="verifyMaterial(m.id, m.qty)" style="cursor: pointer;"><font style="color: rgb(56, 20, 66);">  [Verify]</font></span><span (click)="removeMaterial(m.id)" style="cursor: pointer;"><font style="color: rgb(236, 11, 11);">  [Remove]</font></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <span style="font-size: large;"><u><i>Verified Materials [Can not be removed]</i></u></span><br>
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr *ngFor="let m of verifiedMaterials">
+                            <td>{{m.description}}</td><td>{{m.qty}} Kg</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-5">
+                <div class="row">
+                    <div class="row-12">
+                        <span>Unverified Products </span><button (click)="openProductModal(productModal, '', '', '', 0)" class="btn btn-success">+Add</button>
+                    </div>
+                </div>  
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <td>Code</td><td>Description</td><td>Qty</td><td>Action</td>
+                        </tr>
+                        <tr *ngFor="let p of unverifiedProducts">
+                            <td>{{p.code}}</td><td>{{p.description}}</td><td>{{p.qty}}</td><td><span (click)="openProductModal(productModal, p.id, p.code, p.description, p.qty)" style="cursor: pointer;">[Edit]</span><span (click)="verifyProduct(p.id, p.qty)" style="cursor: pointer;"><font style="color: rgb(56, 20, 66);">  [Verify]</font></span><span (click)="removeProduct(p.id)" style="cursor: pointer;"><font style="color: rgb(236, 11, 11);">  [Remove]</font></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="row-12">
+                        <span>Verified Products [Can not be removed] </span>
+                    </div>
+                </div>  
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <td>Code</td><td>Description</td><td>Qty</td>
+                        </tr>
+                        <tr *ngFor="let p of verifiedProducts">
+                            <td>{{p.code}}</td><td>{{p.description}}</td><td>{{p.qty}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div> 
+
+
+
+
+    <!--<div class="col">
         <table style="width: 100%;">
             <tr style="width: 100%;">
                 <td style="width: 100mm; vertical-align: top;"><p class="h6">Production / Batch Production</p></td>
@@ -151,7 +335,7 @@
                 </td>
             </tr>
         </table>
-    </div>
+    </div>-->
 </div>
 
 <ng-template #materialModal let-modal>
@@ -227,5 +411,39 @@
     <div class="modal-footer">
       <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>-->
       <button type="button" (click)="addProduct(productId, productQty)" (click)="modal.close('Save click')" class="btn btn-outline-dark">Save</button>
+    </div>
+</ng-template>
+
+
+<ng-template #listContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">LPO List</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-12" style="height: 10cm; overflow: auto;">
+                <table class="table table-bordered">
+                    <thead style="position: sticky; top: 0;">
+                        <tr class="table-dark">
+                            <td>Production No</td>
+                            <td>Status</td>
+                            <td>Select</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let p of productions">
+                            <td>{{p.no}}</td>
+                            <td>{{p.status}}</td>
+                            <td><span (click)="get(p.id)" style="cursor: pointer;">[Select]</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+    <div class="modal-footer">
+      
     </div>
 </ng-template>

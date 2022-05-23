@@ -1091,6 +1091,29 @@ export class BatchProductionComponent implements OnInit {
     }
   }
 
+  showList(listContent: any) {
+    
+    this.modalService.open(listContent, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  clearDetail(){
+    //
+  }
+
+  private getDismissReason(reason: any): string {
+    this.clearDetail()
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
   exportToPdf = () => {
     var header = ''
     var footer = ''

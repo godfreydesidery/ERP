@@ -63,6 +63,12 @@ public class Grn {
 	@JsonIgnoreProperties("lpoDetails")
     private Lpo lpo;
 	
+	@ManyToOne(targetEntity = Drp.class, fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "drp_id", nullable = true , updatable = true)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
+	@JsonIgnoreProperties("drpDetails")
+    private Drp drp;
+	
 	@OneToMany(targetEntity = GrnDetail.class, mappedBy = "grn", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     @Valid
     @JsonIgnoreProperties("grn")

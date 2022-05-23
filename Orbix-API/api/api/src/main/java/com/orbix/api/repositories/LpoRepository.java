@@ -69,7 +69,7 @@ public interface LpoRepository extends JpaRepository<Lpo, Long> {
 					"JOIN `suppliers` ON\r\n" + 
 					"`suppliers`.`id`=`products`.`supplier_id`\r\n" +
 					"WHERE\r\n" +
-					"`days`.`bussiness_date` BETWEEN :from AND :to\r\n" + 					
+					"`days`.`bussiness_date` BETWEEN :from AND :to AND `lpos`.`status` IN ('APPROVED', 'PRINTED')\r\n" + 					
 					"ORDER BY\r\n" + 
 					"`date` ASC",
 					nativeQuery = true					
@@ -96,7 +96,7 @@ public interface LpoRepository extends JpaRepository<Lpo, Long> {
 					"JOIN `suppliers` ON\r\n" + 
 					"`suppliers`.`id`=`products`.`supplier_id`\r\n" +
 					"WHERE\r\n" +
-					"`days`.`bussiness_date` BETWEEN :from AND :to AND `products`.`code` IN (:codes)\r\n" + 					
+					"`days`.`bussiness_date` BETWEEN :from AND :to AND `products`.`code` IN (:codes) AND `lpos`.`status` IN ('APPROVED', 'PRINTED')\r\n" + 					
 					"ORDER BY\r\n" + 
 					"`date` ASC",
 					nativeQuery = true					

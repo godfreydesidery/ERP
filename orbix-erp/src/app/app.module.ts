@@ -102,6 +102,7 @@ import { MyShortcutsMenuComponent } from './my-shortcuts-menu/my-shortcuts-menu.
 import { DailyPurchasesReportComponent } from './reports/purchases-reports/daily-purchases-report/daily-purchases-report.component';
 import { LpoReportComponent } from './reports/purchases-reports/lpo-report/lpo-report.component';
 import { GrnReportComponent } from './reports/purchases-reports/grn-report/grn-report.component';
+import { DrpComponent } from './mechandizer/drp/drp.component';
 
 
 @NgModule({
@@ -194,6 +195,7 @@ import { GrnReportComponent } from './reports/purchases-reports/grn-report/grn-r
     DailyPurchasesReportComponent,
     LpoReportComponent,
     GrnReportComponent,
+    DrpComponent,
     //BatchProductionComponent,
     //CustomProductionComponent,
   ],
@@ -231,6 +233,7 @@ import { GrnReportComponent } from './reports/purchases-reports/grn-report/grn-r
       {path : 'sales-reports-sub-menu', component :SalesReportsSubMenuComponent},
       {path : 'inventory-reports-sub-menu', component :InventoryReportsSubMenuComponent},
       {path : 'production-reports-sub-menu', component :ProductionReportsSubMenuComponent},
+      {path : 'drp', component: DrpComponent},
       {path : 'lpo', component: LpoComponent},
       {path : 'grn', component: GrnComponent},
       {path : 'quotations', component: QuotationComponent},

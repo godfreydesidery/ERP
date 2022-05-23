@@ -74,6 +74,7 @@ import { SupplierMassManagerComponent } from './supplier/supplier-mass-manager/s
 import { DailyPurchasesReportComponent } from './reports/purchases-reports/daily-purchases-report/daily-purchases-report.component';
 import { LpoReportComponent } from './reports/purchases-reports/lpo-report/lpo-report.component';
 import { GrnReportComponent } from './reports/purchases-reports/grn-report/grn-report.component';
+import { DrpComponent } from './mechandizer/drp/drp.component';
 
 const routes: Routes = [
   {path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard]},
@@ -97,6 +98,7 @@ const routes: Routes = [
   {path: 'sales-reports-sub-menu', component: SalesReportsSubMenuComponent, canActivate: [AuthGuard]},
   {path: 'inventory-reports-sub-menu', component: InventoryReportsSubMenuComponent, canActivate: [AuthGuard]},
   {path: 'production-reports-sub-menu', component: ProductionReportsSubMenuComponent, canActivate: [AuthGuard]},
+  {path: 'drp', component: DrpComponent, canActivate: [AuthGuard]},
   {path: 'lpo', component: LpoComponent, canActivate: [AuthGuard]},
   {path: 'grn', component: GrnComponent, canActivate: [AuthGuard]},
   {path: 'quotations', component: QuotationComponent, canActivate: [AuthGuard]},

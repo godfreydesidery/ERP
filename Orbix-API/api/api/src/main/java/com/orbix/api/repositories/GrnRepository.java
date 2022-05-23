@@ -42,13 +42,6 @@ public interface GrnRepository extends JpaRepository<Grn, Long> {
 	@Query("SELECT MAX(g.id) FROM Grn g")
 	Long getLastId();
 	
-	
-	
-	
-	
-	
-	
-	
 	@Query(
 			value = "SELECT\r\n" + 
 					"`days`.`bussiness_date` AS `date`,\r\n" + 
@@ -69,9 +62,7 @@ public interface GrnRepository extends JpaRepository<Grn, Long> {
 					"JOIN `suppliers` ON\r\n" + 
 					"`suppliers`.`id`=`products`.`supplier_id`\r\n" +
 					"WHERE\r\n" +
-					"`days`.`bussiness_date` BETWEEN :from AND :to\r\n" + 
-					//"GROUP BY `date`,`code`,`description`,`receiptNo`,`cashier`,`tillNo`\r\n" + 
-					//"GROUP BY `date`,`code`,`description`\r\n" + 
+					"`days`.`bussiness_date` BETWEEN :from AND :to AND `grns`.`status` IN ('RECEIVED', 'ARCHIVED')\r\n" + 					
 					"ORDER BY\r\n" + 
 					"`date` ASC",
 					nativeQuery = true					
@@ -98,7 +89,7 @@ public interface GrnRepository extends JpaRepository<Grn, Long> {
 					"JOIN `suppliers` ON\r\n" + 
 					"`suppliers`.`id`=`products`.`supplier_id`\r\n" +
 					"WHERE\r\n" +
-					"`days`.`bussiness_date` BETWEEN :from AND :to AND `products`.`code` IN (:codes)\r\n" + 				
+					"`days`.`bussiness_date` BETWEEN :from AND :to AND `products`.`code` IN (:codes) AND `grns`.`status` IN ('RECEIVED', 'ARCHIVED')\r\n" + 				
 					"ORDER BY\r\n" + 
 					"`date` ASC",
 					nativeQuery = true					
