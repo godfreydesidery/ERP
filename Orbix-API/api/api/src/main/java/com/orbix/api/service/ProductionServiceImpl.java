@@ -13,6 +13,7 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.orbix.api.accessories.Formater;
+import com.orbix.api.domain.Lpo;
 import com.orbix.api.domain.Material;
 import com.orbix.api.domain.MaterialStockCard;
 import com.orbix.api.domain.PackingList;
@@ -27,6 +28,7 @@ import com.orbix.api.domain.ProductionUnverifiedProduct;
 import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
+import com.orbix.api.models.LpoModel;
 import com.orbix.api.models.PackingListDetailModel;
 import com.orbix.api.models.PackingListModel;
 import com.orbix.api.models.ProductionMaterialModel;
@@ -34,6 +36,7 @@ import com.orbix.api.models.ProductionModel;
 import com.orbix.api.models.ProductionProductModel;
 import com.orbix.api.models.ProductionUnverifiedMaterialModel;
 import com.orbix.api.models.ProductionUnverifiedProductModel;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.DayRepository;
 import com.orbix.api.repositories.MaterialRepository;
 import com.orbix.api.repositories.MaterialStockCardRepository;
@@ -674,7 +677,45 @@ public class ProductionServiceImpl implements ProductionService {
 	private String generateProductionNo(Production production) {
 		Long number = production.getId();		
 		String sNumber = number.toString();
-		return "PRD-"+Formater.formatSix(sNumber);
+		return Formater.formatWithCurrentDate("PRD",number.toString());
+	}
+	
+	@Override
+	public RecordModel requestProductionNo() {
+		Long id = 1L;
+		try {
+			id = productionRepository.getLastId() + 1;
+		}catch(Exception e) {}
+		RecordModel model = new RecordModel();
+		model.setNo(Formater.formatWithCurrentDate("PRD",id.toString()));
+		return model;
+	}
+	
+	@Override
+	public List<ProductionModel> getAllVisible() {
+		List<String> statuses = new ArrayList<String>();
+		statuses.add("OPEN");
+		statuses.add("CLOSED");		
+		List<Production> productions = productionRepository.findAllVissible(statuses);
+		List<ProductionModel> models = new ArrayList<ProductionModel>();
+		for(Production p : productions) {
+			ProductionModel model = new ProductionModel();
+			model.setId(p.getId());
+			model.setNo(p.getNo());
+			model.setStatus(p.getStatus());
+			model.setComments(p.getComments());
+			if(p.getCreatedAt() != null && p.getCreatedBy() != null) {
+				model.setCreated(dayRepository.findById(p.getCreatedAt()).get().getBussinessDate() +" "+ userRepository.getAlias(p.getCreatedBy()));
+			}
+			if(p.getOpenedAt() != null && p.getOpenedBy() != null) {
+				model.setOpened(dayRepository.findById(p.getOpenedAt()).get().getBussinessDate() +" "+ userRepository.getAlias(p.getOpenedBy()));
+			}
+			if(p.getClosedAt() != null && p.getClosedBy() != null) {
+				model.setClosed(dayRepository.findById(p.getClosedAt()).get().getBussinessDate() +" "+ userRepository.getAlias(p.getClosedBy()));
+			}
+			models.add(model);
+		}
+		return models;		
 	}
 	
 }

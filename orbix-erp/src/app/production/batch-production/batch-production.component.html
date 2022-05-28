@@ -5,13 +5,11 @@
     <div class="col-sm-12" style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
         <a routerLink="/home"><button class="btn" (click)="clear()" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
         <button class="btn" style="margin: 2px; width: 20mm;" (click)="showList(listContent)" data-mdb-toggle="tooltip" title="View LPO List for selection"><i class="fas fa-list"></i><br>List</button>
-        <button class="btn" (click)="clear()" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new Production"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
+        <button class="btn" (click)="clear()" (click)="unlockAll()" (click)="requestNo()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new Production"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
         <button class="btn" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing Production"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
-        <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing Production"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
-        <button class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Cancel a Production"><i class="fa-solid fa-times fa-fw"></i><br>Cancel</button>
-        
+        <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing Production"><i class="fa-solid fa-save fa-fw"></i><br><span *ngIf="id">Save</span> <span *ngIf="!id">Open</span></button>
         <button class="btn"style="margin: 2px; width: 20mm;" (click)="closeBatch(id)" data-mdb-toggle="tooltip" title="Approve a Pending Production"><i class="fa-solid fa-check fa-fw"></i><br>Close</button>
-
+        <button class="btn"style="margin: 2px; width: 20mm;" (click)="cancel(id)" data-mdb-toggle="tooltip" title="Cancel a Production"><i class="fa-solid fa-times fa-fw"></i><br>Cancel</button>       
         <button class="btn"style="margin: 2px; width: 20mm;" (click)="exportToPdf()" data-mdb-toggle="tooltip" title="Export document to PDF"><i class="fas fa-file-pdf"></i><br>PDF</button>
         <button class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Send a closed Production to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive</button>
         <button class="btn"style="margin: 2px; width: 30mm;" data-mdb-toggle="tooltip" title="Send all closed Productions to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive All</button>
@@ -117,7 +115,7 @@
         <br>
     </div>
     <hr>
-    <div class="col-sm-12">
+    <div class="col-sm-12" *ngIf="id">
         <div class="row">
             <div class="col-2" style="background-color: antiquewhite;">
                 <span>Material List </span><button (click)="addSelected()">Add Selected</button><br>
@@ -417,7 +415,7 @@
 
 <ng-template #listContent let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">LPO List</h4>
+      <h4 class="modal-title" id="modal-basic-title">Production List</h4>
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
     </div>
     <div class="modal-body">
@@ -435,7 +433,7 @@
                         <tr *ngFor="let p of productions">
                             <td>{{p.no}}</td>
                             <td>{{p.status}}</td>
-                            <td><span (click)="get(p.id)" style="cursor: pointer;">[Select]</span></td>
+                            <td><span (click)="get(p.id)" (click)="modal.close('Select click')" style="cursor: pointer;">[Select]</span></td>
                         </tr>
                     </tbody>
                 </table>

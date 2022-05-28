@@ -202,9 +202,7 @@ public class LpoResource {
 		if(!l.isPresent()) {
 			throw new NotFoundException("LPO not found");
 		}
-		if(l.get().getStatus().equals("PENDING") || l.get().getStatus().equals("APPROVED")) {
-			l.get().setPrintedBy(userService.getUserId(request));
-			l.get().setPrintedAt(dayService.getDayId());
+		if(l.get().getStatus().equals("PENDING") || l.get().getStatus().equals("APPROVED")) {			
 			l.get().setStatus("CANCELED");
 		}else {
 			throw new InvalidOperationException("Could not cancel, only Pending or Approved LPOs can be canceled");

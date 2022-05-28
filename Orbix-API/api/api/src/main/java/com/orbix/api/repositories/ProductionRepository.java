@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.orbix.api.domain.Lpo;
 import com.orbix.api.domain.Production;
 import com.orbix.api.reports.models.ProductionReport;
 import com.orbix.api.reports.models.SupplySalesReport;
@@ -25,6 +26,12 @@ public interface ProductionRepository extends JpaRepository<Production, Long> {
 	 * @return
 	 */
 	Optional<Production> findByNo(String no);
+	
+	@Query("SELECT p FROM Production p WHERE p.status IN (:statuses)")
+	List<Production> findAllVissible(List<String> statuses);
+	
+	@Query("SELECT MAX(p.id) FROM Production p")
+	Long getLastId();
 	
 	@Query(
 			value = "SELECT \r\n" +

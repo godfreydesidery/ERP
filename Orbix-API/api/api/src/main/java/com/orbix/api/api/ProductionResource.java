@@ -14,12 +14,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.orbix.api.domain.Lpo;
 import com.orbix.api.domain.Material;
 import com.orbix.api.domain.MaterialStockCard;
 import com.orbix.api.domain.Product;
@@ -32,8 +34,10 @@ import com.orbix.api.domain.ProductionUnverifiedProduct;
 import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
+import com.orbix.api.models.LpoModel;
 import com.orbix.api.models.PackingListModel;
 import com.orbix.api.models.ProductionModel;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.DayRepository;
 import com.orbix.api.repositories.MaterialRepository;
 import com.orbix.api.repositories.MaterialStockCardRepository;
@@ -78,8 +82,8 @@ public class ProductionResource {
 
 	@GetMapping("/productions")
 	//@PreAuthorize("hasAnyAuthority('PRODUCTION-READ')")
-	public ResponseEntity<List<Production>>getProductions(){
-		return ResponseEntity.ok().body(productionRepository.findAll());
+	public ResponseEntity<List<ProductionModel>>getProductions(){
+		return ResponseEntity.ok().body(productionService.getAllVisible());
 	}
 	
 	@GetMapping("/productions/get")
@@ -87,6 +91,13 @@ public class ProductionResource {
 	public ResponseEntity<ProductionModel> getProduction(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(productionService.get(id));
+	}
+	
+	@GetMapping("/productions/get_by_no")
+	//@PreAuthorize("hasAnyAuthority('PACKING_LIST-READ')")
+	public ResponseEntity<ProductionModel> getProductionByNo(
+			@RequestParam(name = "no") String no){
+		return ResponseEntity.ok().body(productionService.getByNo(no));
 	}
 	
 	@PostMapping("/productions/create")
@@ -102,6 +113,12 @@ public class ProductionResource {
 		production.setOpenedAt(dayRepository.getCurrentBussinessDay().getId());
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/productions/create").toUriString());
 		return ResponseEntity.created(uri).body(productionService.save(production));
+	}
+	
+	@GetMapping("/productions/request_no")
+	//@PreAuthorize("hasAnyAuthority('LPO-READ')")
+	public ResponseEntity<RecordModel> requestNo(){
+		return ResponseEntity.ok().body(productionService.requestProductionNo());
 	}
 	
 	@PostMapping("/productions/update")
@@ -443,7 +460,41 @@ public class ProductionResource {
 		}
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/productions/verify_product").toUriString());
 		return ResponseEntity.created(uri).body(p.get());
-	}	
+	}
+	
+	@PutMapping("/productions/cancel")
+	//@PreAuthorize("hasAnyAuthority('LPO-CANCEL')")
+	public ResponseEntity<ProductionModel>cancelProduction(
+			@RequestBody Production production,
+			HttpServletRequest request){		
+		Optional<Production> l = productionRepository.findById(production.getId());
+		if(!l.isPresent()) {
+			throw new NotFoundException("Production not found");
+		}
+		if(!l.get().getStatus().equals("OPEN")) {
+			throw new InvalidOperationException("Could not cancel, only OPEN production can be canceled");
+		}
+		List<ProductionMaterial> pms = productionMaterialRepository.findByProduction(production);
+		if(!pms.isEmpty()) {
+			throw new InvalidOperationException("Could not cancel, this production has already consumed materials. Please close  the Production");
+		}
+		List<ProductionProduct> pps = productionProductRepository.findByProduction(production);
+		if(!pps.isEmpty()) {
+			throw new InvalidOperationException("Could not cancel, this production has already produced products. Please close  the Production");
+		}		
+		List<ProductionUnverifiedMaterial> pums = productionUnverifiedMaterialRepository.findByProduction(production);
+		if(!pums.isEmpty()) {
+			throw new InvalidOperationException("Could not cancel, this production has unverified materials waiting to be processed. Please remove the materials");
+		}
+		List<ProductionUnverifiedProduct> pups = productionUnverifiedProductRepository.findByProduction(production);
+		if(!pups.isEmpty()) {
+			throw new InvalidOperationException("Could not cancel, this production has unverified products waiting to be added to inventory. Please remove the products");
+		}
+		l.get().setStatus("CANCELED");
+		
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/productions/cancel").toUriString());
+		return ResponseEntity.created(uri).body(productionService.save(l.get()));
+	}
 }
 
 @Data

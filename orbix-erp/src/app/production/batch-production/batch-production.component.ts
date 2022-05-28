@@ -1099,6 +1099,55 @@ export class BatchProductionComponent implements OnInit {
     });
   }
 
+  async requestNo(){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<any>(API_URL+'/productions/request_no', options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        console.log(data)
+        this.no = data!['no']
+        this.noLocked  = true
+      },
+      error => {
+        console.log(error)
+        alert('Could not request production Number')
+      }
+    )
+  }
+
+  cancel(id: any) {
+    if(!window.confirm('Confirm canceling of the selected Production')){
+      return
+    }
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    var production = {
+      id : this.id   
+    }
+    this.spinner.show()
+    this.http.put(API_URL+'/productions/cancel', production, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      () => {
+        this.clear()
+        this.loadProductions()
+      }
+    )
+    .catch(
+      error => {
+        console.log(error)
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not cancel')
+      }
+    )
+  }
+
   clearDetail(){
     //
   }
