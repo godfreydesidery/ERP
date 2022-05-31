@@ -66,33 +66,28 @@ public class GrnResource {
 	private final 	ProductRepository productRepository;
 	
 	@GetMapping("/grns")
-	@PreAuthorize("hasAnyAuthority('GRN-READ')")
 	public ResponseEntity<List<GrnModel>>getGrns(){
 		return ResponseEntity.ok().body(grnService.getAllVisible());
 	}
 	
 	@GetMapping("/grns/get")
-	@PreAuthorize("hasAnyAuthority('GRN-READ')")
 	public ResponseEntity<GrnModel> getGrn(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(grnService.get(id));
 	}
 	
 	@GetMapping("/grns/get_by_no")
-	@PreAuthorize("hasAnyAuthority('GRN-READ')")
 	public ResponseEntity<GrnModel> getGrnByNo(
 			@RequestParam(name = "no") String no){
 		return ResponseEntity.ok().body(grnService.getByNo(no));
 	}
 	
 	@GetMapping("/grns/request_no")
-	//@PreAuthorize("hasAnyAuthority('LPO-READ')")
 	public ResponseEntity<RecordModel> requestNo(){
 		return ResponseEntity.ok().body(grnService.requestGrnNo());
 	}
 	
 	@GetMapping("/grn_details/get_by_grn")
-	@PreAuthorize("hasAnyAuthority('GRN-READ')")
 	public ResponseEntity<List<GrnDetailModel>>getGrnDetails(
 			@RequestParam(name = "id") Long id){		
 		return ResponseEntity.ok().body(grnService.getAllDetails(grnRepository.findById(id).get()));
@@ -112,7 +107,7 @@ public class GrnResource {
 	}
 	
 	@PutMapping("/grns/update")
-	@PreAuthorize("hasAnyAuthority('GRN-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('GRN-CREATE','GRN-UPDATE')")
 	public ResponseEntity<GrnModel>updateGrn(
 			@RequestBody Grn grn,
 			HttpServletRequest request){
@@ -154,7 +149,7 @@ public class GrnResource {
 	}
 	
 	@PutMapping("/grns/archive")
-	@PreAuthorize("hasAnyAuthority('GRN-CREATE','GRN-UPDATE','GRN-ARCHIVE')")
+	@PreAuthorize("hasAnyAuthority('GRN-UPDATE','GRN-ARCHIVE')")
 	public ResponseEntity<Boolean>archiveGrn(
 			@RequestBody Grn grn,
 			HttpServletRequest request){		
@@ -167,14 +162,13 @@ public class GrnResource {
 	}
 	
 	@PutMapping("/grns/archive_all")
-	@PreAuthorize("hasAnyAuthority('GRN-CREATE','GRN-UPDATE','GRN-ARCHIVE')")
+	@PreAuthorize("hasAnyAuthority('GRN-UPDATE','GRN-ARCHIVE')")
 	public ResponseEntity<Boolean>archiveGrns(){			
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/grns/archive_all").toUriString());
 		return ResponseEntity.created(uri).body(grnService.archiveAll());
 	}
 	
 	@GetMapping("/grn_details/get")
-	@PreAuthorize("hasAnyAuthority('GRN-CREATE','GRN-UPDATE')")
 	public ResponseEntity<GrnDetailModel>getDetail(
 			@RequestParam(name = "id") Long id){		
 		Optional<GrnDetail> d = grnDetailRepository.findById(id);
@@ -229,5 +223,4 @@ public class GrnResource {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/grn_details/save").toUriString());
 		return ResponseEntity.created(uri).body(grnService.saveDetail(detail));
 	}
-
 }

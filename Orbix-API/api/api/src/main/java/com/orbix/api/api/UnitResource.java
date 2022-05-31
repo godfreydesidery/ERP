@@ -11,6 +11,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,27 +49,24 @@ public class UnitResource {
 	private final 	UnitService unitService;
 	
 	@GetMapping("/departments")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<List<Department>>getDepartments(){
 		return ResponseEntity.ok().body(unitService.getDepartments());
 	}
 	
 	@GetMapping("/departments/get")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<Department> getDepartment(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(unitService.getDepartment(id));
 	}
 	
 	@GetMapping("/departments/get_by_name")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<Department> getDepartmentByName(
 			@RequestParam(name = "name") String name){
 		return ResponseEntity.ok().body(unitService.getDepartmentByName(name));
 	}
 	
 	@PostMapping("/departments/create")
-	//@PreAuthorize("hasAnyAuthority('TILL-CREATE')")
+	@PreAuthorize("hasAnyAuthority('DEPARTMENT-CREATE')")
 	public ResponseEntity<Department>createDepartment(
 			@RequestBody Department department){
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/departments/create").toUriString());
@@ -76,7 +74,7 @@ public class UnitResource {
 	}
 		
 	@PutMapping("/departments/update")
-	//@PreAuthorize("hasAnyAuthority('USER-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('DEPARTMENT-CREATE','DEPARTMENT-UPDATE')")
 	public ResponseEntity<Department>updateDepartment(
 			@RequestBody Department department, 
 			HttpServletRequest request){
@@ -85,7 +83,7 @@ public class UnitResource {
 	}
 	
 	@DeleteMapping("/departments/delete")
-	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	@PreAuthorize("hasAnyAuthority('DEPARTMENT-DELETE')")
 	public ResponseEntity<Boolean> deleteDepartment(
 			@RequestParam(name = "id") Long id){
 		Department department = unitService.getDepartment(id);
@@ -95,27 +93,23 @@ public class UnitResource {
 	
 	
 	@GetMapping("/classes")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<List<Class>>getclasses(){
 		return ResponseEntity.ok().body(unitService.getClasses());
 	}
 	
 	@GetMapping("/classes/get")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<Class> getClass(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(unitService.getClass(id));
 	}
 	
 	@GetMapping("/classes/get_by_name")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<Class> getClassByName(
 			@RequestParam(name = "name") String name){
 		return ResponseEntity.ok().body(unitService.getClassByName(name));
 	}
 	
 	@GetMapping("/classes/get_by_department_name")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<List<Class>> getClassByDepartmentName(
 			@RequestParam(name = "department_name") String departmentName){
 		Department d = unitService.getDepartmentByName(departmentName);
@@ -131,7 +125,7 @@ public class UnitResource {
 	}
 	
 	@PostMapping("/classes/create")
-	//@PreAuthorize("hasAnyAuthority('TILL-CREATE')")
+	@PreAuthorize("hasAnyAuthority('CLASS-CREATE')")
 	public ResponseEntity<Class>createClass(
 			@RequestBody Class class_){
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/classes/create").toUriString());
@@ -139,7 +133,7 @@ public class UnitResource {
 	}
 		
 	@PutMapping("/classes/update")
-	//@PreAuthorize("hasAnyAuthority('USER-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('CLASS-CREATE','CLASS-UPDATE')")
 	public ResponseEntity<Class>updateClass(
 			@RequestBody Class class_, 
 			HttpServletRequest request){
@@ -148,7 +142,7 @@ public class UnitResource {
 	}
 	
 	@DeleteMapping("/classes/delete")
-	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	@PreAuthorize("hasAnyAuthority('CLASS-DELETE')")
 	public ResponseEntity<Boolean> deleteClass(
 			@RequestParam(name = "id") Long id){
 		Class class_ = unitService.getClass(id);
@@ -158,27 +152,23 @@ public class UnitResource {
 	
 	
 	@GetMapping("/sub_classes")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<List<SubClass>>getSubClasss(){
 		return ResponseEntity.ok().body(unitService.getSubClasses());
 	}
 	
 	@GetMapping("/sub_classes/get")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<SubClass> getSubClass(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(unitService.getSubClass(id));
 	}
 	
 	@GetMapping("/sub_classes/get_by_name")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<SubClass> getSubClassByName(
 			@RequestParam(name = "name") String name){
 		return ResponseEntity.ok().body(unitService.getSubClassByName(name));
 	}
 	
 	@GetMapping("/sub_classes/get_by_class_name")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<List<SubClass>> getSubClassByClassName(
 			@RequestParam(name = "class_name") String className){
 		Class d = unitService.getClassByName(className);
@@ -194,7 +184,7 @@ public class UnitResource {
 	}
 	
 	@PostMapping("/sub_classes/create")
-	//@PreAuthorize("hasAnyAuthority('TILL-CREATE')")
+	@PreAuthorize("hasAnyAuthority('SUB_CLASS-CREATE')")
 	public ResponseEntity<SubClass>createSubClass(
 			@RequestBody SubClass subClass){
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/sub_classes/create").toUriString());
@@ -202,7 +192,7 @@ public class UnitResource {
 	}
 		
 	@PutMapping("/sub_classes/update")
-	//@PreAuthorize("hasAnyAuthority('USER-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('SUB_CLASS-CREATE','SUB_CLASS-UPDATE')")
 	public ResponseEntity<SubClass>updateSubClass(
 			@RequestBody SubClass subClass, 
 			HttpServletRequest request){
@@ -211,7 +201,7 @@ public class UnitResource {
 	}
 	
 	@DeleteMapping("/sub_classes/delete")
-	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	@PreAuthorize("hasAnyAuthority('SUB_CLASS-DELETE')")
 	public ResponseEntity<Boolean> deleteSubClass(
 			@RequestParam(name = "id") Long id){
 		SubClass subClass = unitService.getSubClass(id);
@@ -222,27 +212,24 @@ public class UnitResource {
 	
 	
 	@GetMapping("/categories")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<List<Category>>getCategorys(){
 		return ResponseEntity.ok().body(unitService.getCategories());
 	}
 	
 	@GetMapping("/categories/get")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<Category> getCategory(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(unitService.getCategory(id));
 	}
 	
 	@GetMapping("/categories/get_by_name")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<Category> getCategoryByName(
 			@RequestParam(name = "name") String name){
 		return ResponseEntity.ok().body(unitService.getCategoryByName(name));
 	}
 	
 	@PostMapping("/categories/create")
-	//@PreAuthorize("hasAnyAuthority('TILL-CREATE')")
+	@PreAuthorize("hasAnyAuthority('CATEGORY-CREATE')")
 	public ResponseEntity<Category>createCategory(
 			@RequestBody Category category){
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/categories/create").toUriString());
@@ -250,7 +237,7 @@ public class UnitResource {
 	}
 		
 	@PutMapping("/categories/update")
-	//@PreAuthorize("hasAnyAuthority('USER-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('CATEGORY-CREATE','CATEGORY-UPDATE')")
 	public ResponseEntity<Category>updateCategory(
 			@RequestBody Category category, 
 			HttpServletRequest request){
@@ -259,7 +246,7 @@ public class UnitResource {
 	}
 	
 	@DeleteMapping("/categories/delete")
-	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	@PreAuthorize("hasAnyAuthority('CATEGORY-DELETE')")
 	public ResponseEntity<Boolean> deleteCategory(
 			@RequestParam(name = "id") Long id){
 		Category category = unitService.getCategory(id);
@@ -268,27 +255,23 @@ public class UnitResource {
 	}
 	
 	@GetMapping("/sub_categories")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<List<SubCategory>>getSubCategorys(){
 		return ResponseEntity.ok().body(unitService.getSubCategories());
 	}
 	
 	@GetMapping("/sub_categories/get")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<SubCategory> getSubCategory(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(unitService.getSubCategory(id));
 	}
 	
 	@GetMapping("/sub_categories/get_by_name")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<SubCategory> getSubCategoryByName(
 			@RequestParam(name = "name") String name){
 		return ResponseEntity.ok().body(unitService.getSubCategoryByName(name));
 	}
 	
 	@GetMapping("/sub_categories/get_by_category_name")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<List<SubCategory>> getSubCategoryByCategoryName(
 			@RequestParam(name = "category_name") String categoryName){
 		Category d = unitService.getCategoryByName(categoryName);
@@ -304,7 +287,7 @@ public class UnitResource {
 	}
 	
 	@PostMapping("/sub_categories/create")
-	//@PreAuthorize("hasAnyAuthority('TILL-CREATE')")
+	@PreAuthorize("hasAnyAuthority('SUB_CATEGORY-CREATE')")
 	public ResponseEntity<SubCategory>createSubCategory(
 			@RequestBody SubCategory subCategory){
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/sub_categories/create").toUriString());
@@ -312,7 +295,7 @@ public class UnitResource {
 	}
 		
 	@PutMapping("/sub_categories/update")
-	//@PreAuthorize("hasAnyAuthority('USER-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('SUB_CATEGORY-CREATE','SUB_CATEGORY-UPDATE')")
 	public ResponseEntity<SubCategory>updateSubCategory(
 			@RequestBody SubCategory subCategory, 
 			HttpServletRequest request){
@@ -321,7 +304,7 @@ public class UnitResource {
 	}
 	
 	@DeleteMapping("/sub_categories/delete")
-	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	@PreAuthorize("hasAnyAuthority('SUB_CATEGORY-DELETE')")
 	public ResponseEntity<Boolean> deleteSubCategory(
 			@RequestParam(name = "id") Long id){
 		SubCategory subCategory = unitService.getSubCategory(id);
@@ -332,27 +315,24 @@ public class UnitResource {
 	
 	
 	@GetMapping("/group_level_ones")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<List<LevelOne>>getLevelOnes(){
 		return ResponseEntity.ok().body(unitService.getLevelOnes());
 	}
 	
 	@GetMapping("/group_level_ones/get")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<LevelOne> getLevelOne(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(unitService.getLevelOne(id));
 	}
 	
 	@GetMapping("/group_level_ones/get_by_name")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<LevelOne> getLevelOneByName(
 			@RequestParam(name = "name") String name){
 		return ResponseEntity.ok().body(unitService.getLevelOneByName(name));
 	}
 	
 	@PostMapping("/group_level_ones/create")
-	//@PreAuthorize("hasAnyAuthority('TILL-CREATE')")
+	@PreAuthorize("hasAnyAuthority('GROUP-CREATE')")
 	public ResponseEntity<LevelOne>createLevelOne(
 			@RequestBody LevelOne levelOne){
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/group_level_ones/create").toUriString());
@@ -360,7 +340,7 @@ public class UnitResource {
 	}
 		
 	@PutMapping("/group_level_ones/update")
-	//@PreAuthorize("hasAnyAuthority('USER-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('GROUP-CREATE','GROUP-UPDATE')")
 	public ResponseEntity<LevelOne>updateLevelOne(
 			@RequestBody LevelOne levelOne, 
 			HttpServletRequest request){
@@ -369,7 +349,7 @@ public class UnitResource {
 	}
 	
 	@DeleteMapping("/group_level_ones/delete")
-	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	@PreAuthorize("hasAnyAuthority('GROUP-DELETE')")
 	public ResponseEntity<Boolean> deleteLevelOne(
 			@RequestParam(name = "id") Long id){
 		LevelOne levelOne = unitService.getLevelOne(id);
@@ -382,27 +362,24 @@ public class UnitResource {
 	
 	
 	@GetMapping("/group_level_twos")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<List<LevelTwo>>getLevelTwos(){
 		return ResponseEntity.ok().body(unitService.getLevelTwos());
 	}
 	
 	@GetMapping("/group_level_twos/get")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<LevelTwo> getLevelTwo(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(unitService.getLevelTwo(id));
 	}
 	
 	@GetMapping("/group_level_twos/get_by_name")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<LevelTwo> getLevelTwoByName(
 			@RequestParam(name = "name") String name){
 		return ResponseEntity.ok().body(unitService.getLevelTwoByName(name));
 	}
 	
 	@PostMapping("/group_level_twos/create")
-	//@PreAuthorize("hasAnyAuthority('TILL-CREATE')")
+	@PreAuthorize("hasAnyAuthority('GROUP-CREATE')")
 	public ResponseEntity<LevelTwo>createLevelTwo(
 			@RequestBody LevelTwo levelTwo){
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/group_level_twos/create").toUriString());
@@ -410,7 +387,7 @@ public class UnitResource {
 	}
 		
 	@PutMapping("/group_level_twos/update")
-	//@PreAuthorize("hasAnyAuthority('USER-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('GROUP-CREATE','GROUP-UPDATE')")
 	public ResponseEntity<LevelTwo>updateLevelTwo(
 			@RequestBody LevelTwo levelTwo, 
 			HttpServletRequest request){
@@ -419,7 +396,7 @@ public class UnitResource {
 	}
 	
 	@DeleteMapping("/group_level_twos/delete")
-	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	@PreAuthorize("hasAnyAuthority('GROUP-DELETE')")
 	public ResponseEntity<Boolean> deleteLevelTwo(
 			@RequestParam(name = "id") Long id){
 		LevelTwo levelTwo = unitService.getLevelTwo(id);
@@ -428,27 +405,24 @@ public class UnitResource {
 	}
 	
 	@GetMapping("/group_level_threes")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<List<LevelThree>>getLevelThrees(){
 		return ResponseEntity.ok().body(unitService.getLevelThrees());
 	}
 	
 	@GetMapping("/group_level_threes/get")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<LevelThree> getLevelThree(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(unitService.getLevelThree(id));
 	}
 	
 	@GetMapping("/group_level_threes/get_by_name")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<LevelThree> getLevelThreeByName(
 			@RequestParam(name = "name") String name){
 		return ResponseEntity.ok().body(unitService.getLevelThreeByName(name));
 	}
 	
 	@PostMapping("/group_level_threes/create")
-	//@PreAuthorize("hasAnyAuthority('TILL-CREATE')")
+	@PreAuthorize("hasAnyAuthority('GROUP-CREATE')")
 	public ResponseEntity<LevelThree>createLevelThree(
 			@RequestBody LevelThree levelThree){
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/group_level_threes/create").toUriString());
@@ -456,7 +430,7 @@ public class UnitResource {
 	}
 		
 	@PutMapping("/group_level_threes/update")
-	//@PreAuthorize("hasAnyAuthority('USER-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('GROUP-CREATE','GROUP-UPDATE')")
 	public ResponseEntity<LevelThree>updateLevelThree(
 			@RequestBody LevelThree levelThree, 
 			HttpServletRequest request){
@@ -465,7 +439,7 @@ public class UnitResource {
 	}
 	
 	@DeleteMapping("/group_level_threes/delete")
-	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	@PreAuthorize("hasAnyAuthority('GROUP-DELETE')")
 	public ResponseEntity<Boolean> deleteLevelThree(
 			@RequestParam(name = "id") Long id){
 		LevelThree levelThree = unitService.getLevelThree(id);
@@ -476,27 +450,24 @@ public class UnitResource {
 	
 	
 	@GetMapping("/group_level_fours")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<List<LevelFour>>getLevelFours(){
 		return ResponseEntity.ok().body(unitService.getLevelFours());
 	}
 	
 	@GetMapping("/group_level_fours/get")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<LevelFour> getLevelFour(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(unitService.getLevelFour(id));
 	}
 	
 	@GetMapping("/group_level_fours/get_by_name")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<LevelFour> getLevelFourByName(
 			@RequestParam(name = "name") String name){
 		return ResponseEntity.ok().body(unitService.getLevelFourByName(name));
 	}
 	
 	@PostMapping("/group_level_fours/create")
-	//@PreAuthorize("hasAnyAuthority('TILL-CREATE')")
+	@PreAuthorize("hasAnyAuthority('GROUP-CREATE')")
 	public ResponseEntity<LevelFour>createLevelFour(
 			@RequestBody LevelFour levelFour){
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/group_level_fours/create").toUriString());
@@ -504,7 +475,7 @@ public class UnitResource {
 	}
 		
 	@PutMapping("/group_level_fours/update")
-	//@PreAuthorize("hasAnyAuthority('USER-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('GROUP-CREATE','GROUP-UPDATE')")
 	public ResponseEntity<LevelFour>updateLevelFour(
 			@RequestBody LevelFour levelFour, 
 			HttpServletRequest request){
@@ -513,7 +484,7 @@ public class UnitResource {
 	}
 	
 	@DeleteMapping("/group_level_fours/delete")
-	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	@PreAuthorize("hasAnyAuthority('GROUP-DELETE')")
 	public ResponseEntity<Boolean> deleteLevelFour(
 			@RequestParam(name = "id") Long id){
 		LevelFour levelFour = unitService.getLevelFour(id);

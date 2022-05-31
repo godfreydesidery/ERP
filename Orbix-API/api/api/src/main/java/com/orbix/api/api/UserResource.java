@@ -75,13 +75,11 @@ public class UserResource {
 	private final UserService userService;
 	
 	@GetMapping("/users")
-	@PreAuthorize("hasAnyAuthority('USER-READ')")
 	public ResponseEntity<List<User>>getUsers(){
 		return ResponseEntity.ok().body(userService.getUsers());
 	}
 	
 	@GetMapping("/users/get_user")
-	@PreAuthorize("hasAnyAuthority('USER-READ')")
 	public ResponseEntity<User> getUser(
 			@RequestParam(name = "username") String username){
 		return ResponseEntity.ok().body(userService.getUser(username));
@@ -113,7 +111,7 @@ public class UserResource {
 	}
 		
 	@PutMapping("/users/update")
-	@PreAuthorize("hasAnyAuthority('USER-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('USER-CREATE','USER-UPDATE')")
 	public ResponseEntity<User>updateUser(
 			@RequestBody User user, 
 			HttpServletRequest request){
@@ -160,7 +158,6 @@ public class UserResource {
 	}
 	
 	@GetMapping("/roles/get_role")
-	@PreAuthorize("hasAnyAuthority('ROLE-READ')")
 	public ResponseEntity<Role> getRole(
 			@RequestParam(name = "name") String name){
 		return ResponseEntity.ok().body(userService.getRole(name));
@@ -178,7 +175,7 @@ public class UserResource {
 	}
 	
 	@PutMapping("/roles/update")
-	@PreAuthorize("hasAnyAuthority('ROLE-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('ROLE-CREATE','ROLE-UPDATE')")
 	public ResponseEntity<Role>updateRole(
 			@RequestBody Role role){
 		Role roleToUpdate = userService.getRoleById(role.getId());		

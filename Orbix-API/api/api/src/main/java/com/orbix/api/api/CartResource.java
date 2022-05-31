@@ -55,7 +55,6 @@ public class CartResource {
 	private final 	AllocationService allocationService;
 	
 	@GetMapping("/carts/load")
-	//@PreAuthorize("hasAnyAuthority('MATERIAL-READ')")
 	public ResponseEntity<Cart> loadCart(
 			@RequestParam(name = "till_no") String no){
 		Optional<Till> t = tillRepository.findByNo(no);
@@ -66,7 +65,6 @@ public class CartResource {
 	}
 	
 	@GetMapping("/carts/create")
-	//@PreAuthorize("hasAnyAuthority('MATERIAL-READ')")
 	public ResponseEntity<Cart> createCart(
 			@RequestParam(name = "till_no") String no){
 		Optional<Till> t = tillRepository.findByNo(no);
@@ -78,7 +76,6 @@ public class CartResource {
 	}
 	
 	@PostMapping("/carts/add_detail")
-	//@PreAuthorize("hasAnyAuthority('PRODUCT-CREATE')")
 	public ResponseEntity<Boolean>addDetail(
 			@RequestBody CartDetail cartDetail){		
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/carts/add_detail").toUriString());
@@ -86,7 +83,6 @@ public class CartResource {
 	}
 	
 	@PostMapping("/carts/update_qty")
-	//@PreAuthorize("hasAnyAuthority('PRODUCT-CREATE')")
 	public ResponseEntity<Boolean>updateQty(
 			@RequestBody CartDetail cartDetail){		
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/carts/update_qty").toUriString());
@@ -94,7 +90,6 @@ public class CartResource {
 	}
 	
 	@PostMapping("/carts/update_discount")
-	//@PreAuthorize("hasAnyAuthority('PRODUCT-CREATE')")
 	public ResponseEntity<Boolean>updateDiscount(
 			@RequestBody CartDetail cartDetail){		
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/carts/update_discount").toUriString());
@@ -102,7 +97,6 @@ public class CartResource {
 	}
 	
 	@PostMapping("/carts/void")
-	//@PreAuthorize("hasAnyAuthority('PRODUCT-CREATE')")
 	public ResponseEntity<Boolean>voidd(
 			@RequestBody CartDetail cartDetail,
 			HttpServletRequest request){		
@@ -111,7 +105,6 @@ public class CartResource {
 	}
 	
 	@PostMapping("/carts/unvoid")
-	//@PreAuthorize("hasAnyAuthority('PRODUCT-CREATE')")
 	public ResponseEntity<Boolean>unvoid(
 			@RequestBody CartDetail cartDetail){
 		Optional<CartDetail> d = cartDetailRepository.findById(cartDetail.getId());
@@ -130,7 +123,6 @@ public class CartResource {
 	}
 	
 	@PostMapping("/carts/pay")
-	//@PreAuthorize("hasAnyAuthority('PRODUCT-CREATE')")
 	public ResponseEntity<Receipt>pay(
 			@RequestBody Payment payment,
 			@RequestParam(name = "till_no") String tillNo,

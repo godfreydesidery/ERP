@@ -47,6 +47,7 @@ public class Grn {
 	private String no;
 	@Column(unique = true)
 	private String orderNo;
+	private String refNo;
 	private double invoiceAmount = 0;
 	private String invoiceNo;	
 	private String status;	

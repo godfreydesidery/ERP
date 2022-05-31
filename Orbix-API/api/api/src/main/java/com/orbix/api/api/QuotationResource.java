@@ -62,33 +62,28 @@ public class QuotationResource {
 	private final 	ProductRepository productRepository;
 	
 	@GetMapping("/quotations")
-	@PreAuthorize("hasAnyAuthority('QUOTATION-READ')")
 	public ResponseEntity<List<QuotationModel>>getQuotations(){
 		return ResponseEntity.ok().body(quotationService.getAllVisible());
 	}
 	
 	@GetMapping("/quotations/get")
-	@PreAuthorize("hasAnyAuthority('QUOTATION-READ')")
 	public ResponseEntity<QuotationModel> getQuotation(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(quotationService.get(id));
 	}
 	
 	@GetMapping("/quotations/get_by_no")
-	@PreAuthorize("hasAnyAuthority('QUOTATION-READ')")
 	public ResponseEntity<QuotationModel> getQuotationByNo(
 			@RequestParam(name = "no") String no){
 		return ResponseEntity.ok().body(quotationService.getByNo(no));
 	}
 	
 	@GetMapping("/quotations/request_no")
-	//@PreAuthorize("hasAnyAuthority('LPO-READ')")
 	public ResponseEntity<RecordModel> requestNo(){
 		return ResponseEntity.ok().body(quotationService.requestQuotationNo());
 	}
 	
 	@GetMapping("/quotation_details/get_by_quotation")
-	@PreAuthorize("hasAnyAuthority('QUOTATION-READ')")
 	public ResponseEntity<List<QuotationDetailModel>>getQuotationDetails(
 			@RequestParam(name = "id") Long id){		
 		return ResponseEntity.ok().body(quotationService.getAllDetails(quotationRepository.findById(id).get()));
@@ -116,7 +111,7 @@ public class QuotationResource {
 	}
 	
 	@PutMapping("/quotations/update")
-	@PreAuthorize("hasAnyAuthority('QUOTATION-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('QUOTATION-CREATE','QUOTATION-UPDATE')")
 	public ResponseEntity<QuotationModel>updateQuotation(
 			@RequestBody Quotation quotation,
 			HttpServletRequest request){
@@ -186,7 +181,7 @@ public class QuotationResource {
 	}
 	
 	@PutMapping("/quotations/archive")
-	@PreAuthorize("hasAnyAuthority('QUOTATION-CREATE','QUOTATION-UPDATE','QUOTATION-ARCHIVE')")
+	@PreAuthorize("hasAnyAuthority('QUOTATION-UPDATE','QUOTATION-ARCHIVE')")
 	public ResponseEntity<Boolean>archiveQuotation(
 			@RequestBody Quotation quotation,
 			HttpServletRequest request){		
@@ -252,7 +247,6 @@ public class QuotationResource {
 	}
 	
 	@GetMapping("/quotation_details/get")
-	@PreAuthorize("hasAnyAuthority('QUOTATION-CREATE','QUOTATION-UPDATE')")
 	public ResponseEntity<QuotationDetailModel>getDetail(
 			@RequestParam(name = "id") Long id){		
 		Optional<QuotationDetail> d = quotationDetailRepository.findById(id);

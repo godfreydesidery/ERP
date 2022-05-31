@@ -6,6 +6,7 @@ package com.orbix.api.api;
 import java.time.LocalDate;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +43,7 @@ public class DayResource {
 	}
 	
 	@GetMapping("/days/end_day")
+	//@PreAuthorize("hasAnyAuthority('DAY-CREATE','DAY-UPDATE')")
 	public boolean endDay(){		
 		return dayService.endDay();
 	}

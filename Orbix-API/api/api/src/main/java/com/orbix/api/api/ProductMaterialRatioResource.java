@@ -10,6 +10,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,20 +55,17 @@ public class ProductMaterialRatioResource {
 	private final MaterialRepository materialRepository;
 	
 	@GetMapping("/product_material_ratios")
-	//@PreAuthorize("hasAnyAuthority('PRODUCTION-READ')")
 	public ResponseEntity<List<ProductMaterialRatio>>getProductMaterialRatio(){
 		return ResponseEntity.ok().body(productMaterialRatioRepository.findAll());
 	}
 	
 	@GetMapping("/product_material_ratios/get")
-	//@PreAuthorize("hasAnyAuthority('PACKING_LIST-READ')")
 	public ResponseEntity<ProductMaterialRatioModel> getProductMaterialRatio(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(productMaterialRatioService.get(id));
 	}
 	
 	@GetMapping("/product_material_ratios/get_by_product")
-	//@PreAuthorize("hasAnyAuthority('PACKING_LIST-READ')")
 	public ResponseEntity<ProductMaterialRatioModel> getProductMaterialRatioByProduct(
 			@RequestParam(name = "id") Long id){
 		Optional<Product> prod = productRepository.findById(id);
@@ -78,7 +76,7 @@ public class ProductMaterialRatioResource {
 	}
 	
 	@PostMapping("/product_material_ratios/create")
-	//@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE')")
+	@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE')")
 	public ResponseEntity<ProductMaterialRatioModel>createProductMaterialRatio(
 			@RequestBody ProductMaterialRatio productMaterialRatio,
 			HttpServletRequest request){
@@ -109,7 +107,7 @@ public class ProductMaterialRatioResource {
 	}
 	
 	@PutMapping("/product_material_ratios/update")
-	//@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE')")
+	@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE','PRODUCTION-UPDATE')")
 	public ResponseEntity<ProductMaterialRatioModel>updateProductMaterialRatio(
 			@RequestBody ProductMaterialRatio productMaterialRatio,
 			HttpServletRequest request){
@@ -132,7 +130,7 @@ public class ProductMaterialRatioResource {
 	}
 	
 	@DeleteMapping("/product_material_ratios/delete")
-	//@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE')")
+	@PreAuthorize("hasAnyAuthority('PRODUCTION-DELETE')")
 	public ResponseEntity<Boolean>deleteProductMaterialRatio(
 			@RequestParam(name = "id") Long id){				
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/product_material_ratios/delete").toUriString());

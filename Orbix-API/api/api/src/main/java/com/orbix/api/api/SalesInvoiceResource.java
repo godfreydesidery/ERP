@@ -68,13 +68,11 @@ public class SalesInvoiceResource {
 	private final 	ProductRepository productRepository;
 	
 	@GetMapping("/sales_invoices")
-	@PreAuthorize("hasAnyAuthority('SALES_INVOICE-READ')")
 	public ResponseEntity<List<SalesInvoiceModel>>getSalesInvoices(){
 		return ResponseEntity.ok().body(salesInvoiceService.getAllVisible());
 	}
 	
 	@GetMapping("/sales_invoices/customer")
-	@PreAuthorize("hasAnyAuthority('SALES_INVOICE-READ')")
 	public ResponseEntity<List<SalesInvoiceModel>>getSalesInvoices(
 			@RequestParam(name = "id") Long id){
 		Optional<Customer> c = customerRepository.findById(id);
@@ -85,27 +83,23 @@ public class SalesInvoiceResource {
 	}
 	
 	@GetMapping("/sales_invoices/get")
-	@PreAuthorize("hasAnyAuthority('SALES_INVOICE-READ')")
 	public ResponseEntity<SalesInvoiceModel> getSalesInvoice(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(salesInvoiceService.get(id));
 	}
 	
 	@GetMapping("/sales_invoices/get_by_no")
-	@PreAuthorize("hasAnyAuthority('SALES_INVOICE-READ')")
 	public ResponseEntity<SalesInvoiceModel> getSalesInvoiceByNo(
 			@RequestParam(name = "no") String no){
 		return ResponseEntity.ok().body(salesInvoiceService.getByNo(no));		
 	}
 	
 	@GetMapping("/sales_invoices/request_no")
-	//@PreAuthorize("hasAnyAuthority('LPO-READ')")
 	public ResponseEntity<RecordModel> requestNo(){
 		return ResponseEntity.ok().body(salesInvoiceService.requestSalesInvoiceNo());
 	}
 	
 	@GetMapping("/sales_invoice_details/get_by_salesInvoice")
-	@PreAuthorize("hasAnyAuthority('SALES_INVOICE-READ')")
 	public ResponseEntity<List<SalesInvoiceDetailModel>>getSalesInvoiceDetails(
 			@RequestParam(name = "id") Long id){		
 		return ResponseEntity.ok().body(salesInvoiceService.getAllDetails(salesInvoiceRepository.findById(id).get()));
@@ -132,7 +126,7 @@ public class SalesInvoiceResource {
 	}
 	
 	@PutMapping("/sales_invoices/update")
-	@PreAuthorize("hasAnyAuthority('SALES_INVOICE-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('SALES_INVOICE-CREATE','SALES_INVOICE-UPDATE')")
 	public ResponseEntity<SalesInvoiceModel>updateSalesInvoice(
 			@RequestBody SalesInvoice salesInvoice,
 			HttpServletRequest request){
@@ -201,7 +195,7 @@ public class SalesInvoiceResource {
 	}
 	
 	@PutMapping("/sales_invoices/archive")
-	@PreAuthorize("hasAnyAuthority('SALES_INVOICE-CREATE','SALES_INVOICE-UPDATE','SALES_INVOICE-ARCHIVE')")
+	@PreAuthorize("hasAnyAuthority('SALES_INVOICE-UPDATE','SALES_INVOICE-ARCHIVE')")
 	public ResponseEntity<Boolean>archiveSalesInvoice(
 			@RequestBody SalesInvoice salesInvoice,
 			HttpServletRequest request){		
@@ -214,7 +208,7 @@ public class SalesInvoiceResource {
 	}
 	
 	@PutMapping("/sales_invoices/archive_all")
-	@PreAuthorize("hasAnyAuthority('SALES_INVOICE-CREATE','SALES_INVOICE-UPDATE','SALES_INVOICE-ARCHIVE')")
+	@PreAuthorize("hasAnyAuthority('SALES_INVOICE-UPDATE','SALES_INVOICE-ARCHIVE')")
 	public ResponseEntity<Boolean>archiveSalesInvoices(){			
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/sales_invoices/archive_all").toUriString());
 		return ResponseEntity.created(uri).body(salesInvoiceService.archiveAll());
@@ -271,7 +265,6 @@ public class SalesInvoiceResource {
 	}
 	
 	@GetMapping("/sales_invoice_details/get")
-	@PreAuthorize("hasAnyAuthority('SALES_INVOICE-CREATE','SALES_INVOICE-UPDATE')")
 	public ResponseEntity<SalesInvoiceDetailModel>getDetail(
 			@RequestParam(name = "id") Long id){		
 		Optional<SalesInvoiceDetail> d = salesInvoiceDetailRepository.findById(id);

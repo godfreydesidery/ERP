@@ -54,20 +54,17 @@ public class TillResource {
 	private final FloatService floatService;
 	
 	@GetMapping("/tills")
-	@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<List<Till>>getTills(){
 		return ResponseEntity.ok().body(tillService.getTills());
 	}
 	
 	@GetMapping("/tills/get")
-	@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<Till> getTill(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(tillService.getTill(id));
 	}
 	
 	@GetMapping("/tills/get_by_till_no")
-	//@PreAuthorize("hasAnyAuthority('TILL-READ')")
 	public ResponseEntity<Till> getTillByTillNo(
 			@RequestParam(name = "till_no") String no){
 		return ResponseEntity.ok().body(tillService.getTillByNo(no));
@@ -89,7 +86,7 @@ public class TillResource {
 	}
 		
 	@PutMapping("/tills/update")
-	@PreAuthorize("hasAnyAuthority('USER-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('TILL-CREATE','TILL-UPDATE')")
 	public ResponseEntity<Till>updateTill(
 			@RequestBody Till till, 
 			HttpServletRequest request){
@@ -107,7 +104,7 @@ public class TillResource {
 	}
 	
 	@PostMapping("/tills/activate")
-	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	@PreAuthorize("hasAnyAuthority('TILL-UPDATE')")
 	public ResponseEntity<Till> activateTill(
 			@RequestParam(name = "id") Long id){
 		Till till = tillService.getTill(id);
@@ -117,7 +114,7 @@ public class TillResource {
 	}
 	
 	@PostMapping("/tills/deactivate")
-	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	@PreAuthorize("hasAnyAuthority('TILL-UPDATE')")
 	public ResponseEntity<Till> deactivateTill(
 			@RequestParam(name = "id") Long id){
 		Till till = tillService.getTill(id);
@@ -127,7 +124,7 @@ public class TillResource {
 	}
 	
 	@PostMapping("/tills/activate_pos_printer")
-	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	@PreAuthorize("hasAnyAuthority('TILL-UPDATE')")
 	public ResponseEntity<Till> activatePosPrinter(
 			@RequestParam(name = "id") Long id){
 		Till till = tillService.getTill(id);
@@ -137,7 +134,7 @@ public class TillResource {
 	}
 	
 	@PostMapping("/tills/deactivate_pos_printer")
-	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	@PreAuthorize("hasAnyAuthority('TILL-UPDATE')")
 	public ResponseEntity<Till> deactivatePosPrinter(
 			@RequestParam(name = "id") Long id){
 		Till till = tillService.getTill(id);
@@ -147,7 +144,7 @@ public class TillResource {
 	}
 	
 	@PostMapping("/tills/activate_fiscal_printer")
-	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	@PreAuthorize("hasAnyAuthority('TILL-UPDATE')")
 	public ResponseEntity<Till> activateFiscalPrinter(
 			@RequestParam(name = "id") Long id){
 		Till till = tillService.getTill(id);
@@ -157,7 +154,7 @@ public class TillResource {
 	}
 	
 	@PostMapping("/tills/deactivate_fiscal_printer")
-	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	@PreAuthorize("hasAnyAuthority('TILL-UPDATE')")
 	public ResponseEntity<Till> deactivateFiscalPrinter(
 			@RequestParam(name = "id") Long id){
 		Till till = tillService.getTill(id);
@@ -167,7 +164,7 @@ public class TillResource {
 	}
 	
 	@PostMapping("/tills/enable_negative_sales")
-	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	@PreAuthorize("hasAnyAuthority('TILL-UPDATE')")
 	public ResponseEntity<Till> enableNegativeSales(
 			@RequestParam(name = "id") Long id){
 		Till till = tillService.getTill(id);
@@ -177,7 +174,7 @@ public class TillResource {
 	}
 	
 	@PostMapping("/tills/disable_negative_sales")
-	//@PreAuthorize("hasAnyAuthority('TILL-DELETE')")
+	@PreAuthorize("hasAnyAuthority('TILL-UPDATE')")
 	public ResponseEntity<Till> disableNegativeSales(
 			@RequestParam(name = "id") Long id){
 		Till till = tillService.getTill(id);
@@ -187,7 +184,7 @@ public class TillResource {
 	}
 	
 	@PostMapping("/tills/cash_pick_up")
-	//@PreAuthorize("hasAnyAuthority('TILL-CREATE')")
+	@PreAuthorize("hasAnyAuthority('TILL-UPDATE')")
 	public ResponseEntity<Void>cashPickUp(
 			@RequestBody CashPickUp cashPickUp,
 			HttpServletRequest request){
@@ -224,7 +221,7 @@ public class TillResource {
 	}
 	
 	@PostMapping("/tills/update_float")
-	//@PreAuthorize("hasAnyAuthority('TILL-CREATE')")
+	@PreAuthorize("hasAnyAuthority('TILL-UPDATE')")
 	public ResponseEntity<Void>float_(
 			@RequestBody Floatt float_,
 			HttpServletRequest request){

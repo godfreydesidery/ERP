@@ -39,8 +39,7 @@ public class EmployeeResource {
 
 	private final 	EmployeeService employeeService;
 	
-	@GetMapping("/employees")
-	@PreAuthorize("hasAnyAuthority('EMPLOYEE-READ')")
+	@GetMapping("/employees")	
 	public ResponseEntity<List<Employee>>getEmployees(){
 		return ResponseEntity.ok().body(employeeService.getAll());
 	}
@@ -53,21 +52,18 @@ public class EmployeeResource {
 	}
 	
 	@GetMapping("/employees/get")
-	@PreAuthorize("hasAnyAuthority('EMPLOYEE-READ')")
 	public ResponseEntity<Employee> getEmployee(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(employeeService.get(id));
 	}
 	
 	@GetMapping("/employees/get_by_no")
-	@PreAuthorize("hasAnyAuthority('EMPLOYEE-READ')")
 	public ResponseEntity<Employee> getEmployeeByNo(
 			@RequestParam(name = "no") String no){
 		return ResponseEntity.ok().body(employeeService.getByNo(no));
 	}
 	
 	@GetMapping("/employees/get_by_alias")
-	@PreAuthorize("hasAnyAuthority('EMPLOYEE-READ')")
 	public ResponseEntity<Employee> getEmployeeByName(
 			@RequestParam(name = "alias") String name){
 		return ResponseEntity.ok().body(employeeService.getByName(name));
@@ -83,7 +79,7 @@ public class EmployeeResource {
 	}
 		
 	@PutMapping("/employees/update")
-	@PreAuthorize("hasAnyAuthority('EMPLOYEE-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('EMPLOYEE-CREATE','EMPLOYEE-UPDATE')")
 	public ResponseEntity<Employee>updateEmployee(
 			@RequestBody Employee employee, 
 			HttpServletRequest request){

@@ -566,6 +566,10 @@ public class ProductionServiceImpl implements ProductionService {
 		return model;
 	}
 
+	/**
+	 * This function is not used, a similar function is found in the resource controller
+	 * If editing is needed, please edit the functions in the resource controller
+	 */
 	@Override
 	public ProductionProductModel verifyProduct(Production production, Product product, double qty, HttpServletRequest request) {
 		/**
@@ -580,10 +584,10 @@ public class ProductionServiceImpl implements ProductionService {
 		if(qty <= 0) {
 			throw new InvalidEntryException("Could not verify product, invalid quantity value");
 		}
-		Optional<ProductionUnverifiedProduct> pum = productionUnverifiedProductRepository.findByProductionAndProduct(production, product);
+		Optional<ProductionUnverifiedProduct> pup = productionUnverifiedProductRepository.findByProductionAndProduct(production, product);
 		List<ProductionProduct> products = productionProductRepository.findByProduction(production);
 		ProductionProduct p = new ProductionProduct();
-		if(pum.isPresent()) {
+		if(pup.isPresent()) {
 			/**
 			 * Checks whether product is present in verified list, if it is present
 			 * Remove product from unverified list
@@ -592,8 +596,8 @@ public class ProductionServiceImpl implements ProductionService {
 			 * Update product stock cards
 			 */
 			for(ProductionProduct pm : products) {
-				if(pum.get().getId() == pm.getId()) {
-					productionUnverifiedProductRepository.delete(pum.get());					
+				if(pup.get().getId() == pm.getId()) {
+					productionUnverifiedProductRepository.delete(pup.get());					
 					pm.setQty(pm.getQty() + qty);					
 					p = productionProductRepository.saveAndFlush(pm);
 				}
@@ -609,7 +613,7 @@ public class ProductionServiceImpl implements ProductionService {
 		/**
 		 * Create an updated stock
 		 */
-		double stock = productRepository.findById(pum.get().getId()).get().getStock() - qty;
+		double stock = productRepository.findById(pup.get().getId()).get().getStock() + qty;
 		/**
 		 * Update product stock
 		 */
@@ -621,7 +625,7 @@ public class ProductionServiceImpl implements ProductionService {
 		 */
 		ProductStockCard stockCard = new ProductStockCard();
 		
-		stockCard.setQtyOut(qty);
+		stockCard.setQtyIn(qty);
 		stockCard.setProduct(product);
 		stockCard.setBalance(stock);
 		stockCard.setDay(dayRepository.getCurrentBussinessDay());

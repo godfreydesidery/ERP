@@ -61,27 +61,24 @@ public class DrpResource {
 	private final 	ProductRepository productRepository;
 	
 	@GetMapping("/drps")
-	@PreAuthorize("hasAnyAuthority('DRP-READ')")
 	public ResponseEntity<List<DrpModel>>getDrps(){
 		return ResponseEntity.ok().body(drpService.getAllVisible());
 	}
 	
 	@GetMapping("/drps/get")
-	//@PreAuthorize("hasAnyAuthority('DRP-READ')")
 	public ResponseEntity<DrpModel> getDrp(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(drpService.get(id));
 	}
 	
 	@GetMapping("/drps/get_by_no")
-	//@PreAuthorize("hasAnyAuthority('DRP-READ')")
 	public ResponseEntity<DrpModel> getDrpByNo(
 			@RequestParam(name = "no") String no){
 		return ResponseEntity.ok().body(drpService.getByNo(no));
 	}
 	
 	@GetMapping("/drps/request_no")
-	//@PreAuthorize("hasAnyAuthority('DRP-READ')")
+	@PreAuthorize("hasAnyAuthority('DRP-CREATE')")
 	public ResponseEntity<RecordModel> requestNo(){
 		return ResponseEntity.ok().body(drpService.requestDrpNo());
 	}
@@ -140,7 +137,6 @@ public class DrpResource {
 		if(l.get().getStatus().equals("PENDING")) {
 			l.get().setApprovedBy(userService.getUserId(request));
 			l.get().setApprovedAt(dayService.getDayId());
-			l.get().setStatus("APPROVED");
 		}else {
 			throw new InvalidOperationException("Could not approve, not a PENDING DRP");
 		}
@@ -167,7 +163,7 @@ public class DrpResource {
 	}
 	
 	@PutMapping("/drps/archive")
-	@PreAuthorize("hasAnyAuthority('DRP-CREATE','DRP-UPDATE','DRP-ARCHIVE')")
+	@PreAuthorize("hasAnyAuthority('DRP-ARCHIVE')")
 	public ResponseEntity<Boolean>archiveDrp(
 			@RequestBody Drp drp,
 			HttpServletRequest request){		
@@ -180,7 +176,7 @@ public class DrpResource {
 	}
 	
 	@PutMapping("/drps/archive_all")
-	@PreAuthorize("hasAnyAuthority('DRP-CREATE','DRP-UPDATE','DRP-ARCHIVE')")
+	@PreAuthorize("hasAnyAuthority('DRP-ARCHIVE')")
 	public ResponseEntity<Boolean>archiveDrps(){			
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/drps/archive_all").toUriString());
 		return ResponseEntity.created(uri).body(drpService.archiveAll());
@@ -233,7 +229,6 @@ public class DrpResource {
 	}
 	
 	@GetMapping("/drp_details/get_by_product_id_and_drp_id")
-	@PreAuthorize("hasAnyAuthority('DRP-CREATE','DRP-UPDATE')")
 	public ResponseEntity<DrpDetailModel>getDrpDetailByProductAndDrp(
 			@RequestParam(name = "product_id") Long productId,
 			@RequestParam(name = "drp_id") Long drpId){
@@ -259,7 +254,6 @@ public class DrpResource {
 	}
 	
 	@GetMapping("/drp_details/get")
-	@PreAuthorize("hasAnyAuthority('DRP-CREATE','DRP-UPDATE')")
 	public ResponseEntity<DrpDetailModel>getDetail(
 			@RequestParam(name = "id") Long id){		
 		Optional<DrpDetail> d = drpDetailRepository.findById(id);

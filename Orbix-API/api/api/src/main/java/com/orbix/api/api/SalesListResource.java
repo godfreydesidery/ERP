@@ -62,34 +62,30 @@ public class SalesListResource {
 	private final 	ProductRepository productRepository;
 	
 	@GetMapping("/sales_lists")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-READ')")
 	public ResponseEntity<List<SalesListModel>>getSalesLists(){
 		return ResponseEntity.ok().body(salesListService.getAllVisible());
 	}
 	
 	@GetMapping("/sales_lists/get")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-READ')")
 	public ResponseEntity<SalesListModel> getSalesList(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(salesListService.get(id));
 	}
 	
 	@GetMapping("/sales_lists/get_by_no")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-READ')")
 	public ResponseEntity<SalesListModel> getSalesListByNo(
 			@RequestParam(name = "no") String no){
 		return ResponseEntity.ok().body(salesListService.getByNo(no));
 	}
 	
-	@GetMapping("/sales_list_details/get_by_salesList")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-READ')")
+	@GetMapping("/sales_list_details/get_by_sales_list")
 	public ResponseEntity<List<SalesListDetailModel>>getSalesListDetails(
 			@RequestParam(name = "id") Long id){		
 		return ResponseEntity.ok().body(salesListService.getAllDetails(salesListRepository.findById(id).get()));
 	}
 	
 	@PostMapping("/sales_lists/create")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-CREATE')")
+	@PreAuthorize("hasAnyAuthority('SALES_LIST-CREATE')")
 	public ResponseEntity<SalesListModel>createSalesList(
 			@RequestBody SalesList salesList,
 			HttpServletRequest request){
@@ -114,7 +110,7 @@ public class SalesListResource {
 	}
 	
 	@PutMapping("/sales_lists/update")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('SALES_LIST-CREATE','PACKING_LIST-UPDATE')")
 	public ResponseEntity<SalesListModel>updateSalesList(
 			@RequestBody SalesList salesList,
 			HttpServletRequest request){
@@ -150,7 +146,7 @@ public class SalesListResource {
 	}
 	
 	@PutMapping("/sales_lists/approve")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-APPROVE')")
+	@PreAuthorize("hasAnyAuthority('SALES_LIST-APPROVE')")
 	public ResponseEntity<SalesListModel>postSalesList(
 			@RequestBody SalesList salesList,
 			HttpServletRequest request){		
@@ -178,7 +174,7 @@ public class SalesListResource {
 	}
 	
 	@PutMapping("/sales_lists/cancel")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-CANCEL')")
+	@PreAuthorize("hasAnyAuthority('SALES_LIST-CANCEL')")
 	public ResponseEntity<SalesListModel>cancelSalesList(
 			@RequestBody SalesList salesList,
 			HttpServletRequest request){		
@@ -196,7 +192,7 @@ public class SalesListResource {
 	}
 	
 	@PutMapping("/sales_lists/archive")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-CREATE','PACKING_LIST-UPDATE','PACKING_LIST-ARCHIVE')")
+	@PreAuthorize("hasAnyAuthority('SALES_LIST-UPDATE','SALES_LIST-ARCHIVE')")
 	public ResponseEntity<Boolean>archiveSalesList(
 			@RequestBody SalesList salesList,
 			HttpServletRequest request){		
@@ -209,14 +205,14 @@ public class SalesListResource {
 	}
 	
 	@PutMapping("/sales_lists/archive_all")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-CREATE','PACKING_LIST-UPDATE','PACKING_LIST-ARCHIVE')")
+	@PreAuthorize("hasAnyAuthority('SALES_LIST-UPDATE','SALES_LIST-ARCHIVE')")
 	public ResponseEntity<Boolean>archiveSalesLists(){			
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/sales_lists/archive_all").toUriString());
 		return ResponseEntity.created(uri).body(salesListService.archiveAll());
 	}
 	
 	@PostMapping("/sales_list_details/save")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-CREATE','PACKING_LIST-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('SALES_LIST-CREATE','SALES_LIST-UPDATE')")
 	public ResponseEntity<SalesListDetailModel>createSalesListDetail(
 			@RequestBody SalesListDetail salesListDetail){
 		
@@ -270,7 +266,6 @@ public class SalesListResource {
 	}
 	
 	@GetMapping("/sales_list_details/get")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-CREATE','PACKING_LIST-UPDATE')")
 	public ResponseEntity<SalesListDetailModel>getDetail(
 			@RequestParam(name = "id") Long id){		
 		Optional<SalesListDetail> d = salesListDetailRepository.findById(id);
@@ -293,7 +288,7 @@ public class SalesListResource {
 	}
 	
 	@DeleteMapping("/sales_list_details/delete")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-CREATE','PACKING_LIST-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('SALES_LIST-DELETE')")
 	public ResponseEntity<Boolean> deleteDetail(
 			@RequestParam(name = "id") Long id){		
 		Optional<SalesListDetail> d = salesListDetailRepository.findById(id);

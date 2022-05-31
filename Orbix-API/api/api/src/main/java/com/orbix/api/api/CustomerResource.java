@@ -39,7 +39,6 @@ public class CustomerResource {
 	private final 	CustomerService customerService;
 	
 	@GetMapping("/customers")
-	@PreAuthorize("hasAnyAuthority('ADMIN-READ')")
 	public ResponseEntity<List<Customer>>getCustomers(){
 		return ResponseEntity.ok().body(customerService.getAll());
 	}
@@ -52,21 +51,18 @@ public class CustomerResource {
 	}
 	
 	@GetMapping("/customers/get")
-	@PreAuthorize("hasAnyAuthority('CUSTOMER-READ')")
 	public ResponseEntity<Customer> getCustomer(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(customerService.get(id));
 	}
 	
 	@GetMapping("/customers/get_by_no")
-	@PreAuthorize("hasAnyAuthority('CUSTOMER-READ')")
 	public ResponseEntity<Customer> getCustomerByNo(
 			@RequestParam(name = "no") String no){
 		return ResponseEntity.ok().body(customerService.getByNo(no));
 	}
 	
 	@GetMapping("/customers/get_by_name")
-	@PreAuthorize("hasAnyAuthority('CUSTOMER-READ')")
 	public ResponseEntity<Customer> getCustomerByName(
 			@RequestParam(name = "name") String name){
 		return ResponseEntity.ok().body(customerService.getByName(name));
@@ -82,7 +78,7 @@ public class CustomerResource {
 	}
 		
 	@PutMapping("/customers/update")
-	@PreAuthorize("hasAnyAuthority('CUSTOMER-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('CUSTOMER-CREATE','CUSTOMER-UPDATE')")
 	public ResponseEntity<Customer>updateCustomer(
 			@RequestBody Customer customer, 
 			HttpServletRequest request){

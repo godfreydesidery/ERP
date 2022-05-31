@@ -55,27 +55,23 @@ public class SalesReceiptResource {
 	
 	
 	@GetMapping("/sales_receipts")
-	@PreAuthorize("hasAnyAuthority('SALES_RECEIPT-READ')")
 	public ResponseEntity<List<SalesReceiptModel>>getSalesReceipts(){
 		return ResponseEntity.ok().body(salesReceiptService.getAllVisible());
 	}
 	
 	@GetMapping("/sales_receipts/get")
-	@PreAuthorize("hasAnyAuthority('SALES_RECEIPT-READ')")
 	public ResponseEntity<SalesReceiptModel> getSalesReceipt(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(salesReceiptService.get(id));
 	}
 	
 	@GetMapping("/sales_receipts/get_by_no")
-	@PreAuthorize("hasAnyAuthority('SALES_RECEIPT-READ')")
 	public ResponseEntity<SalesReceiptModel> getSalesReceiptByNo(
 			@RequestParam(name = "no") String no){
 		return ResponseEntity.ok().body(salesReceiptService.getByNo(no));
 	}
 	
 	@GetMapping("/sales_receipts/request_no")
-	//@PreAuthorize("hasAnyAuthority('LPO-READ')")
 	public ResponseEntity<RecordModel> requestNo(){
 		return ResponseEntity.ok().body(salesReceiptService.requestSalesReceiptNo());
 	}
@@ -104,7 +100,7 @@ public class SalesReceiptResource {
 	}
 	
 	@PutMapping("/sales_receipts/update")
-	@PreAuthorize("hasAnyAuthority('SALES_RECEIPT-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('SALES_RECEIPT-CREATE','SALES_RECEIPT-UPDATE')")
 	public ResponseEntity<SalesReceiptModel>updateSalesReceipt(
 			@RequestBody SalesReceipt salesReceipt,
 			HttpServletRequest request){
@@ -171,7 +167,7 @@ public class SalesReceiptResource {
 	}
 	
 	@PutMapping("/sales_receipts/archive")
-	@PreAuthorize("hasAnyAuthority('SALES_RECEIPT-CREATE','SALES_RECEIPT-UPDATE','SALES_RECEIPT-ARCHIVE')")
+	@PreAuthorize("hasAnyAuthority('SALES_RECEIPT-UPDATE','SALES_RECEIPT-ARCHIVE')")
 	public ResponseEntity<Boolean>archiveSalesReceipt(
 			@RequestBody SalesReceipt salesReceipt,
 			HttpServletRequest request){		
@@ -184,7 +180,7 @@ public class SalesReceiptResource {
 	}
 	
 	@PutMapping("/sales_receipts/archive_all")
-	@PreAuthorize("hasAnyAuthority('SALES_RECEIPT-CREATE','SALES_RECEIPT-UPDATE','SALES_RECEIPT-ARCHIVE')")
+	@PreAuthorize("hasAnyAuthority('SALES_RECEIPT-UPDATE','SALES_RECEIPT-ARCHIVE')")
 	public ResponseEntity<Boolean>archiveSalesReceipts(){			
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/sales_receipts/archive_all").toUriString());
 		return ResponseEntity.created(uri).body(salesReceiptService.archiveAll());

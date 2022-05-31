@@ -344,24 +344,18 @@ public class DrpServiceImpl implements DrpService {
 		
 		
 		
-		
+		/**
+		 * Create a new GRN space
+		 */
 		Grn grn = new Grn();
 		grn.setNo("NA");
-		/**
-		 * First check if the GRN has order attached, if not, reject
-		 * If yes, check order status, if order status is not printed, reject
-		 * If PRINTED, search if there is a GRN associated with the order
-		 * 
-		 * 
-		 * 
-		 */
+		
 		Optional<Drp> l = drpRepository.findByNo(drp.getNo());
 		if(!l.isPresent()) {
 			/**
-			 * Checks if the LPO is present
-			 * GRN with a valid LPO will be processed
+			 * Checks if the DRP is present
 			 */
-			throw new InvalidOperationException("Could not process GRN, DRP not found");
+			throw new InvalidOperationException("Could not process DRP, DRP not found");
 		}
 		if(!l.get().getStatus().equals("PENDING")) {
 			/**
@@ -382,6 +376,7 @@ public class DrpServiceImpl implements DrpService {
 		//}
 		if(l.isPresent()) {
 			grn.setOrderNo(l.get().getNo());
+			grn.setRefNo(l.get().getNo());
 		}
 		/**
 		 * Create a GRN collection wrapper
@@ -398,8 +393,11 @@ public class DrpServiceImpl implements DrpService {
 				GrnDetail gd = new GrnDetail();
 				gd.setClientPriceVatIncl(d.getCostPriceVatIncl());
 				gd.setClientPriceVatExcl(d.getCostPriceVatExcl());
+				gd.setSupplierPriceVatIncl(d.getCostPriceVatIncl());
+				gd.setSupplierPriceVatExcl(d.getCostPriceVatExcl());
 				gd.setProduct(d.getProduct());
 				gd.setQtyOrdered(d.getQty());
+				gd.setQtyReceived(d.getQty());
 				grnDetails.add(gd);				
 			}
 		}

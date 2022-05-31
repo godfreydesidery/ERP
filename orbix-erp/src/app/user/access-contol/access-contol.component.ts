@@ -58,7 +58,7 @@ export class AccessContolComponent implements OnInit {
     this.roles        = []
     this.privileges   = {}
     this.selectedRole = ''
-    this.selectedRoleMessage = 'Select role to update'
+    this.selectedRoleMessage = ''
   }
 
   ngOnInit(): void {
@@ -155,7 +155,7 @@ export class AccessContolComponent implements OnInit {
       this.loadPrivileges(role)
     }else{
       this.selectedRole = ''
-      this.selectedRoleMessage = 'Select role to update'
+      this.selectedRoleMessage = 'Please select a Role to update'
     }
   }
 

@@ -81,27 +81,24 @@ public class ProductionResource {
 	private final DayService dayService;
 
 	@GetMapping("/productions")
-	//@PreAuthorize("hasAnyAuthority('PRODUCTION-READ')")
 	public ResponseEntity<List<ProductionModel>>getProductions(){
 		return ResponseEntity.ok().body(productionService.getAllVisible());
 	}
 	
 	@GetMapping("/productions/get")
-	//@PreAuthorize("hasAnyAuthority('PACKING_LIST-READ')")
 	public ResponseEntity<ProductionModel> getProduction(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(productionService.get(id));
 	}
 	
 	@GetMapping("/productions/get_by_no")
-	//@PreAuthorize("hasAnyAuthority('PACKING_LIST-READ')")
 	public ResponseEntity<ProductionModel> getProductionByNo(
 			@RequestParam(name = "no") String no){
 		return ResponseEntity.ok().body(productionService.getByNo(no));
 	}
 	
 	@PostMapping("/productions/create")
-	//@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE')")
+	@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE')")
 	public ResponseEntity<ProductionModel>createProduction(
 			@RequestBody Production production,
 			HttpServletRequest request){
@@ -116,13 +113,12 @@ public class ProductionResource {
 	}
 	
 	@GetMapping("/productions/request_no")
-	//@PreAuthorize("hasAnyAuthority('LPO-READ')")
 	public ResponseEntity<RecordModel> requestNo(){
 		return ResponseEntity.ok().body(productionService.requestProductionNo());
 	}
 	
 	@PostMapping("/productions/update")
-	//@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE')")
+	@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE','PRODUCTION-UPDATE')")
 	public ResponseEntity<ProductionModel>updateProduction(
 			@RequestBody Production production,
 			HttpServletRequest request){
@@ -143,7 +139,7 @@ public class ProductionResource {
 	}
 	
 	@PostMapping("/productions/close")
-	//@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE')")
+	@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE')")
 	public ResponseEntity<ProductionModel>closeProduction(
 			@RequestBody Production production,
 			HttpServletRequest request){
@@ -158,7 +154,7 @@ public class ProductionResource {
 	}
 	
 	@PostMapping("/productions/register_material")
-	//@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE')")
+	@PreAuthorize("hasAnyAuthority('PRODUCTION-UPDATE')")
 	public ResponseEntity<Material> registerMaterial(
 			@RequestBody MaterialProduction materialProduction){
 		Optional<Material> mat = materialRepository.findById(materialProduction.getMaterial().getId());
@@ -188,7 +184,7 @@ public class ProductionResource {
 	}
 	
 	@PostMapping("/productions/add_material")
-	//@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE')")
+	@PreAuthorize("hasAnyAuthority('PRODUCTION-UPDATE')")
 	public ResponseEntity<Material> addMaterial(
 			@RequestBody MaterialProduction materialProduction){
 		Optional<Material> mat = materialRepository.findById(materialProduction.getMaterial().getId());
@@ -220,7 +216,7 @@ public class ProductionResource {
 	}
 	
 	@PostMapping("/productions/add_product")
-	//@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE')")
+	@PreAuthorize("hasAnyAuthority('PRODUCTION-UPDATE')")
 	public ResponseEntity<Product> addProduct(
 			@RequestBody ProductProduction productProduction){
 		Optional<Product> p = productRepository.findById(productProduction.getProduct().getId());
@@ -256,7 +252,7 @@ public class ProductionResource {
 	}
 	
 	@PostMapping("/productions/remove_material")
-	//@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE')")
+	@PreAuthorize("hasAnyAuthority('PRODUCTION-UPDATE')")
 	public ResponseEntity<Material> removeMaterial(
 			@RequestBody MaterialProduction materialProduction){
 		Optional<Material> mat = materialRepository.findById(materialProduction.getMaterial().getId());
@@ -284,7 +280,7 @@ public class ProductionResource {
 	}	
 	
 	@PostMapping("/productions/verify_material")
-	//@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE')")
+	@PreAuthorize("hasAnyAuthority('PRODUCTION-APPROVE')")
 	public ResponseEntity<Material> verifyMaterial(
 			@RequestBody MaterialProduction materialProduction,
 			HttpServletRequest request){
@@ -360,7 +356,7 @@ public class ProductionResource {
 	}
 	
 	@PostMapping("/productions/remove_product")
-	//@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE')")
+	@PreAuthorize("hasAnyAuthority('PRODUCTION-UPDATE')")
 	public ResponseEntity<Product> removeProduct(
 			@RequestBody ProductProduction productProduction){
 		Optional<Product> p = productRepository.findById(productProduction.getProduct().getId());
@@ -388,7 +384,7 @@ public class ProductionResource {
 	}	
 	
 	@PostMapping("/productions/verify_product")
-	//@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE')")
+	@PreAuthorize("hasAnyAuthority('PRODUCTION-APPROVE')")
 	public ResponseEntity<Product> verifyProduct(
 			@RequestBody ProductProduction productProduction,
 			HttpServletRequest request){
@@ -438,14 +434,14 @@ public class ProductionResource {
 			 * Deduct material from stock
 			 */
 			double productStock = p.get().getStock();
-			double newProductStock = productStock - productProduction.getQty();
+			double newProductStock = productStock + productProduction.getQty();
 			p.get().setStock(newProductStock);
 			productRepository.saveAndFlush(p.get());
 			/**
 			 * Now, update material stock cards
 			 */
 			ProductStockCard psc = new ProductStockCard();
-			psc.setQtyOut(productProduction.getQty());		
+			psc.setQtyIn(productProduction.getQty());		
 			psc.setBalance(newProductStock);
 			psc.setProduct(p.get());
 			psc.setDay(dayRepository.getCurrentBussinessDay());
@@ -463,7 +459,7 @@ public class ProductionResource {
 	}
 	
 	@PutMapping("/productions/cancel")
-	//@PreAuthorize("hasAnyAuthority('LPO-CANCEL')")
+	@PreAuthorize("hasAnyAuthority('PRODUCTION-CANCEL')")
 	public ResponseEntity<ProductionModel>cancelProduction(
 			@RequestBody Production production,
 			HttpServletRequest request){		

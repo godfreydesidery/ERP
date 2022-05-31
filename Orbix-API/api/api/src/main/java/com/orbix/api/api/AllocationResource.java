@@ -45,8 +45,7 @@ public class AllocationResource {
 	private final 	AllocationService allocationService;
 	
 	@PostMapping("/allocations/allocate")
-	@PreAuthorize("hasAnyAuthority('ALLOCATION-CREATE')")
-	
+	@PreAuthorize("hasAnyAuthority('ALLOCATION-CREATE')")	
 	public ResponseEntity<Boolean>allocate(
 			@RequestParam(name = "customer_id") Long customerId,
 			@RequestParam(name = "sales_invoice_id") Long salesInvoiceId,

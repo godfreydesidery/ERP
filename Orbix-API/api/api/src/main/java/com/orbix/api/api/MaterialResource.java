@@ -44,20 +44,17 @@ private final MaterialService materialService;
 private final MaterialRepository materialRepository;
 	
 	@GetMapping("/materials")
-	@PreAuthorize("hasAnyAuthority('MATERIAL-READ')")
 	public ResponseEntity<List<Material>>getMaterials(){
 		return ResponseEntity.ok().body(materialService.getAll());
 	}
 	
 	@GetMapping("/materials/get")
-	@PreAuthorize("hasAnyAuthority('MATERIAL-READ')")
 	public ResponseEntity<Material> getMaterial(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(materialService.get(id));
 	}
 	
 	@GetMapping("/materials/request_code")
-	//@PreAuthorize("hasAnyAuthority('LPO-READ')")
 	public ResponseEntity<RecordModel> requestCode(){
 		return ResponseEntity.ok().body(materialService.requestMaterialCode());
 	}

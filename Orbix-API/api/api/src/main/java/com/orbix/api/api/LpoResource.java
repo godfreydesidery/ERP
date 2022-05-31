@@ -69,21 +69,18 @@ public class LpoResource {
 	}
 	
 	@GetMapping("/lpos/get")
-	@PreAuthorize("hasAnyAuthority('LPO-READ')")
 	public ResponseEntity<LpoModel> getLpo(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(lpoService.get(id));
 	}
 	
 	@GetMapping("/lpos/get_by_no")
-	@PreAuthorize("hasAnyAuthority('LPO-READ')")
 	public ResponseEntity<LpoModel> getLpoByNo(
 			@RequestParam(name = "no") String no){
 		return ResponseEntity.ok().body(lpoService.getByNo(no));
 	}
 	
 	@GetMapping("/lpos/request_no")
-	//@PreAuthorize("hasAnyAuthority('LPO-READ')")
 	public ResponseEntity<RecordModel> requestNo(){
 		return ResponseEntity.ok().body(lpoService.requestLpoNo());
 	}
@@ -91,7 +88,6 @@ public class LpoResource {
 	
 	
 	@GetMapping("/lpo_details/get_by_lpo")
-	@PreAuthorize("hasAnyAuthority('LPO-READ')")
 	public ResponseEntity<List<LpoDetailModel>>getLpoDetails(
 			@RequestParam(name = "id") Long id){		
 		return ResponseEntity.ok().body(lpoService.getAllDetails(lpoRepository.findById(id).get()));
@@ -120,7 +116,7 @@ public class LpoResource {
 	}
 	
 	@PutMapping("/lpos/update")
-	@PreAuthorize("hasAnyAuthority('LPO-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('LPO-CREATE','LPO-UPDATE')")
 	public ResponseEntity<LpoModel>updateLpo(
 			@RequestBody Lpo lpo,
 			HttpServletRequest request){
@@ -174,7 +170,6 @@ public class LpoResource {
 	}
 	
 	@PutMapping("/lpos/print")
-	@PreAuthorize("hasAnyAuthority('LPO-PRINT')")
 	public ResponseEntity<LpoModel>printLpo(
 			@RequestBody Lpo lpo,
 			HttpServletRequest request){		
@@ -212,7 +207,7 @@ public class LpoResource {
 	}
 	
 	@PutMapping("/lpos/archive")
-	@PreAuthorize("hasAnyAuthority('LPO-CREATE','LPO-UPDATE','LPO-ARCHIVE')")
+	@PreAuthorize("hasAnyAuthority('LPO-UPDATE','LPO-ARCHIVE')")
 	public ResponseEntity<Boolean>archiveLpo(
 			@RequestBody Lpo lpo,
 			HttpServletRequest request){		
@@ -225,7 +220,7 @@ public class LpoResource {
 	}
 	
 	@PutMapping("/lpos/archive_all")
-	@PreAuthorize("hasAnyAuthority('LPO-CREATE','LPO-UPDATE','LPO-ARCHIVE')")
+	@PreAuthorize("hasAnyAuthority('LPO-UPDATE','LPO-ARCHIVE')")
 	public ResponseEntity<Boolean>archiveLpos(){			
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/lpos/archive_all").toUriString());
 		return ResponseEntity.created(uri).body(lpoService.archiveAll());
@@ -278,7 +273,6 @@ public class LpoResource {
 	}
 	
 	@GetMapping("/lpo_details/get_by_product_id_and_lpo_id")
-	@PreAuthorize("hasAnyAuthority('LPO-CREATE','LPO-UPDATE')")
 	public ResponseEntity<LpoDetailModel>getLpoDetailByProductAndLpo(
 			@RequestParam(name = "product_id") Long productId,
 			@RequestParam(name = "lpo_id") Long lpoId){
@@ -304,7 +298,6 @@ public class LpoResource {
 	}
 	
 	@GetMapping("/lpo_details/get")
-	@PreAuthorize("hasAnyAuthority('LPO-CREATE','LPO-UPDATE')")
 	public ResponseEntity<LpoDetailModel>getDetail(
 			@RequestParam(name = "id") Long id){		
 		Optional<LpoDetail> d = lpoDetailRepository.findById(id);
@@ -321,7 +314,7 @@ public class LpoResource {
 	}
 	
 	@DeleteMapping("/lpo_details/delete")
-	@PreAuthorize("hasAnyAuthority('LPO-CREATE','LPO-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('LPO-DELETE')")
 	public ResponseEntity<Boolean> deleteDetail(
 			@RequestParam(name = "id") Long id){		
 		Optional<LpoDetail> d = lpoDetailRepository.findById(id);

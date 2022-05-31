@@ -62,34 +62,29 @@ public class ProductToMaterialResource {
 	private final ProductMaterialRatioRepository productMaterialRatioRepository;
 	
 	@GetMapping("/product_to_materials")
-	//@PreAuthorize("hasAnyAuthority('CONVERSION-READ')")
 	public ResponseEntity<List<ProductToMaterialModel>>getProductToMaterials(){
 		return ResponseEntity.ok().body(productToMaterialService.getAllVisible());
 	}
 	
-	@GetMapping("/product_to_materials/customer")
-	//@PreAuthorize("hasAnyAuthority('CONVERSION-READ')")
+	@GetMapping("/product_to_materials/customer")//Check on this
 	public ResponseEntity<List<ProductToMaterialModel>>getProductToMaterials(
 			@RequestParam(name = "id") Long id){		
 		return ResponseEntity.ok().body(productToMaterialService.getAllVisible());
 	}
 	
 	@GetMapping("/product_to_materials/get")
-	//@PreAuthorize("hasAnyAuthority('CONVERSION-READ')")
 	public ResponseEntity<ProductToMaterialModel> getProductToMaterial(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(productToMaterialService.get(id));
 	}
 	
 	@GetMapping("/product_to_materials/get_by_no")
-	//@PreAuthorize("hasAnyAuthority('CONVERSION-READ')")
 	public ResponseEntity<ProductToMaterialModel> getProductToMaterialByNo(
 			@RequestParam(name = "no") String no){
 		return ResponseEntity.ok().body(productToMaterialService.getByNo(no));
 	}
 	
 	@GetMapping("/product_to_material_details/get_by_productToMaterial")
-	//@PreAuthorize("hasAnyAuthority('CONVERSION-READ')")
 	public ResponseEntity<List<ProductToMaterialDetailModel>>getProductToMaterialDetails(
 			@RequestParam(name = "id") Long id){		
 		return ResponseEntity.ok().body(productToMaterialService.getAllDetails(productToMaterialRepository.findById(id).get()));

@@ -47,7 +47,6 @@ public class SupplierResource {
 	private final SupplierRepository supplierRepository;
 	
 	@GetMapping("/suppliers")
-	@PreAuthorize("hasAnyAuthority('SUPPLIER-READ')")
 	public ResponseEntity<List<Supplier>>getSuppliers(){
 		return ResponseEntity.ok().body(supplierService.getAll());
 	}
@@ -65,21 +64,18 @@ public class SupplierResource {
 	}
 	
 	@GetMapping("/suppliers/get")
-	@PreAuthorize("hasAnyAuthority('SUPPLIER-READ')")
 	public ResponseEntity<Supplier> getSupplier(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(supplierService.get(id));
 	}
 	
 	@GetMapping("/suppliers/get_by_code")
-	@PreAuthorize("hasAnyAuthority('SUPPLIER-READ')")
 	public ResponseEntity<Supplier> getSupplierByCode(
 			@RequestParam(name = "code") String code){
 		return ResponseEntity.ok().body(supplierService.getByCode(code));
 	}
 	
 	@GetMapping("/suppliers/get_by_name")
-	@PreAuthorize("hasAnyAuthority('SUPPLIER-READ')")
 	public ResponseEntity<Supplier> getSupplierByName(
 			@RequestParam(name = "name") String name){
 		return ResponseEntity.ok().body(supplierService.getByName(name));
@@ -99,7 +95,7 @@ public class SupplierResource {
 	}
 		
 	@PutMapping("/suppliers/update")
-	@PreAuthorize("hasAnyAuthority('SUPPLIER-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('SUPPLIER-CREATE','SUPPLIER-UPDATE')")
 	public ResponseEntity<Supplier>updateSupplier(
 			@RequestBody Supplier supplier, 
 			HttpServletRequest request){

@@ -65,33 +65,28 @@ public class PackingListResource {
 	private final 	ProductRepository productRepository;
 	
 	@GetMapping("/packing_lists")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-READ')")
 	public ResponseEntity<List<PackingListModel>>getPackingLists(){
 		return ResponseEntity.ok().body(packingListService.getAllVisible());
 	}
 	
 	@GetMapping("/packing_lists/get")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-READ')")
 	public ResponseEntity<PackingListModel> getPackingList(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(packingListService.get(id));
 	}
 	
 	@GetMapping("/packing_lists/get_by_no")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-READ')")
 	public ResponseEntity<PackingListModel> getPackingListByNo(
 			@RequestParam(name = "no") String no){
 		return ResponseEntity.ok().body(packingListService.getByNo(no));
 	}
 	
 	@GetMapping("/packing_lists/request_no")
-	//@PreAuthorize("hasAnyAuthority('LPO-READ')")
 	public ResponseEntity<RecordModel> requestNo(){
 		return ResponseEntity.ok().body(packingListService.requestPackingListNo());
 	}
 	
-	@GetMapping("/packing_list_details/get_by_packingList")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-READ')")
+	@GetMapping("/packing_list_details/get_by_packing_list")
 	public ResponseEntity<List<PackingListDetailModel>>getPackingListDetails(
 			@RequestParam(name = "id") Long id){		
 		return ResponseEntity.ok().body(packingListService.getAllDetails(packingListRepository.findById(id).get()));
@@ -123,7 +118,7 @@ public class PackingListResource {
 	}
 	
 	@PutMapping("/packing_lists/update")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('PACKING_LIST-CREATE','PACKING_LIST-UPDATE')")
 	public ResponseEntity<PackingListModel>updatePackingList(
 			@RequestBody PackingList packingList,
 			HttpServletRequest request){
@@ -197,7 +192,7 @@ public class PackingListResource {
 	}
 	
 	@PutMapping("/packing_lists/archive")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-CREATE','PACKING_LIST-UPDATE','PACKING_LIST-ARCHIVE')")
+	@PreAuthorize("hasAnyAuthority('PACKING_LIST-UPDATE','PACKING_LIST-ARCHIVE')")
 	public ResponseEntity<Boolean>archivePackingList(
 			@RequestBody PackingList packingList,
 			HttpServletRequest request){		
@@ -210,7 +205,7 @@ public class PackingListResource {
 	}
 	
 	@PutMapping("/packing_lists/archive_all")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-CREATE','PACKING_LIST-UPDATE','PACKING_LIST-ARCHIVE')")
+	@PreAuthorize("hasAnyAuthority('PACKING_LIST-UPDATE','PACKING_LIST-ARCHIVE')")
 	public ResponseEntity<Boolean>archivePackingLists(){			
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/packing_lists/archive_all").toUriString());
 		return ResponseEntity.created(uri).body(packingListService.archiveAll());
@@ -277,7 +272,6 @@ public class PackingListResource {
 	}
 	
 	@GetMapping("/packing_list_details/get")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-CREATE','PACKING_LIST-UPDATE')")
 	public ResponseEntity<PackingListDetailModel>getDetail(
 			@RequestParam(name = "id") Long id){		
 		Optional<PackingListDetail> d = packingListDetailRepository.findById(id);
@@ -298,7 +292,7 @@ public class PackingListResource {
 	}
 	
 	@DeleteMapping("/packing_list_details/delete")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-CREATE','PACKING_LIST-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('PACKING_LIST-DELETE')")
 	public ResponseEntity<Boolean> deleteDetail(
 			@RequestParam(name = "id") Long id){		
 		Optional<PackingListDetail> d = packingListDetailRepository.findById(id);

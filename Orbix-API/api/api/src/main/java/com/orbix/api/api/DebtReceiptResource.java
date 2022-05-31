@@ -54,7 +54,7 @@ public class DebtReceiptResource {
 	
 	
 	@GetMapping("/debt_receipts")
-	@PreAuthorize("hasAnyAuthority('DEBT_RECEIPT-READ')")
+	//@PreAuthorize("hasAnyAuthority('DEBT_RECEIPT-READ')")
 	public ResponseEntity<List<DebtReceiptModel>>getDebtReceipts(){
 		return ResponseEntity.ok().body(debtReceiptService.getAllVisible());
 	}

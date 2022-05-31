@@ -44,7 +44,6 @@ private final 	ProductService productService;
 private final ProductRepository productRepository;
 	
 	@GetMapping("/products")
-	@PreAuthorize("hasAnyAuthority('PRODUCT-READ')")
 	public ResponseEntity<List<Product>>getProducts(){
 		return ResponseEntity.ok().body(productService.getAll());		
 	}
@@ -57,14 +56,12 @@ private final ProductRepository productRepository;
 	}
 	
 	@GetMapping("/products/get")
-	@PreAuthorize("hasAnyAuthority('PRODUCT-READ')")
 	public ResponseEntity<Product> getProduct(
 			@RequestParam(name = "id") Long id){
 		return ResponseEntity.ok().body(productService.get(id));
 	}
 	
 	@GetMapping("/products/get_by_barcode")
-	//@PreAuthorize("hasAnyAuthority('PRODUCT-READ')")
 	public ResponseEntity<Product> getProductByBarcode(
 			@RequestParam(name = "barcode") String barcode){
 		return ResponseEntity.ok().body(productService.getByBarcode(barcode));
@@ -74,27 +71,23 @@ private final ProductRepository productRepository;
 	
 	
 	@GetMapping("/products/request_code")
-	//@PreAuthorize("hasAnyAuthority('LPO-READ')")
 	public ResponseEntity<RecordModel> requestCode(){
 		return ResponseEntity.ok().body(productService.requestProductCode());
 	}
 	
 	@GetMapping("/products/get_by_code")
-	//@PreAuthorize("hasAnyAuthority('PRODUCT-READ')")
 	public ResponseEntity<Product> getProductByCode(
 			@RequestParam(name = "code") String code){
 		return ResponseEntity.ok().body(productService.getByCode(code));
 	}
 	
 	@GetMapping("/products/get_by_description")
-	//@PreAuthorize("hasAnyAuthority('PRODUCT-READ')")
 	public ResponseEntity<Product> getProductByDescription(
 			@RequestParam(name = "description") String description){
 		return ResponseEntity.ok().body(productService.getByDescription(description));
 	}
 	
 	@GetMapping("/products/get_by_common_name")
-	@PreAuthorize("hasAnyAuthority('PRODUCT-READ')")
 	public ResponseEntity<Product> getProductByCommonName(
 			@RequestParam(name = "common_name") String common_name){
 		return ResponseEntity.ok().body(productService.getByCommonName(common_name));
@@ -112,7 +105,7 @@ private final ProductRepository productRepository;
 	}
 		
 	@PutMapping("/products/update")
-	@PreAuthorize("hasAnyAuthority('PRODUCT-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('PRODUCT-CREATE','PRODUCT-UPDATE')")
 	public ResponseEntity<Product>updateProduct(
 			@RequestBody Product product, 			
 			HttpServletRequest request){		

@@ -151,6 +151,7 @@ export class DrpComponent implements OnInit {
       )
       .catch(
         error => {
+          console.log(error)
           ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not update DRP')
         }
       )
