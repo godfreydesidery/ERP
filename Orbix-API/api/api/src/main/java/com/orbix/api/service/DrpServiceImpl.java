@@ -80,7 +80,8 @@ public class DrpServiceImpl implements DrpService {
 		model.setId(d.getId());
 		model.setNo(d.getNo());
 		model.setStatus(d.getStatus());
-		model.setComments(d.getComments());
+		model.setComments(d.getComments());	
+		model.setSupplier(d.getSupplier());
 		if(d.getCreatedAt() != null && d.getCreatedBy() != null) {
 			model.setCreated(dayRepository.findById(d.getCreatedAt()).get().getBussinessDate() +" "+ userRepository.getAlias(d.getCreatedBy()));
 		}
@@ -100,6 +101,7 @@ public class DrpServiceImpl implements DrpService {
 		model.setNo(l.get().getNo());
 		model.setStatus(l.get().getStatus());		
 		model.setComments(l.get().getComments());
+		model.setSupplier(l.get().getSupplier());
 		if(l.get().getCreatedAt() != null && l.get().getCreatedBy() != null) {
 			model.setCreated(dayRepository.findById(l.get().getCreatedAt()).get().getBussinessDate() +" "+ userRepository.getAlias(l.get().getCreatedBy()));
 		}
@@ -132,6 +134,7 @@ public class DrpServiceImpl implements DrpService {
 		model.setNo(l.get().getNo());
 		model.setStatus(l.get().getStatus());		
 		model.setComments(l.get().getComments());
+		model.setSupplier(l.get().getSupplier());
 		if(l.get().getCreatedAt() != null && l.get().getCreatedBy() != null) {
 			model.setCreated(dayRepository.findById(l.get().getCreatedAt()).get().getBussinessDate() +" "+ userRepository.getAlias(l.get().getCreatedBy()));
 		}
@@ -489,8 +492,14 @@ public class DrpServiceImpl implements DrpService {
 		if(_d.isPresent()) {
 			_d.get().setStatus("APPROVED");
 			drpRepository.saveAndFlush(_d.get());
-		}		
+		}else {
+			throw new NotFoundException("Could not approve, DRP not found");
+		}
 		grn.setStatus("RECEIVED");
+		grn.setCreatedAt(dayRepository.getCurrentBussinessDay().getId());
+		grn.setCreatedBy(_d.get().getApprovedBy());
+		grn.setApprovedAt(dayRepository.getCurrentBussinessDay().getId());
+		grn.setApprovedBy(_d.get().getApprovedBy());
 		grnRepository.saveAndFlush(grn);
 		//Create Purchase
 		Purchase purchase = new Purchase();
@@ -499,7 +508,7 @@ public class DrpServiceImpl implements DrpService {
 		purchase.setApprovedBy(grn.getApprovedBy());
 		purchase.setApprovedAt(grn.getApprovedAt());
 		purchase.setDay(dayRepository.getCurrentBussinessDay());
-		purchase.setReference("Purchase on credit from GRN: "+grn.getNo());
+		purchase.setReference("Purchase on credit/cash from GRN: "+grn.getNo());
 		purchase.setType("Credit");
 		purchase.setStatus("APPROVED");
 		purchase = purchaseRepository.saveAndFlush(purchase);

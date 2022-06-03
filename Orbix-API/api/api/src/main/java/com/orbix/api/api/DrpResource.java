@@ -25,6 +25,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.orbix.api.domain.Drp;
 import com.orbix.api.domain.DrpDetail;
 import com.orbix.api.domain.Product;
+import com.orbix.api.domain.Supplier;
 import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
@@ -35,6 +36,7 @@ import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.DrpDetailRepository;
 import com.orbix.api.repositories.DrpRepository;
 import com.orbix.api.repositories.ProductRepository;
+import com.orbix.api.repositories.SupplierRepository;
 import com.orbix.api.service.DayService;
 import com.orbix.api.service.DrpService;
 import com.orbix.api.service.UserService;
@@ -53,12 +55,13 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class DrpResource {
 	
-	private final 	UserService userService;
-	private final 	DayService dayService;
-	private final 	DrpService drpService;
-	private final 	DrpRepository drpRepository;
-	private final 	DrpDetailRepository drpDetailRepository;
-	private final 	ProductRepository productRepository;
+	private final UserService userService;
+	private final DayService dayService;
+	private final DrpService drpService;
+	private final DrpRepository drpRepository;
+	private final DrpDetailRepository drpDetailRepository;
+	private final ProductRepository productRepository;
+	private final SupplierRepository supplierRepository;
 	
 	@GetMapping("/drps")
 	public ResponseEntity<List<DrpModel>>getDrps(){
@@ -83,8 +86,6 @@ public class DrpResource {
 		return ResponseEntity.ok().body(drpService.requestDrpNo());
 	}
 	
-	
-	
 	@GetMapping("/drp_details/get_by_drp")
 	@PreAuthorize("hasAnyAuthority('DRP-READ')")
 	public ResponseEntity<List<DrpDetailModel>>getDrpDetails(
@@ -98,8 +99,16 @@ public class DrpResource {
 			@RequestBody Drp drp,
 			HttpServletRequest request){
 		Drp l = new Drp();
+		if(!drp.getSupplier().getCode().equals("")) {
+			Optional<Supplier> s = supplierRepository.findByCode(drp.getSupplier().getCode());
+			if(!s.isPresent()) {
+				throw new NotFoundException("Could not create DRP. Selected supplier not found");
+			}else {
+				l.setSupplier(s.get());
+			}
+		}
 		l.setNo("NA");
-		l.setStatus("BLANK");		
+		l.setStatus("BLANK");
 		l.setComments(drp.getComments());
 		l.setCreatedBy(userService.getUserId(request));
 		l.setCreatedAt(dayService.getDayId());
@@ -118,6 +127,14 @@ public class DrpResource {
 		}
 		if(!l.get().getStatus().equals("PENDING")) {
 			throw new InvalidOperationException("Editing not allowed, only Pending DRPs can be edited");
+		}
+		if(!drp.getSupplier().getCode().equals("")) {
+			Optional<Supplier> s = supplierRepository.findByCode(drp.getSupplier().getCode());
+			if(!s.isPresent()) {
+				throw new NotFoundException("Could not create DRP. Selected supplier not found");
+			}else {
+				l.get().setSupplier(s.get());
+			}
 		}
 		drpDetailRepository.findByDrp(l.get());						
 		l.get().setComments(drp.getComments());

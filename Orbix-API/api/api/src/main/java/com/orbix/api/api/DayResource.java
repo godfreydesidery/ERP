@@ -38,12 +38,11 @@ public class DayResource {
 	public DayData getBussinessDate(){
 		DayData dayData = new DayData();
 		dayData.setBussinessDate(dayService.getBussinessDate());
-		//return ResponseEntity.ok().body(dayService.getBussinessDate());
 		return dayData;
 	}
 	
 	@GetMapping("/days/end_day")
-	//@PreAuthorize("hasAnyAuthority('DAY-CREATE','DAY-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('DAY-CREATE','DAY-UPDATE')")
 	public boolean endDay(){		
 		return dayService.endDay();
 	}

@@ -37,12 +37,18 @@ export class DrpComponent implements OnInit {
   no             : string;
   status         : string;
   comments!      : string
+  supplier!      : ISupplier;
+  supplierId     : any
+  supplierCode   : string
+  supplierName   : string
   created        : string;
   approved       : string;
   drpDetails     : IDrpDetail[];
   drps           : IDrp[]
 
   total          : number
+
+  supplierNames : string[] = []
 
 
   //Detail
@@ -70,6 +76,8 @@ export class DrpComponent implements OnInit {
     this.no           = ''
     this.status       = ''
     this.comments     = ''
+    this.supplierCode = ''
+    this.supplierName = ''
     this.created      = ''
     this.approved     = ''
     this.drpDetails   = []
@@ -94,6 +102,7 @@ export class DrpComponent implements OnInit {
     this.address = await this.data.getAddress()
     this.loadDrps()
     this.loadProductDescriptions()
+    this.loadSupplierNames()    
     this.logo = await this.data.getLogo()
   }
   
@@ -104,7 +113,8 @@ export class DrpComponent implements OnInit {
     }
     var drp = {
       id           : this.id,
-      comments     : this.comments
+      supplier     : {code : this.supplierCode, name : this.supplierName},
+      comments     : this.comments 
     }
     if(this.id == null || this.id == ''){  
       this.spinner.show() 
@@ -117,6 +127,15 @@ export class DrpComponent implements OnInit {
           this.no           = data!.no         
           this.status       = data!.status
           this.comments     = data!.comments
+          if(data?.supplier != null){
+            this.supplierId   = data.supplier.id
+            this.supplierCode = data!.supplier.code
+            this.supplierName = data!.supplier.name
+          }else{
+            this.supplierId   = ''
+            this.supplierCode = ''
+            this.supplierName = ''
+          }
           this.created      = data!.created
           this.approved     = data!.approved
           this.getDetails(data?.id)
@@ -142,6 +161,15 @@ export class DrpComponent implements OnInit {
           this.no           = data!.no
           this.status       = data!.status
           this.comments     = data!.comments
+          if(data?.supplier != null){
+            this.supplierId   = data.supplier.id
+            this.supplierCode = data!.supplier.code
+            this.supplierName = data!.supplier.name
+          }else{
+            this.supplierId   = ''
+            this.supplierCode = ''
+            this.supplierName = ''
+          }
           this.created      = data!.created
           this.approved     = data!.approved
           this.getDetails(data?.id)
@@ -172,6 +200,15 @@ export class DrpComponent implements OnInit {
         this.no           = data!.no
         this.status       = data!.status
         this.comments     = data!.comments
+        if(data?.supplier != null){
+          this.supplierId   = data.supplier.id
+          this.supplierCode = data!.supplier.code
+          this.supplierName = data!.supplier.name
+        }else{
+          this.supplierId   = ''
+          this.supplierCode = ''
+          this.supplierName = ''
+        }
         this.created      = data!.created
         this.approved     = data!.approved
         this.getDetails(data?.id)
@@ -201,6 +238,15 @@ export class DrpComponent implements OnInit {
         this.no           = data!.no
         this.status       = data!.status
         this.comments     = data!.comments
+        if(data?.supplier != null){
+          this.supplierId   = data.supplier.id
+          this.supplierCode = data!.supplier.code
+          this.supplierName = data!.supplier.name
+        }else{
+          this.supplierId   = ''
+          this.supplierCode = ''
+          this.supplierName = ''
+        }
         this.created      = data!.created
         this.approved     = data!.approved
         this.getDetails(data?.id)
@@ -240,35 +286,6 @@ export class DrpComponent implements OnInit {
     )
   }
 
-  async print(id: any) {
-    if(!window.confirm('Confirm printing of the selected DRP')){
-      return
-    }
-    let options = {
-      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
-    }
-    var drp = {
-      id : this.id   
-    }
-    this.spinner.show()
-    await this.http.put(API_URL+'/drps/print', drp, options)
-    .pipe(finalize(() => this.spinner.hide()))
-    .toPromise()
-    .then(
-      () => {
-        this.loadDrps()
-        this.get(id)
-        this.exportToPdf()
-      }
-    )
-    .catch(
-      error => {
-        console.log(error)
-        ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not print')
-      }
-    )
-    
-  }
   cancel(id: any) {
     if(!window.confirm('Confirm canceling of the selected DRP')){
       return
@@ -489,6 +506,9 @@ export class DrpComponent implements OnInit {
     this.created      = ''
     this.approved     = ''
     this.drpDetails   = []
+    this.supplierId   = ''
+    this.supplierCode = ''
+    this.supplierName = ''
   }
 
   clearDetail(){
@@ -692,6 +712,28 @@ export class DrpComponent implements OnInit {
     )
   }
 
+  async loadSupplierNames(){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<string[]>(API_URL+'/suppliers/get_names', options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        this.supplierNames = []
+        data?.forEach(element => {
+          this.supplierNames.push(element)
+        })
+      },
+      error => {
+        console.log(error)
+        alert('Could not load Supplier names')
+      }
+    )
+  }
+
 
   async requestNo(){
     let options = {
@@ -714,13 +756,38 @@ export class DrpComponent implements OnInit {
     )
   }
 
+  async searchSupplier(name: string) {
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<ISupplier>(API_URL+'/suppliers/get_by_name?name='+name, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data=>{
+        this.supplierId = data?.id
+        this.supplierCode = data!.code
+      }
+    )
+    .catch(
+      error=>{
+        console.log(error)        
+        alert('Supplier not found')
+        this.supplierId = ''
+        this.supplierCode = ''
+        this.supplierName = ''
+      }
+    )
+  }
+
   exportToPdf = () => {
     if(this.id == '' || this.id == null){
       return
     }
     var header = ''
     var footer = ''
-    var title  = 'Local Purchase Order'
+    var title  = 'Direct Purchase (DRP)'
     var logo : any = ''
     var total : number = 0
     if(this.logo == ''){
@@ -787,6 +854,10 @@ export class DrpComponent implements OnInit {
                   {text : this.no, fontSize : 9} 
                 ],
                 [
+                  {text : 'Supplier', fontSize : 9}, 
+                  {text : this.supplierName, fontSize : 9} 
+                ],
+                [
                   {text : 'Status', fontSize : 9}, 
                   {text : this.status, fontSize : 9} 
                 ]
@@ -823,6 +894,7 @@ interface IDrp{
   comments     : string
   created      : string
   approved     : string
+  supplier     : ISupplier
   drpDetails   : IDrpDetail[]
 }
 
@@ -842,4 +914,10 @@ interface IProduct{
   packSize         : number
   costPriceVatIncl : number
   costPriceVatExcl : number
+}
+
+interface ISupplier{
+  id   : string
+  code : string
+  name : string
 }

@@ -72,6 +72,9 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product save(Product p) {
+		if(!p.getBarcode().equals("") && p.getBarcode().contains(" ")) {//validate barcode, reject barcode with spaces
+			throw new InvalidEntryException("Could not save. Barcode invalid, barcodes should not contain spaces");
+		}	
 		Product product;
 		boolean isNew = false;
 		if(p.getId() == null) {

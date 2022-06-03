@@ -15,5 +15,5 @@ public class Operation {
 	 public static String APPROVE= "APPROVE";
 	 public static String CANCEL= "CANCEL";
 	 public static String ACTIVATE = "ACTIVATE";
-	 public static String PRINT = "PRINT";
+	 //public static String PRINT = "PRINT";
 }

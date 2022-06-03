@@ -51,6 +51,11 @@ public class Drp {
 	private Long approvedBy;
 	private Long createdAt;
 	private Long approvedAt;
+	
+	@ManyToOne(targetEntity = Supplier.class, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "supplier_id", nullable = true , updatable = true)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)	
+    private Supplier supplier;
 		
 	@OneToMany(targetEntity = DrpDetail.class, mappedBy = "drp", fetch = FetchType.EAGER, orphanRemoval = true)
     @Valid

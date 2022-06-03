@@ -152,7 +152,7 @@ public class SalesListResource {
 			HttpServletRequest request){		
 		Optional<SalesList> l = salesListRepository.findById(salesList.getId());
 		if(!l.isPresent()) {
-			throw new NotFoundException("PACKING_LIST not found");
+			throw new NotFoundException("Sales List not found");
 		}
 		if(l.get().getStatus().equals("PENDING")) {
 			l.get().setTotalReturns(salesList.getTotalReturns());

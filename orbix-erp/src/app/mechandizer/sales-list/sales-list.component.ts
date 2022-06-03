@@ -910,25 +910,58 @@ export class SalesListComponent implements OnInit {
         {text : 'Description', fontSize : 9}, 
         {text : 'Price', fontSize : 9}, 
         {text : 'Total', fontSize : 9}, 
-        {text : 'Sold', fontSize : 9}, 
-        {text : 'Offered', fontSize : 9}, 
-        {text : 'Returned', fontSize : 9}, 
-        {text : 'Damaged', fontSize : 9}
+        {text : 'Sold_____', fontSize : 9}, 
+        {text : 'Offered__', fontSize : 9}, 
+        {text : 'Returned_', fontSize : 9}, 
+        {text : 'Damaged__', fontSize : 9}
       ]
     ]   
     this.salesListDetails.forEach((element) => {
+      var qtySold     : string = element.qtySold.toString()
+      var qtyOffered  : string = element.qtyOffered.toString()
+      var qtyReturned : string = element.qtyReturned.toString()
+      var qtyDamaged  : string = element.qtyDamaged.toString()
+      if(this.status == 'PENDING'){
+        qtySold      = ''
+        qtyOffered   = ''
+        qtyReturned  = ''
+        qtyDamaged   = ''
+      }
       var detail = [
         {text : element.product.code.toString(), fontSize : 9}, 
         {text : element.product.description.toString(), fontSize : 9}, 
         {text : element.sellingPriceVatIncl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'},  
         {text : element.totalPacked.toString(), fontSize : 9}, 
-        {text : element.qtySold.toString(), fontSize : 9}, 
-        {text : element.qtyOffered.toString(), fontSize : 9}, 
-        {text : element.qtyReturned.toString(), fontSize : 9}, 
-        {text : element.qtyDamaged.toString(), fontSize : 9}
+        {text : qtySold, fontSize : 9}, 
+        {text : qtyOffered, fontSize : 9}, 
+        {text : qtyReturned, fontSize : 9}, 
+        {text : qtyDamaged, fontSize : 9}
       ]
       report.push(detail)
     })
+
+    var totalSales = this.totalSales.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalOffered = this.totalOffered.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalReturns = this.totalReturns.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalDamages = this.totalDamages.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalDiscounts = this.totalDiscounts.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalExpenditures = this.totalExpenditures.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalBank = this.totalBank.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalCash = this.totalCash.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalDeficit = this.totalDeficit.toLocaleString('en-US', { minimumFractionDigits: 2 })
+
+    if(this.status == 'PENDING'){
+      totalSales        = ''
+      totalOffered      = ''
+      totalReturns      = ''
+      totalDamages      = ''
+      totalDiscounts    = ''
+      totalExpenditures = ''
+      totalBank         = ''
+      totalCash         = ''
+      totalDeficit      = ''
+    }
+
     const docDefinition = {
       header: '',
       watermark : { text : title, color: 'blue', opacity: 0.1, bold: true, italics: false },
@@ -1004,39 +1037,39 @@ export class SalesListComponent implements OnInit {
               ],
               [
                 {text : 'Total Sales', fontSize : 9}, 
-                {text : this.totalSales.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+                {text : totalSales, fontSize : 9, alignment : 'right'} 
               ],
               [
                 {text : 'Total Offer/Giveaway', fontSize : 9}, 
-                {text : this.totalOffered.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+                {text : totalOffered, fontSize : 9, alignment : 'right'} 
               ],
               [
                 {text : 'Total Returns', fontSize : 9}, 
-                {text : this.totalReturns.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+                {text : totalReturns, fontSize : 9, alignment : 'right'} 
               ],
               [
                 {text : 'Total Damages', fontSize : 9}, 
-                {text : this.totalDamages.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+                {text : totalDamages, fontSize : 9, alignment : 'right'} 
               ],
               [
                 {text : 'Total Discounts', fontSize : 9}, 
-                {text : this.totalDiscounts.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+                {text : totalDiscounts, fontSize : 9, alignment : 'right'} 
               ],
               [
                 {text : 'Total Expenditures', fontSize : 9}, 
-                {text : this.totalExpenditures.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+                {text : totalExpenditures, fontSize : 9, alignment : 'right'} 
               ],
               [
                 {text : 'Total Bank', fontSize : 9}, 
-                {text : this.totalBank.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+                {text : totalBank, fontSize : 9, alignment : 'right'} 
               ],
               [
                 {text : 'Total Cash', fontSize : 9}, 
-                {text : this.totalCash.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+                {text : totalCash, fontSize : 9, alignment : 'right'} 
               ],
               [
                 {text : 'Total Deficit', fontSize : 9}, 
-                {text : this.totalDeficit.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+                {text : totalDeficit, fontSize : 9, alignment : 'right'} 
               ]
             ]
           }         

@@ -18,7 +18,7 @@
         <li class="nav-item">
           <a class="nav-link waves-light" routerLink="home" (click)="showBlankMenu()" mdbWavesEffect>Home<span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item dropdown" dropdown>
+        <!--<li class="nav-item dropdown" dropdown>
             <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
               Administration<span class="caret"></span></a>
             <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
@@ -30,7 +30,7 @@
               <div class="divider dropdown-divider"></div>
               <a class="dropdown-item waves-light" (click)="showDayMenu()" mdbWavesEffect>Day Operations</a>
             </div>
-          </li>
+          </li>-->
         <li class="nav-item">
           <a class="nav-link waves-light"  (click)="showInventoryMenu()" mdbWavesEffect>Inventory</a>
         </li>
@@ -43,6 +43,21 @@
         <!--<li class="nav-item">
             <a class="nav-link waves-light" (click)="showProductionMenu()" mdbWavesEffect>Accounts</a>
         </li>-->
+        <li class="nav-item">
+            <a class="nav-link waves-light" (click)="showSupplierRelationsMenu()" mdbWavesEffect>Suppliers</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link waves-light" (click)="showCustomerRelationsMenu()" mdbWavesEffect>Customers</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link waves-light" (click)="showHumanResourceMenu()" mdbWavesEffect>HRM</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link waves-light" (click)="showAdminMenu()" mdbWavesEffect>Admin</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link waves-light" (click)="showDayMenu()" mdbWavesEffect>Day</a>
+        </li>
         <li class="nav-item">
             <a class="nav-link waves-light" (click)="showReportMenu()" mdbWavesEffect>Reports</a>
         </li>

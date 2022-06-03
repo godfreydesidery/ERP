@@ -6,6 +6,8 @@ package com.orbix.api.models;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.orbix.api.domain.Supplier;
+
 import lombok.Data;
 
 /**
@@ -21,5 +23,6 @@ public class DrpModel {
 	String created = "";
 	String approved = "";
 	String comments = "";
+	Supplier supplier = null;
 	List<DrpDetailModel> drpDetails;
 }
