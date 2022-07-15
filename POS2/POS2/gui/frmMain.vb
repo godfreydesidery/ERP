@@ -582,6 +582,39 @@ Public Class frmMain
             count = count + 1
         Next
         PointOfSale.printReceipt(Till.TILLNO, receipt.no, Day.bussinessDate, Company.TIN.ToString(), Company.VRN.ToString(), code, descr, qty, price, tax, amount, subTotal, totalVat, total, tender.ToString(), balance.ToString())
+
+
+        Return vbNull
+    End Function
+
+    Private Function printFiscalReceipt(receipt As Receipt, tender As Double, balance As Double)
+        Dim size As Integer = -1
+        For i As Integer = 0 To receipt.receiptDetails.Count - 1
+            size = size + 1
+        Next
+        Dim code(size + 1) As String
+        Dim descr(size + 1) As String
+        Dim qty(size + 1) As String
+        Dim price(size + 1) As String
+        Dim tax(size + 1) As String
+        Dim amount(size + 1) As String
+        Dim subTotal As String = txtTotal.Text
+        Dim totalVat As String = txtVAT.Text
+        Dim total As String = txtGrandTotal.Text
+        Dim discount As String = txtDiscount.Text
+        Dim count As Integer = 0
+        For i As Integer = 0 To receipt.receiptDetails.Count - 1
+            code(count) = receipt.receiptDetails(i).code
+            descr(count) = receipt.receiptDetails(i).description
+            qty(count) = receipt.receiptDetails(i).qty.ToString()
+            price(count) = LCurrency.displayValue(receipt.receiptDetails(i).sellingPriceVatIncl.ToString())
+            tax(count) = LCurrency.displayValue(receipt.receiptDetails(i).vat.ToString())
+            amount(count) = LCurrency.displayValue(receipt.receiptDetails(i).amount.ToString())
+            count = count + 1
+        Next
+
+        PointOfSale.printFiscalReceipt(Till.TILLNO, receipt.no, Day.bussinessDate, Company.TIN.ToString(), Company.VRN.ToString(), code, descr, qty, price, tax, amount, subTotal, totalVat, total, tender.ToString(), balance.ToString())
+
         Return vbNull
     End Function
 
@@ -600,6 +633,12 @@ Public Class frmMain
                         Try
                             printReceipt(receipt, frmPayPoint.cash, Convert.ToDouble(LCurrency.getValue(frmPayPoint.balance)))
                         Catch ex As Exception
+                            'do nothing, check later
+                        End Try
+                        Try
+                            printFiscalReceipt(receipt, frmPayPoint.cash, Convert.ToDouble(LCurrency.getValue(frmPayPoint.balance)))
+                        Catch ex As Exception
+                            'MsgBox(ex.Message)
                             'do nothing, check later
                         End Try
                         allowVoid = False

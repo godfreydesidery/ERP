@@ -60,7 +60,7 @@ Public Class PointOfSale
     Private Shared eBigCharOff As String = Chr(27) + "!" + Chr(0)
 
 
-    Public Shared Function printFiscalReceipt(tillNo As String, receiptNo As String, date_ As String, TIN As String, VRN As String, itemCode() As String, descr() As String, qty() As String, price() As String, tax() As String, amount() As String, subTotal As String, VAT As String, grandTotal As String, cash As String, balance As String)
+    Public Shared Function printFiscalReceipt1(tillNo As String, receiptNo As String, date_ As String, TIN As String, VRN As String, itemCode() As String, descr() As String, qty() As String, price() As String, tax() As String, amount() As String, subTotal As String, VAT As String, grandTotal As String, cash As String, balance As String)
 
         Dim fileName As String = "Receipt"
         Dim strFile As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & fileName & ".txt"
@@ -116,6 +116,36 @@ Public Class PointOfSale
 
 
 
+    End Function
+
+
+    Public Shared Function printFiscalReceipt(tillNo As String, receiptNo As String, date_ As String, TIN As String, VRN As String, itemCode() As String, descr() As String, qty() As String, price() As String, tax() As String, amount() As String, subTotal As String, VAT As String, grandTotal As String, cash As String, balance As String) As Boolean
+
+        ''''''''''''Dim fiscalDir As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\in"
+        Dim fiscalDir As String = "C:\OrbitFR\in"
+
+        If Not Directory.Exists(fiscalDir) Then
+            Directory.CreateDirectory(fiscalDir)
+        End If
+
+        Dim path As String = "\EFD_RECEIPT_" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") & ".txt"
+
+        Dim strFile As String = fiscalDir + path
+
+        Dim vatGroup As String = "V2"
+
+        Dim receiptText As String = ""
+        receiptText = receiptText + "R_NAM" + """""" + Environment.NewLine
+        receiptText = receiptText + "R_VRN" + """""" + Environment.NewLine
+        receiptText = receiptText + "R_TIN" + """""" + Environment.NewLine
+
+        For i As Integer = 0 To descr.Length - 2
+            receiptText = receiptText + "R_TRP" + """" + itemCode(i) + " " + descr(i) + """" + qty(i) + "pcs.*" + Replace(price(i), ",", "") + vatGroup + Environment.NewLine
+        Next
+
+        File.AppendAllText(strFile, receiptText)
+
+        Return True
     End Function
 
 
@@ -236,7 +266,7 @@ Public Class PointOfSale
             strOutputData = strOutputData + "Cash              " + cash + CRLF
             strOutputData = strOutputData + "Balance           " + balance + CRLF
             strOutputData = strOutputData + "====================================" + CRLF
-            strOutputData = strOutputData + "        You are Welcome !" + CRLF
+            strOutputData = strOutputData + "        You are Welcomed !" + CRLF
             strOutputData = strOutputData + "Sale Date&Time : " + fDateTime + CRLF + CRLF
             strOutputData = strOutputData + CRLF
             strOutputData = strOutputData + "  Served by: " + User.AALIAS + CRLF
