@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.orbix.api.reports.models.ProductListingReport;
-import com.orbix.api.reports.models.ProductionReport;
 
 /**
  * @author Godfrey

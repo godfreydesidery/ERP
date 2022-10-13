@@ -75,6 +75,9 @@ import { DailyPurchasesReportComponent } from './reports/purchases-reports/daily
 import { LpoReportComponent } from './reports/purchases-reports/lpo-report/lpo-report.component';
 import { GrnReportComponent } from './reports/purchases-reports/grn-report/grn-report.component';
 import { DrpComponent } from './mechandizer/drp/drp.component';
+import { DailyProductionReportComponent } from './reports/production-reports/daily-production-report/daily-production-report.component';
+import { MaterialVsProductionReportComponent } from './reports/production-reports/material-vs-production-report/material-vs-production-report.component';
+import { MaterialUsageReportComponent } from './reports/production-reports/material-usage-report/material-usage-report.component';
 
 const routes: Routes = [
   {path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard]},
@@ -148,6 +151,9 @@ const routes: Routes = [
   {path: 'supplier-stock-status', component: SupplierStockStatusComponent, canActivate: [AuthGuard]},
   {path: 'lpo-report', component: LpoReportComponent, canActivate: [AuthGuard]},
   {path: 'grn-report', component: GrnReportComponent, canActivate: [AuthGuard]},
+  {path: 'daily-production-report', component: DailyProductionReportComponent, canActivate: [AuthGuard]},
+  {path: 'material-vs-production-report', component: MaterialVsProductionReportComponent, canActivate: [AuthGuard]},
+  {path: 'material-usage-report', component: MaterialUsageReportComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({

@@ -606,7 +606,9 @@ public class ProductionServiceImpl implements ProductionService {
 			ProductionProduct pm = new ProductionProduct();
 			pm.setProduct(product);
 			pm.setProduction(production);
-			pm.setProduction(production);
+			pm.setProduction(production);			
+			pm.setSellingPriceVatExcl(product.getSellingPriceVatExcl());
+			pm.setSellingPriceVatIncl(product.getSellingPriceVatIncl());
 			p = productionProductRepository.saveAndFlush(pm);
 
 		}

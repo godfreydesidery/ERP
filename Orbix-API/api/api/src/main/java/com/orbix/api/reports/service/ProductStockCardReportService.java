@@ -9,7 +9,6 @@ import java.util.List;
 import com.orbix.api.domain.Product;
 import com.orbix.api.domain.Supplier;
 import com.orbix.api.reports.models.ProductStockCardReport;
-import com.orbix.api.reports.models.ProductionReport;
 
 /**
  * @author Godfrey

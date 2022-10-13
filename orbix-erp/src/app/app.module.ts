@@ -103,6 +103,9 @@ import { DailyPurchasesReportComponent } from './reports/purchases-reports/daily
 import { LpoReportComponent } from './reports/purchases-reports/lpo-report/lpo-report.component';
 import { GrnReportComponent } from './reports/purchases-reports/grn-report/grn-report.component';
 import { DrpComponent } from './mechandizer/drp/drp.component';
+import { DailyProductionReportComponent } from './reports/production-reports/daily-production-report/daily-production-report.component';
+import { MaterialVsProductionReportComponent } from './reports/production-reports/material-vs-production-report/material-vs-production-report.component';
+import { MaterialUsageReportComponent } from './reports/production-reports/material-usage-report/material-usage-report.component';
 
 
 @NgModule({
@@ -196,6 +199,9 @@ import { DrpComponent } from './mechandizer/drp/drp.component';
     LpoReportComponent,
     GrnReportComponent,
     DrpComponent,
+    DailyProductionReportComponent,
+    MaterialVsProductionReportComponent,
+    MaterialUsageReportComponent,
     //BatchProductionComponent,
     //CustomProductionComponent,
   ],
@@ -284,6 +290,9 @@ import { DrpComponent } from './mechandizer/drp/drp.component';
       {path : 'supplier-stock-status', component: SupplierStockStatusComponent},
       {path : 'lpo-report', component: LpoReportComponent},
       {path : 'grn-report', component: GrnReportComponent},
+      {path : 'daily-production-report', component: DailyProductionReportComponent},
+      {path : 'material-vs-production-report', component: MaterialVsProductionReportComponent},
+      {path : 'material-usage-report', component: MaterialUsageReportComponent},
     ]),
     BrowserAnimationsModule,
   ],

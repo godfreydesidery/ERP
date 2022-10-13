@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.orbix.api.domain.Product;
 import com.orbix.api.domain.Supplier;
+import com.orbix.api.reports.models.DailyProductionReport;
 import com.orbix.api.reports.models.DailyPurchaseReport;
 import com.orbix.api.reports.models.DailySalesReport;
 import com.orbix.api.reports.models.DailySummaryReport;
@@ -24,7 +25,6 @@ import com.orbix.api.reports.models.LpoReport;
 import com.orbix.api.reports.models.NegativeStockReport;
 import com.orbix.api.reports.models.ProductListingReport;
 import com.orbix.api.reports.models.ProductStockCardReport;
-import com.orbix.api.reports.models.ProductionReport;
 import com.orbix.api.reports.models.SlowMovingProductsReport;
 import com.orbix.api.reports.models.SupplierStockStatusReport;
 import com.orbix.api.reports.models.SupplySalesReport;
@@ -107,10 +107,10 @@ public class ReportResource {
 		return ResponseEntity.ok().body(supplierStockStatusReportService.getSupplierStockStatusReport(args.supplier, args.products));			
 	}	
 	
-	@PostMapping("/reports/production_report")
-	public ResponseEntity<List<ProductionReport>> productionReport(
+	@PostMapping("/reports/daily_production_report")
+	public ResponseEntity<List<DailyProductionReport>> productionReport(
 			@RequestBody ProductionReportArgs args){
-		return ResponseEntity.ok().body(productionReportService.getProductionReport(args.from, args.to));
+		return ResponseEntity.ok().body(productionReportService.getDailyProductionReport(args.from, args.to));
 	}	
 	
 	@PostMapping("/reports/product_listing_report")

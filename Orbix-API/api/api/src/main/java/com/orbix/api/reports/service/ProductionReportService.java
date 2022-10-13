@@ -6,14 +6,14 @@ package com.orbix.api.reports.service;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.orbix.api.reports.models.ProductionReport;
+import com.orbix.api.reports.models.DailyProductionReport;
 
 /**
  * @author GODFREY
  *
  */
 public interface ProductionReportService {
-	List<ProductionReport> getProductionReport(
+	List<DailyProductionReport> getDailyProductionReport(
 			LocalDate from,
 			LocalDate to);
 }

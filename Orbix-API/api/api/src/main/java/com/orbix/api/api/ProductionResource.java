@@ -425,6 +425,8 @@ public class ProductionResource {
 				ProductionProduct productionProduct = new ProductionProduct();
 				productionProduct.setProduction(prod.get());
 				productionProduct.setProduct(p.get());
+				productionProduct.setSellingPriceVatExcl(p.get().getSellingPriceVatExcl());
+				productionProduct.setSellingPriceVatIncl(p.get().getSellingPriceVatIncl());
 				productionProduct.setQty(productProduction.getQty());
 				productionProduct.setVerifiedAt(dayService.getDayId());
 				productionProduct.setVerifiedBy(userService.getUserId(request));

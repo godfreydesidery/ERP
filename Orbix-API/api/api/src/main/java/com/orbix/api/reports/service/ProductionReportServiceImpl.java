@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.orbix.api.domain.Supplier;
 import com.orbix.api.exceptions.NotFoundException;
-import com.orbix.api.reports.models.ProductionReport;
+import com.orbix.api.reports.models.DailyProductionReport;
 import com.orbix.api.reports.models.SupplySalesReport;
 import com.orbix.api.repositories.ProductionRepository;
 
@@ -33,9 +33,9 @@ public class ProductionReportServiceImpl implements ProductionReportService {
 	private final ProductionRepository productionRepository;
 	
 	@Override
-	public List<ProductionReport> getProductionReport(
+	public List<DailyProductionReport> getDailyProductionReport(
 			LocalDate from,
 			LocalDate to) {		
-		return productionRepository.getProductionReport(from, to);
+		return productionRepository.getDailyProductionReport(from, to);
 	}
 }

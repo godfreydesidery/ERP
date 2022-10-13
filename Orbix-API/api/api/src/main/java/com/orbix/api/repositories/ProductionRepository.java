@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.orbix.api.domain.Lpo;
 import com.orbix.api.domain.Production;
-import com.orbix.api.reports.models.ProductionReport;
+import com.orbix.api.reports.models.DailyProductionReport;
 import com.orbix.api.reports.models.SupplySalesReport;
 
 /**
@@ -35,8 +35,10 @@ public interface ProductionRepository extends JpaRepository<Production, Long> {
 	
 	@Query(
 			value = "SELECT \r\n" +
+					"`days`.`bussiness_date` AS `date`,\r\n" + 
 					"`products`.`code` AS `code`,\r\n" + 
 					"`products`.`description` AS `description`,\r\n" + 
+					"SUM(`production_products`.`qty`*`production_products`.`selling_price_vat_incl`) AS `amount`,\r\n" +
 					"SUM(`production_products`.`qty`) AS `qty`\r\n" + 
 					"FROM\r\n" + 
 					"`production_products`\r\n" + 
@@ -46,9 +48,10 @@ public interface ProductionRepository extends JpaRepository<Production, Long> {
 					"`production_products`.`product_id`=`products`.`id`\r\n" + 				
 					"WHERE\r\n" + 
 					"`days`.`bussiness_date` BETWEEN :from AND :to \r\n" + 
-					"GROUP BY `code`",
+					"GROUP BY `code`,`date`\r\n" +
+					"ORDER BY `date`",
 					nativeQuery = true					
 			)
-	List<ProductionReport> getProductionReport(LocalDate from, LocalDate to);
+	List<DailyProductionReport> getDailyProductionReport(LocalDate from, LocalDate to);
 
 }
