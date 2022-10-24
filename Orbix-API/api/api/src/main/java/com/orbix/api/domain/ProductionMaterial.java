@@ -33,6 +33,8 @@ public class ProductionMaterial {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private double qty = 0;
+	private double costPriceVatIncl = 0;
+	private double costPriceVatExcl = 0;
 	
 	private Long verifiedBy;
 	private Long verifiedAt;

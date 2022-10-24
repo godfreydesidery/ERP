@@ -22,6 +22,7 @@ import com.orbix.api.reports.models.DailySummaryReport;
 import com.orbix.api.reports.models.FastMovingProductsReport;
 import com.orbix.api.reports.models.GrnReport;
 import com.orbix.api.reports.models.LpoReport;
+import com.orbix.api.reports.models.MaterialUsageReport;
 import com.orbix.api.reports.models.NegativeStockReport;
 import com.orbix.api.reports.models.ProductListingReport;
 import com.orbix.api.reports.models.ProductStockCardReport;
@@ -111,6 +112,12 @@ public class ReportResource {
 	public ResponseEntity<List<DailyProductionReport>> productionReport(
 			@RequestBody ProductionReportArgs args){
 		return ResponseEntity.ok().body(productionReportService.getDailyProductionReport(args.from, args.to));
+	}	
+	
+	@PostMapping("/reports/material_usage_report")
+	public ResponseEntity<List<MaterialUsageReport>> materialUsageReport(
+			@RequestBody ProductionReportArgs args){
+		return ResponseEntity.ok().body(productionReportService.getMaterialUsageReport(args.from, args.to));
 	}	
 	
 	@PostMapping("/reports/product_listing_report")

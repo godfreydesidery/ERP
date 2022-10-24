@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.orbix.api.domain.Supplier;
 import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.reports.models.DailyProductionReport;
+import com.orbix.api.reports.models.MaterialUsageReport;
 import com.orbix.api.reports.models.SupplySalesReport;
 import com.orbix.api.repositories.ProductionRepository;
 
@@ -37,5 +38,12 @@ public class ProductionReportServiceImpl implements ProductionReportService {
 			LocalDate from,
 			LocalDate to) {		
 		return productionRepository.getDailyProductionReport(from, to);
+	}
+	
+	@Override
+	public List<MaterialUsageReport> getMaterialUsageReport(
+			LocalDate from,
+			LocalDate to) {		
+		return productionRepository.getMaterialUsageReport(from, to);
 	}
 }

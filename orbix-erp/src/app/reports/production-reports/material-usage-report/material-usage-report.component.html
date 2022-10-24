@@ -1,1 +1,108 @@
-<p>Please Ignore this!</p>
+<div class="row" [@fadeInOut]>
+    <div class="col-sm-12" style="text-align: center;">
+        <h6>Reports | Production | Material Usage Report</h6>
+    </div>
+    <div class="col-sm-12" style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
+        <a routerLink="/home"><button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+        <button class="btn" (click)="showRunOptions(runOptions)" style="margin: 2px; width: 35mm;" data-mdb-toggle="tooltip" title="Enter Run options to run report"><mdb-icon fas icon="sync"></mdb-icon><br>Run Options</button>
+        <button class="btn" (click)="exportToPdf()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Export report to PDF"><mdb-icon fas icon="file-pdf"></mdb-icon><br>PDF</button>
+        <button class="btn" (click)="exportToSpreadsheet()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Export report to Spreadsheet"><mdb-icon fas icon="file-excel"></mdb-icon><br>Excel</button>
+        <button class="btn" (click)="clear()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Clear entries"><i class="fa-solid fa-times fa-fw"></i><br>Clear</button>
+    </div>
+    <div class="col-12">
+        <br>
+        <table class="table table-bordered">
+            <thead style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
+                <tr>
+                    <th>Date</th>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>Qty</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let r of report">
+                    <td>{{r.dateString}}</td>
+                    <td>{{r.code}}</td>
+                    <td>{{r.description}}</td>
+                    <td>{{r.qty}}</td>
+                    <td style="text-align: right;">{{r.amount | currency:'':''}}</td>
+                </tr>               
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Total</th>
+                    <th style="text-align: right;">{{totalAmount | currency:'':''}}</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<ng-template #runOptions let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title" id="modal-basic-title">Enter options to run Material Usage Report</h6>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-2" style="min-width: 50mm;">
+                        <span>From*</span>
+                        <input type="date" [(ngModel)]="from" class="form-control">
+                    </div>
+                    <div class="col-2" style="min-width: 50mm;">
+                        <span>To*</span>
+                        <input type="date"  [(ngModel)]="to" class="form-control">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-12">
+                        <p><u>Select Material</u></p>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!--input type="search" [(ngModel)]="barcode" class="form-control" (focus)="clearProduct()" placeholder="Barcode"-->
+                            </div>
+                            <div class="col-sm-6">
+                                <button class="btn btn-success form-control" (click)="search()">Search Material</button>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <input type="search" [(ngModel)]="code" class="form-control" (focus)="clearMaterial()" placeholder="Code">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row"  *ngIf="id">
+                                    <div class="col-8">
+                                        <button class="btn btn-success form-control" (click)="addMaterial()">Add Material</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn btn-danger" (click)="clearMaterial()">X</button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <br>
+                        <input type="search" [(ngModel)]="description" class="form-control" list="descriptions" (focus)="clearMaterial()" placeholder="Description"><br>  
+                        <datalist id="descriptions" style="padding: 0px;">
+                            <option *ngFor="let d of descriptions" [ngValue]="d">{{d}}</option>
+                        </datalist> 
+                        <span>Double click to remove Material <u style="cursor: pointer;" (click)="clearList()"><font color="red">Remove All Materials</font></u></span><br><br>               
+                        <select name="materials" id="materials" size="5" class="form-control">
+                            <option *ngFor="let p of materials" (dblclick)="removeMaterial(p.id)" >{{p.description}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button (click)="getMaterialUsageReport(from, to)" (click)="modal.close('Run click')" class="btn btn-success" style="margin: 2px;">Run Report</button>
+    </div>
+</ng-template>
