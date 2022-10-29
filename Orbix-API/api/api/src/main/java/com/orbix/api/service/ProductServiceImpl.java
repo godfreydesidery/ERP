@@ -267,6 +267,7 @@ public class ProductServiceImpl implements ProductService {
 		Product product;
 		double originalDiscount = 0;
 		double originalVat = 0;
+		String originalVatGroup = "";
 		double originalProfitMargin = 0;
 		double originalCostPriceVatIncl = 0;
 		double originalCostPriceVatExcl = 0;
@@ -274,23 +275,29 @@ public class ProductServiceImpl implements ProductService {
 		double originalSellingPriceVatExcl = 0;
 		double finalDiscount = 0;
 		double finalVat = 0;
+		String finalVatGroup = "";
 		double finalProfitMargin = 0;
 		double finalCostPriceVatIncl = 0;
 		double finalCostPriceVatExcl = 0;
 		double finalSellingPriceVatIncl = 0;
 		double finalSellingPriceVatExcl = 0;
 		
+		String vatGroup = "";
+		
 		Product pr = productRepository.findById(p.getId()).get();
 		originalDiscount = pr.getDiscount();
 		originalVat = pr.getVat();
+		originalVatGroup = pr.getVatGroup();
 		originalProfitMargin = pr.getProfitMargin();
 		originalCostPriceVatIncl = Math.round(pr.getCostPriceVatIncl() *100.0)/100.0;
 		originalCostPriceVatExcl = Math.round(pr.getCostPriceVatExcl() *100.0)/100.0;
 		originalSellingPriceVatIncl = Math.round(pr.getSellingPriceVatIncl() *100.0)/100.0;
 		originalSellingPriceVatExcl = Math.round(pr.getSellingPriceVatExcl() *100.0)/100.0;
+		
 				
 		finalDiscount = p.getDiscount();
 		finalVat = p.getVat();
+		finalVatGroup = p.getVatGroup();
 		finalProfitMargin = p.getProfitMargin();
 		finalCostPriceVatIncl = Math.round(p.getCostPriceVatIncl() *100.0)/100.0;
 		finalCostPriceVatExcl = Math.round(((p.getCostPriceVatIncl() * (100 - p.getVat()) / 100)) *100.0)/100.0;
@@ -299,6 +306,7 @@ public class ProductServiceImpl implements ProductService {
 		
 		pr.setDiscount(finalDiscount);
 		pr.setVat(finalVat);
+		pr.setVatGroup(finalVatGroup);
 		pr.setProfitMargin(finalProfitMargin);
 		pr.setCostPriceVatIncl(finalCostPriceVatIncl);
 		pr.setCostPriceVatExcl(finalCostPriceVatExcl);

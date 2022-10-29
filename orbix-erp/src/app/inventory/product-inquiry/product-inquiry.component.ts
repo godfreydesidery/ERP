@@ -56,6 +56,7 @@ export class ProductInquiryComponent implements OnInit {
   levelFour!          : ILevelFour
   discount            : number
   vat                 : number
+  vatGroup            : string
   profitMargin        : number
   costPriceVatIncl    : number
   costPriceVatExcl    : number
@@ -119,6 +120,7 @@ export class ProductInquiryComponent implements OnInit {
     this.levelFour
     this.discount            = 0
     this.vat                 = 0
+    this.vatGroup            = ''
     this.profitMargin        = 0
     this.costPriceVatIncl    = 0
     this.costPriceVatExcl    = 0
@@ -262,6 +264,7 @@ export class ProductInquiryComponent implements OnInit {
     this.active              = data['active']
     this.discount            = data['discount']
     this.vat                 = data['vat']
+    this.vatGroup            = data['vatGroup']
     this.profitMargin        = data['profitMargin']
     this.costPriceVatIncl    = data['costPriceVatIncl']
     this.costPriceVatExcl    = data['costPriceVatExcl']
@@ -298,6 +301,7 @@ export class ProductInquiryComponent implements OnInit {
     this.active           = false
     this.discount            = 0
     this.vat                 = 0
+    this.vatGroup            = ''
     this.profitMargin        = 0
     this.costPriceVatIncl    = 0
     this.costPriceVatExcl    = 0

@@ -47,6 +47,7 @@ public class CartDetail {
 	private double sellingPriceVatExcl = 0;
 	private double discount = 0;
 	private double vat = 0;
+	private String vatGroup;
 	private boolean voided = false;
 	
 	@ManyToOne(targetEntity = Cart.class, fetch = FetchType.EAGER,  optional = true)

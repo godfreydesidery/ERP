@@ -49,6 +49,8 @@ public class Product {
 	private String commonName;
 	private double discount = 0;
 	private double vat = 0;
+	@Column(columnDefinition = "varchar(255) default 'V2'")
+	private String vatGroup;
 	private double profitMargin = 0;
 	private double costPriceVatIncl = 0;
 	private double costPriceVatExcl = 0;

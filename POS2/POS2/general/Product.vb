@@ -17,6 +17,7 @@ Public Class Product
     Public Property sellingPriceVatExcl As Double
     Public Property profitMargin As Double
     Public Property vat As Double
+    Public Property vatGroup As String
     Public Property discountRatio As Double
     Public Property stock As Double
     Public Property minimumStock As Double

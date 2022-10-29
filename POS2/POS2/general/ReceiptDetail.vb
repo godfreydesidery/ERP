@@ -5,6 +5,7 @@
     Public Property description As String
     Public Property qty As Double
     Public Property vat As Double
+    Public Property vatGroup As String
     Public Property costPriceVatIncl As Double
     Public Property costPriceVatExcl As Double
     Public Property sellingPriceVatIncl As Double

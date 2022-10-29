@@ -58,6 +58,7 @@ export class ProductMasterComponent implements OnInit, IProduct {
   levelFour!          : ILevelFour
   discount            : number
   vat                 : number
+  vatGroup            : string
   profitMargin        : number
   costPriceVatIncl    : number
   costPriceVatExcl    : number
@@ -122,6 +123,7 @@ export class ProductMasterComponent implements OnInit, IProduct {
     this.levelFour
     this.discount            = 0
     this.vat                 = 0
+    this.vatGroup            = ''
     this.profitMargin        = 0
     this.costPriceVatIncl    = 0
     this.costPriceVatExcl    = 0
@@ -196,6 +198,7 @@ export class ProductMasterComponent implements OnInit, IProduct {
       levelFour           : { name : this.levelFourName},
       discount            : this.discount,
       vat                 : this.vat,
+      vatGroup            : this.vatGroup,
       profitMargin        : this.profitMargin,
       costPriceVatIncl    : this.costPriceVatIncl,
       costPriceVatExcl    : this.costPriceVatExcl,
@@ -285,6 +288,7 @@ export class ProductMasterComponent implements OnInit, IProduct {
       levelFour           : { name : this.levelFourName},
       discount            : this.discount,
       vat                 : this.vat,
+      vatGroup            : this.vatGroup,
       profitMargin        : this.profitMargin,
       costPriceVatIncl    : this.costPriceVatIncl,
       costPriceVatExcl    : this.costPriceVatExcl,
@@ -346,6 +350,7 @@ export class ProductMasterComponent implements OnInit, IProduct {
       levelFour           : { name : this.levelFourName},
       discount            : this.discount,
       vat                 : this.vat,
+      vatGroup            : this.vatGroup,
       profitMargin        : this.profitMargin,
       costPriceVatIncl    : this.costPriceVatIncl,
       costPriceVatExcl    : this.costPriceVatExcl,
@@ -509,6 +514,7 @@ export class ProductMasterComponent implements OnInit, IProduct {
     this.active              = data['active']
     this.discount            = data['discount']
     this.vat                 = data['vat']
+    this.vatGroup            = data['vatGroup']
     this.profitMargin        = data['profitMargin']
     this.costPriceVatIncl    = data['costPriceVatIncl']
     this.costPriceVatExcl    = data['costPriceVatExcl']
@@ -545,6 +551,7 @@ export class ProductMasterComponent implements OnInit, IProduct {
     this.active           = true
     this.discount            = 0
     this.vat                 = 0
+    this.vatGroup            = ''
     this.profitMargin        = 0
     this.costPriceVatIncl    = 0
     this.costPriceVatExcl    = 0
@@ -974,6 +981,7 @@ export interface IProduct{
   levelFour           : ILevelFour
   discount            : number
   vat                 : number
+  vatGroup            : string
   profitMargin        : number
   costPriceVatIncl    : number
   costPriceVatExcl    : number

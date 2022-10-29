@@ -7,7 +7,6 @@ D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\models\Produ
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\api\LpoResource.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\filter\CustomAuthorizationFilter.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\DepartmentRepository.java
-D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\reports\models\ProductionReport.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\models\ProductionUnverifiedMaterialModel.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\QuotationService.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\controllers\service\UserServiceController.java
@@ -185,6 +184,7 @@ D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\exceptions\I
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\reports\service\SalesReportService.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\exceptions\DuplicateEntryException.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\LevelFourRepository.java
+D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\reports\models\DailyProductionReport.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\LpoService.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\api\ProductionResource.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\reports\service\package-info.java
@@ -215,6 +215,7 @@ D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\Cart.
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\SalesReceipt.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\api\UnitResource.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\SalesInvoiceRepository.java
+D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\reports\models\MaterialUsageReport.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\exceptions\package-info.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\api\ProductResource.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\api\ProductToMaterialResource.java

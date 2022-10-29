@@ -20,6 +20,7 @@ Public Class frmMain
     Dim packSize As Double = 1
     Dim price As Double = 0
     Dim vat As Double = 0
+    Dim vatGroup As String = ""
     Dim discountRatio As Double = 0
     Dim qty As Double = 0
     Dim amount As Double = 0
@@ -290,6 +291,7 @@ Public Class frmMain
             packSize = product.packSize
             discountRatio = product.discountRatio
             vat = product.vat
+            vatGroup = product.vatGroup
             qty = q
             price = product.sellingPriceVatIncl
             amount = (Val(qty) * price) * (1 - Val(discountRatio) / 100)
@@ -598,6 +600,7 @@ Public Class frmMain
         Dim price(size + 1) As String
         Dim tax(size + 1) As String
         Dim amount(size + 1) As String
+        Dim vatGroup(size + 1) As String
         Dim subTotal As String = txtTotal.Text
         Dim totalVat As String = txtVAT.Text
         Dim total As String = txtGrandTotal.Text
@@ -609,11 +612,12 @@ Public Class frmMain
             qty(count) = receipt.receiptDetails(i).qty.ToString()
             price(count) = LCurrency.displayValue(receipt.receiptDetails(i).sellingPriceVatIncl.ToString())
             tax(count) = LCurrency.displayValue(receipt.receiptDetails(i).vat.ToString())
+            vatGroup(count) = receipt.receiptDetails(i).vatGroup
             amount(count) = LCurrency.displayValue(receipt.receiptDetails(i).amount.ToString())
             count = count + 1
         Next
 
-        PointOfSale.printFiscalReceipt(Till.TILLNO, receipt.no, Day.bussinessDate, Company.TIN.ToString(), Company.VRN.ToString(), code, descr, qty, price, tax, amount, subTotal, totalVat, total, tender.ToString(), balance.ToString())
+        PointOfSale.printFiscalReceipt(Till.TILLNO, receipt.no, Day.bussinessDate, Company.TIN.ToString(), Company.VRN.ToString(), code, descr, qty, price, tax, amount, subTotal, totalVat, total, tender.ToString(), balance.ToString(), vatGroup)
 
         Return vbNull
     End Function

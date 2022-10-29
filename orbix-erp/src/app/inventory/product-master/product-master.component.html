@@ -226,6 +226,14 @@
             </div>
             <div class="row">
                 <div class="col-4 float-end" style="text-align: right;">
+                    <label>VAT Group</label>                               
+                </div>
+                <div class="col-8">
+                    <input type="text" [(ngModel)]="vatGroup" name="vatGroup" required class="form-control input-sm special" [readonly]="inputsLocked">                               
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 float-end" style="text-align: right;">
                     <label>Profit Margin %</label>                               
                 </div>
                 <div class="col-8">
@@ -360,6 +368,14 @@
                     </div>
                     <div class="col-8">
                         <input type="text" [(ngModel)]="vat" name="rollNo" required class="form-control input-sm special">                               
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 float-end" style="text-align: right;">
+                        <label>VAT Group</label>                               
+                    </div>
+                    <div class="col-8">
+                        <input type="text" [(ngModel)]="vatGroup" name="vatGropu" required class="form-control input-sm special">                               
                     </div>
                 </div>
                 <div class="row">

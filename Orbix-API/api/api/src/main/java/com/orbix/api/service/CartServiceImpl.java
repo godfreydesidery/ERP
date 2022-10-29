@@ -164,6 +164,7 @@ public class CartServiceImpl implements CartService {
 			detail.setQty(cartDetail.getQty());
 			detail.setDiscount(cartDetail.getDiscount());
 			detail.setVat(cartDetail.getVat());
+			detail.setVatGroup(p.get().getVatGroup());
 			detail.setVoided(false);
 			cartDetailRepository.saveAndFlush(detail);
 			return true;
@@ -283,6 +284,7 @@ public class CartServiceImpl implements CartService {
 				rd.setSellingPriceVatExcl(cartDetail.getSellingPriceVatExcl());
 				rd.setDiscount((cartDetail.getDiscount()/100) * cartDetail.getSellingPriceVatIncl());
 				rd.setTax((cartDetail.getVat()/100) * cartDetail.getSellingPriceVatIncl());
+				rd.setVatGroup(cartDetail.getVatGroup());
 				rds.add(rd);
 				receiptDetailRepository.saveAndFlush(rd);				
 			}			

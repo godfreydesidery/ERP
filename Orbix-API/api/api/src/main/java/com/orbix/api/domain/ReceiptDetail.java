@@ -44,6 +44,7 @@ public class ReceiptDetail {
 	private double sellingPriceVatExcl = 0;
 	private double discount = 0;
 	private double tax = 0;
+	private String vatGroup;
 	
 	@ManyToOne(targetEntity = Receipt.class, fetch = FetchType.EAGER,  optional = true)
     @JoinColumn(name = "receipt_id", nullable = true , updatable = true)

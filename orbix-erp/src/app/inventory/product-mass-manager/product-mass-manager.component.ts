@@ -59,6 +59,7 @@ export class ProductMassManagerComponent implements OnInit {
       { header: 'COMMON_NAME', key: 'COMMON_NAME'},
       { header: 'DISCOUNT', key: 'DISCOUNT'},
       { header: 'VAT', key: 'VAT'},
+      { header: 'VAT_GROUP', key: 'VAT_GROUP'},
       { header: 'PROFIT_MARGIN', key: 'PROFIT_MARGIN'},
       { header: 'COST_PRICE_VAT_INCL', key: 'COST_PRICE_VAT_INCL'},
       { header: 'COST_PRICE_VAT_EXCL', key: 'COST_PRICE_VAT_EXCL'},
@@ -146,6 +147,7 @@ export class ProductMassManagerComponent implements OnInit {
               COMMON_NAME            : element.commonName,
               DISCOUNT               : element.discount,
               VAT                    : element.vat,
+              VAT_GROUP              : element.vatGroup,
               PROFIT_MARGIN          : element.profitMargin,
               COST_PRICE_VAT_INCL    : element.costPriceVatIncl,
               COST_PRICE_VAT_EXCL    : element.costPriceVatExcl,
@@ -202,6 +204,7 @@ export class ProductMassManagerComponent implements OnInit {
       { header: 'COMMON_NAME', key: 'COMMON_NAME'},
       { header: 'DISCOUNT', key: 'DISCOUNT'},
       { header: 'VAT', key: 'VAT'},
+      { header: 'VAT_GROUP', key: 'VAT_GROUP'},
       { header: 'PROFIT_MARGIN', key: 'PROFIT_MARGIN'},
       { header: 'COST_PRICE_VAT_INCL', key: 'COST_PRICE_VAT_INCL'},
       { header: 'COST_PRICE_VAT_EXCL', key: 'COST_PRICE_VAT_EXCL'},
@@ -383,31 +386,32 @@ export class ProductMassManagerComponent implements OnInit {
         data[0][4] != 'COMMON_NAME'              ||
         data[0][5] != 'DISCOUNT'                 ||
         data[0][6] != 'VAT'                      ||
-        data[0][7] != 'PROFIT_MARGIN'            ||
-        data[0][8] != 'COST_PRICE_VAT_INCL'      ||
-        data[0][9] != 'COST_PRICE_VAT_EXCL'      ||
-        data[0][10] != 'SELLING_PRICE_VAT_INCL'  ||
-        data[0][11] != 'SELLING_PRICE_VAT_EXCL'  ||
-        data[0][12] != 'UOM'                     ||
-        data[0][13] != 'PACK_SIZE'               ||
-        data[0][14] != 'STOCK'                   ||
-        data[0][15] != 'MINIMUM_INVENTORY'       ||
-        data[0][16] != 'MAXIMUM_INVENTORY'       ||
-        data[0][17] != 'DEFAULT_REORDER_QTY'     ||
-        data[0][18] != 'DEFAULT_REORDER_LEVEL'   ||  
-        data[0][19] != 'ACTIVE'                  ||
-        data[0][20] != 'SELLABLE'                ||
-        data[0][21] != 'INGREDIENTS'             ||
-        data[0][22] != 'SUPPLIER'                ||
-        data[0][23] != 'DEPARTMENT'              ||
-        data[0][24] != 'CLASS'                   ||
-        data[0][25] != 'SUB_CLASS'               ||
-        data[0][26] != 'CATEGORY'                ||
-        data[0][27] != 'SUB_CATEGORY'            ||
-        data[0][28] != 'LEVEL_ONE'               ||
-        data[0][29] != 'LEVEL_TWO'               ||
-        data[0][30] != 'LEVEL_THREE'             ||
-        data[0][31] != 'LEVEL_FOUR'  
+        data[0][7] != 'VAT_GROUP'                ||
+        data[0][8] != 'PROFIT_MARGIN'            ||
+        data[0][9] != 'COST_PRICE_VAT_INCL'      ||
+        data[0][10] != 'COST_PRICE_VAT_EXCL'     ||
+        data[0][11] != 'SELLING_PRICE_VAT_INCL'  ||
+        data[0][12] != 'SELLING_PRICE_VAT_EXCL'  ||
+        data[0][13] != 'UOM'                     ||
+        data[0][14] != 'PACK_SIZE'               ||
+        data[0][15] != 'STOCK'                   ||
+        data[0][16] != 'MINIMUM_INVENTORY'       ||
+        data[0][17] != 'MAXIMUM_INVENTORY'       ||
+        data[0][18] != 'DEFAULT_REORDER_QTY'     ||
+        data[0][19] != 'DEFAULT_REORDER_LEVEL'   ||  
+        data[0][20] != 'ACTIVE'                  ||
+        data[0][21] != 'SELLABLE'                ||
+        data[0][22] != 'INGREDIENTS'             ||
+        data[0][23] != 'SUPPLIER'                ||
+        data[0][24] != 'DEPARTMENT'              ||
+        data[0][25] != 'CLASS'                   ||
+        data[0][26] != 'SUB_CLASS'               ||
+        data[0][27] != 'CATEGORY'                ||
+        data[0][28] != 'SUB_CATEGORY'            ||
+        data[0][29] != 'LEVEL_ONE'               ||
+        data[0][30] != 'LEVEL_TWO'               ||
+        data[0][31] != 'LEVEL_THREE'             ||
+        data[0][32] != 'LEVEL_FOUR'  
         )
     {
       valid = false
@@ -449,31 +453,32 @@ export class ProductMassManagerComponent implements OnInit {
         commonName          : dt[i][4],
         discount            : dt[i][5],
         vat                 : dt[i][6],
-        profitMargin        : dt[i][7],
-        costPriceVatIncl    : dt[i][8],
-        costPriceVatExcl    : dt[i][9],
-        sellingPriceVatIncl : dt[i][10],
-        sellingPriceVatExcl : dt[i][11],
-        uom                 : dt[i][12],
-        packSize            : dt[i][13],
-        stock               : dt[i][14],
-        minimumInventory    : dt[i][15],
-        maximumInventory    : dt[i][16],
-        defaultReorderQty   : dt[i][17],
-        defaultReorderLevel : dt[i][18],
-        active              : dt[i][19],
-        sellable            : dt[i][20],
-        ingredients         : dt[i][21],
-        supplier            : {name : dt[i][22]},
-        department          : {name : dt[i][23]},
-        class_              : {name : dt[i][24]},
-        subClass            : {name : dt[i][25]},
-        category            : {name : dt[i][26]},
-        subCategory         : {name : dt[i][27]},
-        levelOne            : {name : dt[i][28]},
-        levelTwo            : {name : dt[i][29]},
-        levelThree          : {name : dt[i][30]},
-        levelFour           : {name : dt[i][31]}
+        vatGroup            : dt[i][7],
+        profitMargin        : dt[i][8],
+        costPriceVatIncl    : dt[i][9],
+        costPriceVatExcl    : dt[i][10],
+        sellingPriceVatIncl : dt[i][11],
+        sellingPriceVatExcl : dt[i][12],
+        uom                 : dt[i][13],
+        packSize            : dt[i][14],
+        stock               : dt[i][15],
+        minimumInventory    : dt[i][16],
+        maximumInventory    : dt[i][17],
+        defaultReorderQty   : dt[i][18],
+        defaultReorderLevel : dt[i][19],
+        active              : dt[i][20],
+        sellable            : dt[i][21],
+        ingredients         : dt[i][22],
+        supplier            : {name : dt[i][23]},
+        department          : {name : dt[i][24]},
+        class_              : {name : dt[i][25]},
+        subClass            : {name : dt[i][26]},
+        category            : {name : dt[i][27]},
+        subCategory         : {name : dt[i][28]},
+        levelOne            : {name : dt[i][29]},
+        levelTwo            : {name : dt[i][30]},
+        levelThree          : {name : dt[i][31]},
+        levelFour           : {name : dt[i][32]}
       }
 
       if(dt[i][0] == undefined){
@@ -513,31 +518,32 @@ export class ProductMassManagerComponent implements OnInit {
         commonName          : dt[i][4],
         discount            : dt[i][5],
         vat                 : dt[i][6],
-        profitMargin        : dt[i][7],
-        costPriceVatIncl    : dt[i][8],
-        costPriceVatExcl    : dt[i][9],
-        sellingPriceVatIncl : dt[i][10],
-        sellingPriceVatExcl : dt[i][11],
-        uom                 : dt[i][12],
-        packSize            : dt[i][13],
-        stock               : dt[i][14],
-        minimumInventory    : dt[i][15],
-        maximumInventory    : dt[i][16],
-        defaultReorderQty   : dt[i][17],
-        defaultReorderLevel : dt[i][18],
-        active              : dt[i][19],
-        sellable            : dt[i][20],
-        ingredients         : dt[i][21],
-        supplier            : {name : dt[i][22]},
-        department          : {name : dt[i][23]},
-        class_              : {name : dt[i][24]},
-        subClass            : {name : dt[i][25]},
-        category            : {name : dt[i][26]},
-        subCategory         : {name : dt[i][27]},
-        levelOne            : {name : dt[i][28]},
-        levelTwo            : {name : dt[i][29]},
-        levelThree          : {name : dt[i][30]},
-        levelFour           : {name : dt[i][31]}
+        vatGroup            : dt[i][7],
+        profitMargin        : dt[i][8],
+        costPriceVatIncl    : dt[i][9],
+        costPriceVatExcl    : dt[i][10],
+        sellingPriceVatIncl : dt[i][11],
+        sellingPriceVatExcl : dt[i][12],
+        uom                 : dt[i][13],
+        packSize            : dt[i][14],
+        stock               : dt[i][15],
+        minimumInventory    : dt[i][16],
+        maximumInventory    : dt[i][17],
+        defaultReorderQty   : dt[i][18],
+        defaultReorderLevel : dt[i][19],
+        active              : dt[i][20],
+        sellable            : dt[i][21],
+        ingredients         : dt[i][22],
+        supplier            : {name : dt[i][23]},
+        department          : {name : dt[i][24]},
+        class_              : {name : dt[i][25]},
+        subClass            : {name : dt[i][26]},
+        category            : {name : dt[i][27]},
+        subCategory         : {name : dt[i][28]},
+        levelOne            : {name : dt[i][29]},
+        levelTwo            : {name : dt[i][30]},
+        levelThree          : {name : dt[i][31]},
+        levelFour           : {name : dt[i][32]}
       }
 
       if(dt[i][0] == undefined){
@@ -577,31 +583,32 @@ export class ProductMassManagerComponent implements OnInit {
         commonName          : dt[i][4],
         discount            : dt[i][5],
         vat                 : dt[i][6],
-        profitMargin        : dt[i][7],
-        costPriceVatIncl    : dt[i][8],
-        costPriceVatExcl    : dt[i][9],
-        sellingPriceVatIncl : dt[i][10],
-        sellingPriceVatExcl : dt[i][11],
-        uom                 : dt[i][12],
-        packSize            : dt[i][13],
-        stock               : dt[i][14],
-        minimumInventory    : dt[i][15],
-        maximumInventory    : dt[i][16],
-        defaultReorderQty   : dt[i][17],
-        defaultReorderLevel : dt[i][18],
-        active              : dt[i][19],
-        sellable            : dt[i][20],
-        ingredients         : dt[i][21],
-        supplier            : {name : dt[i][22]},
-        department          : {name : dt[i][23]},
-        class_              : {name : dt[i][24]},
-        subClass            : {name : dt[i][25]},
-        category            : {name : dt[i][26]},
-        subCategory         : {name : dt[i][27]},
-        levelOne            : {name : dt[i][28]},
-        levelTwo            : {name : dt[i][29]},
-        levelThree          : {name : dt[i][30]},
-        levelFour           : {name : dt[i][31]}
+        vatGroup            : dt[i][7],
+        profitMargin        : dt[i][8],
+        costPriceVatIncl    : dt[i][9],
+        costPriceVatExcl    : dt[i][10],
+        sellingPriceVatIncl : dt[i][11],
+        sellingPriceVatExcl : dt[i][12],
+        uom                 : dt[i][13],
+        packSize            : dt[i][14],
+        stock               : dt[i][15],
+        minimumInventory    : dt[i][16],
+        maximumInventory    : dt[i][17],
+        defaultReorderQty   : dt[i][18],
+        defaultReorderLevel : dt[i][19],
+        active              : dt[i][20],
+        sellable            : dt[i][21],
+        ingredients         : dt[i][22],
+        supplier            : {name : dt[i][23]},
+        department          : {name : dt[i][24]},
+        class_              : {name : dt[i][25]},
+        subClass            : {name : dt[i][26]},
+        category            : {name : dt[i][27]},
+        subCategory         : {name : dt[i][28]},
+        levelOne            : {name : dt[i][29]},
+        levelTwo            : {name : dt[i][30]},
+        levelThree          : {name : dt[i][31]},
+        levelFour           : {name : dt[i][32]}
       }
 
       if(dt[i][0] == undefined){
@@ -641,31 +648,32 @@ export class ProductMassManagerComponent implements OnInit {
         commonName          : dt[i][4],
         discount            : dt[i][5],
         vat                 : dt[i][6],
-        profitMargin        : dt[i][7],
-        costPriceVatIncl    : dt[i][8],
-        costPriceVatExcl    : dt[i][9],
-        sellingPriceVatIncl : dt[i][10],
-        sellingPriceVatExcl : dt[i][11],
-        uom                 : dt[i][12],
-        packSize            : dt[i][13],
-        stock               : dt[i][14],
-        minimumInventory    : dt[i][15],
-        maximumInventory    : dt[i][16],
-        defaultReorderQty   : dt[i][17],
-        defaultReorderLevel : dt[i][18],
-        active              : dt[i][19],
-        sellable            : dt[i][20],
-        ingredients         : dt[i][21],
-        supplier            : {name : dt[i][22]},
-        department          : {name : dt[i][23]},
-        class_              : {name : dt[i][24]},
-        subClass            : {name : dt[i][25]},
-        category            : {name : dt[i][26]},
-        subCategory         : {name : dt[i][27]},
-        levelOne            : {name : dt[i][28]},
-        levelTwo            : {name : dt[i][29]},
-        levelThree          : {name : dt[i][30]},
-        levelFour           : {name : dt[i][31]}
+        vatGroup            : dt[i][7],
+        profitMargin        : dt[i][8],
+        costPriceVatIncl    : dt[i][9],
+        costPriceVatExcl    : dt[i][10],
+        sellingPriceVatIncl : dt[i][11],
+        sellingPriceVatExcl : dt[i][12],
+        uom                 : dt[i][13],
+        packSize            : dt[i][14],
+        stock               : dt[i][15],
+        minimumInventory    : dt[i][16],
+        maximumInventory    : dt[i][17],
+        defaultReorderQty   : dt[i][18],
+        defaultReorderLevel : dt[i][19],
+        active              : dt[i][20],
+        sellable            : dt[i][21],
+        ingredients         : dt[i][22],
+        supplier            : {name : dt[i][23]},
+        department          : {name : dt[i][24]},
+        class_              : {name : dt[i][25]},
+        subClass            : {name : dt[i][26]},
+        category            : {name : dt[i][27]},
+        subCategory         : {name : dt[i][28]},
+        levelOne            : {name : dt[i][29]},
+        levelTwo            : {name : dt[i][30]},
+        levelThree          : {name : dt[i][31]},
+        levelFour           : {name : dt[i][32]}
       }
 
       if(dt[i][0] == undefined){
@@ -764,6 +772,7 @@ export interface IProduct {
   levelFour           : ILevelFour
   discount            : number
   vat                 : number
+  vatGroup            : string
   profitMargin        : number
   costPriceVatIncl    : number
   costPriceVatExcl    : number
