@@ -1490,4 +1490,8 @@ Public Class frmMain
     Private Sub ToolStripButton8_Click(sender As Object, e As EventArgs) Handles ToolStripButton8.Click
 
     End Sub
+
+    Private Sub ProductListingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ProductListingToolStripMenuItem.Click
+        frmProductListingReport.ShowDialog()
+    End Sub
 End Class

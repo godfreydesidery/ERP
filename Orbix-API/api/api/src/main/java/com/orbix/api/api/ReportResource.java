@@ -173,7 +173,7 @@ public class ReportResource {
 	@PostMapping("/reports/product_listing_report")
 	public ResponseEntity<List<ProductListingReport>> productListingReport(
 			@RequestBody ProductListingReportArgs args){
-		return ResponseEntity.ok().body(productListingReportService.getProductListingReport(args.from, args.to));
+		return ResponseEntity.ok().body(productListingReportService.getProductListingReport(args.from, args.to, args.tillNo));
 	}	
 	
 	@PostMapping("/reports/fast_moving_products_report")
@@ -279,6 +279,7 @@ class SlowMovingProductsReportArgs {
 class ProductListingReportArgs {
 	LocalDate from;
 	LocalDate to;
+	String tillNo;
 }
 
 @Data

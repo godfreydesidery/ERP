@@ -15,5 +15,6 @@ import com.orbix.api.reports.models.ProductListingReport;
 public interface ProductListingReportService {
 	List<ProductListingReport> getProductListingReport(
 			LocalDate from,
-			LocalDate to);
+			LocalDate to,
+			String tillNo);
 }

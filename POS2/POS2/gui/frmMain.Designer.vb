@@ -25,11 +25,11 @@ Partial Class frmMain
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
-        Dim DataGridViewCellStyle24 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle25 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.MenuStrip = New System.Windows.Forms.MenuStrip()
         Me.FileMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
@@ -40,6 +40,8 @@ Partial Class frmMain
         Me.FloatToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PickUpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PettyCashToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OpenCashDrawerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DisplayPoleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.XReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ZReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -151,8 +153,7 @@ Partial Class frmMain
         Me.btn2 = New System.Windows.Forms.Button()
         Me.btn1 = New System.Windows.Forms.Button()
         Me.cmbProducts = New System.Windows.Forms.ComboBox()
-        Me.OpenCashDrawerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DisplayPoleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ProductListingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip.SuspendLayout()
         Me.ToolStrip.SuspendLayout()
         Me.StatusStrip.SuspendLayout()
@@ -186,22 +187,22 @@ Partial Class frmMain
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(178, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(105, 6)
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(178, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(105, 6)
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(178, 6)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(105, 6)
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(181, 26)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(108, 26)
         Me.ExitToolStripMenuItem.Text = "E&xit"
         '
         'WindowsMenu
@@ -229,9 +230,21 @@ Partial Class frmMain
         Me.PettyCashToolStripMenuItem.Size = New System.Drawing.Size(207, 26)
         Me.PettyCashToolStripMenuItem.Text = "Petty Cash"
         '
+        'OpenCashDrawerToolStripMenuItem
+        '
+        Me.OpenCashDrawerToolStripMenuItem.Name = "OpenCashDrawerToolStripMenuItem"
+        Me.OpenCashDrawerToolStripMenuItem.Size = New System.Drawing.Size(207, 26)
+        Me.OpenCashDrawerToolStripMenuItem.Text = "Open Cash Drawer"
+        '
+        'DisplayPoleToolStripMenuItem
+        '
+        Me.DisplayPoleToolStripMenuItem.Name = "DisplayPoleToolStripMenuItem"
+        Me.DisplayPoleToolStripMenuItem.Size = New System.Drawing.Size(207, 26)
+        Me.DisplayPoleToolStripMenuItem.Text = "Display Pole"
+        '
         'ToolStripMenuItem1
         '
-        Me.ToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.XReportToolStripMenuItem, Me.ZReportToolStripMenuItem})
+        Me.ToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.XReportToolStripMenuItem, Me.ZReportToolStripMenuItem, Me.ProductListingToolStripMenuItem})
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
         Me.ToolStripMenuItem1.Size = New System.Drawing.Size(72, 24)
         Me.ToolStripMenuItem1.Text = "Reports"
@@ -239,13 +252,13 @@ Partial Class frmMain
         'XReportToolStripMenuItem
         '
         Me.XReportToolStripMenuItem.Name = "XReportToolStripMenuItem"
-        Me.XReportToolStripMenuItem.Size = New System.Drawing.Size(181, 26)
+        Me.XReportToolStripMenuItem.Size = New System.Drawing.Size(182, 26)
         Me.XReportToolStripMenuItem.Text = "X- Report"
         '
         'ZReportToolStripMenuItem
         '
         Me.ZReportToolStripMenuItem.Name = "ZReportToolStripMenuItem"
-        Me.ZReportToolStripMenuItem.Size = New System.Drawing.Size(181, 26)
+        Me.ZReportToolStripMenuItem.Size = New System.Drawing.Size(182, 26)
         Me.ZReportToolStripMenuItem.Text = "Z-Report"
         '
         'ToolStripMenuItem2
@@ -259,12 +272,12 @@ Partial Class frmMain
         'ToolStripSeparator6
         '
         Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
-        Me.ToolStripSeparator6.Size = New System.Drawing.Size(178, 6)
+        Me.ToolStripSeparator6.Size = New System.Drawing.Size(124, 6)
         '
         'PrinterToolStripMenuItem
         '
         Me.PrinterToolStripMenuItem.Name = "PrinterToolStripMenuItem"
-        Me.PrinterToolStripMenuItem.Size = New System.Drawing.Size(181, 26)
+        Me.PrinterToolStripMenuItem.Size = New System.Drawing.Size(127, 26)
         Me.PrinterToolStripMenuItem.Text = "Printer"
         '
         'ToolStrip
@@ -375,18 +388,18 @@ Partial Class frmMain
         Me.dtgrdViewItemList.Enabled = False
         Me.dtgrdViewItemList.Location = New System.Drawing.Point(0, 66)
         Me.dtgrdViewItemList.Name = "dtgrdViewItemList"
-        DataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.ActiveCaption
-        DataGridViewCellStyle24.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dtgrdViewItemList.RowHeadersDefaultCellStyle = DataGridViewCellStyle24
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.ActiveCaption
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dtgrdViewItemList.RowHeadersDefaultCellStyle = DataGridViewCellStyle4
         Me.dtgrdViewItemList.RowHeadersWidth = 40
-        DataGridViewCellStyle25.BackColor = System.Drawing.Color.LightSteelBlue
-        DataGridViewCellStyle25.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.dtgrdViewItemList.RowsDefaultCellStyle = DataGridViewCellStyle25
+        DataGridViewCellStyle5.BackColor = System.Drawing.Color.LightSteelBlue
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.dtgrdViewItemList.RowsDefaultCellStyle = DataGridViewCellStyle5
         Me.dtgrdViewItemList.RowTemplate.Height = 24
         Me.dtgrdViewItemList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.dtgrdViewItemList.Size = New System.Drawing.Size(1534, 500)
@@ -395,8 +408,8 @@ Partial Class frmMain
         'colBarCode
         '
         Me.colBarCode.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        DataGridViewCellStyle21.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.colBarCode.DefaultCellStyle = DataGridViewCellStyle21
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.colBarCode.DefaultCellStyle = DataGridViewCellStyle1
         Me.colBarCode.FillWeight = 22.57355!
         Me.colBarCode.HeaderText = "Bar Code"
         Me.colBarCode.MinimumWidth = 6
@@ -426,8 +439,8 @@ Partial Class frmMain
         '
         'colPrice
         '
-        DataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.colPrice.DefaultCellStyle = DataGridViewCellStyle22
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.colPrice.DefaultCellStyle = DataGridViewCellStyle2
         Me.colPrice.FillWeight = 17.71424!
         Me.colPrice.HeaderText = "Price@"
         Me.colPrice.Name = "colPrice"
@@ -455,8 +468,8 @@ Partial Class frmMain
         '
         'colAmount
         '
-        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.colAmount.DefaultCellStyle = DataGridViewCellStyle23
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.colAmount.DefaultCellStyle = DataGridViewCellStyle3
         Me.colAmount.FillWeight = 18.71424!
         Me.colAmount.HeaderText = "Amount"
         Me.colAmount.Name = "colAmount"
@@ -1454,17 +1467,11 @@ Partial Class frmMain
         Me.cmbProducts.TabIndex = 32
         Me.cmbProducts.Visible = False
         '
-        'OpenCashDrawerToolStripMenuItem
+        'ProductListingToolStripMenuItem
         '
-        Me.OpenCashDrawerToolStripMenuItem.Name = "OpenCashDrawerToolStripMenuItem"
-        Me.OpenCashDrawerToolStripMenuItem.Size = New System.Drawing.Size(207, 26)
-        Me.OpenCashDrawerToolStripMenuItem.Text = "Open Cash Drawer"
-        '
-        'DisplayPoleToolStripMenuItem
-        '
-        Me.DisplayPoleToolStripMenuItem.Name = "DisplayPoleToolStripMenuItem"
-        Me.DisplayPoleToolStripMenuItem.Size = New System.Drawing.Size(207, 26)
-        Me.DisplayPoleToolStripMenuItem.Text = "Display Pole"
+        Me.ProductListingToolStripMenuItem.Name = "ProductListingToolStripMenuItem"
+        Me.ProductListingToolStripMenuItem.Size = New System.Drawing.Size(182, 26)
+        Me.ProductListingToolStripMenuItem.Text = "Product Listing"
         '
         'frmMain
         '
@@ -1630,4 +1637,5 @@ Partial Class frmMain
     Friend WithEvents btnQ As Button
     Friend WithEvents OpenCashDrawerToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents DisplayPoleToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ProductListingToolStripMenuItem As ToolStripMenuItem
 End Class

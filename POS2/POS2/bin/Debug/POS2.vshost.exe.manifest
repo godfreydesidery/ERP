@@ -92,14 +92,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="POS2.exe" size="505344">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="POS2.exe" size="514560">
       <assemblyIdentity name="POS2" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>qZW9HGMyc5zka42fgUXTVsKVwJ5ixK8W4aOi3H2F2gs=</dsig:DigestValue>
+        <dsig:DigestValue>1zTYFEtpS1yP33xu682s2TLmpTyt4/y12m9XiHzkX2k=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

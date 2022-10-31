@@ -185,6 +185,7 @@
     <Compile Include="general\PettyCash.vb" />
     <Compile Include="general\PointOfSale.vb" />
     <Compile Include="general\Product.vb" />
+    <Compile Include="general\ProductListingReport.vb" />
     <Compile Include="general\RandomKeyGenerator.vb" />
     <Compile Include="general\RawPrinterHelper.vb" />
     <Compile Include="general\Receipt.vb" />
@@ -274,6 +275,12 @@
     <Compile Include="gui\frmPrinters.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="gui\frmProductListingReport.Designer.vb">
+      <DependentUpon>frmProductListingReport.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmProductListingReport.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="gui\frmSearchItem.Designer.vb">
       <DependentUpon>frmSearchItem.vb</DependentUpon>
     </Compile>
@@ -359,6 +366,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="gui\frmPrinters.resx">
       <DependentUpon>frmPrinters.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmProductListingReport.resx">
+      <DependentUpon>frmProductListingReport.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="gui\frmSearchItem.resx">
       <DependentUpon>frmSearchItem.vb</DependentUpon>

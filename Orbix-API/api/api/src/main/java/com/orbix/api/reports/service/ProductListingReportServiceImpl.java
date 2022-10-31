@@ -30,8 +30,12 @@ public class ProductListingReportServiceImpl implements ProductListingReportServ
 	private final SaleRepository saleRepository;
 	
 	@Override
-	public List<ProductListingReport> getProductListingReport(LocalDate from, LocalDate to) {
-	return saleRepository.getProductListingReport(from, to);
+	public List<ProductListingReport> getProductListingReport(LocalDate from, LocalDate to, String tillNo) {
+		if(tillNo == null) {
+			return saleRepository.getProductListingReport(from, to);
+		}else {
+			return saleRepository.getProductListingReportByTill(from, to, tillNo);
+		}	
 	}
 
 }

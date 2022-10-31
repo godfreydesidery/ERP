@@ -13,6 +13,7 @@ import com.orbix.api.domain.Product;
  */
 public interface ProductListingReport {
 	LocalDate getDate();
+	String getBarcode();
 	String getCode();
 	String getDescription();
 	double getQty();
