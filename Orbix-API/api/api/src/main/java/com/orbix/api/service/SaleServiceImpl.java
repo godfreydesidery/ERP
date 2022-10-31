@@ -53,9 +53,6 @@ public class SaleServiceImpl implements SaleService {
 	private final SaleDetailRepository saleDetailRepository;
 	private final UserRepository userRepository;
 	private final DayRepository dayRepository;
-	private final ProductRepository productRepository;
-	private final ProductStockCardService productStockCardService;
-
 	@Override
 	public SaleModel save(Sale sale) {
 		Sale s = saleRepository.save(sale);	

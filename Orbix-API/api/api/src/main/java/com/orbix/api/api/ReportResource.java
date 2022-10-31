@@ -4,7 +4,9 @@
 package com.orbix.api.api;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.orbix.api.domain.Product;
 import com.orbix.api.domain.Supplier;
@@ -26,6 +29,9 @@ import com.orbix.api.reports.models.MaterialUsageReport;
 import com.orbix.api.reports.models.NegativeStockReport;
 import com.orbix.api.reports.models.ProductListingReport;
 import com.orbix.api.reports.models.ProductStockCardReport;
+import com.orbix.api.reports.models.ProductStockSummaryReport;
+import com.orbix.api.reports.models.PurchaseSummaryReport;
+import com.orbix.api.reports.models.SalesSummaryReport;
 import com.orbix.api.reports.models.SlowMovingProductsReport;
 import com.orbix.api.reports.models.SupplierStockStatusReport;
 import com.orbix.api.reports.models.SupplySalesReport;
@@ -40,6 +46,9 @@ import com.orbix.api.reports.service.PurchaseReportService;
 import com.orbix.api.reports.service.SalesReportService;
 import com.orbix.api.reports.service.SlowMovingProductsReportService;
 import com.orbix.api.reports.service.SupplierStockStatusReportService;
+import com.orbix.api.repositories.ProductStockRepository;
+import com.orbix.api.repositories.PurchaseRepository;
+import com.orbix.api.repositories.SaleRepository;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -65,6 +74,10 @@ public class ReportResource {
 	private final SlowMovingProductsReportService slowMovingProductsReportService;
 	private final LpoReportService lpoReportService;
 	private final GrnReportService grnReportService;
+	private final ProductStockRepository productStockRepository;
+	private final SaleRepository saleRepository;
+	private final PurchaseRepository purchaseRepository;
+	
 	
 	@PostMapping("/reports/daily_sales_report")
 	public ResponseEntity<List<DailySalesReport>> dailySalesReport(
@@ -83,6 +96,43 @@ public class ReportResource {
 			@RequestBody DailySummaryReportArgs args){
 		return ResponseEntity.ok().body(salesReportService.getDailySummaryReport(args.from, args.to));
 	}
+	
+	@PostMapping("/reports/purchase_summary_report")
+	public ResponseEntity<List<PurchaseSummaryReport>> purchaseSummaryReport(
+			@RequestBody PurchaseSummaryReportArgs args){
+		return ResponseEntity.ok().body(purchaseRepository.getPurchaseSummaryReport(args.from, args.to));
+	}
+	
+	@PostMapping("/reports/sales_summary_report")
+	public ResponseEntity<List<SalesSummaryReport>> salesSummaryReport(
+			@RequestBody SalesSummaryReportArgs args){
+		return ResponseEntity.ok().body(saleRepository.getSalesSummaryReport(args.from, args.to));
+	}
+	
+	@PostMapping("/reports/product_stock_summary_report")
+	public ResponseEntity<List<ProductStockSummaryReport>> productStockSummaryReport(
+			@RequestBody ProductStockSummaryReportArgs args){
+		return ResponseEntity.ok().body(productStockRepository.getProductStockSummaryReport(args.from, args.to));
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
 	
 	@PostMapping("/reports/negative_stock_report")
 	public ResponseEntity<List<NegativeStockReport>> negativeStockReport(
@@ -172,6 +222,13 @@ class DailySummaryReportArgs {
 }
 
 @Data
+class PurchasesAndSalesSummaryReportArgs {
+	LocalDate from;
+	LocalDate to;
+	
+}
+
+@Data
 class NegativeStockReportArgs {
 	LocalDate from;
 	LocalDate to;
@@ -240,4 +297,21 @@ class GrnReportArgs {
 	List<Product> products;
 }
 
+@Data
+class PurchaseSummaryReportArgs{
+	LocalDate from;
+	LocalDate to;
+}
+
+@Data
+class SalesSummaryReportArgs{
+	LocalDate from;
+	LocalDate to;
+}
+
+@Data
+class ProductStockSummaryReportArgs{
+	LocalDate from;
+	LocalDate to;
+}
 

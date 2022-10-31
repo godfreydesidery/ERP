@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.orbix.api.domain.Purchase;
 import com.orbix.api.reports.models.DailyPurchaseReport;
 import com.orbix.api.reports.models.DailySalesReport;
+import com.orbix.api.reports.models.PurchaseSummaryReport;
 
 /**
  * @author Godfrey
@@ -39,4 +40,24 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
 					nativeQuery = true					
 			)
 	List<DailyPurchaseReport> getDailyPurchaseReport(LocalDate from, LocalDate to);
+	
+	@Query(
+			value = "SELECT\r\n" + 
+					"`days`.`bussiness_date` AS `date`,\r\n" + 
+					"SUM(CASE WHEN `purchase_details`.`qty` > 0 THEN `purchase_details`.`qty`*`purchase_details`.`cost_price_vat_incl` ELSE 0 END) AS `totalPurchases`\r\n" + 
+					"FROM\r\n" + 
+					"(SELECT * FROM `days` WHERE `bussiness_date` BETWEEN :from AND :to)`days`\r\n" + 
+					"LEFT JOIN\r\n" + 
+					"`purchases`\r\n" + 
+					"ON\r\n" + 
+					"`days`.`id`=`purchases`.`day_id`\r\n" + 
+					"LEFT JOIN\r\n" + 
+					"`purchase_details`\r\n" + 
+					"ON\r\n" + 
+					"`purchase_details`.`purchase_id`=`purchases`.`id`\r\n" + 
+					"GROUP BY\r\n" + 
+					"`date`",
+					nativeQuery = true					
+			)
+	List<PurchaseSummaryReport> getPurchaseSummaryReport(LocalDate from, LocalDate to);
 }

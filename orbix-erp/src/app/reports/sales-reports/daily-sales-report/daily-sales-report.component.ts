@@ -103,7 +103,7 @@ export class DailySalesReportComponent implements OnInit {
       )
       .catch(error => {
         console.log(error)
-        ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load report')
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load Sales report')
       })
   }
 

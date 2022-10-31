@@ -22,4 +22,10 @@ public interface DailySummaryReport {
 	double getCreditSales();
 	//double getStockTarget();
 	//double GetVariationInStockTarget();
+	
+	
+	double getTotalSalesVatExcl();
+	double getTotalSalesVatIncl();
+	double getTotalVat();
+	double getTotalPurchases();
 }

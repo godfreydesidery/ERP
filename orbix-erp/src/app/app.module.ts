@@ -106,6 +106,7 @@ import { DrpComponent } from './mechandizer/drp/drp.component';
 import { DailyProductionReportComponent } from './reports/production-reports/daily-production-report/daily-production-report.component';
 import { MaterialVsProductionReportComponent } from './reports/production-reports/material-vs-production-report/material-vs-production-report.component';
 import { MaterialUsageReportComponent } from './reports/production-reports/material-usage-report/material-usage-report.component';
+import { SalesAndPurchasesSummaryReportComponent } from './reports/sales-reports/sales-and-purchases-summary-report/sales-and-purchases-summary-report.component';
 
 
 @NgModule({
@@ -202,6 +203,7 @@ import { MaterialUsageReportComponent } from './reports/production-reports/mater
     DailyProductionReportComponent,
     MaterialVsProductionReportComponent,
     MaterialUsageReportComponent,
+    SalesAndPurchasesSummaryReportComponent,
     //BatchProductionComponent,
     //CustomProductionComponent,
   ],
@@ -293,6 +295,7 @@ import { MaterialUsageReportComponent } from './reports/production-reports/mater
       {path : 'daily-production-report', component: DailyProductionReportComponent},
       {path : 'material-vs-production-report', component: MaterialVsProductionReportComponent},
       {path : 'material-usage-report', component: MaterialUsageReportComponent},
+      {path : 'sales-and-purchases-summary-report', component: SalesAndPurchasesSummaryReportComponent},
     ]),
     BrowserAnimationsModule,
   ],

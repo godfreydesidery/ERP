@@ -16,6 +16,8 @@ import com.orbix.api.reports.models.DailySalesReport;
 import com.orbix.api.reports.models.DailySummaryReport;
 import com.orbix.api.reports.models.FastMovingProductsReport;
 import com.orbix.api.reports.models.ProductListingReport;
+import com.orbix.api.reports.models.PurchasesAndSalesSummaryReport;
+import com.orbix.api.reports.models.SalesSummaryReport;
 import com.orbix.api.reports.models.SlowMovingProductsReport;
 import com.orbix.api.reports.models.SupplySalesReport;
 
@@ -26,27 +28,14 @@ import com.orbix.api.reports.models.SupplySalesReport;
 @Repository
 public interface SaleRepository extends JpaRepository<Sale, Long> {
 	
-	/*@Query("SELECT day.bussinessDate AS date, "
-			+ "SUM(saleDetail.qty*saleDetail.sellingPriceVatIncl) AS amount, "
-			+ "SUM(saleDetail.qty*saleDetail.discount) AS discount, "
-			+ "SUM(saleDetail.qty*saleDetail.tax) AS tax "
-			+ "FROM "
-			+ "(SELECT d FROM Day d WHERE d.bussinessDate BETWEEN :from AND :to) Day day "
-			+ "JOIN "
-			+ "Sale sale "
-			+ "ON "
-			+ "day=sale.day "
-			+ "JOIN "
-			+ "SaleDetail saleDetail "
-			+ "ON "
-			+ "saleDetail.sale=sale "
-			+ "GROUP BY "
-			+ "date")*/
+	
 	@Query(
 			value = "SELECT\r\n" + 
 					"`days`.`bussiness_date` AS `date`,\r\n" + 
 					"SUM(`sale_details`.`qty`*`sale_details`.`selling_price_vat_incl`) AS `amount`,\r\n" + 
 					"SUM(`sale_details`.`qty`*`sale_details`.`discount`) AS `discount`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`selling_price_vat_excl`) AS `total_sales_vat_excl`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`selling_price_vat_incl`) AS `total_sales_vat_incl`,\r\n" + 
 					"SUM(`sale_details`.`qty`*`sale_details`.`tax`) AS `tax`\r\n" + 
 					"FROM\r\n" + 
 					"(SELECT * FROM `days` WHERE `bussiness_date` BETWEEN :from AND :to)`days`\r\n" + 
@@ -66,14 +55,11 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 	
 	@Query(
 			value = "SELECT\r\n" + 
-					"`days`.`bussiness_date` AS `date`,\r\n" + 
-					"`product_stocks`.`opening_stock`*`product_stocks`.`selling_price_vat_incl` AS `openingStockValue`,\r\n" +
-					"`product_stocks`.`closing_stock`*`product_stocks`.`selling_price_vat_incl` AS `closingStockValue`,\r\n" +
-					"SUM(CASE WHEN `grns`.`status`='RECEIVED' OR `grns`.`status`='ARCHIVED' THEN `grns`.`invoice_amount` ELSE 0 END) AS `purchaseOnCredit`,\r\n" +
-					"SUM(CASE WHEN `sales_receipts`.`status`='APPROVED' OR `sales_receipts`.`status`='ARCHIVED' THEN `sales_receipts`.`amount` ELSE 0 END) AS `amountPaid`,\r\n" +
-					"SUM(CASE WHEN `sales`.`type`='Cash' THEN `sale_details`.`qty`*`sale_details`.`selling_price_vat_incl` ELSE 0 END) AS `cashSales`,\r\n" +
-					"SUM(CASE WHEN `sales`.`type`='Credit' THEN `sale_details`.`qty`*`sale_details`.`selling_price_vat_incl` ELSE 0 END) AS `creditSales`,\r\n" +
-					"SUM(CASE WHEN `sale_details`.`qty` > 0 THEN `sale_details`.`qty`*(`sale_details`.`selling_price_vat_incl` - `sale_details`.`cost_price_vat_incl`) ELSE 0 END) AS `grossMargin`\r\n" +
+					"`days`.`bussiness_date` AS `date`,\r\n" + 					
+					"SUM(CASE WHEN `sale_details`.`qty` > 0 THEN `sale_details`.`qty`*`sale_details`.`selling_price_vat_excl` ELSE 0 END) AS `totalSalesVatExcl`,\r\n" + 
+					"SUM(CASE WHEN `sale_details`.`qty` > 0 THEN `sale_details`.`qty`*`sale_details`.`selling_price_vat_incl` ELSE 0 END) AS `totalSalesVatIncl`,\r\n" + 
+					"SUM(CASE WHEN `sale_details`.`qty` > 0 THEN `sale_details`.`qty`*(`sale_details`.`selling_price_vat_incl`-`sale_details`.`cost_price_vat_incl`) ELSE 0 END) AS `grossMargin`,\r\n" + 
+					"SUM(CASE WHEN `sale_details`.`qty` > 0 THEN `sale_details`.`qty`*`sale_details`.`tax` ELSE 0 END) AS `totalVat`\r\n" + 
 					"FROM\r\n" + 
 					"(SELECT * FROM `days` WHERE `bussiness_date` BETWEEN :from AND :to)`days`\r\n" + 
 					"LEFT JOIN\r\n" + 
@@ -84,23 +70,102 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 					"`sale_details`\r\n" + 
 					"ON\r\n" + 
 					"`sale_details`.`sale_id`=`sales`.`id`\r\n" + 
-					"LEFT JOIN\r\n" + 
+					"GROUP BY\r\n" + 
+					"`date`",
+					nativeQuery = true					
+			)
+	List<SalesSummaryReport> getSalesSummaryReport(LocalDate from, LocalDate to);
+	
+	@Query(
+			value = "SELECT\r\n" + 
+					"`days`.`bussiness_date` AS `date`,\r\n" + 
+					"SUM(CASE WHEN `product_stocks`.`opening_stock` > 0 THEN `product_stocks`.`opening_stock`*`product_stocks`.`selling_price_vat_incl` ELSE 0 END) AS `openingStockValue`,\r\n" +
+					"SUM(CASE WHEN `product_stocks`.`closing_stock` > 0 THEN `product_stocks`.`closing_stock`*`product_stocks`.`selling_price_vat_incl` ELSE 0 END) AS `closingStockValue`,\r\n" +	
+					"SUM(CASE WHEN `sale_details`.`qty` > 0 THEN `sale_details`.`qty`*`sale_details`.`selling_price_vat_excl` ELSE 0 END) AS `totalSalesVatExcl`,\r\n" +
+					"SUM(CASE WHEN `sale_details`.`qty` > 0 THEN `sale_details`.`qty`*`sale_details`.`selling_price_vat_incl` ELSE 0 END) AS `totalSalesVatIncl`,\r\n" +
+					"SUM(CASE WHEN `sale_details`.`qty` > 0 THEN `sale_details`.`qty`*(`sale_details`.`selling_price_vat_incl`-`sale_details`.`selling_price_vat_excl`) ELSE 0 END) AS `totalVat`,\r\n" +
+					"SUM(CASE WHEN `purchase_details`.`qty` > 0 THEN `purchase_details`.`qty`*`purchase_details`.`cost_price_vat_incl` ELSE 0 END) AS `totalPurchases`,\r\n" +
+					"SUM(CASE WHEN `grns`.`status`='RECEIVED' OR `grns`.`status`='ARCHIVED' THEN `grns`.`invoice_amount` ELSE 0 END) AS `purchaseOnCredit`,\r\n" +
+					"SUM(CASE WHEN `sales_receipts`.`status`='APPROVED' OR `sales_receipts`.`status`='ARCHIVED' THEN `sales_receipts`.`amount` ELSE 0 END) AS `amountPaid`,\r\n" +
+					"SUM(CASE WHEN `sales`.`type`='Cash' THEN `sale_details`.`qty`*`sale_details`.`selling_price_vat_incl` ELSE 0 END) AS `cashSales`,\r\n" +
+					"SUM(CASE WHEN `sales`.`type`='Credit' THEN `sale_details`.`qty`*`sale_details`.`selling_price_vat_incl` ELSE 0 END) AS `creditSales`,\r\n" +
+					"SUM(CASE WHEN `sale_details`.`qty` > 0 THEN `sale_details`.`qty`*(`sale_details`.`selling_price_vat_incl` - `sale_details`.`cost_price_vat_incl`) ELSE 0 END) AS `grossMargin`\r\n" +
+					"FROM\r\n" + 
+					"(SELECT * FROM `days` WHERE `bussiness_date` BETWEEN :from AND :to)`days`\r\n" + 
+					"INNER JOIN\r\n" + 
+					"`sales`\r\n" + 
+					"ON\r\n" + 
+					"`days`.`id`=`sales`.`day_id`\r\n" + 
+					"RIGHT JOIN\r\n" + 
+					"`sale_details`\r\n" + 
+					"ON\r\n" + 
+					"`sale_details`.`sale_id`=`sales`.`id`\r\n" + 
+					"INNER JOIN\r\n" + 
 					"`product_stocks`\r\n" + 
 					"ON\r\n" + 
 					"`product_stocks`.`day_id`=`days`.`id`\r\n" + 
-					"LEFT JOIN\r\n" + 
+					"INNER JOIN\r\n" + 
 					"`grns`\r\n" + 
 					"ON\r\n" + 
 					"`grns`.`approved_at`=`days`.`id`\r\n" + 
-					"LEFT JOIN\r\n" + 
+					"INNER JOIN\r\n" + 
 					"`sales_receipts`\r\n" + 
 					"ON\r\n" + 
 					"`sales_receipts`.`approved_at`=`days`.`id`\r\n" + 
+					"INNER JOIN\r\n" + 
+					"`purchases`\r\n" + 
+					"ON\r\n" + 
+					"`days`.`id`=`purchases`.`day_id`\r\n" + 
+					"RIGHT JOIN\r\n" + 
+					"`purchase_details`\r\n" + 
+					"ON\r\n" + 
+					"`purchase_details`.`purchase_id`=`purchases`.`id`\r\n" + 
 					"GROUP BY\r\n" + 
 					"`date`",
 					nativeQuery = true					
 			)
 	List<DailySummaryReport> getDailySummaryReport(LocalDate from, LocalDate to);
+	
+	
+	
+	@Query(
+			value = "SELECT\r\n" + 
+					"`days`.`bussiness_date` AS `date`,\r\n" + 
+					"SUM(CASE WHEN `product_stocks`.`opening_stock` > 0 THEN `product_stocks`.`opening_stock`*`product_stocks`.`selling_price_vat_incl` ELSE 0 END) AS `openingStockValue`,\r\n" +
+					"SUM(CASE WHEN `product_stocks`.`closing_stock` > 0 THEN `product_stocks`.`closing_stock`*`product_stocks`.`selling_price_vat_incl` ELSE 0 END) AS `closingStockValue`,\r\n" +	
+					"SUM(CASE WHEN `sale_details`.`qty` > 0 THEN `sale_details`.`qty`*`sale_details`.`selling_price_vat_excl` ELSE 0 END) AS `totalSalesVatExcl`,\r\n" +
+					"SUM(CASE WHEN `sale_details`.`qty` > 0 THEN `sale_details`.`qty`*`sale_details`.`selling_price_vat_incl` ELSE 0 END) AS `totalSalesVatIncl`,\r\n" +
+					"SUM(CASE WHEN `sale_details`.`qty` > 0 THEN `sale_details`.`qty`*(`sale_details`.`selling_price_vat_incl`-`sale_details`.`selling_price_vat_excl`) ELSE 0 END) AS `totalVat`,\r\n" +
+					"SUM(CASE WHEN `purchase_details`.`qty` > 0 THEN `purchase_details`.`qty`*`purchase_details`.`cost_price_vat_incl` ELSE 0 END) AS `totalPurchases`,\r\n" +
+					"SUM(CASE WHEN `sale_details`.`qty` > 0 THEN `sale_details`.`qty`*(`sale_details`.`selling_price_vat_incl` - `sale_details`.`cost_price_vat_incl`) ELSE 0 END) AS `grossMargin`\r\n" +
+					"FROM\r\n" + 
+					"(SELECT * FROM `days` WHERE `bussiness_date` BETWEEN :from AND :to)`days`\r\n" + 
+					"INNER JOIN\r\n" + 
+					"`sales`\r\n" + 
+					"ON\r\n" + 
+					"`days`.`id`=`sales`.`day_id`\r\n" + 
+					"RIGHT JOIN\r\n" + 
+					"`sale_details`\r\n" + 
+					"ON\r\n" + 
+					"`sale_details`.`sale_id`=`sales`.`id`\r\n" + 
+					"INNER JOIN\r\n" + 
+					"`product_stocks`\r\n" + 
+					"ON\r\n" + 
+					"`product_stocks`.`day_id`=`days`.`id`\r\n" + 
+					"INNER JOIN\r\n" + 
+					"`purchases`\r\n" + 
+					"ON\r\n" + 
+					"`days`.`id`=`purchases`.`day_id`\r\n" + 
+					"RIGHT JOIN\r\n" + 
+					"`purchase_details`\r\n" + 
+					"ON\r\n" + 
+					"`purchase_details`.`purchase_id`=`purchases`.`id`\r\n" + 
+					"GROUP BY\r\n" + 
+					"`date`",
+					nativeQuery = true					
+			)
+	List<DailySummaryReport> getDailySummaryReport2(LocalDate from, LocalDate to);
+	
 	
 	@Query(
 			value = "SELECT\r\n" + 

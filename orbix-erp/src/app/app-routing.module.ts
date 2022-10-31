@@ -78,6 +78,7 @@ import { DrpComponent } from './mechandizer/drp/drp.component';
 import { DailyProductionReportComponent } from './reports/production-reports/daily-production-report/daily-production-report.component';
 import { MaterialVsProductionReportComponent } from './reports/production-reports/material-vs-production-report/material-vs-production-report.component';
 import { MaterialUsageReportComponent } from './reports/production-reports/material-usage-report/material-usage-report.component';
+import { SalesAndPurchasesSummaryReportComponent } from './reports/sales-reports/sales-and-purchases-summary-report/sales-and-purchases-summary-report.component';
 
 const routes: Routes = [
   {path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard]},
@@ -154,6 +155,7 @@ const routes: Routes = [
   {path: 'daily-production-report', component: DailyProductionReportComponent, canActivate: [AuthGuard]},
   {path: 'material-vs-production-report', component: MaterialVsProductionReportComponent, canActivate: [AuthGuard]},
   {path: 'material-usage-report', component: MaterialUsageReportComponent, canActivate: [AuthGuard]},
+  {path: 'sales-and-purchases-summary-report', component: SalesAndPurchasesSummaryReportComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({
