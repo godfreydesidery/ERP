@@ -37,6 +37,24 @@ Public Class frmPayPoint
 
     Public Shared paid As Boolean = False
 
+    Private Function getReceipt(receiptNo As String)
+        Dim response As New Object
+        Dim json As New JObject
+        Dim receipt As Receipt = New Receipt()
+        Try
+            Cursor.Current = Cursors.WaitCursor
+            response = Web.post(vbNull, "receipt/get_receipt?no=" + receiptNo)
+            json = JObject.Parse(response.ToString())
+            receipt = JsonConvert.DeserializeObject(Of Receipt)(json.ToString())
+            Cursor.Current = Cursors.Default
+            Return receipt
+        Catch ex As Exception
+            Cursor.Current = Cursors.Default
+            MsgBox("Could not load receipt")
+            Return New Receipt
+        End Try
+    End Function
+
     Private Sub btnAccept_Click(sender As Object, e As EventArgs) Handles btnAccept.Click
         paid = False
         Dim amount As Double = txtTotal.Text

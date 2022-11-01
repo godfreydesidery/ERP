@@ -30,6 +30,7 @@ import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.repositories.CartDetailRepository;
 import com.orbix.api.repositories.CartRepository;
 import com.orbix.api.repositories.CustomerRepository;
+import com.orbix.api.repositories.ReceiptRepository;
 import com.orbix.api.repositories.SalesInvoiceRepository;
 import com.orbix.api.repositories.TillRepository;
 import com.orbix.api.service.AllocationService;
@@ -50,6 +51,7 @@ public class CartResource {
 	private final TillRepository tillRepository;
 	private final SalesInvoiceRepository salesInvoiceRepository;
 	private final CartRepository cartRepository;
+	private final ReceiptRepository receiptRepository;
 	private final CartDetailRepository cartDetailRepository;
 	private final 	CartService cartService;
 	private final 	AllocationService allocationService;
@@ -134,5 +136,17 @@ public class CartResource {
 		}		
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/carts/pay").toUriString());
 		return ResponseEntity.created(uri).body(cartService.pay(payment, c.get(), request));
+	}
+	
+	@PostMapping("/receipt/get_receipt")
+	public ResponseEntity<Receipt>pay(
+			@RequestParam(name = "receipt_no") String receiptNo,
+			HttpServletRequest request){
+		Optional<Receipt> r = receiptRepository.findByNo(receiptNo);
+		if(!r.isPresent()) {
+			throw new NotFoundException("Receipt not found in database");
+		}		
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/receipt/get_receipt").toUriString());
+		return ResponseEntity.created(uri).body(r.get());
 	}
 }

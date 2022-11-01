@@ -195,6 +195,7 @@
     <Compile Include="general\StockCard.vb" />
     <Compile Include="general\Till.vb" />
     <Compile Include="general\TillPosition.vb" />
+    <Compile Include="general\TotalSalesReport.vb" />
     <Compile Include="general\User.vb" />
     <Compile Include="general\Web.vb" />
     <Compile Include="gui\frmAllow.Designer.vb">
@@ -299,6 +300,12 @@
     <Compile Include="gui\frmSplash.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="gui\frmTotalSalesReport.Designer.vb">
+      <DependentUpon>frmTotalSalesReport.vb</DependentUpon>
+    </Compile>
+    <Compile Include="gui\frmTotalSalesReport.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="gui\frmXReport.Designer.vb">
       <DependentUpon>frmXReport.vb</DependentUpon>
     </Compile>
@@ -378,6 +385,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="gui\frmSplash.resx">
       <DependentUpon>frmSplash.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\frmTotalSalesReport.resx">
+      <DependentUpon>frmTotalSalesReport.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="gui\frmXReport.resx">
       <DependentUpon>frmXReport.vb</DependentUpon>

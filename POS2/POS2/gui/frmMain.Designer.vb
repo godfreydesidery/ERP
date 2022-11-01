@@ -45,6 +45,7 @@ Partial Class frmMain
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.XReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ZReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ProductListingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
         Me.PrinterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -153,7 +154,7 @@ Partial Class frmMain
         Me.btn2 = New System.Windows.Forms.Button()
         Me.btn1 = New System.Windows.Forms.Button()
         Me.cmbProducts = New System.Windows.Forms.ComboBox()
-        Me.ProductListingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TotalSalesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip.SuspendLayout()
         Me.ToolStrip.SuspendLayout()
         Me.StatusStrip.SuspendLayout()
@@ -244,7 +245,7 @@ Partial Class frmMain
         '
         'ToolStripMenuItem1
         '
-        Me.ToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.XReportToolStripMenuItem, Me.ZReportToolStripMenuItem, Me.ProductListingToolStripMenuItem})
+        Me.ToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.XReportToolStripMenuItem, Me.ZReportToolStripMenuItem, Me.ProductListingToolStripMenuItem, Me.TotalSalesToolStripMenuItem})
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
         Me.ToolStripMenuItem1.Size = New System.Drawing.Size(72, 24)
         Me.ToolStripMenuItem1.Text = "Reports"
@@ -260,6 +261,12 @@ Partial Class frmMain
         Me.ZReportToolStripMenuItem.Name = "ZReportToolStripMenuItem"
         Me.ZReportToolStripMenuItem.Size = New System.Drawing.Size(182, 26)
         Me.ZReportToolStripMenuItem.Text = "Z-Report"
+        '
+        'ProductListingToolStripMenuItem
+        '
+        Me.ProductListingToolStripMenuItem.Name = "ProductListingToolStripMenuItem"
+        Me.ProductListingToolStripMenuItem.Size = New System.Drawing.Size(182, 26)
+        Me.ProductListingToolStripMenuItem.Text = "Product Listing"
         '
         'ToolStripMenuItem2
         '
@@ -1467,11 +1474,11 @@ Partial Class frmMain
         Me.cmbProducts.TabIndex = 32
         Me.cmbProducts.Visible = False
         '
-        'ProductListingToolStripMenuItem
+        'TotalSalesToolStripMenuItem
         '
-        Me.ProductListingToolStripMenuItem.Name = "ProductListingToolStripMenuItem"
-        Me.ProductListingToolStripMenuItem.Size = New System.Drawing.Size(182, 26)
-        Me.ProductListingToolStripMenuItem.Text = "Product Listing"
+        Me.TotalSalesToolStripMenuItem.Name = "TotalSalesToolStripMenuItem"
+        Me.TotalSalesToolStripMenuItem.Size = New System.Drawing.Size(182, 26)
+        Me.TotalSalesToolStripMenuItem.Text = "Total Sales"
         '
         'frmMain
         '
@@ -1638,4 +1645,5 @@ Partial Class frmMain
     Friend WithEvents OpenCashDrawerToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents DisplayPoleToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ProductListingToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents TotalSalesToolStripMenuItem As ToolStripMenuItem
 End Class

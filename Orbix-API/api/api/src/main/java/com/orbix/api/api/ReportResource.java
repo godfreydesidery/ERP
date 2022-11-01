@@ -176,6 +176,12 @@ public class ReportResource {
 		return ResponseEntity.ok().body(productListingReportService.getProductListingReport(args.from, args.to, args.tillNo));
 	}	
 	
+	@PostMapping("/reports/daily_sales_report_by_till")
+	public ResponseEntity<List<DailySalesReport>> dailySalesReport(
+			@RequestBody ProductListingReportArgs args){
+		return ResponseEntity.ok().body(saleRepository.getDailySalesReportByTill(args.from, args.to, args.tillNo));
+	}	
+	
 	@PostMapping("/reports/fast_moving_products_report")
 	public ResponseEntity<List<FastMovingProductsReport>> fastMovingProductsReport(
 			@RequestBody FastMovingProductsReportArgs args){
@@ -205,6 +211,13 @@ class DailySalesReportArgs {
 	LocalDate from;
 	LocalDate to;
 	
+}
+
+@Data
+class TotalSalesReportArgs {
+	LocalDate from;
+	LocalDate to;
+	String tillNo;
 }
 
 @Data

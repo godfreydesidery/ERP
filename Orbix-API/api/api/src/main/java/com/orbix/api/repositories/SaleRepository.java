@@ -55,6 +55,35 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 	
 	@Query(
 			value = "SELECT\r\n" + 
+					"`days`.`bussiness_date` AS `date`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`selling_price_vat_incl`) AS `amount`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`discount`) AS `discount`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`selling_price_vat_excl`) AS `total_sales_vat_excl`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`selling_price_vat_incl`) AS `total_sales_vat_incl`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`tax`) AS `tax`,\r\n" + 
+					"`tills`.`no` AS `tillNo`\r\n" + 
+					"FROM\r\n" + 
+					"(SELECT * FROM `days` WHERE `bussiness_date` BETWEEN :from AND :to)`days`\r\n" + 
+					"JOIN\r\n" + 
+					"`sales`\r\n" + 
+					"ON\r\n" + 
+					"`days`.`id`=`sales`.`day_id`\r\n" + 
+					"JOIN\r\n" + 
+					"`sale_details`\r\n" + 
+					"ON\r\n" + 
+					"`sale_details`.`sale_id`=`sales`.`id`\r\n" +
+					"LEFT JOIN `tills` ON\r\n" + 
+					"`tills`.`id`=`sales`.`till_id`\r\n" + 
+					"WHERE\r\n" +
+					"`days`.`bussiness_date` BETWEEN :from AND :to AND `tills`.`no`=:tillNo\r\n" +
+					"GROUP BY\r\n" + 
+					"`date`",
+					nativeQuery = true					
+			)
+	List<DailySalesReport> getDailySalesReportByTill(LocalDate from, LocalDate to, String tillNo);
+	
+	@Query(
+			value = "SELECT\r\n" + 
 					"`days`.`bussiness_date` AS `date`,\r\n" + 					
 					"SUM(CASE WHEN `sale_details`.`qty` > 0 THEN `sale_details`.`qty`*`sale_details`.`selling_price_vat_excl` ELSE 0 END) AS `totalSalesVatExcl`,\r\n" + 
 					"SUM(CASE WHEN `sale_details`.`qty` > 0 THEN `sale_details`.`qty`*`sale_details`.`selling_price_vat_incl` ELSE 0 END) AS `totalSalesVatIncl`,\r\n" + 

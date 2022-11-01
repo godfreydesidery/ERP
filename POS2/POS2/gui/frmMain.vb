@@ -1,8 +1,4 @@
-﻿Imports System.Windows.Forms
-Imports Devart.Data.MySql
-Imports Microsoft.PointOfService.PosPrinter
-Imports POS.Devices
-Imports Microsoft.PointOfService
+﻿Imports Microsoft.PointOfService
 Imports Newtonsoft.Json.Linq
 Imports Newtonsoft.Json
 
@@ -94,11 +90,6 @@ Public Class frmMain
         End If
     End Sub
 
-
-
-
-
-
     Private Sub ComboBox1_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles cmbProducts.KeyDown
         Dim items As Integer = cmbProducts.Items.Count
         Dim i As Integer
@@ -113,13 +104,6 @@ Public Class frmMain
             cmbProducts.Text = cmbProducts.Items.Item(i - 1).ToString
         End If
     End Sub
-
-
-
-
-
-
-
 
 
 
@@ -388,8 +372,8 @@ Public Class frmMain
         Return vbNull
     End Function
     Dim allow As Boolean = False
-    Private Function calculateValues()
-
+    Private Function calculateValues() As Integer
+        Dim itemCount As Integer = 0
         Try
             dtgrdViewItemList.EndEdit()
             Dim _total As Double = 0
@@ -417,6 +401,8 @@ Public Class frmMain
 
                     _discount = _discount + ((price - discountedPrice) * qty)
 
+                    itemCount = itemCount + 1
+
                     '_discount = _discount + (Val(LCurrency.getValue(dtgrdViewItemList.Item(6, i).Value.ToString)) / 100) * Val(LCurrency.getValue(dtgrdViewItemList.Item(8, i).Value.ToString))
                 End If
             Next
@@ -429,7 +415,7 @@ Public Class frmMain
             'MsgBox(ex.StackTrace)
         End Try
 
-        Return vbNull
+        Return itemCount
     End Function
 
     Private Sub Button4_Click(sender As Object, e As EventArgs)
@@ -585,7 +571,6 @@ Public Class frmMain
         Next
         PointOfSale.printReceipt(Till.TILLNO, receipt.no, Day.bussinessDate, Company.TIN.ToString(), Company.VRN.ToString(), code, descr, qty, price, tax, amount, subTotal, totalVat, total, tender.ToString(), balance.ToString())
 
-
         Return vbNull
     End Function
 
@@ -622,10 +607,29 @@ Public Class frmMain
         Return vbNull
     End Function
 
+    Private Function getReceipt(receiptNo As String)
+        Dim response As New Object
+        Dim json As New JObject
+        Dim receipt As Receipt = New Receipt()
+        Try
+            Cursor.Current = Cursors.WaitCursor
+            response = Web.post(vbNull, "receipt/get_receipt?receipt_no=" + receiptNo)
+            json = JObject.Parse(response.ToString())
+            receipt = JsonConvert.DeserializeObject(Of Receipt)(json.ToString())
+            Cursor.Current = Cursors.Default
+            Return receipt
+        Catch ex As Exception
+            Cursor.Current = Cursors.Default
+            MsgBox("Could not load receipt")
+            Return New Receipt
+        End Try
+    End Function
+
     Private Sub btnPay_Click(sender As Object, e As EventArgs) Handles btnPay.Click
+        Dim itemCount As Integer = 0
         Try
             refreshList()
-            calculateValues()
+            itemCount = calculateValues()
             If dtgrdViewItemList.RowCount > 0 And isAllVoid() = False Then
                 frmPayPoint.txtTotal.Text = FormatNumber(txtGrandTotal.Text, 2, , , TriState.True)
                 frmPayPoint.ShowDialog(Me)
@@ -634,6 +638,22 @@ Public Class frmMain
                 Else
                     If frmPayPoint.paid = True Then
                         Dim receipt As Receipt = Receipt.CURRENT_RECEIPT
+                        For k As Integer = 1 To 21
+                            Dim c As Integer = 0
+                            For Each detail As ReceiptDetail In receipt.receiptDetails
+                                c = c + 1
+                            Next
+                            If Not c = itemCount Then
+                                Receipt.CURRENT_RECEIPT = getReceipt(receipt.no)
+                                receipt = Receipt.CURRENT_RECEIPT
+                            Else
+                                Exit For
+                            End If
+                            If k = 20 Then
+                                MsgBox("Failed to load receipt, please cross-check the receipt for errors")
+                            End If
+                        Next
+
                         Try
                             printReceipt(receipt, frmPayPoint.cash, Convert.ToDouble(LCurrency.getValue(frmPayPoint.balance)))
                         Catch ex As Exception
@@ -710,7 +730,7 @@ Public Class frmMain
             Cursor.Current = Cursors.Default
             Return cartDetail.qty
         Catch ex As Exception
-            MsgBox (ex.Message )
+            MsgBox(ex.Message)
             Cursor.Current = Cursors.Default
             Return 0
         End Try
@@ -1493,5 +1513,9 @@ Public Class frmMain
 
     Private Sub ProductListingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ProductListingToolStripMenuItem.Click
         frmProductListingReport.ShowDialog()
+    End Sub
+
+    Private Sub TotalSalesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TotalSalesToolStripMenuItem.Click
+        frmTotalSalesReport.ShowDialog()
     End Sub
 End Class

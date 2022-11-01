@@ -22,6 +22,7 @@ Partial Class frmProductListingReport
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.dtgrdReport = New System.Windows.Forms.DataGridView()
         Me.dateStart = New System.Windows.Forms.DateTimePicker()
         Me.dateEnd = New System.Windows.Forms.DateTimePicker()
@@ -31,6 +32,7 @@ Partial Class frmProductListingReport
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.lblHead = New System.Windows.Forms.Label()
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -39,7 +41,6 @@ Partial Class frmProductListingReport
         Me.Column6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.lblHead = New System.Windows.Forms.Label()
         CType(Me.dtgrdReport, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
@@ -136,6 +137,15 @@ Partial Class frmProductListingReport
         Me.Button2.Text = "Close"
         Me.Button2.UseVisualStyleBackColor = True
         '
+        'lblHead
+        '
+        Me.lblHead.AutoSize = True
+        Me.lblHead.Location = New System.Drawing.Point(12, 18)
+        Me.lblHead.Name = "lblHead"
+        Me.lblHead.Size = New System.Drawing.Size(218, 17)
+        Me.lblHead.TabIndex = 7
+        Me.lblHead.Text = "Product Listing Report for this Till"
+        '
         'Column1
         '
         Me.Column1.FillWeight = 85.27919!
@@ -173,6 +183,8 @@ Partial Class frmProductListingReport
         '
         'Column6
         '
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.Column6.DefaultCellStyle = DataGridViewCellStyle1
         Me.Column6.FillWeight = 85.27919!
         Me.Column6.HeaderText = "Amount"
         Me.Column6.Name = "Column6"
@@ -191,15 +203,6 @@ Partial Class frmProductListingReport
         Me.Column8.HeaderText = "Receipt#"
         Me.Column8.Name = "Column8"
         Me.Column8.ReadOnly = True
-        '
-        'lblHead
-        '
-        Me.lblHead.AutoSize = True
-        Me.lblHead.Location = New System.Drawing.Point(12, 18)
-        Me.lblHead.Name = "lblHead"
-        Me.lblHead.Size = New System.Drawing.Size(218, 17)
-        Me.lblHead.TabIndex = 7
-        Me.lblHead.Text = "Product Listing Report for this Till"
         '
         'frmProductListingReport
         '
@@ -231,6 +234,7 @@ Partial Class frmProductListingReport
     Friend WithEvents Label3 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents Button3 As Button
+    Friend WithEvents lblHead As Label
     Friend WithEvents Column1 As DataGridViewTextBoxColumn
     Friend WithEvents Column2 As DataGridViewTextBoxColumn
     Friend WithEvents Column3 As DataGridViewTextBoxColumn
@@ -239,5 +243,4 @@ Partial Class frmProductListingReport
     Friend WithEvents Column6 As DataGridViewTextBoxColumn
     Friend WithEvents Column7 As DataGridViewTextBoxColumn
     Friend WithEvents Column8 As DataGridViewTextBoxColumn
-    Friend WithEvents lblHead As Label
 End Class

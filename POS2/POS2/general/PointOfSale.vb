@@ -1,6 +1,8 @@
 ﻿Imports POS.Devices
 Imports OposPOSPrinter_CCO
 Imports System.IO
+Imports Newtonsoft.Json
+Imports Newtonsoft.Json.Linq
 'Imports OposFiscalPrinter_CCO
 Public Class PointOfSale
     ''' <summary>
@@ -117,7 +119,6 @@ Public Class PointOfSale
 
 
     End Function
-
 
     Public Shared Function printFiscalReceipt(tillNo As String, receiptNo As String, date_ As String, TIN As String, VRN As String, itemCode() As String, descr() As String, qty() As String, price() As String, tax() As String, amount() As String, subTotal As String, VAT As String, grandTotal As String, cash As String, balance As String, vatGroup() As String) As Boolean
         ''''''''''''Dim fiscalDir As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\in"

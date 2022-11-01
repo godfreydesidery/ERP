@@ -140,3 +140,4 @@ D:\My Works\Orbix\ERP\POS2\POS2\obj\Debug\POS2.TrustInfo.xml
 D:\My Works\Orbix\ERP\POS2\POS2\obj\Debug\POS2.exe.manifest
 D:\My Works\Orbix\ERP\POS2\POS2\obj\Debug\POS2.application
 D:\My Works\Orbix\ERP\POS2\POS2\obj\Debug\POS2.frmProductListingReport.resources
+D:\My Works\Orbix\ERP\POS2\POS2\obj\Debug\POS2.frmTotalSalesReport.resources
