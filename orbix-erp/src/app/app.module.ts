@@ -107,6 +107,7 @@ import { DailyProductionReportComponent } from './reports/production-reports/dai
 import { MaterialVsProductionReportComponent } from './reports/production-reports/material-vs-production-report/material-vs-production-report.component';
 import { MaterialUsageReportComponent } from './reports/production-reports/material-usage-report/material-usage-report.component';
 import { SalesAndPurchasesSummaryReportComponent } from './reports/sales-reports/sales-and-purchases-summary-report/sales-and-purchases-summary-report.component';
+import { VatGroupsComponent } from './company/vat-groups/vat-groups.component';
 
 
 @NgModule({
@@ -204,6 +205,7 @@ import { SalesAndPurchasesSummaryReportComponent } from './reports/sales-reports
     MaterialVsProductionReportComponent,
     MaterialUsageReportComponent,
     SalesAndPurchasesSummaryReportComponent,
+    VatGroupsComponent,
     //BatchProductionComponent,
     //CustomProductionComponent,
   ],
@@ -296,6 +298,7 @@ import { SalesAndPurchasesSummaryReportComponent } from './reports/sales-reports
       {path : 'material-vs-production-report', component: MaterialVsProductionReportComponent},
       {path : 'material-usage-report', component: MaterialUsageReportComponent},
       {path : 'sales-and-purchases-summary-report', component: SalesAndPurchasesSummaryReportComponent},
+      {path : 'vat-group', component: VatGroupsComponent},
     ]),
     BrowserAnimationsModule,
   ],

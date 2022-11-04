@@ -211,7 +211,7 @@ export class ProductListingReportComponent implements OnInit {
             layout : 'noBorders',
             table : {
                 headerRows : 1,
-                widths : [50, 40, 110, 50, 50, 50, 50, 50, 50],
+                widths : [50, 40, 140, 20, 50, 50, 50, 50, 50],
                 body : report
             }
         },                   

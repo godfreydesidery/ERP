@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 import com.orbix.api.accessories.Formater;
 import com.orbix.api.domain.Cart;
 import com.orbix.api.domain.CartDetail;
-import com.orbix.api.domain.Lpo;
-import com.orbix.api.domain.PackingList;
 import com.orbix.api.domain.Payment;
 import com.orbix.api.domain.Product;
 import com.orbix.api.domain.ProductStockCard;
@@ -28,10 +26,8 @@ import com.orbix.api.domain.Till;
 import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
-import com.orbix.api.repositories.AllocationRepository;
 import com.orbix.api.repositories.CartDetailRepository;
 import com.orbix.api.repositories.CartRepository;
-import com.orbix.api.repositories.CustomerRepository;
 import com.orbix.api.repositories.DayRepository;
 import com.orbix.api.repositories.PackingListDetailRepository;
 import com.orbix.api.repositories.PackingListRepository;
@@ -40,7 +36,6 @@ import com.orbix.api.repositories.ReceiptDetailRepository;
 import com.orbix.api.repositories.ReceiptRepository;
 import com.orbix.api.repositories.SaleDetailRepository;
 import com.orbix.api.repositories.SaleRepository;
-import com.orbix.api.repositories.SalesInvoiceRepository;
 import com.orbix.api.repositories.TillRepository;
 import com.orbix.api.repositories.UserRepository;
 
@@ -63,20 +58,12 @@ public class CartServiceImpl implements CartService {
 	private final ReceiptDetailRepository receiptDetailRepository;
 	private final TillRepository tillRepository;
 	
-	private final PackingListRepository packingListRepository;
-	private final PackingListDetailRepository packingListDetailRepository;
-	private final UserRepository userRepository;
 	private final UserService userService;
 	private final DayRepository dayRepository;
 	private final ProductRepository productRepository;
 	private final ProductStockCardService productStockCardService;
-	private final SaleService saleService;
 	private final SaleRepository saleRepository;
 	private final SaleDetailRepository saleDetailRepository;
-	private final ProductDamageService productDamageService;
-	private final ProductOfferService productOfferService;
-	private final DebtService debtService;
-		
 	private final VoidedService voidedService;
 	
 	@Override
@@ -350,6 +337,7 @@ public class CartServiceImpl implements CartService {
 	private String generateReceiptNo(Receipt receipt) {
 		Long number = receipt.getId();		
 		String sNumber = number.toString();
-		return "RCPT-"+Formater.formatNine(sNumber);
+		return "R"+sNumber;
+		//return "RCPT-"+Formater.formatNine(sNumber);
 	}
 }

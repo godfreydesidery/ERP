@@ -95,6 +95,8 @@ export class ProductMasterComponent implements OnInit, IProduct {
   levelThreeNames  : string[]
   levelFourNames   : string[]
 
+  vatGroupCodes    : string[]
+
 
   
 
@@ -158,7 +160,9 @@ export class ProductMasterComponent implements OnInit, IProduct {
     this.levelOneNames    = []
     this.levelTwoNames    = []
     this.levelThreeNames  = []
-    this.levelFourNames   = [] 
+    this.levelFourNames   = []
+    
+    this.vatGroupCodes    = []
   }
   
 
@@ -171,6 +175,7 @@ export class ProductMasterComponent implements OnInit, IProduct {
     this.loadLevelTwoNames()
     this.loadLevelThreeNames()
     this.loadLevelFourNames()
+    this.loadVatGroupCodes()
   }
 
   async save() {
@@ -958,6 +963,53 @@ export class ProductMasterComponent implements OnInit, IProduct {
       }
     )
   }
+
+  loadVatGroupCodes(){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.subCategoryNames = []
+    this.spinner.show()
+    this.http.get<string[]>(API_URL+'/vat_groups/get_codes', options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        data?.forEach(element => {
+          this.vatGroupCodes.push(element)
+        })
+      }
+    )
+    .catch(
+      error => {
+        console.log(error)
+      }
+    )
+  }
+
+  async searchVatGroup(code: string) {
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<IVatGroup>(API_URL+'/vat_groups/get_by_code?code='+code, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data=>{
+        this.vatGroup = data!.code
+        this.vat  = data!.value
+      }
+    )
+    .catch(
+      error=>{
+        console.log(error)        
+        alert('VAT Group not found')
+        this.code = ''
+        this.vat  = 0
+      }
+    )
+  }
 }
 
 export interface IProduct{
@@ -1004,4 +1056,11 @@ export interface IProduct{
   //delete(id : any) : void
   //show(data : any) : void
   //clear() : void
+}
+
+export interface IVatGroup {
+  id          : any
+  code        : string
+  value       : number
+  description : string   
 }

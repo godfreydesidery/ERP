@@ -79,6 +79,7 @@ import { DailyProductionReportComponent } from './reports/production-reports/dai
 import { MaterialVsProductionReportComponent } from './reports/production-reports/material-vs-production-report/material-vs-production-report.component';
 import { MaterialUsageReportComponent } from './reports/production-reports/material-usage-report/material-usage-report.component';
 import { SalesAndPurchasesSummaryReportComponent } from './reports/sales-reports/sales-and-purchases-summary-report/sales-and-purchases-summary-report.component';
+import { VatGroupsComponent } from './company/vat-groups/vat-groups.component';
 
 const routes: Routes = [
   {path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard]},
@@ -156,6 +157,7 @@ const routes: Routes = [
   {path: 'material-vs-production-report', component: MaterialVsProductionReportComponent, canActivate: [AuthGuard]},
   {path: 'material-usage-report', component: MaterialUsageReportComponent, canActivate: [AuthGuard]},
   {path: 'sales-and-purchases-summary-report', component: SalesAndPurchasesSummaryReportComponent, canActivate: [AuthGuard]},
+  {path: 'vat-group', component: VatGroupsComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({

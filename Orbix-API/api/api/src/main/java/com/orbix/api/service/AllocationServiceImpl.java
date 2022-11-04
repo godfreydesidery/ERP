@@ -17,7 +17,6 @@ import com.orbix.api.domain.SalesInvoice;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.repositories.AllocationRepository;
-import com.orbix.api.repositories.CompanyProfileRepository;
 import com.orbix.api.repositories.CustomerRepository;
 import com.orbix.api.repositories.DayRepository;
 import com.orbix.api.repositories.SalesInvoiceRepository;
