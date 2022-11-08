@@ -193,7 +193,7 @@ export class TillAdministrationComponent implements OnInit, ITill {
         headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
       }
       this.spinner.show()
-      await this.http.post(API_URL+'/tills/activate?id='+id, options)
+      await this.http.post(API_URL+'/tills/activate?id='+id, null, options)
       .pipe(finalize(() => this.spinner.hide()))
       .toPromise()
       .then(
@@ -219,7 +219,7 @@ export class TillAdministrationComponent implements OnInit, ITill {
         headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
       }
       this.spinner.show()
-      await this.http.post(API_URL+'/tills/deactivate?id='+id, options)
+      await this.http.post(API_URL+'/tills/deactivate?id='+id, null, options)
       .pipe(finalize(() => this.spinner.hide()))
       .toPromise()
       .then(
@@ -242,9 +242,9 @@ export class TillAdministrationComponent implements OnInit, ITill {
     }
     if(active == false){
       //activate
-        if(window.confirm('Activate POS printer for this till?') == true){
+      if(window.confirm('Activate POS printer for this till?') == true){
           this.spinner.show()
-        await this.http.post(API_URL+'/tills/activate_pos_printer?id='+id, options)
+        await this.http.post(API_URL+'/tills/activate_pos_printer?id='+id, null, options)
         .pipe(finalize(() => this.spinner.hide()))
         .toPromise()
         .then(
@@ -255,6 +255,7 @@ export class TillAdministrationComponent implements OnInit, ITill {
         )
         .catch(
           error => {
+            console.log(error)
             ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not activate POS printer')
           }
         )
@@ -263,7 +264,7 @@ export class TillAdministrationComponent implements OnInit, ITill {
       //deactivate
       if(window.confirm('Deactivate POS printer for this till?') == true){
         this.spinner.show()
-      await this.http.post(API_URL+'/tills/deactivate_pos_printer?id='+id, options)
+      await this.http.post(API_URL+'/tills/deactivate_pos_printer?id='+id, null, options)
       .pipe(finalize(() => this.spinner.hide()))
       .toPromise()
       .then(
@@ -274,6 +275,7 @@ export class TillAdministrationComponent implements OnInit, ITill {
       )
       .catch(
         error => {
+          console.log(error)
           ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not activate POS printer')
         }
       )
@@ -290,7 +292,7 @@ export class TillAdministrationComponent implements OnInit, ITill {
       //activate
         if(window.confirm('Activate Fiscal printer for this till?') == true){
           this.spinner.show()
-        await this.http.post(API_URL+'/tills/activate_fiscal_printer?id='+id, options)
+        await this.http.post(API_URL+'/tills/activate_fiscal_printer?id='+id, null, options)
         .pipe(finalize(() => this.spinner.hide()))
         .toPromise()
         .then(
@@ -309,7 +311,7 @@ export class TillAdministrationComponent implements OnInit, ITill {
       //deactivate
       if(window.confirm('Deactivate Fiscal printer for this till?') == true){
         this.spinner.show()
-      await this.http.post(API_URL+'/tills/deactivate_fiscal_printer?id='+id, options)
+      await this.http.post(API_URL+'/tills/deactivate_fiscal_printer?id='+id, null, options)
       .pipe(finalize(() => this.spinner.hide()))
       .toPromise()
       .then(
@@ -336,7 +338,7 @@ export class TillAdministrationComponent implements OnInit, ITill {
       //activate
       if (window.confirm('Activate Till?') == true) {
         this.spinner.show()
-        await this.http.post(API_URL + '/tills/activate?id=' + id, options)
+        await this.http.post(API_URL + '/tills/activate?id=' + id, null, options)
           .pipe(finalize(() => this.spinner.hide()))
           .toPromise()
           .then(
@@ -355,7 +357,7 @@ export class TillAdministrationComponent implements OnInit, ITill {
       //deactivate
       if (window.confirm('Deactivate till?') == true) {
         this.spinner.show()
-        await this.http.post(API_URL + '/tills/deactivate?id=' + id, options)
+        await this.http.post(API_URL + '/tills/deactivate?id=' + id, null, options)
           .pipe(finalize(() => this.spinner.hide()))
           .toPromise()
           .then(
@@ -387,7 +389,7 @@ export class TillAdministrationComponent implements OnInit, ITill {
     if(enabled == false){
       if (window.confirm('Enable Negative Sales?') == true) {
         this.spinner.show()
-        await this.http.post(API_URL + '/tills/enable_negative_sales?id=' + id, options)
+        await this.http.post(API_URL + '/tills/enable_negative_sales?id=' + id, null, options)
           .pipe(finalize(() => this.spinner.hide()))
           .toPromise()
           .then(
@@ -405,7 +407,7 @@ export class TillAdministrationComponent implements OnInit, ITill {
     }else{
       if (window.confirm('Disable Negative Sales?') == true) {
         this.spinner.show()
-        await this.http.post(API_URL + '/tills/disable_negative_sales?id=' + id, options)
+        await this.http.post(API_URL + '/tills/disable_negative_sales?id=' + id, null, options)
           .pipe(finalize(() => this.spinner.hide()))
           .toPromise()
           .then(

@@ -104,7 +104,7 @@ public class TillResource {
 	}
 	
 	@PostMapping("/tills/activate")
-	@PreAuthorize("hasAnyAuthority('TILL-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('TILL-CREATE','TILL-UPDATE')")
 	public ResponseEntity<Till> activateTill(
 			@RequestParam(name = "id") Long id){
 		Till till = tillService.getTill(id);
@@ -114,7 +114,7 @@ public class TillResource {
 	}
 	
 	@PostMapping("/tills/deactivate")
-	@PreAuthorize("hasAnyAuthority('TILL-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('TILL-CREATE','TILL-UPDATE')")
 	public ResponseEntity<Till> deactivateTill(
 			@RequestParam(name = "id") Long id){
 		Till till = tillService.getTill(id);
@@ -124,7 +124,7 @@ public class TillResource {
 	}
 	
 	@PostMapping("/tills/activate_pos_printer")
-	@PreAuthorize("hasAnyAuthority('TILL-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('TILL-CREATE','TILL-UPDATE')")
 	public ResponseEntity<Till> activatePosPrinter(
 			@RequestParam(name = "id") Long id){
 		Till till = tillService.getTill(id);
@@ -134,7 +134,7 @@ public class TillResource {
 	}
 	
 	@PostMapping("/tills/deactivate_pos_printer")
-	@PreAuthorize("hasAnyAuthority('TILL-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('TILL-CREATE','TILL-UPDATE')")
 	public ResponseEntity<Till> deactivatePosPrinter(
 			@RequestParam(name = "id") Long id){
 		Till till = tillService.getTill(id);
@@ -144,7 +144,7 @@ public class TillResource {
 	}
 	
 	@PostMapping("/tills/activate_fiscal_printer")
-	@PreAuthorize("hasAnyAuthority('TILL-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('TILL-CREATE','TILL-UPDATE')")
 	public ResponseEntity<Till> activateFiscalPrinter(
 			@RequestParam(name = "id") Long id){
 		Till till = tillService.getTill(id);
@@ -154,7 +154,7 @@ public class TillResource {
 	}
 	
 	@PostMapping("/tills/deactivate_fiscal_printer")
-	@PreAuthorize("hasAnyAuthority('TILL-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('TILL-CREATE','TILL-UPDATE')")
 	public ResponseEntity<Till> deactivateFiscalPrinter(
 			@RequestParam(name = "id") Long id){
 		Till till = tillService.getTill(id);

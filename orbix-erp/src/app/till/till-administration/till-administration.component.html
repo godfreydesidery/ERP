@@ -34,7 +34,7 @@
                                                 <button class="btn btn-sm btn-outline-primary" (click)="open(content, till.id)" style="margin-left: 2mm;">Edit</button>
                                                 <button class="btn btn-sm btn-outline-primary" (click)="changeStatus(till.id, till.active)" style="margin-left: 2mm;">{{till.active == true ? 'Deactivate Till' : 'ActivateTill'}}</button>
                                                 <button class="btn btn-sm btn-outline-primary" (click)="changePosPrinter(till.id, till.posPrinterEnabled)" style="margin-left: 2mm;">{{till.posPrinterEnabled == true ? 'Disable POS printer' : 'Enable POS printer'}}</button>
-                                                <button class="btn btn-sm btn-outline-primary" (click)="changeFiscalPrinter(till.id, till.posPrinterEnabled)" style="margin-left: 2mm;">{{till.fiscalPrinterEnabled == true ? 'Disable Fiscal printer' : 'Enable Fiscal printer'}}</button>
+                                                <button class="btn btn-sm btn-outline-primary" (click)="changeFiscalPrinter(till.id, till.fiscalPrinterEnabled)" style="margin-left: 2mm;">{{till.fiscalPrinterEnabled == true ? 'Disable Fiscal printer' : 'Enable Fiscal printer'}}</button>
                                                 <button class="btn btn-sm btn-outline-primary" (click)="changeSalesMode(till.id, till.negativeSalesEnabled)" style="margin-left: 2mm;">{{till.negativeSalesEnabled == true ? 'Disable Negative Sales' : 'Enable Negative Sales'}}</button>
                                                 <button class="btn btn-sm btn-outline-danger" (click)="deleteTill(till.id)" style="margin-left: 2mm;">Delete</button>
                                             </td>
