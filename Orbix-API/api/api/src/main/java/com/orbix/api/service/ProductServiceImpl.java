@@ -71,14 +71,18 @@ public class ProductServiceImpl implements ProductService {
 	private final ProductPriceChangeService productPriceChangeService;
 
 	@Override
-	public Product save(Product p) {		
+	public Product save(Product p) {
+		if(p.getBarcode() == null){
+			p.setBarcode("");
+		}
 		if(!p.getBarcode().equals("") && p.getBarcode().contains(" ")) {//validate barcode, reject barcode with spaces
 			p.setBarcode(p.getBarcode().replace(" ", ""));	
 		}	
 		Product product;
 		boolean isNew = false;
+		
 		if(p.getId() == null) {
-			isNew = true;
+			isNew = true;			
 			if(!p.getBarcode().equals("")) {
 				Optional<Product> pr = productRepository.findByBarcode(p.getBarcode());				
 				if(!pr.isEmpty()) {

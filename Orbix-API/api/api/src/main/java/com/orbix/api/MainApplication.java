@@ -87,25 +87,6 @@ protected ConfigurableApplicationContext springContext;
         return new CorsFilter(source);
     }
     
-    
-    
-    /**
-    
-    @Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/api/login").allowedOrigins("*");
-			}
-		};
-	}
-    
-    
-    */
-    
-    
-    
 	@PostConstruct
 	void started() {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
