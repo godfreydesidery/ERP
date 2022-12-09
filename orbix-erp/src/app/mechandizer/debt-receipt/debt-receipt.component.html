@@ -36,13 +36,13 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-4">
-                        <small>Select Employee</small>
+                        <small>Select SalesAgent</small>
                     </div>
                     <div class="col-sm-8">
-                        <input type="text" [(ngModel)]="employeeNo" class="form-control special" placeholder="Employee No" readonly>
-                        <select [(ngModel)]="employeeName" (ngModelChange)="searchEmployee(employeeName)" class="form-control input-sm" [disabled]="inputsLocked">
+                        <input type="text" [(ngModel)]="salesAgentNo" class="form-control special" placeholder="SalesAgent No" readonly>
+                        <select [(ngModel)]="salesAgentName" (ngModelChange)="searchSalesAgent(salesAgentName)" class="form-control input-sm" [disabled]="inputsLocked">
                             <option></option>
-                            <option *ngFor="let c of employeeNames">{{c}}</option>
+                            <option *ngFor="let c of salesAgentNames">{{c}}</option>
                         </select>
                     </div>
                 </div>
@@ -127,7 +127,7 @@
                     <thead style="position: sticky; top: 0;">
                         <tr class="table-dark">
                             <td>Receipt No</td>
-                            <td>Employee</td>
+                            <td>SalesAgent</td>
                             <td>Status</td>
                             <td>Select</td>
                         </tr>
@@ -135,7 +135,7 @@
                     <tbody>
                         <tr *ngFor="let rec of receipts">
                             <td>{{rec.no}}</td>
-                            <td>{{rec.employee.alias}}</td>
+                            <td>{{rec.salesAgent.name}}</td>
                             <td>{{rec.status}}</td>
                             <td><span (click)="get(rec.id)" style="cursor: pointer;">[Select]</span></td>
                         </tr>

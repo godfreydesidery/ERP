@@ -66,10 +66,10 @@
                         <small>Select Sales Person</small>
                     </div>
                     <div class="col-sm-8">
-                        <input type="text" [(ngModel)]="employeeNo" class="form-control special" placeholder="Employee No" readonly>
-                        <select [(ngModel)]="employeeName" (ngModelChange)="searchEmployee(employeeName)" class="form-control input-sm" [disabled]="inputsLocked">
+                        <input type="text" [(ngModel)]="salesAgentNo" class="form-control special" placeholder="Sales Agent No" readonly>
+                        <select [(ngModel)]="salesAgentName" (ngModelChange)="searchSalesAgent(salesAgentName)" class="form-control input-sm" [disabled]="inputsLocked">
                             <option></option>
-                            <option *ngFor="let e of employeeNames">{{e}}</option>
+                            <option *ngFor="let e of salesAgentNames">{{e}}</option>
                         </select>
                     </div>
                 </div>

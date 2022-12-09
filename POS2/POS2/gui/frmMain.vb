@@ -403,7 +403,6 @@ Public Class frmMain
 
                     itemCount = itemCount + 1
 
-                    '_discount = _discount + (Val(LCurrency.getValue(dtgrdViewItemList.Item(6, i).Value.ToString)) / 100) * Val(LCurrency.getValue(dtgrdViewItemList.Item(8, i).Value.ToString))
                 End If
             Next
             _grandTotal = _total
@@ -412,9 +411,8 @@ Public Class frmMain
             txtVAT.Text = LCurrency.displayValue(_vat)
             txtGrandTotal.Text = LCurrency.displayValue(_grandTotal)
         Catch ex As Exception
-            'MsgBox(ex.StackTrace)
+            'MsgBox(ex.Message)
         End Try
-
         Return itemCount
     End Function
 
@@ -626,6 +624,8 @@ Public Class frmMain
     End Function
 
     Private Sub btnPay_Click(sender As Object, e As EventArgs) Handles btnPay.Click
+        cart = loadCart(Till.TILLNO)
+        displayCart(cart)
         Dim itemCount As Integer = 0
         Try
             refreshList()
@@ -1361,6 +1361,7 @@ Public Class frmMain
     End Function
 
     Private Function displayCart(cart As Cart)
+        btnPay.Enabled = False
         dtgrdViewItemList.Rows.Clear()
 
         If Not IsNothing(cart.cartDetails) Then
@@ -1433,7 +1434,7 @@ Public Class frmMain
             calculateValues()
             dtgrdViewItemList.CurrentCell = dtgrdViewItemList(0, dtgrdViewItemList.RowCount - 1)
         End If
-
+        btnPay.Enabled = True
         Return vbNull
     End Function
 
@@ -1517,5 +1518,45 @@ Public Class frmMain
 
     Private Sub TotalSalesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TotalSalesToolStripMenuItem.Click
         frmTotalSalesReport.ShowDialog()
+    End Sub
+
+    Private Sub tstrpHold_Click(sender As Object, e As EventArgs) Handles tstrpHold.Click
+        Dim hold As Integer = MsgBox("Hold?", vbYesNo + vbQuestion, "Hold Cart")
+        If hold = DialogResult.Yes Then
+            holdCart(Till.TILLNO)
+            cart = loadCart(Till.TILLNO)
+            displayCart(cart)
+        End If
+    End Sub
+
+    Private Function holdCart(tillNo As String) As Cart
+        Dim response As New Object
+        Dim json As New JObject
+        Try
+            Cursor.Current = Cursors.WaitCursor
+            response = Web.get_("carts/hold?till_no=" + tillNo)
+            json = JObject.Parse(response.ToString())
+            cart = JsonConvert.DeserializeObject(Of Cart)(json.ToString())
+            Cursor.Current = Cursors.Default
+        Catch ex As Exception
+            Cursor.Current = Cursors.Default
+            MsgBox("Could not hold")
+            Return New Cart
+        End Try
+        Cursor.Current = Cursors.Default
+        Return cart
+    End Function
+
+    Private Sub tstrpViewHeld_Click(sender As Object, e As EventArgs) Handles tstrpViewHeld.Click
+        If dtgrdViewItemList.RowCount > 1 Then
+            MsgBox("Please offload or hold the current cart")
+            Exit Sub
+        End If
+        frmShowHeld.ShowDialog(Me)
+        cart = loadCart(Till.TILLNO)
+        If IsNothing(cart) Then
+            cart = createCart(Till.TILLNO)
+        End If
+        displayCart(cart)
     End Sub
 End Class

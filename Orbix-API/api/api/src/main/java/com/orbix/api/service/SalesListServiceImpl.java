@@ -86,7 +86,7 @@ public class SalesListServiceImpl implements SalesListService {
 		model.setId(salesList.getId());
 		model.setNo(salesList.getNo());
 		model.setCustomer(salesList.getCustomer());
-		model.setEmployee(salesList.getEmployee());
+		model.setSalesAgent(salesList.getSalesAgent());
 		model.setStatus(salesList.getStatus());
 		model.setComments(salesList.getComments());
 		model.setTotalBank(salesList.getTotalBank());
@@ -155,7 +155,7 @@ public class SalesListServiceImpl implements SalesListService {
 		model.setId(pcl.get().getId());
 		model.setNo(pcl.get().getNo());
 		model.setCustomer(pcl.get().getCustomer());
-		model.setEmployee(pcl.get().getEmployee());
+		model.setSalesAgent(pcl.get().getSalesAgent());
 		model.setStatus(pcl.get().getStatus());
 		model.setComments(pcl.get().getComments());
 		
@@ -231,7 +231,7 @@ public class SalesListServiceImpl implements SalesListService {
 		model.setId(pcl.get().getId());
 		model.setNo(pcl.get().getNo());
 		model.setCustomer(pcl.get().getCustomer());
-		model.setEmployee(pcl.get().getEmployee());
+		model.setSalesAgent(pcl.get().getSalesAgent());
 		model.setStatus(pcl.get().getStatus());
 		model.setComments(pcl.get().getComments());
 		
@@ -536,7 +536,7 @@ public class SalesListServiceImpl implements SalesListService {
 			debt.setAmount(totalDeficit);
 			debt.setBalance(totalDeficit);
 			debt.setDay(dayRepository.getCurrentBussinessDay());
-			debt.setEmployee(slsl.getEmployee());
+			debt.setSalesAgent(slsl.getSalesAgent());
 			debt.setSalesList(slsl);
 			debtService.create(debt);
 		}

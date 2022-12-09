@@ -53,10 +53,10 @@ export class PackingListComponent implements OnInit {
   customerId     : any
   customerNo!    : string
   customerName!  : string
-  employee!     : IEmployee
-  employeeId    : any
-  employeeNo!   : string
-  employeeName! : string
+  salesAgent!     : ISalesAgent
+  salesAgentId    : any
+  salesAgentNo!   : string
+  salesAgentName! : string
   status         : string
   comments!      : string
   created        : string
@@ -72,7 +72,7 @@ export class PackingListComponent implements OnInit {
   totalAmountPacked    : number
 
   customerNames  : string[] = []
-  employeeNames  : string[] = []
+  salesAgentNames  : string[] = []
 
   //detail
   detailId            : any
@@ -136,7 +136,7 @@ export class PackingListComponent implements OnInit {
     this.logo = await this.data.getLogo()
     this.loadPackingLists()
     this.loadCustomerNames()
-    this.loadEmployeeNames()
+    this.loadSalesAgentNames()
     this.loadProductDescriptions()
   }
 
@@ -147,7 +147,7 @@ export class PackingListComponent implements OnInit {
     var packingList = {
       id           : this.id,
       customer     : {no : this.customerNo, name : this.customerName},
-      employee     : {no : this.employeeNo, alias : this.employeeName},
+      salesAgent     : {no : this.salesAgentNo, alias : this.salesAgentName},
       comments     : this.comments
     }
     if(this.id == null || this.id == ''){  
@@ -234,9 +234,9 @@ export class PackingListComponent implements OnInit {
         this.customerId      = data!.customer.id
         this.customerNo      = data!.customer.no
         this.customerName    = data!.customer.name
-        this.employeeId     = data!.employee.id
-        this.employeeNo     = data!.employee.no
-        this.employeeName   = data!.employee.alias
+        this.salesAgentId     = data!.salesAgent.id
+        this.salesAgentNo     = data!.salesAgent.no
+        this.salesAgentName   = data!.salesAgent.name
         this.status               = data!.status
         this.comments             = data!.comments
         this.created              = data!.created
@@ -276,9 +276,9 @@ export class PackingListComponent implements OnInit {
         this.customerId    = data!.customer.id
         this.customerNo    = data!.customer.no
         this.customerName  = data!.customer.name  
-        this.employeeId     = data!.employee.id
-        this.employeeNo     = data!.employee.no
-        this.employeeName   = data!.employee.alias
+        this.salesAgentId     = data!.salesAgent.id
+        this.salesAgentNo     = data!.salesAgent.no
+        this.salesAgentName   = data!.salesAgent.name
         this.status               = data!.status
         this.comments             = data!.comments
         this.created              = data!.created
@@ -585,8 +585,8 @@ export class PackingListComponent implements OnInit {
     this.packingListDetails   = []
     this.customerNo           = ''
     this.customerName         = ''
-    this.employeeNo           = ''
-    this.employeeName         = ''
+    this.salesAgentNo           = ''
+    this.salesAgentName         = ''
     this.totalPreviousReturns = 0
     this.totalAmountIssued    = 0
     this.totalAmountPacked    = 0
@@ -788,24 +788,24 @@ export class PackingListComponent implements OnInit {
     }
   }
 
-  async loadEmployeeNames(){
+  async loadSalesAgentNames(){
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
     this.spinner.show()
-    await this.http.get<string[]>(API_URL+'/employees/get_aliases', options)
+    await this.http.get<string[]>(API_URL+'/sales_agents/get_names', options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       data => {
-        this.employeeNames = []
+        this.salesAgentNames = []
         data?.forEach(element => {
-          this.employeeNames.push(element)
+          this.salesAgentNames.push(element)
         })
       },
       error => {
         console.log(error)
-        alert('Could not load employee names')
+        alert('Could not load sales agent names')
       }
     )
   }
@@ -863,33 +863,33 @@ export class PackingListComponent implements OnInit {
     )
   }
 
-  async searchEmployee(name: string) {
+  async searchSalesAgent(name: string) {
     if(name == ''){
-      this.employeeId   = ''
-      this.employeeNo   = ''
-      this.employeeName = ''
+      this.salesAgentId   = ''
+      this.salesAgentNo   = ''
+      this.salesAgentName = ''
       return
     }
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
     this.spinner.show()
-    await this.http.get<ICustomer>(API_URL+'/employees/get_by_alias?alias='+name, options)
+    await this.http.get<ISalesAgent>(API_URL+'/sales_agents/get_by_name?name='+name, options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       data=>{
-        this.employeeId = data?.id
-        this.employeeNo = data!.no
+        this.salesAgentId = data?.id
+        this.salesAgentNo = data!.no
       }
     )
     .catch(
       error=>{
         console.log(error)        
-        alert('Employee not found')
-        this.employeeId   = ''
-        this.employeeNo   = ''
-        this.employeeName = ''
+        alert('SalesAgent not found')
+        this.salesAgentId   = ''
+        this.salesAgentNo   = ''
+        this.salesAgentName = ''
       }
     )
   }
@@ -977,7 +977,7 @@ export class PackingListComponent implements OnInit {
                 ],
                 [
                   {text : 'Sales Officer', fontSize : 9}, 
-                  {text : this.employeeName, fontSize : 9} 
+                  {text : this.salesAgentName, fontSize : 9} 
                 ],
                 [
                   {text : 'Customer', fontSize : 9}, 
@@ -1036,7 +1036,7 @@ interface IPackingList{
   no                 : string
   salesListNo        : string
   customer           : ICustomer
-  employee           : IEmployee
+  salesAgent           : ISalesAgent
   status             : string
   comments           : string
   created            : string
@@ -1102,8 +1102,8 @@ interface ICustomerName{
   names : string[]
 }
 
-interface IEmployee{
+interface ISalesAgent{
   id                  : any
   no                  : string
-  alias                : string
+  name                : string
 }

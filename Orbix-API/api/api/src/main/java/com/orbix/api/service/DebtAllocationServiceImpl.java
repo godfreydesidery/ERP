@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 
 import com.orbix.api.accessories.Formater;
 import com.orbix.api.domain.DebtAllocation;
-import com.orbix.api.domain.Employee;
+import com.orbix.api.domain.SalesAgent;
 import com.orbix.api.domain.SalesList;
 import com.orbix.api.domain.Debt;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.repositories.DebtAllocationRepository;
-import com.orbix.api.repositories.EmployeeRepository;
+import com.orbix.api.repositories.SalesAgentRepository;
 import com.orbix.api.repositories.SalesListRepository;
 import com.orbix.api.repositories.DayRepository;
 import com.orbix.api.repositories.DebtRepository;
@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DebtAllocationServiceImpl implements DebtAllocationService {
 	private final DebtAllocationRepository debtAllocationRepository;
-	private final EmployeeRepository employeeRepository;
+	private final SalesAgentRepository salesAgentRepository;
 	private final DebtRepository debtRepository;
 	private final UserService userService;
 	private final DayService dayService;
@@ -44,25 +44,25 @@ public class DebtAllocationServiceImpl implements DebtAllocationService {
 	private final SalesListRepository salesListRepository;
 
 	@Override
-	public boolean allocate(Employee employee, Debt debt, HttpServletRequest request) {
-		Optional<Employee> e = employeeRepository.findById(employee.getId());
+	public boolean allocate(SalesAgent salesAgent, Debt debt, HttpServletRequest request) {
+		Optional<SalesAgent> e = salesAgentRepository.findById(salesAgent.getId());
 		if(!e.isPresent()) {
-			throw new NotFoundException("Employee not found in database");
+			throw new NotFoundException("SalesAgent not found in database");
 		}
 		Optional<Debt> d = debtRepository.findById(debt.getId());
 		if(!d.isPresent()) {
 			throw new NotFoundException("Debt not found in database");
 		}
 		if(d.get().getSalesList() != null) {
-			if(e.get().getId() != d.get().getSalesList().getEmployee().getId()) {
-				throw new InvalidOperationException("Employee and invoice do not match");
+			if(e.get().getId() != d.get().getSalesList().getSalesAgent().getId()) {
+				throw new InvalidOperationException("SalesAgent and invoice do not match");
 			}
 		}else {
 			throw new InvalidOperationException("Debt has no reference");
 		}
 		
-		double employeeBalance = employee.getBalance();
-		if(employeeBalance <= 0) {
+		double salesAgentBalance = salesAgent.getBalance();
+		if(salesAgentBalance <= 0) {
 			throw new InvalidOperationException("Could not process, no balance available");
 		}
 		double referenceBalance = 0;
@@ -74,30 +74,30 @@ public class DebtAllocationServiceImpl implements DebtAllocationService {
 			}
 			Optional<SalesList> p = salesListRepository.findById(d.get().getSalesList().getId());
 			
-			if(employeeBalance >= debt.getBalance()) {
+			if(salesAgentBalance >= debt.getBalance()) {
 				double balance = debt.getBalance();
 				p.get().setTotalOther(p.get().getTotalOther() + balance);
 				p.get().setTotalDeficit(p.get().getTotalDeficit() - balance);
 				salesListRepository.saveAndFlush(p.get());
-				double newEmployeeBalance = employeeBalance - debt.getBalance();
+				double newSalesAgentBalance = salesAgentBalance - debt.getBalance();
 				balance = 0;
 				debtAllocationAmount = debt.getBalance();
-				employee.setBalance(newEmployeeBalance);
+				salesAgent.setBalance(newSalesAgentBalance);
 				debt.setBalance(balance);
 				debt.setStatus("PAID");
-				employeeRepository.saveAndFlush(employee);
+				salesAgentRepository.saveAndFlush(salesAgent);
 				debtRepository.saveAndFlush(debt);				
-			}else if(employeeBalance < debt.getBalance()) {
-				p.get().setTotalOther(p.get().getTotalOther() + employeeBalance);
-				p.get().setTotalDeficit(p.get().getTotalDeficit() - employeeBalance);
+			}else if(salesAgentBalance < debt.getBalance()) {
+				p.get().setTotalOther(p.get().getTotalOther() + salesAgentBalance);
+				p.get().setTotalDeficit(p.get().getTotalDeficit() - salesAgentBalance);
 				salesListRepository.saveAndFlush(p.get());
-				double newEmployeeBalance = 0;
-				double balance = debt.getBalance() - employeeBalance;
-				debtAllocationAmount = employeeBalance;
-				employee.setBalance(newEmployeeBalance);
+				double newSalesAgentBalance = 0;
+				double balance = debt.getBalance() - salesAgentBalance;
+				debtAllocationAmount = salesAgentBalance;
+				salesAgent.setBalance(newSalesAgentBalance);
 				debt.setBalance(balance);
 				debt.setStatus("PARTIAL");
-				employeeRepository.saveAndFlush(employee);
+				salesAgentRepository.saveAndFlush(salesAgent);
 				debtRepository.saveAndFlush(debt);
 			}			
 		}

@@ -3,10 +3,13 @@
  */
 package com.orbix.api.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import com.orbix.api.domain.Cart;
 import com.orbix.api.domain.CartDetail;
+import com.orbix.api.domain.CartHeld;
 import com.orbix.api.domain.Payment;
 import com.orbix.api.domain.Receipt;
 import com.orbix.api.domain.Till;
@@ -26,4 +29,8 @@ public interface CartService {
 	boolean voidd(CartDetail cartDetail, HttpServletRequest request);
 	boolean unvoid(CartDetail cartDetail);
 	Receipt pay(Payment payment, Cart cart, HttpServletRequest request);
+	
+	Cart holdCart(Till till);
+	Cart unholdCartHeld(Till till, Long id);
+	List<CartHeld> showCartsHeld(Till till);
 }

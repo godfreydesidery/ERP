@@ -6,12 +6,12 @@ package com.orbix.api.service;
 import javax.servlet.http.HttpServletRequest;
 
 import com.orbix.api.domain.Debt;
-import com.orbix.api.domain.Employee;
+import com.orbix.api.domain.SalesAgent;
 
 /**
  * @author GODFREY
  *
  */
 public interface DebtAllocationService {
-	boolean allocate(Employee employee, Debt debt, HttpServletRequest request);
+	boolean allocate(SalesAgent salesAgent, Debt debt, HttpServletRequest request);
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.orbix.api.domain.Employee;
 import com.orbix.api.domain.PackingList;
+import com.orbix.api.domain.SalesAgent;
 import com.orbix.api.accessories.Formater;
 import com.orbix.api.domain.Debt;
 import com.orbix.api.domain.Debt;
@@ -66,17 +67,17 @@ public class DebtServiceImpl implements DebtService {
 	}
 	
 	@Override
-	public List<DebtModel> getByEmployeeAndApprovedOrPartial(Employee employee) {
+	public List<DebtModel> getBySalesAgentAndApprovedOrPartial(SalesAgent salesAgent) {
 		List<String> statuses = new ArrayList<String>();
 		statuses.add("PENDING");
 		statuses.add("PARTIAL");
-		List<Debt> debts = debtRepository.findByEmployeeAndPendingOrPartial(employee, statuses);
+		List<Debt> debts = debtRepository.findBySalesAgentAndPendingOrPartial(salesAgent, statuses);
 		List<DebtModel> models = new ArrayList<DebtModel>();
 		for(Debt d : debts) {
 			DebtModel model = new DebtModel();
 			model.setId(d.getId());
 			model.setNo(d.getNo());
-			model.setEmployee(d.getEmployee());
+			model.setSalesAgent(d.getSalesAgent());
 			model.setStatus(d.getStatus());
 			model.setBalance(d.getBalance());
 //			if(inv.getCreatedAt() != null && inv.getCreatedBy() != null) {

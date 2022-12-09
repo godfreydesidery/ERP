@@ -44,10 +44,10 @@ export class DebtReceiptComponent implements OnInit {
   
   id             : any
   no             : string
-  employee!      : IEmployee
-  employeeId     : any
-  employeeNo!    : string
-  employeeName!  : string
+  salesAgent!      : ISalesAgent
+  salesAgentId     : any
+  salesAgentNo!    : string
+  salesAgentName!  : string
   status         : string
   mode           : string
   amount         : number
@@ -58,7 +58,7 @@ export class DebtReceiptComponent implements OnInit {
 
   receipts       : IDebtReceipt[]
  
-  employeeNames  : string[] = []
+  salesAgentNames  : string[] = []
 
   constructor(private auth : AuthService,
               private http :HttpClient,
@@ -84,12 +84,12 @@ export class DebtReceiptComponent implements OnInit {
     this.logo = await this.data.getLogo() 
     this.address = await this.data.getAddress()
     this.loadReceipts()
-    this.loadEmployeeNames()
+    this.loadSalesAgentNames()
   }
   
   async save() {
-    if(this.employeeId == null || this.employeeId == ''){
-      alert('Employee information missing')
+    if(this.salesAgentId == null || this.salesAgentId == ''){
+      alert('SalesAgent information missing')
       return
     }
     if(this.mode == ''){
@@ -101,7 +101,7 @@ export class DebtReceiptComponent implements OnInit {
     }
     var debt_receipt = {
       id           : this.id,
-      employee     : {no : this.employeeNo, name : this.employeeName},
+      salesAgent     : {no : this.salesAgentNo, name : this.salesAgentName},
       mode         : this.mode,
       chequeNo     : this.chequeNo,
       amount       : this.amount,
@@ -177,9 +177,9 @@ export class DebtReceiptComponent implements OnInit {
         this.lockAll()
         this.id           = data?.id
         this.no           = data!.no
-        this.employeeId   = data!.employee.id
-        this.employeeNo   = data!.employee.no
-        this.employeeName = data!.employee.alias
+        this.salesAgentId   = data!.salesAgent.id
+        this.salesAgentNo   = data!.salesAgent.no
+        this.salesAgentName = data!.salesAgent.name
         this.status       = data!.status
         this.mode         = data!.mode
         this.amount       = data!.amount
@@ -212,9 +212,9 @@ export class DebtReceiptComponent implements OnInit {
         this.lockAll()
         this.id           = data?.id
         this.no           = data!.no 
-        this.employeeId   = data!.employee.id
-        this.employeeNo   = data!.employee.no
-        this.employeeName = data!.employee.alias 
+        this.salesAgentId   = data!.salesAgent.id
+        this.salesAgentNo   = data!.salesAgent.no
+        this.salesAgentName = data!.salesAgent.name 
         this.status       = data!.status
         this.mode         = data!.mode
         this.amount       = data!.amount
@@ -422,8 +422,8 @@ export class DebtReceiptComponent implements OnInit {
     this.comments     = ''
     this.created      = ''
     this.approved     = ''
-    this.employeeNo = ''
-    this.employeeName = ''
+    this.salesAgentNo = ''
+    this.salesAgentName = ''
   }
 
   createShortCut(shortCutName : string, link : string){
@@ -433,8 +433,8 @@ export class DebtReceiptComponent implements OnInit {
   }
 
   open(content: any, productId: string, detailId: string) {
-    if (this.employeeNo == '' || this.employeeNo == null) {
-      alert('Please enter employee information')
+    if (this.salesAgentNo == '' || this.salesAgentNo == null) {
+      alert('Please enter salesAgent information')
       return
     }
 
@@ -454,49 +454,49 @@ export class DebtReceiptComponent implements OnInit {
     }
   }
 
-  async loadEmployeeNames(){
+  async loadSalesAgentNames(){
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
     this.spinner.show()
-    await this.http.get<string[]>(API_URL+'/employees/get_aliases', options)
+    await this.http.get<string[]>(API_URL+'/sales_agents/get_names', options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       data => {
-        this.employeeNames = []
+        this.salesAgentNames = []
         data?.forEach(element => {
-          this.employeeNames.push(element)
+          this.salesAgentNames.push(element)
         })
       },
       error => {
         console.log(error)
-        alert('Could not load employee names')
+        alert('Could not load salesAgent names')
       }
     )
   }
 
-  async searchEmployee(alias: string) {
+  async searchSalesAgent(alias: string) {
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
     this.spinner.show()
-    await this.http.get<IEmployee>(API_URL+'/employees/get_by_alias?alias='+alias, options)
+    await this.http.get<ISalesAgent>(API_URL+'/sales_agents/get_by_name?name='+alias, options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       data=>{
-        this.employeeId = data?.id
-        this.employeeNo = data!.no
+        this.salesAgentId = data?.id
+        this.salesAgentNo = data!.no
       }
     )
     .catch(
       error=>{
         console.log(error)        
-        alert('Employee not found')
-        this.employeeId = ''
-        this.employeeNo = ''
-        this.employeeName = ''
+        alert('SalesAgent not found')
+        this.salesAgentId = ''
+        this.salesAgentNo = ''
+        this.salesAgentName = ''
       }
     )
   }
@@ -551,8 +551,8 @@ export class DebtReceiptComponent implements OnInit {
                 {text : '', fontSize : 9} 
               ],
               [
-                {text : 'Employee', fontSize : 9}, 
-                {text : this.employeeName+'  ['+this.employeeNo+']', fontSize : 9} 
+                {text : 'SalesAgent', fontSize : 9}, 
+                {text : this.salesAgentName+'  ['+this.salesAgentNo+']', fontSize : 9} 
               ],
               [
                 {text : 'Status', fontSize : 9}, 
@@ -582,7 +582,7 @@ export class DebtReceiptComponent implements OnInit {
 interface IDebtReceipt{
   id           : any
   no           : string
-  employee     : IEmployee
+  salesAgent     : ISalesAgent
   status       : string
   comments     : string
   receiptDate  : Date
@@ -593,10 +593,10 @@ interface IDebtReceipt{
   approved     : string
 }
 
-interface IEmployee{
+interface ISalesAgent{
   id                  : any
   no                  : string
-  alias               : string
+  name                : string
   contactName         : string
   active              : boolean
   tin                 : string
@@ -619,6 +619,6 @@ interface IEmployee{
   bankAccountNo       : string
 }
 
-interface IEmployeeName{
+interface ISalesAgentName{
   names : string[]
 }

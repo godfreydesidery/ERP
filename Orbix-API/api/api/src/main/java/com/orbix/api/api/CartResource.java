@@ -4,12 +4,12 @@
 package com.orbix.api.api;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,22 +21,16 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.orbix.api.domain.Cart;
 import com.orbix.api.domain.CartDetail;
-import com.orbix.api.domain.Material;
+import com.orbix.api.domain.CartHeld;
 import com.orbix.api.domain.Payment;
-import com.orbix.api.domain.Product;
 import com.orbix.api.domain.Receipt;
 import com.orbix.api.domain.Till;
 import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.repositories.CartDetailRepository;
 import com.orbix.api.repositories.CartRepository;
-import com.orbix.api.repositories.CustomerRepository;
 import com.orbix.api.repositories.ReceiptRepository;
-import com.orbix.api.repositories.SalesInvoiceRepository;
 import com.orbix.api.repositories.TillRepository;
-import com.orbix.api.service.AllocationService;
 import com.orbix.api.service.CartService;
-import com.orbix.api.service.CustomerService;
-
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -49,12 +43,10 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CartResource {
 	private final TillRepository tillRepository;
-	private final SalesInvoiceRepository salesInvoiceRepository;
 	private final CartRepository cartRepository;
 	private final ReceiptRepository receiptRepository;
 	private final CartDetailRepository cartDetailRepository;
 	private final 	CartService cartService;
-	private final 	AllocationService allocationService;
 	
 	@GetMapping("/carts/load")
 	public ResponseEntity<Cart> loadCart(
@@ -75,6 +67,40 @@ public class CartResource {
 		}
 		
 		return ResponseEntity.ok().body(cartService.createCart(t.get()));
+	}
+	
+	@GetMapping("/carts/hold")
+	public ResponseEntity<Cart> holdCart(
+			@RequestParam(name = "till_no") String no){
+		Optional<Till> t = tillRepository.findByNo(no);
+		if(!t.isPresent()) {
+			throw new NotFoundException("Till not found");
+		}
+		
+		return ResponseEntity.ok().body(cartService.holdCart(t.get()));
+	}
+	
+	@GetMapping("/carts/unhold")
+	public ResponseEntity<Cart> unholdCart(
+			@RequestParam(name = "till_no") String no,
+			@RequestParam(name = "id") Long id){
+		Optional<Till> t = tillRepository.findByNo(no);
+		if(!t.isPresent()) {
+			throw new NotFoundException("Till not found");
+		}
+		
+		return ResponseEntity.ok().body(cartService.unholdCartHeld(t.get(), id));
+	}
+	
+	@GetMapping("/carts/show_held")
+	public ResponseEntity<List<CartHeld>> showCartsHeld(
+			@RequestParam(name = "till_no") String no){
+		Optional<Till> t = tillRepository.findByNo(no);
+		if(!t.isPresent()) {
+			throw new NotFoundException("Till not found");
+		}
+		
+		return ResponseEntity.ok().body(cartService.showCartsHeld(t.get()));
 	}
 	
 	@PostMapping("/carts/add_detail")

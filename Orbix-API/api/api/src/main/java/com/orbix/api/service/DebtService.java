@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.orbix.api.domain.Debt;
 import com.orbix.api.domain.Employee;
+import com.orbix.api.domain.SalesAgent;
 import com.orbix.api.models.DebtModel;
 import com.orbix.api.models.RecordModel;
 
@@ -17,6 +18,6 @@ import com.orbix.api.models.RecordModel;
 public interface DebtService {
 	public Debt create(Debt debt);
 	public Debt pay(Debt debt, double amount);
-	List<DebtModel>getByEmployeeAndApprovedOrPartial(Employee employee);
+	List<DebtModel>getBySalesAgentAndApprovedOrPartial(SalesAgent salesAgent);
 	
 }

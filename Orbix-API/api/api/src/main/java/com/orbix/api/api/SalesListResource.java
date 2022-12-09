@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.orbix.api.domain.Customer;
-import com.orbix.api.domain.Employee;
+import com.orbix.api.domain.SalesAgent;
 import com.orbix.api.domain.SalesList;
 import com.orbix.api.domain.SalesListDetail;
 import com.orbix.api.domain.Product;
@@ -33,7 +33,7 @@ import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.models.SalesListDetailModel;
 import com.orbix.api.models.SalesListModel;
 import com.orbix.api.repositories.CustomerRepository;
-import com.orbix.api.repositories.EmployeeRepository;
+import com.orbix.api.repositories.SalesAgentRepository;
 import com.orbix.api.repositories.SalesListDetailRepository;
 import com.orbix.api.repositories.SalesListRepository;
 import com.orbix.api.repositories.ProductRepository;
@@ -58,7 +58,7 @@ public class SalesListResource {
 	private final 	SalesListRepository salesListRepository;
 	private final 	SalesListDetailRepository salesListDetailRepository;
 	private final 	CustomerRepository customerRepository;
-	private final 	EmployeeRepository employeeRepository;
+	private final 	SalesAgentRepository salesAgentRepository;
 	private final 	ProductRepository productRepository;
 	
 	@GetMapping("/sales_lists")
@@ -93,14 +93,14 @@ public class SalesListResource {
 		if(!c.isPresent()) {
 			throw new NotFoundException("Customer not found");
 		}
-		Optional<Employee> e = employeeRepository.findByNo(salesList.getEmployee().getNo());
+		Optional<SalesAgent> e = salesAgentRepository.findByNo(salesList.getSalesAgent().getNo());
 		if(!e.isPresent()) {
-			throw new NotFoundException("Employee not found");
+			throw new NotFoundException("SalesAgent not found");
 		}
 		SalesList inv = new SalesList();
 		inv.setNo("NA");
 		inv.setCustomer(c.get());
-		inv.setEmployee(e.get());
+		inv.setSalesAgent(e.get());
 		inv.setStatus("PENDING");
 		inv.setComments(salesList.getComments());	
 		inv.setCreatedBy(userService.getUserId(request));
@@ -118,9 +118,9 @@ public class SalesListResource {
 		if(!c.isPresent()) {
 			throw new NotFoundException("Customer not found");
 		}
-		Optional<Employee> e = employeeRepository.findByNo(salesList.getEmployee().getNo());
+		Optional<SalesAgent> e = salesAgentRepository.findByNo(salesList.getSalesAgent().getNo());
 		if(!e.isPresent()) {
-			throw new NotFoundException("Employee not found");
+			throw new NotFoundException("SalesAgent not found");
 		}
 		Optional<SalesList> l = salesListRepository.findById(salesList.getId());
 		if(!l.isPresent()) {
@@ -139,7 +139,7 @@ public class SalesListResource {
 			throw new InvalidOperationException("Changing Customer is not allowed for non blank Sales Issues");
 		}		
 		l.get().setCustomer(c.get());
-		l.get().setEmployee(e.get());
+		l.get().setSalesAgent(e.get());
 		l.get().setComments(salesList.getComments());
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/sales_lists/update").toUriString());
 		return ResponseEntity.created(uri).body(salesListService.save(l.get()));

@@ -50,8 +50,8 @@ public class DebtReceipt {
 	private Long approvedBy;
 	private Long approvedAt;
 	
-	@ManyToOne(targetEntity = Employee.class, fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "employee_id", nullable = true , updatable = true)
+	@ManyToOne(targetEntity = SalesAgent.class, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "sales_agent_id", nullable = true , updatable = true)
     @OnDelete(action = OnDeleteAction.NO_ACTION)	
-    private Employee employee;
+    private SalesAgent salesAgent;
 }

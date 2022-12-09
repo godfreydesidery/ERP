@@ -25,11 +25,11 @@ Partial Class frmMain
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.MenuStrip = New System.Windows.Forms.MenuStrip()
         Me.FileMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
@@ -46,6 +46,7 @@ Partial Class frmMain
         Me.XReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ZReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ProductListingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TotalSalesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
         Me.PrinterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -154,7 +155,8 @@ Partial Class frmMain
         Me.btn2 = New System.Windows.Forms.Button()
         Me.btn1 = New System.Windows.Forms.Button()
         Me.cmbProducts = New System.Windows.Forms.ComboBox()
-        Me.TotalSalesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tstrpHold = New System.Windows.Forms.ToolStripButton()
+        Me.tstrpViewHeld = New System.Windows.Forms.ToolStripButton()
         Me.MenuStrip.SuspendLayout()
         Me.ToolStrip.SuspendLayout()
         Me.StatusStrip.SuspendLayout()
@@ -268,6 +270,12 @@ Partial Class frmMain
         Me.ProductListingToolStripMenuItem.Size = New System.Drawing.Size(182, 26)
         Me.ProductListingToolStripMenuItem.Text = "Product Listing"
         '
+        'TotalSalesToolStripMenuItem
+        '
+        Me.TotalSalesToolStripMenuItem.Name = "TotalSalesToolStripMenuItem"
+        Me.TotalSalesToolStripMenuItem.Size = New System.Drawing.Size(182, 26)
+        Me.TotalSalesToolStripMenuItem.Text = "Total Sales"
+        '
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator6, Me.PrinterToolStripMenuItem})
@@ -290,7 +298,7 @@ Partial Class frmMain
         'ToolStrip
         '
         Me.ToolStrip.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton7, Me.ToolStripButton8, Me.ToolStripSeparator1, Me.ToolStripSeparator2, Me.tpsLock, Me.ToolStripButton1})
+        Me.ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton7, Me.ToolStripButton8, Me.ToolStripSeparator1, Me.ToolStripSeparator2, Me.tpsLock, Me.ToolStripButton1, Me.tstrpHold, Me.tstrpViewHeld})
         Me.ToolStrip.Location = New System.Drawing.Point(0, 28)
         Me.ToolStrip.Name = "ToolStrip"
         Me.ToolStrip.Size = New System.Drawing.Size(1764, 47)
@@ -395,18 +403,18 @@ Partial Class frmMain
         Me.dtgrdViewItemList.Enabled = False
         Me.dtgrdViewItemList.Location = New System.Drawing.Point(0, 66)
         Me.dtgrdViewItemList.Name = "dtgrdViewItemList"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.ActiveCaption
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dtgrdViewItemList.RowHeadersDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.ActiveCaption
+        DataGridViewCellStyle14.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dtgrdViewItemList.RowHeadersDefaultCellStyle = DataGridViewCellStyle14
         Me.dtgrdViewItemList.RowHeadersWidth = 40
-        DataGridViewCellStyle5.BackColor = System.Drawing.Color.LightSteelBlue
-        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.dtgrdViewItemList.RowsDefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle15.BackColor = System.Drawing.Color.LightSteelBlue
+        DataGridViewCellStyle15.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.dtgrdViewItemList.RowsDefaultCellStyle = DataGridViewCellStyle15
         Me.dtgrdViewItemList.RowTemplate.Height = 24
         Me.dtgrdViewItemList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.dtgrdViewItemList.Size = New System.Drawing.Size(1534, 500)
@@ -415,8 +423,8 @@ Partial Class frmMain
         'colBarCode
         '
         Me.colBarCode.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.colBarCode.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle11.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.colBarCode.DefaultCellStyle = DataGridViewCellStyle11
         Me.colBarCode.FillWeight = 22.57355!
         Me.colBarCode.HeaderText = "Bar Code"
         Me.colBarCode.MinimumWidth = 6
@@ -446,8 +454,8 @@ Partial Class frmMain
         '
         'colPrice
         '
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.colPrice.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.colPrice.DefaultCellStyle = DataGridViewCellStyle12
         Me.colPrice.FillWeight = 17.71424!
         Me.colPrice.HeaderText = "Price@"
         Me.colPrice.Name = "colPrice"
@@ -475,8 +483,8 @@ Partial Class frmMain
         '
         'colAmount
         '
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.colAmount.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.colAmount.DefaultCellStyle = DataGridViewCellStyle13
         Me.colAmount.FillWeight = 18.71424!
         Me.colAmount.HeaderText = "Amount"
         Me.colAmount.Name = "colAmount"
@@ -1474,11 +1482,23 @@ Partial Class frmMain
         Me.cmbProducts.TabIndex = 32
         Me.cmbProducts.Visible = False
         '
-        'TotalSalesToolStripMenuItem
+        'tstrpHold
         '
-        Me.TotalSalesToolStripMenuItem.Name = "TotalSalesToolStripMenuItem"
-        Me.TotalSalesToolStripMenuItem.Size = New System.Drawing.Size(182, 26)
-        Me.TotalSalesToolStripMenuItem.Text = "Total Sales"
+        Me.tstrpHold.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.tstrpHold.Image = CType(resources.GetObject("tstrpHold.Image"), System.Drawing.Image)
+        Me.tstrpHold.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.tstrpHold.Name = "tstrpHold"
+        Me.tstrpHold.Size = New System.Drawing.Size(46, 44)
+        Me.tstrpHold.Text = "Hold"
+        '
+        'tstrpViewHeld
+        '
+        Me.tstrpViewHeld.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.tstrpViewHeld.Image = CType(resources.GetObject("tstrpViewHeld.Image"), System.Drawing.Image)
+        Me.tstrpViewHeld.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.tstrpViewHeld.Name = "tstrpViewHeld"
+        Me.tstrpViewHeld.Size = New System.Drawing.Size(81, 44)
+        Me.tstrpViewHeld.Text = "View Held"
         '
         'frmMain
         '
@@ -1646,4 +1666,6 @@ Partial Class frmMain
     Friend WithEvents DisplayPoleToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ProductListingToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents TotalSalesToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents tstrpHold As ToolStripButton
+    Friend WithEvents tstrpViewHeld As ToolStripButton
 End Class

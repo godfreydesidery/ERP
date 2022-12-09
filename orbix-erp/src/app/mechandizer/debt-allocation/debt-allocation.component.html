@@ -21,17 +21,17 @@
                                 <table class="table table-bordered">
                                     <tbody>
                                         <tr>
-                                            <td style="text-align: right;">Employee</td>
+                                            <td style="text-align: right;">SalesAgent</td>
                                             <td style="padding: 0;">
-                                                <input type="text" [(ngModel)]="employeeNo" class="form-control special" placeholder="Employee No" readonly>
-                                                <select [(ngModel)]="employeeName" (ngModelChange)="searchEmployee(employeeName)" class="form-control input-sm">
+                                                <input type="text" [(ngModel)]="salesAgentNo" class="form-control special" placeholder="SalesAgent No" readonly>
+                                                <select [(ngModel)]="salesAgentName" (ngModelChange)="searchSalesAgent(salesAgentName)" class="form-control input-sm">
                                                     <option></option>
-                                                    <option *ngFor="let c of employeeNames">{{c}}</option>
+                                                    <option *ngFor="let c of salesAgentNames">{{c}}</option>
                                                 </select>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="text-align: right;">Balance</td><td style="text-align: right; font-family: Arial, Helvetica, sans-serif;">{{employeeBalance | currency :'':''}}</td>
+                                            <td style="text-align: right;">Balance</td><td style="text-align: right; font-family: Arial, Helvetica, sans-serif;">{{salesAgentBalance | currency :'':''}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -39,10 +39,10 @@
                                 <table class="table table-bordered">
                                     <tbody>
                                         <tr>
-                                            <td>Debt No</td><td>Status</td><td>Balance</td><td>Action</td>
+                                            <td>Debt No</td><td>Status</td><td>Amount Outstanding</td><td>Action</td>
                                         </tr>
                                         <tr *ngFor="let i of debts">
-                                            <td>{{i.no}}</td><td>{{i.status}}</td><td style="text-align: right;">{{i.balance | currency:'':''}}</td><td><button (click)="allocate(employeeId, i.id)">Allocate</button></td>
+                                            <td>{{i.no}}</td><td>{{i.status}}</td><td style="text-align: right;">{{i.balance | currency:'':''}}</td><td><button (click)="allocate(salesAgentId, i.id)">Allocate</button></td>
                                         </tr>
                                     </tbody>
                                 </table>

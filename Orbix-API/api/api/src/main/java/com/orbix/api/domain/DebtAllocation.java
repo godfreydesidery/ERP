@@ -42,8 +42,8 @@ public class DebtAllocation {
 	private Long createdBy;	
 	private Long createdAt;
 	
-	@ManyToOne(targetEntity = Debt.class, fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "debt_id", nullable = false , updatable = false)
+	@ManyToOne(targetEntity = Debt.class, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "debt_id", nullable = false , updatable = true)
     @OnDelete(action = OnDeleteAction.NO_ACTION)	
     private Debt debt;
 }

@@ -24,7 +24,7 @@
                 <tr *ngFor="let r of report">
                     <td>{{r.code}}</td>
                     <td>{{r.description}}</td>
-                    <td>{{r.qty}}</td>
+                    <td>{{(r.qty*10)/10}}</td>
                     <td style="text-align: right;">{{r.amount | currency:'':''}}</td>
                 </tr>               
                 <tr>

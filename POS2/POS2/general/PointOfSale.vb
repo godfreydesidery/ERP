@@ -139,8 +139,10 @@ Public Class PointOfSale
         receiptText = receiptText + "R_VRN" + """""" + Environment.NewLine
         receiptText = receiptText + "R_TIN" + """""" + Environment.NewLine
 
-        For i As Integer = 0 To descr.Length - 2
+        For i As Integer = 0 To itemCode.Length - 2
+            Dim aTest As Integer 'Not necessary, to buy time
             receiptText = receiptText + "R_TRP" + """" + itemCode(i) + " " + descr(i) + """" + qty(i) + "pcs.*" + Replace(price(i), ",", "") + vatGroup(i) + Environment.NewLine
+            aTest = 2
         Next
 
         File.AppendAllText(strFile, receiptText)

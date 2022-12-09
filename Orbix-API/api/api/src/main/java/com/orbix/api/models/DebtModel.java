@@ -3,8 +3,8 @@
  */
 package com.orbix.api.models;
 
-import com.orbix.api.domain.Employee;
 import com.orbix.api.domain.PackingList;
+import com.orbix.api.domain.SalesAgent;
 
 import lombok.Data;
 
@@ -20,6 +20,6 @@ public class DebtModel {
 	double amount = 0;
 	double balance = 0;	
     String created = "";
-    Employee employee = null;
+    SalesAgent salesAgent = null;
     PackingList packingList = null;
 }

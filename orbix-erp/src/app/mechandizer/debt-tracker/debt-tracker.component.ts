@@ -22,14 +22,14 @@ export class DebtTrackerComponent implements OnInit {
   blank          : boolean = false
   
   id             : any
-  employee!      : IEmployee
-  employeeId     : any
-  employeeNo!    : string
-  employeeName!  : string
-  employeeBalance! :number
+  salesAgent!      : ISalesAgent
+  salesAgentId     : any
+  salesAgentNo!    : string
+  salesAgentName!  : string
+  salesAgentBalance! :number
   debts       : IDebt[]
   
-  employeeNames  : string[] = []
+  salesAgentNames  : string[] = []
 
   constructor(private auth : AuthService,
               private http :HttpClient,
@@ -40,7 +40,7 @@ export class DebtTrackerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadEmployeeNames()
+    this.loadSalesAgentNames()
   }
 
   createShortCut(shortCutName : string, link : string){
@@ -49,33 +49,33 @@ export class DebtTrackerComponent implements OnInit {
     }
   }
 
-  async loadEmployeeNames(){
+  async loadSalesAgentNames(){
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
     this.spinner.show()
-    await this.http.get<string[]>(API_URL+'/employees/get_aliases', options)
+    await this.http.get<string[]>(API_URL+'/sales_agents/get_names', options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       data => {
-        this.employeeNames = []
+        this.salesAgentNames = []
         data?.forEach(element => {
-          this.employeeNames.push(element)
+          this.salesAgentNames.push(element)
         })
       },
       error => {
         console.log(error)
-        alert('Could not load employee names')
+        alert('Could not load salesAgent names')
       }
     )
   }
 
-  async searchEmployee(name: string) {
+  async searchSalesAgent(name: string) {
     if (name == '') {
-      this.employeeId = ''
-      this.employeeNo = ''
-      this.employeeBalance = 0
+      this.salesAgentId = ''
+      this.salesAgentNo = ''
+      this.salesAgentBalance = 0
       this.debts = []
       return
     }
@@ -84,35 +84,35 @@ export class DebtTrackerComponent implements OnInit {
     }
 
     this.spinner.show()
-    await this.http.get<IEmployee>(API_URL+'/employees/get_by_alias?alias='+name, options)
+    await this.http.get<ISalesAgent>(API_URL+'/sales_agents/get_by_name?name='+name, options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       data=>{
-        this.employeeId = data?.id
-        this.employeeNo = data!.no
-        this.employeeBalance = data!.balance
-        this.loadEmployeeDebts(this.employeeId)
+        this.salesAgentId = data?.id
+        this.salesAgentNo = data!.no
+        this.salesAgentBalance = data!.balance
+        this.loadSalesAgentDebts(this.salesAgentId)
       }
     )
     .catch(
       error=>{
         console.log(error)        
-        alert('Employee not found')
-        this.employeeId = ''
-        this.employeeNo = ''
-        this.employeeName = ''
+        alert('SalesAgent not found')
+        this.salesAgentId = ''
+        this.salesAgentNo = ''
+        this.salesAgentName = ''
       }
     )
   }
 
-  async loadEmployeeDebts(employeeId : any){
+  async loadSalesAgentDebts(salesAgentId : any){
     this.debts = []
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
     this.spinner.hide()
-    await this.http.get<IDebt[]>(API_URL+'/debts/employee?id='+employeeId, options)
+    await this.http.get<IDebt[]>(API_URL+'/debts/sales_agent?id='+salesAgentId, options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
@@ -128,17 +128,17 @@ export class DebtTrackerComponent implements OnInit {
     })
   }
 
-  async allocate(employeeId : any, debtId : any){
+  async allocate(salesAgentId : any, debtId : any){
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
     this.spinner.show()
-    await this.http.post<boolean>(API_URL+'/debt_allocations/allocate?employee_id='+employeeId+'&debt_id='+debtId, null, options)
+    await this.http.post<boolean>(API_URL+'/debt_allocations/allocate?sales_agent_id='+salesAgentId+'&debt_id='+debtId, null, options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       () => {
-        this.searchEmployee(this.employeeName)
+        this.searchSalesAgent(this.salesAgentName)
         alert('Allocated successifully')
       }
     )
@@ -150,7 +150,7 @@ export class DebtTrackerComponent implements OnInit {
 
 }
 
-interface IEmployee{
+interface ISalesAgent{
   id                  : any
   no                  : string
   name                : string
@@ -181,7 +181,7 @@ interface IEmployee{
 interface IDebt{
   id           : any
   no           : string
-  employee     : IEmployee
+  salesAgent     : ISalesAgent
   status       : string
   comments     : string
   debtDate  : Date

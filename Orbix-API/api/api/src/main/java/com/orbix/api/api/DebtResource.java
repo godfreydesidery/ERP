@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.orbix.api.domain.Employee;
+import com.orbix.api.domain.SalesAgent;
 import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.models.DebtModel;
 import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.EmployeeRepository;
 import com.orbix.api.repositories.DebtReceiptRepository;
 import com.orbix.api.repositories.ProductRepository;
+import com.orbix.api.repositories.SalesAgentRepository;
 import com.orbix.api.repositories.DebtRepository;
 import com.orbix.api.service.DayService;
 import com.orbix.api.service.DebtReceiptService;
@@ -41,22 +43,17 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class DebtResource {
 	
-	private final 	UserService userService;
-	private final 	DayService dayService;
 	private final 	DebtService debtService;
-	private final 	DebtRepository debtRepository;
-	private final 	EmployeeRepository employeeRepository;
-	private final 	ProductRepository productRepository;
+	private final 	SalesAgentRepository salesAgentRepository;
 	
-	@GetMapping("/debts/employee")
-	@PreAuthorize("hasAnyAuthority('SALES_INVOICE-READ')")
+	@GetMapping("/debts/sales_agent")
 	public ResponseEntity<List<DebtModel>>getDebts(
 			@RequestParam(name = "id") Long id){
-		Optional<Employee> e = employeeRepository.findById(id);
-		if(!e.isPresent()) {
-			throw new NotFoundException("Employee not found in database");
+		Optional<SalesAgent> sa = salesAgentRepository.findById(id);
+		if(!sa.isPresent()) {
+			throw new NotFoundException("Sales agent not found in database");
 		}
-		return ResponseEntity.ok().body(debtService.getByEmployeeAndApprovedOrPartial(e.get()));
+		return ResponseEntity.ok().body(debtService.getBySalesAgentAndApprovedOrPartial(sa.get()));
 	}
 	
 	

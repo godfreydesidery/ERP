@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.orbix.api.domain.Customer;
-import com.orbix.api.domain.Employee;
+import com.orbix.api.domain.SalesAgent;
 
 import lombok.Data;
 
@@ -26,7 +26,7 @@ public class SalesListModel {
 	String approved = "";
 	String posted = "";
 	Customer customer = null;
-	Employee employee = null;
+	SalesAgent salesAgent = null;
 	
 	double totalPreviousReturns = 0;
 	double totalAmountIssued = 0;

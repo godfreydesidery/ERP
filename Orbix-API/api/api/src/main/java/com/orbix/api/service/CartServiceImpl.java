@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import com.orbix.api.accessories.Formater;
 import com.orbix.api.domain.Cart;
 import com.orbix.api.domain.CartDetail;
+import com.orbix.api.domain.CartHeld;
+import com.orbix.api.domain.CartHeldDetail;
 import com.orbix.api.domain.Payment;
 import com.orbix.api.domain.Product;
 import com.orbix.api.domain.ProductStockCard;
@@ -27,6 +29,8 @@ import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.repositories.CartDetailRepository;
+import com.orbix.api.repositories.CartHeldDetailRepository;
+import com.orbix.api.repositories.CartHeldRepository;
 import com.orbix.api.repositories.CartRepository;
 import com.orbix.api.repositories.DayRepository;
 import com.orbix.api.repositories.PackingListDetailRepository;
@@ -54,6 +58,8 @@ public class CartServiceImpl implements CartService {
 	
 	private final CartRepository cartRepository;
 	private final CartDetailRepository cartDetailRepository;
+	private final CartHeldRepository cartHeldRepository;
+	private final CartHeldDetailRepository cartHeldDetailRepository;
 	private final ReceiptRepository receiptRepository;
 	private final ReceiptDetailRepository receiptDetailRepository;
 	private final TillRepository tillRepository;
@@ -65,6 +71,7 @@ public class CartServiceImpl implements CartService {
 	private final SaleRepository saleRepository;
 	private final SaleDetailRepository saleDetailRepository;
 	private final VoidedService voidedService;
+	
 	
 	@Override
 	public Cart createCart(Till till) {
@@ -93,11 +100,113 @@ public class CartServiceImpl implements CartService {
 	}
 	
 	
+	@Override
+	public Cart holdCart(Till till) {
+		Optional<Cart> c = cartRepository.findByTillAndActive(till, true);
+		if(!c.isPresent()) {
+			throw new NotFoundException("No active work space exist");
+		}
+		int count = 0;
+		double amount = 0;
+		for(CartDetail cartDetail : c.get().getCartDetails()) {
+			count = count + 1;
+			if(cartDetail.isVoided() == false) {
+				amount = amount + cartDetail.getSellingPriceVatIncl()*cartDetail.getQty()*(1 - (cartDetail.getDiscount()/100));
+			}		
+		}
+		if(count == 0) {
+			throw new InvalidOperationException("Can not hold an empty cart");
+		}
+		
+		CartHeld cartHeld = new CartHeld();
+		cartHeld.setNo(c.get().getNo());
+		cartHeld.setActive(c.get().isActive());
+		cartHeld.setTill(c.get().getTill());
+		cartHeld.setAmount(amount);
+		cartHeldRepository.saveAndFlush(cartHeld);
+		
+		for(CartDetail cartDetail : c.get().getCartDetails()) {
+			CartHeldDetail cartHeldDetail = new CartHeldDetail();
+			cartHeldDetail.setBarcode(cartDetail.getBarcode());
+			
+			cartHeldDetail.setCode(cartDetail.getCode());
+			cartHeldDetail.setDescription(cartDetail.getDescription());
+			cartHeldDetail.setCostPriceVatExcl(cartDetail.getCostPriceVatExcl());
+			cartHeldDetail.setCostPriceVatIncl(cartDetail.getCostPriceVatIncl());
+			cartHeldDetail.setSellingPriceVatExcl(cartDetail.getSellingPriceVatExcl());
+			cartHeldDetail.setSellingPriceVatIncl(cartDetail.getSellingPriceVatIncl());
+			cartHeldDetail.setDiscount(cartDetail.getDiscount());
+			cartHeldDetail.setQty(cartDetail.getQty());			
+			cartHeldDetail.setVat(cartDetail.getVat());
+			cartHeldDetail.setVatGroup(cartDetail.getVatGroup());
+			cartHeldDetail.setVoided(cartDetail.isVoided());
+			cartHeldDetail.setCartHeld(cartHeld);
+			cartHeldDetailRepository.saveAndFlush(cartHeldDetail);
+		}
+		cartRepository.delete(c.get());
+		Cart newCart = new Cart();
+		newCart.setNo("NA");
+		newCart.setTill(till);
+		newCart.setActive(true);
+		newCart = cartRepository.save(newCart);
+		if(newCart.getNo().equals("NA")) {
+			newCart.setNo(generateCartNo(newCart));
+			newCart = cartRepository.save(newCart);
+		}	
+		return newCart;
+	}
+	@Override
+	public Cart unholdCartHeld(Till till, Long id) {
+		Optional<Cart> c = cartRepository.findByTillAndActive(till, true);
+		if(!c.isPresent()) {
+			throw new NotFoundException("No active work space exist");
+		}
+		int count = 0;
+		for(CartDetail cartDetail : c.get().getCartDetails()) {
+			count = count + 1;
+		}
+		if(count > 0) {
+			throw new InvalidOperationException("Can not unhold to the current cart. Please empty the current cart");
+		}
+		Optional<CartHeld> ch = cartHeldRepository.findById(id);
+		if(!ch.isPresent()) {
+			throw new NotFoundException("Can not unhold, cart does not exist");
+		}
+		
+		for(CartHeldDetail cartHeldDetail : ch.get().getCartHeldDetails()) {
+			CartDetail cartDetail = new CartDetail();
+			cartDetail.setBarcode(cartHeldDetail.getBarcode());			
+			cartDetail.setCode(cartHeldDetail.getCode());
+			cartDetail.setDescription(cartHeldDetail.getDescription());
+			cartDetail.setCostPriceVatExcl(cartHeldDetail.getCostPriceVatExcl());
+			cartDetail.setCostPriceVatIncl(cartHeldDetail.getCostPriceVatIncl());
+			cartDetail.setSellingPriceVatExcl(cartHeldDetail.getSellingPriceVatExcl());
+			cartDetail.setSellingPriceVatIncl(cartHeldDetail.getSellingPriceVatIncl());
+			cartDetail.setDiscount(cartHeldDetail.getDiscount());
+			cartDetail.setQty(cartHeldDetail.getQty());			
+			cartDetail.setVat(cartHeldDetail.getVat());
+			cartDetail.setVatGroup(cartHeldDetail.getVatGroup());
+			cartDetail.setVoided(cartHeldDetail.isVoided());
+			cartDetail.setCart(c.get());
+			cartDetailRepository.saveAndFlush(cartDetail);
+		}
+		cartHeldRepository.delete(ch.get());
+		return c.get();
+	}
+	
+	
+	@Override
+	public List<CartHeld> showCartsHeld(Till till) {
+		Optional<Till> t = tillRepository.findByNo(till.getNo());
+		if(!t.isPresent()) {
+			throw new NotFoundException("Till not found");
+		}	
+		return cartHeldRepository.findByTill(t.get());
+	}
 	
 	private String generateCartNo(Cart cart) {
 		Long number = cart.getId();		
-		String sNumber = number.toString();
-		return "CART-"+Formater.formatNine(sNumber);
+		return number.toString();
 	}
 	@Override
 	public boolean deactivateCart(Cart cart) {
@@ -340,4 +449,6 @@ public class CartServiceImpl implements CartService {
 		return "R"+sNumber;
 		//return "RCPT-"+Formater.formatNine(sNumber);
 	}
+	
+	
 }

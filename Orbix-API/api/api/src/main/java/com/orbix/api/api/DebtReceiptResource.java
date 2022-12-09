@@ -21,13 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.orbix.api.domain.Employee;
+import com.orbix.api.domain.SalesAgent;
 import com.orbix.api.domain.DebtReceipt;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.models.DebtReceiptModel;
 import com.orbix.api.models.RecordModel;
-import com.orbix.api.repositories.EmployeeRepository;
+import com.orbix.api.repositories.SalesAgentRepository;
 import com.orbix.api.repositories.DebtReceiptRepository;
 import com.orbix.api.service.DayService;
 import com.orbix.api.service.DebtReceiptService;
@@ -50,7 +50,7 @@ public class DebtReceiptResource {
 	private final 	DayService dayService;
 	private final 	DebtReceiptService debtReceiptService;
 	private final 	DebtReceiptRepository debtReceiptRepository;
-	private final 	EmployeeRepository customerRepository;
+	private final 	SalesAgentRepository customerRepository;
 	
 	
 	@GetMapping("/debt_receipts")
@@ -84,13 +84,13 @@ public class DebtReceiptResource {
 	public ResponseEntity<DebtReceiptModel>createDebtReceipt(
 			@RequestBody DebtReceipt debtReceipt,
 			HttpServletRequest request){
-		Optional<Employee> c = customerRepository.findByNo(debtReceipt.getEmployee().getNo());
+		Optional<SalesAgent> c = customerRepository.findByNo(debtReceipt.getSalesAgent().getNo());
 		if(!c.isPresent()) {
-			throw new NotFoundException("Employee not found");
+			throw new NotFoundException("SalesAgent not found");
 		}
 		DebtReceipt rec = new DebtReceipt();
 		rec.setNo("NA");
-		rec.setEmployee(c.get());
+		rec.setSalesAgent(c.get());
 		rec.setStatus("PENDING");
 		rec.setMode(debtReceipt.getMode());
 		rec.setAmount(debtReceipt.getAmount());
@@ -107,9 +107,9 @@ public class DebtReceiptResource {
 	public ResponseEntity<DebtReceiptModel>updateDebtReceipt(
 			@RequestBody DebtReceipt debtReceipt,
 			HttpServletRequest request){
-		Optional<Employee> c = customerRepository.findByNo(debtReceipt.getEmployee().getNo());
+		Optional<SalesAgent> c = customerRepository.findByNo(debtReceipt.getSalesAgent().getNo());
 		if(!c.isPresent()) {
-			throw new NotFoundException("Employee not found");
+			throw new NotFoundException("SalesAgent not found");
 		}
 		Optional<DebtReceipt> l = debtReceiptRepository.findById(debtReceipt.getId());
 		if(!l.isPresent()) {
@@ -119,10 +119,10 @@ public class DebtReceiptResource {
 			throw new InvalidOperationException("Editing not allowed, only Pending Debt Receipts can be edited");
 		}
 		
-		if(l.get().getEmployee().equals(c.get()) && !l.get().getStatus().equals("PENDING")) {
-			throw new InvalidOperationException("Changing Employee is not allowed for a non pending receipt");
+		if(l.get().getSalesAgent().equals(c.get()) && !l.get().getStatus().equals("PENDING")) {
+			throw new InvalidOperationException("Changing SalesAgent is not allowed for a non pending receipt");
 		}		
-		l.get().setEmployee(c.get());
+		l.get().setSalesAgent(c.get());
 		l.get().setMode(debtReceipt.getMode());
 		l.get().setChequeNo(debtReceipt.getChequeNo());
 		l.get().setAmount(debtReceipt.getAmount());

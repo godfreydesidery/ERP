@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.orbix.api.domain.Debt;
 import com.orbix.api.domain.Employee;
+import com.orbix.api.domain.SalesAgent;
 
 /**
  * @author GODFREY
@@ -22,8 +23,8 @@ public interface DebtRepository extends JpaRepository<Debt, Long> {
 	 * @param string
 	 * @return
 	 */
-	@Query("SELECT e FROM Debt e WHERE e.employee =:employee AND e.status IN (:statuses)")
-	List<Debt> findByEmployeeAndPendingOrPartial(Employee employee, List<String> statuses);
+	@Query("SELECT d FROM Debt d WHERE d.salesAgent =:salesAgent AND d.status IN (:statuses)")
+	List<Debt> findBySalesAgentAndPendingOrPartial(SalesAgent salesAgent, List<String> statuses);
 	
 	@Query("SELECT MAX(d.id) FROM Debt d")
 	Long getLastId();

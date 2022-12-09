@@ -12,19 +12,14 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.orbix.api.accessories.Formater;
-import com.orbix.api.domain.Employee;
-import com.orbix.api.domain.DebtReceipt;
-import com.orbix.api.domain.Employee;
-import com.orbix.api.domain.DebtReceipt;
+import com.orbix.api.domain.SalesAgent;
 import com.orbix.api.domain.DebtReceipt;
 import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.models.DebtReceiptModel;
 import com.orbix.api.models.RecordModel;
-import com.orbix.api.models.DebtReceiptModel;
-import com.orbix.api.models.DebtReceiptModel;
-import com.orbix.api.repositories.EmployeeRepository;
+import com.orbix.api.repositories.SalesAgentRepository;
 import com.orbix.api.repositories.DayRepository;
 import com.orbix.api.repositories.DebtReceiptRepository;
 import com.orbix.api.repositories.UserRepository;
@@ -44,7 +39,7 @@ public class DebtReceiptServiceImpl implements DebtReceiptService {
 	
 	private final DebtReceiptRepository debtReceiptRepository;
 	private final UserRepository userRepository;
-	private final EmployeeRepository employeeRepository;
+	private final SalesAgentRepository employeeRepository;
 	private final DayRepository dayRepository;
 	
 
@@ -61,7 +56,7 @@ public class DebtReceiptServiceImpl implements DebtReceiptService {
 		DebtReceiptModel model = new DebtReceiptModel();
 		model.setId(rec.getId());
 		model.setNo(rec.getNo());
-		model.setEmployee(rec.getEmployee());
+		model.setSalesAgent(rec.getSalesAgent());
 		model.setStatus(rec.getStatus());
 		model.setMode(rec.getMode());
 		model.setChequeNo(rec.getChequeNo());
@@ -84,7 +79,7 @@ public class DebtReceiptServiceImpl implements DebtReceiptService {
 		DebtReceiptModel model = new DebtReceiptModel();
 		model.setId(rec.get().getId());
 		model.setNo(rec.get().getNo());
-		model.setEmployee(rec.get().getEmployee());
+		model.setSalesAgent(rec.get().getSalesAgent());
 		model.setStatus(rec.get().getStatus());
 		model.setMode(rec.get().getMode());
 		model.setChequeNo(rec.get().getChequeNo());
@@ -109,7 +104,7 @@ public class DebtReceiptServiceImpl implements DebtReceiptService {
 		DebtReceiptModel model = new DebtReceiptModel();
 		model.setId(rec.get().getId());
 		model.setNo(rec.get().getNo());
-		model.setEmployee(rec.get().getEmployee());
+		model.setSalesAgent(rec.get().getSalesAgent());
 		model.setStatus(rec.get().getStatus());
 		model.setMode(rec.get().getMode());
 		model.setChequeNo(rec.get().getChequeNo());
@@ -144,7 +139,7 @@ public class DebtReceiptServiceImpl implements DebtReceiptService {
 			DebtReceiptModel model = new DebtReceiptModel();
 			model.setId(rec.getId());
 			model.setNo(rec.getNo());
-			model.setEmployee(rec.getEmployee());
+			model.setSalesAgent(rec.getSalesAgent());
 			model.setStatus(rec.getStatus());
 			for(int i = 0; i < 300; i++) {
 				System.out.println(rec.getStatus().toString());
@@ -213,9 +208,9 @@ public class DebtReceiptServiceImpl implements DebtReceiptService {
 		 * Add receipt amount to employee balance
 		 */
 		DebtReceipt rec = debtReceiptRepository.saveAndFlush(debtReceipt);
-		Optional<Employee> c = employeeRepository.findById(rec.getEmployee().getId());
+		Optional<SalesAgent> c = employeeRepository.findById(rec.getSalesAgent().getId());
 		if(!c.isPresent()) {
-			throw new NotFoundException("Employee not found in database");
+			throw new NotFoundException("SalesAgent not found in database");
 		}		
 		c.get().setBalance(c.get().getBalance() + rec.getAmount());
 		employeeRepository.saveAndFlush(c.get());	
@@ -223,7 +218,7 @@ public class DebtReceiptServiceImpl implements DebtReceiptService {
 		DebtReceiptModel model = new DebtReceiptModel();
 		model.setId(rec.getId());
 		model.setNo(rec.getNo());
-		model.setEmployee(rec.getEmployee());
+		model.setSalesAgent(rec.getSalesAgent());
 		model.setStatus(rec.getStatus());
 		model.setMode(rec.getMode());
 		model.setChequeNo(rec.getChequeNo());

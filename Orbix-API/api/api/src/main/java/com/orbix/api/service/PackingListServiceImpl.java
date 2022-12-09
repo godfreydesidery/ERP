@@ -58,16 +58,9 @@ public class PackingListServiceImpl implements PackingListService {
 	private final SalesListDetailRepository salesListDetailRepository;
 	private final PackingListDetailRepository packingListDetailRepository;
 	private final UserRepository userRepository;
-	private final UserService userService;
 	private final DayRepository dayRepository;
 	private final ProductRepository productRepository;
 	private final ProductStockCardService productStockCardService;
-	private final SaleService saleService;
-	private final SaleRepository saleRepository;
-	private final SaleDetailRepository saleDetailRepository;
-	private final ProductDamageService productDamageService;
-	private final ProductOfferService productOfferService;
-	private final DebtService debtService;
 	private final SalesListService salesListService;
 
 	@Override
@@ -94,7 +87,7 @@ public class PackingListServiceImpl implements PackingListService {
 		model.setNo(pcl.getNo());
 		model.setSalesListNo(pcl.getSalesListNo());
 		model.setCustomer(pcl.getCustomer());
-		model.setEmployee(pcl.getEmployee());
+		model.setSalesAgent(pcl.getSalesAgent());
 		model.setStatus(pcl.getStatus());
 		model.setComments(pcl.getComments());
 		if(pcl.getCreatedAt() != null && pcl.getCreatedBy() != null) {
@@ -150,7 +143,7 @@ public class PackingListServiceImpl implements PackingListService {
 		model.setNo(pcl.get().getNo());
 		model.setSalesListNo(pcl.get().getSalesListNo());
 		model.setCustomer(pcl.get().getCustomer());
-		model.setEmployee(pcl.get().getEmployee());
+		model.setSalesAgent(pcl.get().getSalesAgent());
 		model.setStatus(pcl.get().getStatus());
 		model.setComments(pcl.get().getComments());
 		
@@ -212,7 +205,7 @@ public class PackingListServiceImpl implements PackingListService {
 		model.setNo(pcl.get().getNo());
 		model.setSalesListNo(pcl.get().getSalesListNo());
 		model.setCustomer(pcl.get().getCustomer());
-		model.setEmployee(pcl.get().getEmployee());
+		model.setSalesAgent(pcl.get().getSalesAgent());
 		model.setStatus(pcl.get().getStatus());
 		model.setComments(pcl.get().getComments());
 		
@@ -409,7 +402,7 @@ public class PackingListServiceImpl implements PackingListService {
 		salesList.setNo("NA");
 		salesList.setPackingList(pcl);
 		salesList.setCustomer(pcl.getCustomer());
-		salesList.setEmployee(pcl.getEmployee());
+		salesList.setSalesAgent(pcl.getSalesAgent());
 		salesList.setStatus("PENDING");
 		salesList.setCreatedBy(pcl.getApprovedBy());
 		salesList.setCreatedAt(pcl.getApprovedAt());

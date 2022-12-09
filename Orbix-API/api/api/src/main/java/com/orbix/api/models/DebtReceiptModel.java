@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 import com.orbix.api.domain.Customer;
 import com.orbix.api.domain.Employee;
+import com.orbix.api.domain.SalesAgent;
 
 import lombok.Data;
 
@@ -26,5 +27,5 @@ public class DebtReceiptModel {
 	String comments = "";	
 	String created = "";
 	String approved = "";
-    Employee employee = null;
+    SalesAgent salesAgent = null;
 }

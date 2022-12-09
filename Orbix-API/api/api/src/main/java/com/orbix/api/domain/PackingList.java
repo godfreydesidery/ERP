@@ -61,10 +61,10 @@ public class PackingList {
     @OnDelete(action = OnDeleteAction.NO_ACTION)	
     private Customer customer;
 	
-	@ManyToOne(targetEntity = Employee.class, fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name = "employee_id", nullable = false , updatable = true)
+	@ManyToOne(targetEntity = SalesAgent.class, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "sales_agent_id", nullable = false , updatable = true)
     @OnDelete(action = OnDeleteAction.NO_ACTION)	
-    private Employee employee;
+    private SalesAgent salesAgent;
 	
 	@OneToMany(targetEntity = PackingListDetail.class, mappedBy = "packingList", fetch = FetchType.EAGER, orphanRemoval = true)
     @Valid

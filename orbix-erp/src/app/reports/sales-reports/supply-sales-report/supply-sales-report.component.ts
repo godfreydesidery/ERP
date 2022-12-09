@@ -131,7 +131,6 @@ export class SupplySalesReportComponent implements OnInit {
       .toPromise()
       .then(
         data => {
-          console.log(data)
           this.report = data!
           this.refresh()
         }
@@ -343,7 +342,7 @@ export class SupplySalesReportComponent implements OnInit {
       var detail = [
         {text : element.code.toString(), fontSize : 9, fillColor : '#ffffff'}, 
         {text : element.description.toString(), fontSize : 9, alignment : 'left', fillColor : '#ffffff'},
-        {text : element.qty.toString(), fontSize : 9, alignment : 'left', fillColor : '#ffffff'},  
+        {text : ((element.qty*10)/10).toString(), fontSize : 9, alignment : 'left', fillColor : '#ffffff'},  
         {text : element.amount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right', fillColor : '#ffffff'},
       ]
       report.push(detail)
