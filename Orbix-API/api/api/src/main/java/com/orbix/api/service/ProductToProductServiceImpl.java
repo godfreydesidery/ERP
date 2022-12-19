@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.orbix.api.accessories.Formater;
 import com.orbix.api.domain.Product;
 import com.orbix.api.domain.ProductStockCard;
 import com.orbix.api.domain.ProductToProduct;
@@ -22,6 +23,7 @@ import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.models.ProductToProductFinalModel;
 import com.orbix.api.models.ProductToProductInitialModel;
 import com.orbix.api.models.ProductToProductModel;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.DayRepository;
 import com.orbix.api.repositories.ProductRepository;
 import com.orbix.api.repositories.ProductToProductFinalRepository;
@@ -407,7 +409,8 @@ public class ProductToProductServiceImpl implements ProductToProductService{
 		Long number = productToProduct.getId();		
 		String sNumber = number.toString();
 		//return "PTM-"+Formater.formatSix(sNumber);
-		return "PTM-"+sNumber;
+		//return "PTM-"+sNumber;
+		return Formater.formatWithCurrentDate("PTP",sNumber);
 	}
 
 	@Override
@@ -501,5 +504,14 @@ public class ProductToProductServiceImpl implements ProductToProductService{
 		return model;
 	}
 
-	
+	@Override
+	public RecordModel requestPTPNo() {
+		Long id = 1L;
+		try {
+			id = productToProductRepository.getLastId() + 1;
+		}catch(Exception e) {}
+		RecordModel model = new RecordModel();
+		model.setNo(Formater.formatWithCurrentDate("PTP",id.toString()));
+		return model;
+	}	
 }

@@ -24,5 +24,15 @@ public class SalesInvoiceModel {
 	Customer customer = null;
 	String created = "";
 	String approved = "";
+	
+	String billingAddress = "";
+	String shippingAddress = "";
+	double totalVat = 0;
+	double amountVatExcl = 0;
+	double amountVatIncl = 0;
+	double discount = 0;
+	double otherCharges = 0;
+	double netAmount = 0;
+	
 	List<SalesInvoiceDetailModel> salesInvoiceDetails;	
 }

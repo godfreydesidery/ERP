@@ -44,9 +44,6 @@ public class QuotationServiceImpl implements QuotationService {
 	private final QuotationDetailRepository quotationDetailRepository;
 	private final UserRepository userRepository;
 	private final DayRepository dayRepository;
-	private final ProductRepository productRepository;
-	private final ProductStockCardService stockCardService;
-	
 	@Override
 	public QuotationModel save(Quotation quotation) {
 		if(!validate(quotation)) {
@@ -62,7 +59,15 @@ public class QuotationServiceImpl implements QuotationService {
 		model.setNo(inv.getNo());
 		model.setCustomer(inv.getCustomer());
 		model.setStatus(inv.getStatus());
-		model.setQuotationDate(inv.getQuotationDate());		
+		model.setQuotationDate(inv.getQuotationDate());	
+		model.setBillingAddress(inv.getBillingAddress());
+		model.setShippingAddress(inv.getShippingAddress());
+		model.setTotalVat(inv.getTotalVat());
+		model.setAmountVatExcl(inv.getAmountVatExcl());
+		model.setAmountVatIncl(inv.getAmountVatIncl());
+		model.setDiscount(inv.getDiscount());
+		model.setOtherCharges(inv.getOtherCharges());
+		model.setNetAmount(inv.getNetAmount());
 		model.setComments(inv.getComments());
 		if(inv.getCreatedAt() != null && inv.getCreatedBy() != null) {
 			model.setCreated(dayRepository.findById(inv.getCreatedAt()).get().getBussinessDate() +" "+ userRepository.getAlias(inv.getCreatedBy()));
@@ -84,7 +89,15 @@ public class QuotationServiceImpl implements QuotationService {
 		model.setNo(inv.get().getNo());
 		model.setCustomer(inv.get().getCustomer());
 		model.setStatus(inv.get().getStatus());
-		model.setQuotationDate(inv.get().getQuotationDate());		
+		model.setQuotationDate(inv.get().getQuotationDate());
+		model.setBillingAddress(inv.get().getBillingAddress());
+		model.setShippingAddress(inv.get().getShippingAddress());
+		model.setTotalVat(inv.get().getTotalVat());
+		model.setAmountVatExcl(inv.get().getAmountVatExcl());
+		model.setAmountVatIncl(inv.get().getAmountVatIncl());
+		model.setDiscount(inv.get().getDiscount());
+		model.setOtherCharges(inv.get().getOtherCharges());
+		model.setNetAmount(inv.get().getNetAmount());
 		model.setComments(inv.get().getComments());
 		if(inv.get().getCreatedAt() != null && inv.get().getCreatedBy() != null) {
 			model.setCreated(dayRepository.findById(inv.get().getCreatedAt()).get().getBussinessDate() +" "+ userRepository.getAlias(inv.get().getCreatedBy()));
@@ -99,6 +112,8 @@ public class QuotationServiceImpl implements QuotationService {
 			modelDetail.setId(d.getId());
 			modelDetail.setProduct(d.getProduct());
 			modelDetail.setQty(d.getQty());
+			modelDetail.setCostPriceVatIncl(d.getCostPriceVatIncl());
+			modelDetail.setCostPriceVatExcl(d.getCostPriceVatExcl());
 			modelDetail.setSellingPriceVatIncl(d.getSellingPriceVatIncl());
 			modelDetail.setSellingPriceVatExcl(d.getSellingPriceVatExcl());
 			modelDetail.setQuotation(d.getQuotation());
@@ -119,7 +134,15 @@ public class QuotationServiceImpl implements QuotationService {
 		model.setNo(inv.get().getNo());
 		model.setCustomer(inv.get().getCustomer());
 		model.setStatus(inv.get().getStatus());
-		model.setQuotationDate(inv.get().getQuotationDate());		
+		model.setQuotationDate(inv.get().getQuotationDate());	
+		model.setBillingAddress(inv.get().getBillingAddress());
+		model.setShippingAddress(inv.get().getShippingAddress());
+		model.setTotalVat(inv.get().getTotalVat());
+		model.setAmountVatExcl(inv.get().getAmountVatExcl());
+		model.setAmountVatIncl(inv.get().getAmountVatIncl());
+		model.setDiscount(inv.get().getDiscount());
+		model.setOtherCharges(inv.get().getOtherCharges());
+		model.setNetAmount(inv.get().getNetAmount());
 		model.setComments(inv.get().getComments());
 		if(inv.get().getCreatedAt() != null && inv.get().getCreatedBy() != null) {
 			model.setCreated(dayRepository.findById(inv.get().getCreatedAt()).get().getBussinessDate() +" "+ userRepository.getAlias(inv.get().getCreatedBy()));
@@ -134,6 +157,8 @@ public class QuotationServiceImpl implements QuotationService {
 			modelDetail.setId(d.getId());
 			modelDetail.setProduct(d.getProduct());
 			modelDetail.setQty(d.getQty());
+			modelDetail.setCostPriceVatIncl(d.getCostPriceVatIncl());
+			modelDetail.setCostPriceVatExcl(d.getCostPriceVatExcl());
 			modelDetail.setSellingPriceVatIncl(d.getSellingPriceVatIncl());
 			modelDetail.setSellingPriceVatExcl(d.getSellingPriceVatExcl());
 			modelDetail.setQuotation(d.getQuotation());
@@ -168,7 +193,15 @@ public class QuotationServiceImpl implements QuotationService {
 			model.setNo(quot.getNo());
 			model.setCustomer(quot.getCustomer());
 			model.setStatus(quot.getStatus());
-			model.setQuotationDate(quot.getQuotationDate());		
+			model.setQuotationDate(quot.getQuotationDate());
+			model.setBillingAddress(quot.getBillingAddress());
+			model.setShippingAddress(quot.getShippingAddress());
+			model.setTotalVat(quot.getTotalVat());
+			model.setAmountVatExcl(quot.getAmountVatExcl());
+			model.setAmountVatIncl(quot.getAmountVatIncl());
+			model.setDiscount(quot.getDiscount());
+			model.setOtherCharges(quot.getOtherCharges());
+			model.setNetAmount(quot.getNetAmount());
 			model.setComments(quot.getComments());
 			if(quot.getCreatedAt() != null && quot.getCreatedBy() != null) {
 				model.setCreated(dayRepository.findById(quot.getCreatedAt()).get().getBussinessDate() +" "+ userRepository.getAlias(quot.getCreatedBy()));
@@ -191,6 +224,8 @@ public class QuotationServiceImpl implements QuotationService {
 		model.setId(d.getId());
 		model.setProduct(d.getProduct());
 		model.setQty(d.getQty());
+		model.setCostPriceVatIncl(d.getCostPriceVatIncl());
+		model.setCostPriceVatExcl(d.getCostPriceVatExcl());
 		model.setSellingPriceVatIncl(d.getSellingPriceVatIncl());
 		model.setSellingPriceVatExcl(d.getSellingPriceVatExcl());
 		model.setQuotation(d.getQuotation());
@@ -207,6 +242,8 @@ public class QuotationServiceImpl implements QuotationService {
 		model.setId(d.get().getId());
 		model.setProduct(d.get().getProduct());
 		model.setQty(d.get().getQty());
+		model.setCostPriceVatIncl(d.get().getCostPriceVatIncl());
+		model.setCostPriceVatExcl(d.get().getCostPriceVatExcl());
 		model.setSellingPriceVatIncl(d.get().getSellingPriceVatIncl());
 		model.setSellingPriceVatExcl(d.get().getSellingPriceVatExcl());
 		model.setQuotation(d.get().getQuotation());
@@ -231,6 +268,8 @@ public class QuotationServiceImpl implements QuotationService {
 			model.setId(d.getId());
 			model.setProduct(d.getProduct());
 			model.setQty(d.getQty());
+			model.setCostPriceVatIncl(d.getCostPriceVatIncl());
+			model.setCostPriceVatExcl(d.getCostPriceVatExcl());
 			model.setSellingPriceVatIncl(d.getSellingPriceVatIncl());
 			model.setSellingPriceVatExcl(d.getSellingPriceVatExcl());
 			model.setQuotation(d.getQuotation());

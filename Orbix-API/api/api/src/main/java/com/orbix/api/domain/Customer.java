@@ -60,5 +60,7 @@ public class Customer {
 	private String bankPostAddress;
 	private String bankName;
 	private String bankAccountNo;
+	private String shippingAddress;
+	private String billingAddress;
 
 }

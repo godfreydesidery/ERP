@@ -31,6 +31,7 @@ import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.models.ProductToProductFinalModel;
 import com.orbix.api.models.ProductToProductInitialModel;
 import com.orbix.api.models.ProductToProductModel;
+import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.ProductRepository;
 import com.orbix.api.repositories.ProductToProductFinalRepository;
 import com.orbix.api.repositories.ProductToProductInitialRepository;
@@ -61,6 +62,11 @@ public class ProductToProductResource {
 	@GetMapping("/product_to_products")
 	public ResponseEntity<List<ProductToProductModel>>getProductToProducts(){
 		return ResponseEntity.ok().body(productToProductService.getAllVisible());
+	}
+	
+	@GetMapping("/product_to_products/request_no")
+	public ResponseEntity<RecordModel> requestNo(){
+		return ResponseEntity.ok().body(productToProductService.requestPTPNo());
 	}
 	
 	@GetMapping("/product_to_products/get")

@@ -43,6 +43,7 @@ public class SalesAgent {
 	private double creditLimit = 0;
 	private double invoiceLimit = 0;
 	private double balance = 0;
+	private double salesTarget = 0;
 	private int creditDays = 1;
 	private String physicalAddress;
 	private String postCode;

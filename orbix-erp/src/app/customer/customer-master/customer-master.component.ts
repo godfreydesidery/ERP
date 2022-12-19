@@ -47,6 +47,9 @@ export class CustomerMasterComponent implements OnInit, ICustomer {
   bankName            : string
   bankAccountNo       : string
 
+  billingAddress      : string
+  shippingAddress     : string
+
   customers           : ICustomer[] = []
   names     : string[] =[]
 
@@ -76,6 +79,9 @@ export class CustomerMasterComponent implements OnInit, ICustomer {
     this.bankPostCode        = ''
     this.bankName            = ''
     this.bankAccountNo       = ''
+
+    this.shippingAddress     = ''
+    this.billingAddress      = ''
   }
 
   ngOnInit(): void {
@@ -115,7 +121,9 @@ export class CustomerMasterComponent implements OnInit, ICustomer {
       bankPostAddress     : this.bankPostAddress,
       bankPostCode        : this.bankPostCode,
       bankName            : this.bankName,
-      bankAccountNo       : this.bankAccountNo
+      bankAccountNo       : this.bankAccountNo,
+      billingAddress      : this.billingAddress,
+      shippingAddress     : this.shippingAddress
     }
     
     let options = {
@@ -192,6 +200,8 @@ export class CustomerMasterComponent implements OnInit, ICustomer {
     this.bankPostCode        = customer['bankPostCode']
     this.bankName            = customer['bankName']
     this.bankAccountNo       = customer['bankAccountNo']
+    this.shippingAddress       = customer['shippingAddress']
+    this.billingAddress       = customer['billingAddress']
   }
   validateInputs() : boolean{
     let valid : boolean = true
@@ -228,6 +238,9 @@ export class CustomerMasterComponent implements OnInit, ICustomer {
      this.bankPostCode        = ''
      this.bankName            = ''
      this.bankAccountNo       = ''
+     this.shippingAddress       = ''
+    this.billingAddress       = ''
+
      this.unlockAll()
     if (this.id == null || this.id == '') {
       this.noLocked = true
@@ -418,6 +431,10 @@ export interface ICustomer {
   bankPostCode        : string
   bankName            : string
   bankAccountNo       : string
+  shippingAddress     : string
+  billingAddress      : string
+
+
 
   save()         : void
   getAll()       : void

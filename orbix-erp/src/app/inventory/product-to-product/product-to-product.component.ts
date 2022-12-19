@@ -2,8 +2,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
+import * as pdfMake from 'pdfmake/build/pdfmake';
 import { finalize } from 'rxjs';
 import { AuthService } from 'src/app/auth.service';
+import { DataService } from 'src/app/services/data.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { ShortCutHandlerService } from 'src/app/services/short-cut-handler.service';
 import { environment } from 'src/environments/environment';
@@ -17,6 +19,9 @@ const API_URL = environment.apiUrl;
 })
 export class ProductToProductComponent implements OnInit {
   closeResult    : string = ''
+
+  logo!              : any
+  address  : any 
 
   blank          : boolean = false
   
@@ -66,6 +71,7 @@ export class ProductToProductComponent implements OnInit {
               private http :HttpClient,
               private shortcut : ShortCutHandlerService, 
               private modalService: NgbModal,
+              private data : DataService,
               private spinner: NgxSpinnerService) {
     this.id                       = null
     this.no                       = ''
@@ -101,7 +107,9 @@ export class ProductToProductComponent implements OnInit {
     this.productToProducts   = []
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.address = await this.data.getAddress()
+    this.logo = await this.data.getLogo()
     this.loadConversions()
     this.loadProductDescriptions()
   }
@@ -539,6 +547,28 @@ export class ProductToProductComponent implements OnInit {
     this.finalSellingPriceVatIncl = 0
   }
 
+  async requestNo(){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<any>(API_URL+'/product_to_products/request_no', options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        console.log(data)
+        this.no = data!['no']
+        //this.lpoNoLocked  = true
+      },
+      error => {
+        console.log(error)
+        alert('Could not request PTP Number')
+      }
+    )
+  }
+
+
   createShortCut(shortCutName : string, link : string){
     if(confirm('Create shortcut for this page?')){
       this.shortcut.createShortCut(shortCutName, link)
@@ -826,6 +856,126 @@ export class ProductToProductComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
+
+
+  exportToPdf = () => {
+    var header = ''
+    var footer = ''
+    var title  = 'Product to Product Conversion'
+    var logo : any = ''
+    var total : number = 0
+    if(this.logo == ''){
+      logo = { text : '', width : 70, height : 70, absolutePosition : {x : 40, y : 40}}
+    }else{
+      logo = {image : this.logo, width : 70, height : 70, absolutePosition : {x : 40, y : 40}}
+    }
+    var initialProduct = [
+      [
+        {text : 'Code', fontSize : 9}, 
+        {text : 'Description', fontSize : 9},
+        {text : 'Qty', fontSize : 9},
+      ]
+    ]  
+    var finalProduct = [
+      [
+        {text : 'Code', fontSize : 9}, 
+        {text : 'Description', fontSize : 9},
+        {text : 'Qty', fontSize : 9},
+      ]
+    ] 
+        
+    this.productToProductInitials.forEach((element) => {
+      var detail = [
+        {text : element.product.code.toString(), fontSize : 9}, 
+        {text : element.product.description.toString(), fontSize : 9},
+        {text : element.qty.toString(), fontSize : 9}, 
+      ]
+      initialProduct.push(detail)
+    })
+
+    this.productToProductFinals.forEach((element) => {
+      var detail = [
+        {text : element.product.code.toString(), fontSize : 9}, 
+        {text : element.product.description.toString(), fontSize : 9},
+        {text : element.qty.toString(), fontSize : 9}, 
+      ]
+      finalProduct.push(detail)
+    })
+   
+    const docDefinition = {
+      header: '',
+      watermark : { text : title, color: 'blue', opacity: 0.1, bold: true, italics: false },
+        content : [
+          {
+            columns : 
+            [
+              logo,
+              {width : 10, columns : [[]]},
+              {
+                width : 300,
+                columns : [
+                  this.address
+                ]
+              },
+            ]
+          },
+          '  ',
+          '  ',
+          {text : title, fontSize : 12, bold : true},
+          '  ',
+          {
+            layout : 'noBorders',
+            table : {
+              widths : [75, 300],
+              body : [
+                [
+                  {text : 'Conversion No', fontSize : 9}, 
+                  {text : this.no, fontSize : 9} 
+                ],
+                [
+                  {text : 'Reason', fontSize : 9}, 
+                  {text : this.reason, fontSize : 9} 
+                ],
+                [
+                  {text : 'Status', fontSize : 9}, 
+                  {text : this.status, fontSize : 9} 
+                ]
+              ]
+            },
+          },
+          '  ',
+          'Initial Products',
+          {
+            table : {
+              headerRows : 1,
+              widths : ['auto', 200, 'auto'],
+              body : 
+                initialProduct
+            }
+        },
+        ' ',
+        'Final Products',
+        {
+          table : {
+            headerRows : 1,
+            widths : ['auto', 200, 'auto'],
+            body : 
+              finalProduct
+          }
+      },
+        ' ',
+        ' ',
+        ' ',
+        'Verified ____________________________________', 
+        ' ',
+        ' ',
+        'Approved __________________________________',             
+      ]     
+    };
+    pdfMake.createPdf(docDefinition).open(); 
+  }
+
+
 }
 
 interface IProductToProduct{

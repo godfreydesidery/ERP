@@ -103,6 +103,14 @@ public class QuotationResource {
 		quot.setCustomer(c.get());
 		quot.setStatus("BLANK");
 		quot.setQuotationDate(quotation.getQuotationDate());
+		quot.setBillingAddress(quotation.getBillingAddress());
+		quot.setShippingAddress(quotation.getShippingAddress());
+		quot.setTotalVat(quotation.getTotalVat());
+		quot.setAmountVatExcl(quotation.getAmountVatExcl());
+		quot.setAmountVatIncl(quotation.getAmountVatIncl());
+		quot.setDiscount(quotation.getDiscount());
+		quot.setOtherCharges(quotation.getOtherCharges());
+		quot.setNetAmount(quotation.getNetAmount());
 		quot.setComments(quotation.getComments());	
 		quot.setCreatedBy(userService.getUserId(request));
 		quot.setCreatedAt(dayService.getDayId());
@@ -137,6 +145,16 @@ public class QuotationResource {
 		}		
 		l.get().setCustomer(c.get());
 		l.get().setQuotationDate(quotation.getQuotationDate());
+		
+		l.get().setBillingAddress(quotation.getBillingAddress());
+		l.get().setShippingAddress(quotation.getShippingAddress());
+		l.get().setTotalVat(quotation.getTotalVat());
+		l.get().setAmountVatExcl(quotation.getAmountVatExcl());
+		l.get().setAmountVatIncl(quotation.getAmountVatIncl());
+		l.get().setDiscount(quotation.getDiscount());
+		l.get().setOtherCharges(quotation.getOtherCharges());
+		l.get().setNetAmount(quotation.getNetAmount());
+		
 		l.get().setComments(quotation.getComments());
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/quotations/update").toUriString());
 		return ResponseEntity.created(uri).body(quotationService.save(l.get()));

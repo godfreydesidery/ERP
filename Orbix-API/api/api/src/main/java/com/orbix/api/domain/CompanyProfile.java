@@ -45,6 +45,7 @@ public class CompanyProfile {
 	private String email;
 	private String website;
 	private String fax;
+	
 	private String bankAccountName;
 	private String bankPhysicalAddress;
 	private String bankPostCode;
@@ -52,5 +53,18 @@ public class CompanyProfile {
 	private String bankName;
 	private String bankAccountNo;
 	
+	private String bankAccountName2;
+	private String bankPhysicalAddress2;
+	private String bankPostCode2;
+	private String bankPostAddress2;
+	private String bankName2;
+	private String bankAccountNo2;
+	
+	private String bankAccountName3;
+	private String bankPhysicalAddress3;
+	private String bankPostCode3;
+	private String bankPostAddress3;
+	private String bankName3;
+	private String bankAccountNo3;
 
 }

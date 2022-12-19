@@ -50,6 +50,18 @@
             <div class="col-sm-3">
                 <div class="row">
                     <div class="col-sm-12">
+                        <small>Billing Address</small>
+                        <textarea [(ngModel)]="billingAddress" class="form-control" style="font-size: smaller; height: 3cm;"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <small>Shipping Address</small>
+                        <textarea [(ngModel)]="shippingAddress" class="form-control" style="font-size: smaller; height: 3cm;"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
                         <small>Comments</small>
                         <textarea [(ngModel)]="comments" class="form-control"></textarea>
                     </div>
@@ -113,12 +125,45 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th>Total</th>
+                    <th></th>
                     <th style="text-align: right;">{{total | currency:'':''}}</th>
                     <th></th>
                 </tr>
             </tbody>
         </table>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-bordered table-sm" style="width: 10cm;">
+                    <tbody>
+                        <tr>
+                            <td><small>Total VAT</small></td>
+                            <td style="text-align: right;">{{totalVat | currency:'':''}}</td>
+                        </tr>
+                        <tr>
+                            <td><small>Amount VAT Excl</small></td>
+                            <td style="text-align: right;">{{amountVatExcl | currency:'':''}}</td>
+                        </tr>
+                        <tr>
+                            <td><small>Amount VAT Incl</small></td>
+                            <td style="text-align: right;">{{amountVatIncl | currency:'':''}}</td>
+                        </tr>
+                        <tr>
+                            <td><small>Discount</small></td>
+                            <td style="text-align: right;"> <input type="text" [(ngModel)]="discount" (change)="showNet()" class="form-control special" style="text-align: right;"></td>
+                        </tr>
+                        <tr>
+                            <td><small>Other Charges</small></td>
+                            <td style="text-align: right;"> <input type="text" [(ngModel)]="otherCharges" (change)="showNet()" class="form-control special" style="text-align: right;"></td>
+                        </tr>
+                        <tr>
+                            <td><small>Net Amount</small></td>
+                            <td style="text-align: right;">{{netAmount | currency:'':''}}</td>
+                        </tr>
+                    </tbody>
+                    
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 

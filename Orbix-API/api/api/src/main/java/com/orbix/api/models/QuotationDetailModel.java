@@ -17,6 +17,8 @@ public class QuotationDetailModel {
 	double qty = 0;
 	double sellingPriceVatIncl = 0;
 	double sellingPriceVatExcl = 0;
+	double costPriceVatIncl = 0;
+	double costPriceVatExcl = 0;
 	Product product = null;
 	Quotation quotation = null;
 }

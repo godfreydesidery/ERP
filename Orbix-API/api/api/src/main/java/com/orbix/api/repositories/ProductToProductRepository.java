@@ -23,6 +23,9 @@ public interface ProductToProductRepository extends JpaRepository<ProductToProdu
 	 * @return
 	 */
 	Optional<ProductToProduct> findByNo(String no);
+	
+	@Query("SELECT MAX(p.id) FROM ProductToProduct p")
+	Long getLastId();
 
 	/**
 	 * @param statuses

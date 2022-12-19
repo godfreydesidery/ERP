@@ -11,6 +11,7 @@ import com.orbix.api.domain.ProductToProductInitial;
 import com.orbix.api.models.ProductToProductFinalModel;
 import com.orbix.api.models.ProductToProductInitialModel;
 import com.orbix.api.models.ProductToProductModel;
+import com.orbix.api.models.RecordModel;
 
 /**
  * @author Godfrey
@@ -33,4 +34,5 @@ public interface ProductToProductService {
 	boolean archive(ProductToProduct productToProduct);
 	boolean archiveAll();
 	ProductToProductModel post(ProductToProduct productToProduct);
+	RecordModel requestPTPNo();
 }

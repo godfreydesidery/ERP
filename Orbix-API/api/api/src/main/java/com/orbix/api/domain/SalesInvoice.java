@@ -48,10 +48,20 @@ public class SalesInvoice {
 	private String comments;
 	private double balance;
 	
+	private String billingAddress;
+	private String shippingAddress;
+	
 	private Long createdBy;
 	private Long createdAt;
 	private Long approvedBy;
 	private Long approvedAt;
+	
+	private double totalVat = 0;
+	private double amountVatExcl = 0;
+	private double amountVatIncl = 0;
+	private double discount = 0;
+	private double otherCharges = 0;
+	private double netAmount = 0;
 	
 	@ManyToOne(targetEntity = Customer.class, fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "customer_id", nullable = true , updatable = true)

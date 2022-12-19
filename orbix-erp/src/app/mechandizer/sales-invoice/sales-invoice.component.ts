@@ -49,6 +49,14 @@ export class SalesInvoiceComponent implements OnInit {
   customerNo!    : string
   customerName!  : string
   status         : string
+  billingAddress   : string
+  shippingAddress  : string
+  totalVat         : number
+  amountVatExcl    : number
+  amountVatIncl    : number
+  discount         : number
+  otherCharges     : number
+  netAmount        : number
   comments!      : string
   created        : string
   approved       : string
@@ -68,6 +76,8 @@ export class SalesInvoiceComponent implements OnInit {
   qty                 : number
   sellingPriceVatIncl : number
   sellingPriceVatExcl : number
+  costPriceVatIncl    : number
+  costPriceVatExcl    : number
 
   descriptions : string[]
 
@@ -80,6 +90,14 @@ export class SalesInvoiceComponent implements OnInit {
     this.id               = ''
     this.no               = ''
     this.status           = ''
+    this.billingAddress      = ''
+    this.shippingAddress     = ''
+    this.totalVat            = 0
+    this.amountVatExcl       = 0
+    this.amountVatIncl       = 0
+    this.discount            = 0
+    this.otherCharges        = 0
+    this.netAmount           = 0
     this.comments         = ''
     this.created          = ''
     this.approved         = ''
@@ -95,6 +113,8 @@ export class SalesInvoiceComponent implements OnInit {
     this.qty                 = 0
     this.sellingPriceVatIncl = 0
     this.sellingPriceVatExcl = 0
+    this.costPriceVatIncl    = 0
+    this.costPriceVatExcl    = 0
 
     this.descriptions        = []
   }
@@ -118,6 +138,14 @@ export class SalesInvoiceComponent implements OnInit {
     var sales_invoices = {
       id           : this.id,
       customer     : {no : this.customerNo, name : this.customerName},
+      billingAddress      : this.billingAddress,
+      shippingAddress     : this.shippingAddress,
+      totalVat            : this.totalVat,
+      amountVatExcl       : this.amountVatExcl,
+      amountVatIncl       : this.amountVatIncl,
+      discount            : this.discount,
+      otherCharges        : this.otherCharges,
+      netAmount           : this.netAmount,
       comments     : this.comments
     }
     if(this.id == null || this.id == ''){   
@@ -130,6 +158,14 @@ export class SalesInvoiceComponent implements OnInit {
           this.id           = data?.id
           this.no           = data!.no         
           this.status       = data!.status
+          this.billingAddress      = data!.billingAddress
+          this.shippingAddress     = data!.shippingAddress
+          this.totalVat            = data!.totalVat
+          this.amountVatExcl       = data!.amountVatExcl
+          this.amountVatIncl       = data!.amountVatIncl
+          this.discount            = data!.discount
+          this.otherCharges        = data!.otherCharges
+          this.netAmount           = data!.netAmount
           this.comments     = data!.comments
           this.created      = data!.created
           this.approved     = data!.approved
@@ -154,6 +190,14 @@ export class SalesInvoiceComponent implements OnInit {
           this.id           = data?.id
           this.no           = data!.no
           this.status       = data!.status
+          this.billingAddress      = data!.billingAddress
+          this.shippingAddress     = data!.shippingAddress
+          this.totalVat            = data!.totalVat
+          this.amountVatExcl       = data!.amountVatExcl
+          this.amountVatIncl       = data!.amountVatIncl
+          this.discount            = data!.discount
+          this.otherCharges        = data!.otherCharges
+          this.netAmount           = data!.netAmount
           this.comments     = data!.comments
           this.created      = data!.created
           this.approved     = data!.approved
@@ -188,6 +232,14 @@ export class SalesInvoiceComponent implements OnInit {
         this.customerNo     = data!.customer.no
         this.customerName   = data!.customer.name
         this.status         = data!.status
+        this.billingAddress   = data!.customer.billingAddress
+        this.shippingAddress  = data!.customer.shippingAddress
+        this.totalVat         = data!.totalVat
+        this.amountVatExcl    = data!.amountVatExcl
+        this.amountVatIncl    = data!.amountVatIncl
+        this.discount         = data!.discount
+        this.otherCharges     = data!.otherCharges
+        this.netAmount        = data!.netAmount
         this.comments       = data!.comments
         this.created        = data!.created
         this.approved       = data!.approved
@@ -222,6 +274,14 @@ export class SalesInvoiceComponent implements OnInit {
         this.customerNo   = data!.customer.no
         this.customerName = data!.customer.name  
         this.status       = data!.status
+        this.billingAddress   = data!.customer.billingAddress
+        this.shippingAddress  = data!.customer.shippingAddress
+        this.totalVat         = data!.totalVat
+        this.amountVatExcl    = data!.amountVatExcl
+        this.amountVatIncl    = data!.amountVatIncl
+        this.discount         = data!.discount
+        this.otherCharges     = data!.otherCharges
+        this.netAmount        = data!.netAmount
         this.comments     = data!.comments
         this.created      = data!.created
         this.approved     = data!.approved
@@ -455,6 +515,14 @@ export class SalesInvoiceComponent implements OnInit {
     this.id             = ''
     this.no             = ''
     this.status         = ''
+    this.billingAddress      = ''
+    this.shippingAddress     = ''
+    this.totalVat            = 0
+    this.amountVatExcl       = 0
+    this.amountVatIncl       = 0
+    this.discount            = 0
+    this.otherCharges        = 0
+    this.netAmount           = 0
     this.comments       = ''
     this.created        = ''
     this.approved       = ''
@@ -471,13 +539,27 @@ export class SalesInvoiceComponent implements OnInit {
     this.qty              = 0
     this.sellingPriceVatIncl = 0
     this.sellingPriceVatExcl = 0
+    this.costPriceVatIncl    = 0
+    this.costPriceVatExcl    = 0
   }
 
   refresh(){
     this.total = 0
+    this.amountVatExcl = 0
+    this.amountVatIncl = 0
+    this.totalVat = 0
+    this.netAmount = 0
     this.invoiceDetails.forEach(element => {
       this.total = this.total + element.sellingPriceVatIncl*element.qty
+      this.amountVatExcl = this.amountVatExcl + element.sellingPriceVatExcl*element.qty
+      this.amountVatIncl = this.amountVatIncl + element.sellingPriceVatIncl*element.qty
     })
+    this.totalVat = this.amountVatIncl - this.amountVatExcl
+    this.showNet()
+  }
+
+  showNet(){
+    this.netAmount = this.amountVatIncl - (this.otherCharges * -1) - this.discount
   }
 
   createShortCut(shortCutName : string, link : string){
@@ -749,7 +831,7 @@ export class SalesInvoiceComponent implements OnInit {
       {text : '', fontSize : 9}, 
       {text : '', fontSize : 9},
       {text : '', fontSize : 9},  
-      {text : 'Total', fontSize : 9},
+      {text : '', fontSize : 9},
       {text : total.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'},        
     ]
     report.push(detailSummary)
@@ -794,13 +876,62 @@ export class SalesInvoiceComponent implements OnInit {
               ]
             },
           },
-          '  ',
+          ' ',
+          {
+            table : {
+              widths : [160, 160],
+              body : [
+                [
+                  {text : 'Bill To', fontSize : 9}, 
+                  {text : 'Ship To', fontSize : 9} 
+                ],
+                [
+                  {text : this.billingAddress, fontSize : 9}, 
+                  {text : this.shippingAddress, fontSize : 9} 
+                ]
+              ]
+            },
+          },
+          ' ',
           {
             table : {
                 headerRows : 1,
                 widths : ['auto', 230, 'auto', 70, 80],
                 body : report
             }
+        },
+        ' ',
+        ' ',
+        {
+          table : {
+            widths : [75, 75],
+            body : [
+              [
+                {text : 'Total VAT', fontSize : 9}, 
+                {text : this.totalVat.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Amount VAT Excl', fontSize : 9}, 
+                {text : this.amountVatExcl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Amount VAT Incl', fontSize : 9}, 
+                {text : this.amountVatIncl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Discount', fontSize : 9}, 
+                {text : this.discount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Other Charges', fontSize : 9}, 
+                {text : this.otherCharges.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Net Amount', fontSize : 9}, 
+                {text : this.netAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+              ]
+            ]
+          },
         },
         ' ',
         ' ',   
@@ -822,6 +953,14 @@ interface ISalesInvoice{
   no           : string
   customer     : ICustomer
   status       : string
+  billingAddress : string
+  shippingAddress : string
+  totalVat : number
+  amountVatExcl : number
+  amountVatIncl : number
+  discount : number
+  otherCharges : number
+  netAmount : number
   comments     : string
   invoiceDate  : Date
   validUntil   : Date
@@ -835,6 +974,8 @@ interface ISalesInvoiceDetail{
   qty              : number
   sellingPriceVatIncl : number
   sellingPriceVatExcl : number
+  costPriceVatIncl    : number
+  costPriceVatExcl    : number
   product          : IProduct
 }
 
@@ -846,6 +987,8 @@ interface IProduct{
   packSize         : number
   sellingPriceVatIncl : number
   sellingPriceVatExcl : number
+  costPriceVatIncl : number
+  costPriceVatExcl : number
 }
 
 interface ICustomer{
@@ -872,6 +1015,9 @@ interface ICustomer{
   bankPostCode        : string
   bankName            : string
   bankAccountNo       : string
+
+  billingAddress      : string
+  shippingAddress     : string
 }
 
 interface ICustomerName{

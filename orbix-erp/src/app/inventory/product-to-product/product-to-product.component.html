@@ -5,19 +5,18 @@
 
     <div class="col-sm-12" style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
         <a routerLink="/home"><button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
-        <button class="btn" style="margin: 2px; width: 20mm;" (click)="showList(listContent)" data-mdb-toggle="tooltip" title="View LPO List for selection"><i class="fas fa-list"></i><br>List</button>
-        <button class="btn" (click)="clear()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new LPO"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
-        <button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing LPO"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
-        <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing LPO"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
+        <button class="btn" style="margin: 2px; width: 20mm;" (click)="showList(listContent)" data-mdb-toggle="tooltip" title="View PTP List for selection"><i class="fas fa-list"></i><br>List</button>
+        <button class="btn" (click)="clear()" (click)="requestNo()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new PTP"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
+        <button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing PTP"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
+        <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing PTP"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
     
-        <button class="btn"style="margin: 2px; width: 20mm;" (click)="cancel(id)" data-mdb-toggle="tooltip" title="Cancel an LPO"><i class="fa-solid fa-times fa-fw"></i><br>Cancel</button>
-        <button class="btn"style="margin: 2px; width: 20mm;" (click)="approve(id)" data-mdb-toggle="tooltip" title="Approve a Pending LPO"><i class="fa-solid fa-check fa-fw"></i><br>Approve</button>
-        <button class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Print an Approved LPO"><i class="fas fa-print"></i><br>Print</button>
-        <button class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Export document to PDF"><i class="fas fa-file-pdf"></i><br>PDF</button>
+        <button class="btn"style="margin: 2px; width: 20mm;" (click)="cancel(id)" data-mdb-toggle="tooltip" title="Cancel a PTP"><i class="fa-solid fa-times fa-fw"></i><br>Cancel</button>
+        <button class="btn"style="margin: 2px; width: 20mm;" (click)="approve(id)" data-mdb-toggle="tooltip" title="Approve a Pending PTP"><i class="fa-solid fa-check fa-fw"></i><br>Approve</button>
+        <button class="btn"style="margin: 2px; width: 20mm;" (click)="exportToPdf()" data-mdb-toggle="tooltip" title="Export document to PDF"><i class="fas fa-file-pdf"></i><br>PDF</button>
     
-        <button (click)="archive(id)" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Send a Received LPO to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive</button>
-        <button (click)="archiveAll()" class="btn"style="margin: 2px; width: 30mm;" data-mdb-toggle="tooltip" title="Send all Received LPOs to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive All</button>
-        <button class="btn"style="margin: 2px; width: 30mm;" (click)="createShortCut('LPO', 'lpo')" data-mdb-toggle="tooltip" title="Create a page shortcut on user's Dashboard"><i class="fas fa-external-link-alt"></i><br>Shortcut</button>
+        <button (click)="archive(id)" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Send an Approved PTP to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive</button>
+        <button (click)="archiveAll()" class="btn"style="margin: 2px; width: 30mm;" data-mdb-toggle="tooltip" title="Send all Approved PTPs to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive All</button>
+        <button class="btn"style="margin: 2px; width: 30mm;" (click)="createShortCut('PTP', 'product_to_product')" data-mdb-toggle="tooltip" title="Create a page shortcut on user's Dashboard"><i class="fas fa-external-link-alt"></i><br>Shortcut</button>
     </div>
 
 
@@ -97,10 +96,11 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
+                                <span><u>Initial Products</u></span>
                                 <button *ngIf="status==='PENDING' || status==='BLANK' || status===''" class="btn btn-success" style="margin: 2px; border-radius: 5mm;" (click)="openInitial(contentInitial, '')" data-mdb-toggle="tooltip" title="Add Product"><i class="fas fa-plus"></i></button>
                             </div>
                             <div class="col-12">
-                                <table class="table table-bordered">
+                                <table class="table table-bordered table-striped table-sm">
                                     <thead>
                                         <tr>
                                             <td>Code</td>
@@ -132,10 +132,11 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
+                                <span><u>Final Products</u></span>
                                 <button *ngIf="status==='PENDING' || status==='BLANK' || status===''" class="btn btn-success" style="margin: 2px; border-radius: 5mm;" (click)="openFinal(contentFinal, '')" data-mdb-toggle="tooltip" title="Add Product"><i class="fas fa-plus"></i></button>
                             </div>
                             <div class="col-12">
-                                <table class="table table-bordered">
+                                <table class="table table-bordered table-striped table-sm">
                                     <thead>
                                         <tr>
                                             <td>Code</td>
@@ -149,7 +150,7 @@
                                             <td>{{d.product.code}}</td>
                                             <td>{{d.product.description}}</td>
                                             <td><b>{{d.qty}}</b>  <i>    {{d.uom}}    </i></td>
-                                            <td><span style="cursor: pointer;" (click)="deleteInitial(d.id)">[Remove]</span><span style="cursor: pointer;" (click)="openFinal(contentFinal, d.id)">[Edit]</span></td>
+                                            <td><span style="cursor: pointer;" (click)="deleteFinal(d.id)">[Remove]</span><span style="cursor: pointer;" (click)="openFinal(contentFinal, d.id)">[Edit]</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -288,7 +289,7 @@
                         <tr *ngFor="let c of productToProducts">
                             <td>{{c.no}}</td>
                             <td>{{c.status}}</td>
-                            <td><span (click)="get(c.id)" style="cursor: pointer;">[Select]</span></td>
+                            <td><span (click)="get(c.id)" (click)="modal.close('Select click')" style="cursor: pointer;">[Select]</span></td>
                         </tr>
                     </tbody>
                 </table>

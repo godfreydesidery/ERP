@@ -72,6 +72,14 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 		model.setNo(inv.getNo());
 		model.setCustomer(inv.getCustomer());
 		model.setStatus(inv.getStatus());
+		model.setBillingAddress(inv.getBillingAddress());
+		model.setShippingAddress(inv.getShippingAddress());
+		model.setTotalVat(inv.getTotalVat());
+		model.setAmountVatExcl(inv.getAmountVatExcl());
+		model.setAmountVatIncl(inv.getAmountVatIncl());
+		model.setDiscount(inv.getDiscount());
+		model.setOtherCharges(inv.getOtherCharges());
+		model.setNetAmount(inv.getNetAmount());
 		model.setComments(inv.getComments());
 		model.setBalance(inv.getBalance());
 		if(inv.getCreatedAt() != null && inv.getCreatedBy() != null) {
@@ -94,6 +102,14 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 		model.setNo(inv.get().getNo());
 		model.setCustomer(inv.get().getCustomer());
 		model.setStatus(inv.get().getStatus());
+		model.setBillingAddress(inv.get().getBillingAddress());
+		model.setShippingAddress(inv.get().getShippingAddress());
+		model.setTotalVat(inv.get().getTotalVat());
+		model.setAmountVatExcl(inv.get().getAmountVatExcl());
+		model.setAmountVatIncl(inv.get().getAmountVatIncl());
+		model.setDiscount(inv.get().getDiscount());
+		model.setOtherCharges(inv.get().getOtherCharges());
+		model.setNetAmount(inv.get().getNetAmount());
 		model.setComments(inv.get().getComments());
 		model.setBalance(inv.get().getBalance());
 		if(inv.get().getCreatedAt() != null && inv.get().getCreatedBy() != null) {
@@ -131,6 +147,14 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 		model.setNo(inv.get().getNo());
 		model.setCustomer(inv.get().getCustomer());
 		model.setStatus(inv.get().getStatus());
+		model.setBillingAddress(inv.get().getBillingAddress());
+		model.setShippingAddress(inv.get().getShippingAddress());
+		model.setTotalVat(inv.get().getTotalVat());
+		model.setAmountVatExcl(inv.get().getAmountVatExcl());
+		model.setAmountVatIncl(inv.get().getAmountVatIncl());
+		model.setDiscount(inv.get().getDiscount());
+		model.setOtherCharges(inv.get().getOtherCharges());
+		model.setNetAmount(inv.get().getNetAmount());
 		model.setComments(inv.get().getComments());
 		model.setBalance(inv.get().getBalance());
 		if(inv.get().getCreatedAt() != null && inv.get().getCreatedBy() != null) {
@@ -182,6 +206,14 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 			model.setNo(inv.getNo());
 			model.setCustomer(inv.getCustomer());
 			model.setStatus(inv.getStatus());
+			model.setBillingAddress(inv.getBillingAddress());
+			model.setShippingAddress(inv.getShippingAddress());
+			model.setTotalVat(inv.getTotalVat());
+			model.setAmountVatExcl(inv.getAmountVatExcl());
+			model.setAmountVatIncl(inv.getAmountVatIncl());
+			model.setDiscount(inv.getDiscount());
+			model.setOtherCharges(inv.getOtherCharges());
+			model.setNetAmount(inv.getNetAmount());
 			model.setComments(inv.getComments());
 			model.setBalance(inv.getBalance());
 			if(inv.getCreatedAt() != null && inv.getCreatedBy() != null) {
@@ -208,6 +240,14 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 			model.setNo(inv.getNo());
 			model.setCustomer(inv.getCustomer());
 			model.setStatus(inv.getStatus());
+			model.setBillingAddress(inv.getBillingAddress());
+			model.setShippingAddress(inv.getShippingAddress());
+			model.setTotalVat(inv.getTotalVat());
+			model.setAmountVatExcl(inv.getAmountVatExcl());
+			model.setAmountVatIncl(inv.getAmountVatIncl());
+			model.setDiscount(inv.getDiscount());
+			model.setOtherCharges(inv.getOtherCharges());
+			model.setNetAmount(inv.getNetAmount());
 			model.setComments(inv.getComments());
 			model.setBalance(inv.getBalance());
 			if(inv.getCreatedAt() != null && inv.getCreatedBy() != null) {
@@ -401,6 +441,14 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 		model.setNo(inv.getNo());
 		model.setCustomer(inv.getCustomer());
 		model.setStatus(inv.getStatus());
+		model.setBillingAddress(inv.getBillingAddress());
+		model.setShippingAddress(inv.getShippingAddress());
+		model.setTotalVat(inv.getTotalVat());
+		model.setAmountVatExcl(inv.getAmountVatExcl());
+		model.setAmountVatIncl(inv.getAmountVatIncl());
+		model.setDiscount(inv.getDiscount());
+		model.setOtherCharges(inv.getOtherCharges());
+		model.setNetAmount(inv.getNetAmount());
 		model.setComments(inv.getComments());
 		model.setBalance(inv.getBalance());
 		if(inv.getCreatedAt() != null && inv.getCreatedBy() != null) {

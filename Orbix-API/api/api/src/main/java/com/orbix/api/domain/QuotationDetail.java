@@ -35,8 +35,10 @@ public class QuotationDetail {
 	private Long id;
 	@NotNull
 	private double qty;
-	private double sellingPriceVatIncl;
-	private double sellingPriceVatExcl;
+	private double sellingPriceVatIncl = 0;
+	private double sellingPriceVatExcl = 0;
+	private double costPriceVatIncl = 0;
+	private double costPriceVatExcl = 0;
 	
 	@ManyToOne(targetEntity = Product.class, fetch = FetchType.EAGER,  optional = true)
     @JoinColumn(name = "product_id", nullable = true , updatable = true)

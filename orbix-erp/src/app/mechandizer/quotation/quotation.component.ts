@@ -49,11 +49,21 @@ export class QuotationComponent implements OnInit {
   customerNo!      : string
   customerName!    : string
   status           : string
+  billingAddress   : string
+  shippingAddress  : string
+  totalVat         : number
+  amountVatExcl    : number
+  amountVatIncl    : number
+  discount         : number
+  otherCharges     : number
+  netAmount        : number
   comments!        : string
   created          : string
   approved         : string
   quotationDetails : IQuotationDetail[]
   quotations       : IQuotation[]
+
+
 
   total            : number
 
@@ -68,6 +78,9 @@ export class QuotationComponent implements OnInit {
   qty                 : number
   sellingPriceVatIncl : number
   sellingPriceVatExcl : number
+  costPriceVatIncl    : number
+  costPriceVatExcl    : number
+
 
   descriptions : string[]
 
@@ -80,6 +93,14 @@ export class QuotationComponent implements OnInit {
     this.id                  = ''
     this.no                  = ''
     this.status              = ''
+    this.billingAddress      = ''
+    this.shippingAddress     = ''
+    this.totalVat            = 0
+    this.amountVatExcl       = 0
+    this.amountVatIncl       = 0
+    this.discount            = 0
+    this.otherCharges        = 0
+    this.netAmount           = 0
     this.comments            = ''
     this.created             = ''
     this.approved            = ''
@@ -95,6 +116,8 @@ export class QuotationComponent implements OnInit {
     this.qty                 = 0
     this.sellingPriceVatIncl = 0
     this.sellingPriceVatExcl = 0
+    this.costPriceVatIncl    = 0
+    this.costPriceVatExcl    = 0
 
     this.descriptions        = []
   }
@@ -118,6 +141,14 @@ export class QuotationComponent implements OnInit {
     var quotations = {
       id           : this.id,
       customer     : {no : this.customerNo, name : this.customerName},
+      billingAddress      : this.billingAddress,
+      shippingAddress     : this.shippingAddress,
+      totalVat            : this.totalVat,
+      amountVatExcl       : this.amountVatExcl,
+      amountVatIncl       : this.amountVatIncl,
+      discount            : this.discount,
+      otherCharges        : this.otherCharges,
+      netAmount           : this.netAmount,
       comments     : this.comments
     }
     if(this.id == null || this.id == ''){ 
@@ -130,6 +161,14 @@ export class QuotationComponent implements OnInit {
           this.id           = data?.id
           this.no           = data!.no         
           this.status       = data!.status
+          this.billingAddress      = data!.billingAddress
+          this.shippingAddress     = data!.shippingAddress
+          this.totalVat            = data!.totalVat
+          this.amountVatExcl       = data!.amountVatExcl
+          this.amountVatIncl       = data!.amountVatIncl
+          this.discount            = data!.discount
+          this.otherCharges        = data!.otherCharges
+          this.netAmount           = data!.netAmount
           this.comments     = data!.comments
           this.created      = data!.created
           this.approved     = data!.approved
@@ -155,6 +194,14 @@ export class QuotationComponent implements OnInit {
           this.no           = data!.no
           this.status       = data!.status
           this.comments     = data!.comments
+          this.billingAddress      = data!.billingAddress
+          this.shippingAddress     = data!.shippingAddress
+          this.totalVat            = data!.totalVat
+          this.amountVatExcl       = data!.amountVatExcl
+          this.amountVatIncl       = data!.amountVatIncl
+          this.discount            = data!.discount
+          this.otherCharges        = data!.otherCharges
+          this.netAmount           = data!.netAmount
           this.created      = data!.created
           this.approved     = data!.approved
           this.get(this.id)
@@ -188,6 +235,14 @@ export class QuotationComponent implements OnInit {
         this.customerNo       = data!.customer.no
         this.customerName     = data!.customer.name
         this.status           = data!.status
+        this.billingAddress   = data!.customer.billingAddress
+        this.shippingAddress  = data!.customer.shippingAddress
+        this.totalVat         = data!.totalVat
+        this.amountVatExcl    = data!.amountVatExcl
+        this.amountVatIncl    = data!.amountVatIncl
+        this.discount         = data!.discount
+        this.otherCharges     = data!.otherCharges
+        this.netAmount        = data!.netAmount
         this.comments         = data!.comments
         this.created          = data!.created
         this.approved         = data!.approved
@@ -223,6 +278,14 @@ export class QuotationComponent implements OnInit {
         this.customerNo   = data!.customer.no
         this.customerName = data!.customer.name  
         this.status       = data!.status
+        this.billingAddress      = data!.customer.billingAddress
+        this.shippingAddress     = data!.customer.shippingAddress
+        this.totalVat            = data!.totalVat
+        this.amountVatExcl       = data!.amountVatExcl
+        this.amountVatIncl       = data!.amountVatIncl
+        this.discount            = data!.discount
+        this.otherCharges        = data!.otherCharges
+        this.netAmount           = data!.netAmount
         this.comments     = data!.comments
         this.created      = data!.created
         this.approved     = data!.approved
@@ -445,9 +508,21 @@ export class QuotationComponent implements OnInit {
 
   refresh(){
     this.total = 0
+    this.amountVatExcl = 0
+    this.amountVatIncl = 0
+    this.totalVat = 0
+    this.netAmount = 0
     this.quotationDetails.forEach(element => {
       this.total = this.total + element.sellingPriceVatIncl*element.qty
+      this.amountVatExcl = this.amountVatExcl + element.sellingPriceVatExcl*element.qty
+      this.amountVatIncl = this.amountVatIncl + element.sellingPriceVatIncl*element.qty
     })
+    this.totalVat = this.amountVatIncl - this.amountVatExcl
+    this.showNet()
+  }
+
+  showNet(){
+    this.netAmount = this.amountVatIncl - (this.otherCharges * -1) - this.discount
   }
 
   unlockAll(){
@@ -464,6 +539,14 @@ export class QuotationComponent implements OnInit {
     this.id               = ''
     this.no               = ''
     this.status           = ''
+    this.billingAddress      = ''
+    this.shippingAddress     = ''
+    this.totalVat            = 0
+    this.amountVatExcl       = 0
+    this.amountVatIncl       = 0
+    this.discount            = 0
+    this.otherCharges        = 0
+    this.netAmount           = 0
     this.comments         = ''
     this.created          = ''
     this.approved         = ''
@@ -480,6 +563,8 @@ export class QuotationComponent implements OnInit {
     this.qty                 = 0
     this.sellingPriceVatIncl = 0
     this.sellingPriceVatExcl = 0
+    this.costPriceVatIncl    = 0
+    this.costPriceVatExcl    = 0
   }
 
   createShortCut(shortCutName : string, link : string){
@@ -508,6 +593,8 @@ export class QuotationComponent implements OnInit {
           this.description = data!.description
           this.sellingPriceVatIncl = data!.sellingPriceVatIncl
           this.sellingPriceVatExcl = data!.sellingPriceVatExcl
+          this.costPriceVatIncl = data!.costPriceVatIncl
+          this.costPriceVatExcl = data!.costPriceVatExcl
         }
       )
       .catch(error => {
@@ -526,6 +613,8 @@ export class QuotationComponent implements OnInit {
           this.description = data!.description
           this.sellingPriceVatIncl = data!.sellingPriceVatIncl
           this.sellingPriceVatExcl = data!.sellingPriceVatExcl
+          this.costPriceVatIncl = data!.costPriceVatIncl
+          this.costPriceVatExcl = data!.costPriceVatExcl
         }
       )
       .catch(error => {
@@ -546,6 +635,8 @@ export class QuotationComponent implements OnInit {
           this.description = data!.description
           this.sellingPriceVatIncl = data!.sellingPriceVatIncl
           this.sellingPriceVatExcl = data!.sellingPriceVatExcl
+          this.costPriceVatIncl = data!.costPriceVatIncl
+          this.costPriceVatExcl = data!.costPriceVatExcl
         }
       )
       .catch(error => {
@@ -582,6 +673,8 @@ export class QuotationComponent implements OnInit {
         this.detailId = data!.id
         this.sellingPriceVatIncl = data!.sellingPriceVatIncl
         this.sellingPriceVatExcl = data!.sellingPriceVatExcl
+        this.costPriceVatIncl = data!.costPriceVatIncl
+        this.costPriceVatExcl = data!.costPriceVatExcl
         this.qty = data!.qty
       }
     )
@@ -702,6 +795,8 @@ export class QuotationComponent implements OnInit {
       data=>{
         this.customerId = data?.id
         this.customerNo = data!.no
+        this.billingAddress = data!.billingAddress
+        this.shippingAddress = data!.shippingAddress
       }
     )
     .catch(
@@ -711,14 +806,19 @@ export class QuotationComponent implements OnInit {
         this.customerId = ''
         this.customerNo = ''
         this.customerName = ''
+        this.billingAddress = ''
+        this.shippingAddress = ''
       }
     )
   }
+
+ 
 
   exportToPdf = () => {
     if(this.id == '' || this.id == null){
       return
     }
+    this.refresh()
     var header = ''
     var footer = ''
     var title  = 'Quotation'
@@ -753,7 +853,7 @@ export class QuotationComponent implements OnInit {
       {text : '', fontSize : 9}, 
       {text : '', fontSize : 9},
       {text : '', fontSize : 9},  
-      {text : 'Total', fontSize : 9},
+      {text : '', fontSize : 9},
       {text : total.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'},        
     ]
     report.push(detailSummary)
@@ -798,7 +898,23 @@ export class QuotationComponent implements OnInit {
               ]
             },
           },
-          '  ',
+          ' ',
+          {
+            table : {
+              widths : [160, 160],
+              body : [
+                [
+                  {text : 'Bill To', fontSize : 9}, 
+                  {text : 'Ship To', fontSize : 9} 
+                ],
+                [
+                  {text : this.billingAddress, fontSize : 9}, 
+                  {text : this.shippingAddress, fontSize : 9} 
+                ]
+              ]
+            },
+          },
+          ' ',
           {
             table : {
                 headerRows : 1,
@@ -806,6 +922,40 @@ export class QuotationComponent implements OnInit {
                 body : report
             }
         },
+        ' ',
+        ' ',
+        {
+          table : {
+            widths : [75, 75],
+            body : [
+              [
+                {text : 'Total VAT', fontSize : 9}, 
+                {text : this.totalVat.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Amount VAT Excl', fontSize : 9}, 
+                {text : this.amountVatExcl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Amount VAT Incl', fontSize : 9}, 
+                {text : this.amountVatIncl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Discount', fontSize : 9}, 
+                {text : this.discount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Other Charges', fontSize : 9}, 
+                {text : this.otherCharges.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Net Amount', fontSize : 9}, 
+                {text : this.netAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+              ]
+            ]
+          },
+        },
+        '  ',
         ' ',
         ' ',   
         ' ',
@@ -829,6 +979,16 @@ interface IQuotation{
   comments      : string
   quotationDate : Date
   validUntil    : Date
+
+  billingAddress : string
+  shippingAddress : string
+  totalVat : number
+  amountVatExcl : number
+  amountVatIncl : number
+  discount : number
+  otherCharges : number
+  netAmount : number
+
   created       : string
   approved      : string
   quotationDetails : IQuotationDetail[]
@@ -839,6 +999,8 @@ interface IQuotationDetail{
   qty                 : number
   sellingPriceVatIncl : number
   sellingPriceVatExcl : number
+  costPriceVatIncl    : number
+  costPriceVatExcl    : number
   product             : IProduct
 }
 
@@ -850,6 +1012,8 @@ interface IProduct{
   packSize         : number
   sellingPriceVatIncl : number
   sellingPriceVatExcl : number
+  costPriceVatIncl : number
+  costPriceVatExcl : number
 }
 
 interface ICustomer{
@@ -861,7 +1025,7 @@ interface ICustomer{
   tin                 : string
   vrn                 : string
   creditLimit         : number
-  quotationLimit        : number
+  quotationLimit      : number
   creditDays          : number
   physicalAddress     : string
   postCode            : string
@@ -876,6 +1040,9 @@ interface ICustomer{
   bankPostCode        : string
   bankName            : string
   bankAccountNo       : string
+
+  billingAddress      : string
+  shippingAddress     : string
 }
 
 interface ICustomerName{

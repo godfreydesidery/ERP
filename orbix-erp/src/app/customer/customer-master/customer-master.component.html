@@ -195,6 +195,26 @@
                 <input type="text" [(ngModel)]="bankAccountNo" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                             
             </div>
         </div>
+        <div class="row">
+            <div class="col-4 float-end" style="text-align: right;">
+                <label>Billing Address</label>
+            </div>
+            <div class="col-8">
+                <textarea [(ngModel)]="billingAddress" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">
+
+                </textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4 float-end" style="text-align: right;">
+                <label>Shipping Address</label>
+            </div>
+            <div class="col-8">
+                <textarea [(ngModel)]="shippingAddress" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">
+
+                </textarea>
+            </div>
+        </div>
     </div>
 
     <div class="col-md-6">

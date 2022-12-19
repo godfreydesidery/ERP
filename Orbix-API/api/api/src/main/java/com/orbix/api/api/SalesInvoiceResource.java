@@ -118,6 +118,14 @@ public class SalesInvoiceResource {
 		inv.setNo("NA");
 		inv.setCustomer(c.get());
 		inv.setStatus("BLANK");
+		inv.setBillingAddress(salesInvoice.getBillingAddress());
+		inv.setShippingAddress(salesInvoice.getShippingAddress());
+		inv.setTotalVat(salesInvoice.getTotalVat());
+		inv.setAmountVatExcl(salesInvoice.getAmountVatExcl());
+		inv.setAmountVatIncl(salesInvoice.getAmountVatIncl());
+		inv.setDiscount(salesInvoice.getDiscount());
+		inv.setOtherCharges(salesInvoice.getOtherCharges());
+		inv.setNetAmount(salesInvoice.getNetAmount());
 		inv.setComments(salesInvoice.getComments());	
 		inv.setCreatedBy(userService.getUserId(request));
 		inv.setCreatedAt(dayService.getDayId());
@@ -152,6 +160,16 @@ public class SalesInvoiceResource {
 		}		
 		l.get().setCustomer(c.get());
 		l.get().setComments(salesInvoice.getComments());
+		
+		l.get().setBillingAddress(salesInvoice.getBillingAddress());
+		l.get().setShippingAddress(salesInvoice.getShippingAddress());
+		l.get().setTotalVat(salesInvoice.getTotalVat());
+		l.get().setAmountVatExcl(salesInvoice.getAmountVatExcl());
+		l.get().setAmountVatIncl(salesInvoice.getAmountVatIncl());
+		l.get().setDiscount(salesInvoice.getDiscount());
+		l.get().setOtherCharges(salesInvoice.getOtherCharges());
+		l.get().setNetAmount(salesInvoice.getNetAmount());
+		
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/sales_invoices/update").toUriString());
 		return ResponseEntity.created(uri).body(salesInvoiceService.save(l.get()));
 	}
