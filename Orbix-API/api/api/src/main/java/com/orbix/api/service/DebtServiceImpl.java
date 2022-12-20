@@ -79,6 +79,7 @@ public class DebtServiceImpl implements DebtService {
 			model.setNo(d.getNo());
 			model.setSalesAgent(d.getSalesAgent());
 			model.setStatus(d.getStatus());
+			model.setAmount(d.getAmount());
 			model.setBalance(d.getBalance());
 //			if(inv.getCreatedAt() != null && inv.getCreatedBy() != null) {
 //				model.setCreated(dayRepository.findById(inv.getCreatedAt()).get().getBussinessDate() +" "+ userRepository.getAlias(inv.getCreatedBy()));

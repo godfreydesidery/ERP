@@ -38,8 +38,6 @@ public class SalesAgent {
 	private String contactName;
 	private String alias;
 	private boolean active = true;
-	private String tin;
-	private String vrn;
 	private double creditLimit = 0;
 	private double invoiceLimit = 0;
 	private double balance = 0;
@@ -52,10 +50,4 @@ public class SalesAgent {
 	private String mobile;
 	private String email;
 	private String fax;
-	private String bankAccountName;
-	private String bankPhysicalAddress;
-	private String bankPostCode;
-	private String bankPostAddress;
-	private String bankName;
-	private String bankAccountNo;
 }

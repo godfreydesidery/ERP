@@ -83,7 +83,7 @@ import { MaterialToMaterialComponent } from './inventory/material-to-material/ma
 import { NgxSpinnerModule } from "ngx-spinner";
 import { DebtReceiptComponent } from './mechandizer/debt-receipt/debt-receipt.component';
 import { DebtAllocationComponent } from './mechandizer/debt-allocation/debt-allocation.component';
-import { DebtTrackerComponent } from './mechandizer/debt-tracker/debt-tracker.component';
+import { SalesDebtComponent } from './mechandizer/debt-tracker/sales-debt.component';
 import { DailySalesReportComponent } from './reports/sales-reports/daily-sales-report/daily-sales-report.component';
 import { ProductListingReportComponent } from './reports/sales-reports/product-listing-report/product-listing-report.component';
 import { SupplySalesReportComponent } from './reports/sales-reports/supply-sales-report/supply-sales-report.component';
@@ -182,7 +182,7 @@ import { SalesAgentComponent } from './mechandizer/sales-agent/sales-agent.compo
     MaterialToMaterialComponent,
     DebtReceiptComponent,
     DebtAllocationComponent,
-    DebtTrackerComponent,
+    SalesDebtComponent,
     DailySalesReportComponent,
     ProductListingReportComponent,
     SupplySalesReportComponent,
@@ -281,7 +281,7 @@ import { SalesAgentComponent } from './mechandizer/sales-agent/sales-agent.compo
       {path : 'material-to-material', component:MaterialToMaterialComponent},
       {path : 'debt-receipts', component: DebtReceiptComponent},
       {path : 'debt-allocations', component: DebtAllocationComponent},
-      {path : 'debt-tracker', component: DebtTrackerComponent},
+      {path : 'sales-debt', component: SalesDebtComponent},
       {path : 'daily-sales-report', component: DailySalesReportComponent},
       {path : 'daily-purchases-report', component: DailyPurchasesReportComponent},
       {path : 'daily-summary-report', component: DailySummaryReportComponent},

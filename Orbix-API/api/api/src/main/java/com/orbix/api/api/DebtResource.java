@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.orbix.api.domain.Debt;
 import com.orbix.api.domain.Employee;
 import com.orbix.api.domain.SalesAgent;
 import com.orbix.api.exceptions.NotFoundException;
@@ -45,6 +46,7 @@ public class DebtResource {
 	
 	private final 	DebtService debtService;
 	private final 	SalesAgentRepository salesAgentRepository;
+	private final DebtRepository debtRepository;
 	
 	@GetMapping("/debts/sales_agent")
 	public ResponseEntity<List<DebtModel>>getDebts(
@@ -54,6 +56,23 @@ public class DebtResource {
 			throw new NotFoundException("Sales agent not found in database");
 		}
 		return ResponseEntity.ok().body(debtService.getBySalesAgentAndApprovedOrPartial(sa.get()));
+	}
+	
+	@GetMapping("/debts/get")
+	public ResponseEntity<DebtModel>getDebt(
+			@RequestParam(name = "id") Long id){
+		Optional<Debt> d = debtRepository.findById(id);
+		if(!d.isPresent()) {
+			throw new NotFoundException("Debt not found");
+		}
+		DebtModel m = new DebtModel();
+		m.setId(d.get().getId());
+		m.setNo(d.get().getNo());
+		m.setStatus(d.get().getStatus());
+		m.setAmount(d.get().getAmount());
+		m.setBalance(d.get().getBalance());
+		
+		return ResponseEntity.ok().body(m);
 	}
 	
 	
