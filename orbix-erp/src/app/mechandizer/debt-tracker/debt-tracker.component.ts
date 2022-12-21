@@ -1,0 +1,189 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from 'src/app/auth.service';
+import { ErrorHandlerService } from 'src/app/services/error-handler.service';
+import { environment } from 'src/environments/environment';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { finalize } from 'rxjs/operators';
+
+const API_URL = environment.apiUrl;
+
+@Component({
+  selector: 'app-debt-tracker',
+  templateUrl: './debt-tracker.component.html',
+  styleUrls: ['./debt-tracker.component.scss']
+})
+export class DebtTrackerComponent implements OnInit {
+
+  id : any
+  no : string
+  inceptionDate! : Date
+  totalAmount : number
+  paid : number
+  balance : number
+  status : string
+  customer! : ICustomer
+  officerIncharge! : ISalesAgent
+
+  debtTrackers : IDebtTracker[] = [] 
+
+
+  closeResult    : string = ''
+  constructor(private auth : AuthService, 
+              private http :HttpClient, 
+              private modalService: NgbModal,
+              private spinner : NgxSpinnerService) {
+    this.id = null
+    this.no = ''
+    this.totalAmount = 0
+    this.paid = 0
+    this.balance = 0
+    this.status = ''
+  }
+
+  ngOnInit(): void {
+    this.getAll()
+  }
+  
+  
+  async getAll(): Promise<void> {
+    this.debtTrackers = []
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer ' + this.auth.user.access_token)
+    }
+    this.spinner.show() 
+    await this.http.get<IDebtTracker[]>(API_URL + '/debt_trackers', options)
+      .pipe(finalize(() => this.spinner.hide()))
+      .toPromise()
+      .then(
+        data => {
+          console.log(data)
+          data?.forEach(
+            element => {
+              this.debtTrackers.push(element)
+            }
+          )
+        }
+      )
+      .catch(error => {
+        console.log(error)
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load debts')
+      })
+    return
+  }
+
+  openPay(contentPay : any, detailId : string) {
+   
+    this.modalService.open(contentPay, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  openHistory(history : any, detailId : string) {
+   
+    this.modalService.open(history, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+}
+
+export interface ICustomer {
+  /**
+   * Basic Inf
+   */
+  id          : any
+  name        : string
+  contactName : string 
+  active      : boolean 
+  tin         : string
+  vrn         : string
+  /**
+   * Credit Inf
+   */
+  creditLimit  : number
+  invoiceLimit : number
+  creditDays   : number
+  /**
+   * Contact Inf
+   */
+  physicalAddress : string
+  postCode        : string
+  postAddress     : string
+  telephone       : string
+  mobile          : string
+  email           : string
+  fax             : string
+  /**
+   * Bank Inf
+   */
+  bankAccountName     : string
+  bankPhysicalAddress : string
+  bankPostAddress     : string
+  bankPostCode        : string
+  bankName            : string
+  bankAccountNo       : string
+  shippingAddress     : string
+  billingAddress      : string
+}
+
+export interface ISalesAgent {
+  /**
+   * Basic Inf
+   */
+  id         : any
+  no : string
+  name   : string
+  contactName   : string 
+  active : boolean 
+  
+  /**
+   * Contract Inf
+   */
+  termsOfContract : string
+  /**
+   * Credit Inf
+   */
+   creditLimit  : number
+   invoiceLimit : number
+   creditDays   : number
+   salesTarget  : number
+  /**
+   * Contact Inf
+   */
+  physicalAddress : string
+  postCode : string
+  postAddress : string
+  telephone : string
+  mobile : string
+  email : string
+  fax : string
+}
+
+export interface IDebtTracker{
+  id : any
+  no : string
+  inceptionDay : IDay
+  amount : number
+  paid : number
+  balance : number
+  status : string
+  customer : ICustomer
+  officerIncharge : ISalesAgent
+}
+
+export interface IDay{
+  bussinessDate : Date
+}

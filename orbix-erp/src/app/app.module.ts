@@ -83,7 +83,7 @@ import { MaterialToMaterialComponent } from './inventory/material-to-material/ma
 import { NgxSpinnerModule } from "ngx-spinner";
 import { DebtReceiptComponent } from './mechandizer/debt-receipt/debt-receipt.component';
 import { DebtAllocationComponent } from './mechandizer/debt-allocation/debt-allocation.component';
-import { SalesDebtComponent } from './mechandizer/debt-tracker/sales-debt.component';
+import { SalesDebtComponent } from './mechandizer/sales-debt/sales-debt.component';
 import { DailySalesReportComponent } from './reports/sales-reports/daily-sales-report/daily-sales-report.component';
 import { ProductListingReportComponent } from './reports/sales-reports/product-listing-report/product-listing-report.component';
 import { SupplySalesReportComponent } from './reports/sales-reports/supply-sales-report/supply-sales-report.component';
@@ -109,6 +109,7 @@ import { MaterialUsageReportComponent } from './reports/production-reports/mater
 import { SalesAndPurchasesSummaryReportComponent } from './reports/sales-reports/sales-and-purchases-summary-report/sales-and-purchases-summary-report.component';
 import { VatGroupsComponent } from './company/vat-groups/vat-groups.component';
 import { SalesAgentComponent } from './mechandizer/sales-agent/sales-agent.component';
+import { DebtTrackerComponent } from './mechandizer/debt-tracker/debt-tracker.component';
 
 
 @NgModule({
@@ -208,6 +209,7 @@ import { SalesAgentComponent } from './mechandizer/sales-agent/sales-agent.compo
     SalesAndPurchasesSummaryReportComponent,
     VatGroupsComponent,
     SalesAgentComponent,
+    DebtTrackerComponent,
     //BatchProductionComponent,
     //CustomProductionComponent,
   ],
@@ -302,6 +304,7 @@ import { SalesAgentComponent } from './mechandizer/sales-agent/sales-agent.compo
       {path : 'sales-and-purchases-summary-report', component: SalesAndPurchasesSummaryReportComponent},
       {path : 'vat-group', component: VatGroupsComponent},
       {path : 'sales-agents', component: SalesAgentComponent},
+      {path : 'debt-tracker', component: DebtTrackerComponent},
     ]),
     BrowserAnimationsModule,
   ],

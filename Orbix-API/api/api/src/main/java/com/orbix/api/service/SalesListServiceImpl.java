@@ -538,7 +538,7 @@ public class SalesListServiceImpl implements SalesListService {
 			debt.setDay(dayRepository.getCurrentBussinessDay());
 			debt.setSalesAgent(slsl.getSalesAgent());
 			debt.setSalesList(slsl);
-			debtService.create(debt);
+			debtService.create(debt, userRepository.findById(userService.getUserId(request)).get());			
 		}
 		
 		if(totalDiscounts < 0) {

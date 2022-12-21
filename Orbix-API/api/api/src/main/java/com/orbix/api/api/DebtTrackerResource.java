@@ -4,6 +4,7 @@
 package com.orbix.api.api;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +32,7 @@ import com.orbix.api.repositories.CustomerRepository;
 import com.orbix.api.repositories.DayRepository;
 import com.orbix.api.repositories.DebtRepository;
 import com.orbix.api.repositories.SalesAgentRepository;
+import com.orbix.api.repositories.UserRepository;
 import com.orbix.api.service.DayService;
 import com.orbix.api.service.DebtService;
 import com.orbix.api.service.DebtTrackerService;
@@ -56,6 +59,12 @@ public class DebtTrackerResource {
 	private final DayService dayService;
 	private final DebtTrackerService debtTrackerService;
 	private final DayRepository dayRepository;
+	private final UserRepository userRepository;
+	
+	@GetMapping("/debt_trackers")
+	public ResponseEntity<List<DebtTracker>>getDebtTrackers(){
+		return ResponseEntity.ok().body(debtTrackerService.getAll());
+	}
 	
 	@PostMapping("/debt_trackers/create")
 	//@PreAuthorize("hasAnyAuthority('LPO-CREATE')")
@@ -88,6 +97,6 @@ public class DebtTrackerResource {
 		dt.setCreatedAt(dayService.getDayId());
 		dt.setInceptionDay(dayRepository.getCurrentBussinessDay());
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/debt_trackers/create").toUriString());
-		return ResponseEntity.created(uri).body(debtTrackerService.create(dt));
+		return ResponseEntity.created(uri).body(debtTrackerService.create(dt, userRepository.findById(userService.getUserId(request)).get()));
 	}
 }

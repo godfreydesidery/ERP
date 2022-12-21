@@ -40,12 +40,27 @@ export class CustomerMasterComponent implements OnInit, ICustomer {
   mobile              : string
   email               : string
   fax                 : string
+
   bankAccountName     : string
   bankPhysicalAddress : string
   bankPostAddress     : string
   bankPostCode        : string
   bankName            : string
   bankAccountNo       : string
+
+  bankAccountName2     : string
+  bankPhysicalAddress2 : string
+  bankPostAddress2     : string
+  bankPostCode2        : string
+  bankName2            : string
+  bankAccountNo2       : string
+
+  bankAccountName3     : string
+  bankPhysicalAddress3 : string
+  bankPostAddress3     : string
+  bankPostCode3        : string
+  bankName3            : string
+  bankAccountNo3       : string
 
   billingAddress      : string
   shippingAddress     : string
@@ -79,6 +94,20 @@ export class CustomerMasterComponent implements OnInit, ICustomer {
     this.bankPostCode        = ''
     this.bankName            = ''
     this.bankAccountNo       = ''
+
+    this.bankAccountName2     = ''
+    this.bankPhysicalAddress2 = ''
+    this.bankPostAddress2     = ''
+    this.bankPostCode2        = ''
+    this.bankName2            = ''
+    this.bankAccountNo2       = ''
+
+    this.bankAccountName3     = ''
+    this.bankPhysicalAddress3 = ''
+    this.bankPostAddress3     = ''
+    this.bankPostCode3        = ''
+    this.bankName3            = ''
+    this.bankAccountNo3       = ''
 
     this.shippingAddress     = ''
     this.billingAddress      = ''

@@ -18,6 +18,8 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -57,8 +59,8 @@ public class DebtTracker {
     @OnDelete(action = OnDeleteAction.NO_ACTION)	
     private SalesAgent officerIncharge;
 	
-	@ManyToOne(targetEntity = Day.class, fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name = "inception_day", nullable = true , updatable = true)
+	@ManyToOne(targetEntity = Day.class, fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "inception_day", nullable = false , updatable = true)
     @OnDelete(action = OnDeleteAction.NO_ACTION)	
     private Day inceptionDay;
 	
@@ -69,7 +71,8 @@ public class DebtTracker {
 	
 	@ManyToOne(targetEntity = Debt.class, fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "debt_id", nullable = true , updatable = false)
-    @OnDelete(action = OnDeleteAction.NO_ACTION)	
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
+	@JsonIgnoreProperties("salesList")
     private Debt debt;
 	
 	

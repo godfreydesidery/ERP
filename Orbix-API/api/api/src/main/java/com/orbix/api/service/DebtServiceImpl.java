@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.orbix.api.domain.Employee;
 import com.orbix.api.domain.PackingList;
 import com.orbix.api.domain.SalesAgent;
+import com.orbix.api.domain.User;
 import com.orbix.api.accessories.Formater;
 import com.orbix.api.domain.Debt;
 import com.orbix.api.domain.Debt;
@@ -20,6 +21,7 @@ import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.models.DebtModel;
 import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.DayRepository;
+import com.orbix.api.repositories.DebtHistoryRepository;
 import com.orbix.api.repositories.DebtRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -36,9 +38,10 @@ import lombok.extern.slf4j.Slf4j;
 public class DebtServiceImpl implements DebtService {
 	
 	private final DebtRepository debtRepository;
+	private final DebtHistoryService debtHistoryService;
 
 	@Override
-	public Debt create(Debt debt) {
+	public Debt create(Debt debt, User user) {
 		/**
 		 * First register debt payment, to be implemented later
 		 * then pay debt
@@ -47,15 +50,23 @@ public class DebtServiceImpl implements DebtService {
 		if(d.getNo().equals("NA")) {
 			d.setNo(generateDebtNo(d));
 		}
-		return debtRepository.saveAndFlush(d);
+		d = debtRepository.saveAndFlush(d);
+		/**
+		 * Register history
+		 */
+		debtHistoryService.create(debt.getBalance(), 0, debt, null, user, "New sales debt created "+debt.getNo());
+		return d;
 		
 	}
 
 	@Override
-	public Debt pay(Debt debt, double amount) {
+	public Debt pay(Debt debt, double amount, User user) {	
 		/**
-		 * First register debt payment, to be implemented later
-		 * then pay debt
+		 * Register history
+		 */
+		debtHistoryService.create(debt.getBalance(), amount, debt, null, user, "Received from sales debt "+debt.getNo());		
+		/**
+		 * Now receive debt
 		 */
 		if(amount <= 0) {
 			throw new InvalidEntryException("Invalid amount");
@@ -96,7 +107,7 @@ public class DebtServiceImpl implements DebtService {
 		Long number = debt.getId();		
 		String sNumber = number.toString();
 		//return "DBT-"+Formater.formatNine(sNumber);
-		return Formater.formatWithCurrentDate("DBT",sNumber);
+		return Formater.formatWithCurrentDate("SDB",sNumber);
 	}
 	
 	

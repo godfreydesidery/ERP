@@ -14,6 +14,7 @@ import com.orbix.api.accessories.Formater;
 import com.orbix.api.domain.Debt;
 import com.orbix.api.domain.DebtTracker;
 import com.orbix.api.domain.SalesAgent;
+import com.orbix.api.domain.User;
 import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.models.DebtModel;
 import com.orbix.api.models.DebtTrackerModel;
@@ -36,9 +37,10 @@ import lombok.extern.slf4j.Slf4j;
 public class DebtTrackerServiceImpl implements DebtTrackerService {
 	private final DebtTrackerRepository debtTrackerRepository;
 	private final DebtRepository debtRepository;
+	private final DebtHistoryService debtHistoryService;
 
 	@Override
-	public boolean create(DebtTracker debtTracker) {
+	public boolean create(DebtTracker debtTracker, User user) {
 		if(debtTracker.getAmount() <= 0) {
 			throw new InvalidEntryException("Invalid debt amount");
 		}
@@ -46,15 +48,25 @@ public class DebtTrackerServiceImpl implements DebtTrackerService {
 			throw new InvalidEntryException("Amount exceeds the sales debt balance");
 		}
 		Debt debt = debtTracker.getDebt();
+		//put here debt history
+		double debtBalance = debt.getBalance();
 		debt.setBalance(debt.getBalance() - debtTracker.getAmount());
 		debt = debtRepository.saveAndFlush(debt);
+		if(debt.getBalance() == 0) {
+			debt.setStatus("PAID");
+			debt = debtRepository.saveAndFlush(debt);
+		}
 		debtTracker.setDebt(debt);
 		
 		DebtTracker d = debtTrackerRepository.saveAndFlush(debtTracker);
 		if(d.getNo().equals("NA")) {
 			d.setNo(generateDebtTrackerNo(d));
 			d = debtTrackerRepository.saveAndFlush(d);
-		}		
+		}
+		//put condition latter, if debt is null
+		debtHistoryService.create(debtBalance, debtTracker.getAmount(), debt, null, user, "Amount transfered to debt tracker "+debtTracker.getNo());
+		debtHistoryService.create(debtTracker.getBalance(), 0, null, debtTracker, user, "New registered debt on debt tracker "+debtTracker.getNo());
+		
 		DebtTrackerModel model = new DebtTrackerModel();
 		model.setId(d.getId());
 		model.setNo(d.getNo());
@@ -71,10 +83,13 @@ public class DebtTrackerServiceImpl implements DebtTrackerService {
 	}
 
 	@Override
-	public DebtTracker pay(DebtTracker debtTracker, double amount) {
+	public DebtTracker pay(DebtTracker debtTracker, double amount, User user) {
 		/**
-		 * First register debt payment, to be implemented later
-		 * then pay debt
+		 * Register history
+		 */
+		debtHistoryService.create(debtTracker.getBalance(), amount, null, debtTracker, user, "Received from debt tracker "+debtTracker.getNo());
+		/**
+		 * Now pay debt
 		 */
 		if(amount <= 0) {
 			throw new InvalidEntryException("Invalid amount");
@@ -93,7 +108,7 @@ public class DebtTrackerServiceImpl implements DebtTrackerService {
 	private String generateDebtTrackerNo(DebtTracker debtTracker) {
 		Long number = debtTracker.getId();		
 		String sNumber = number.toString();
-		return Formater.formatWithCurrentDate("DBT",sNumber);
+		return Formater.formatWithCurrentDate("DTR",sNumber);
 	}
 	
 	@Override
@@ -103,14 +118,13 @@ public class DebtTrackerServiceImpl implements DebtTrackerService {
 			id = debtTrackerRepository.getLastId() + 1;
 		}catch(Exception e) {}
 		RecordModel model = new RecordModel();
-		model.setNo(Formater.formatWithCurrentDate("DBT",id.toString()));
+		model.setNo(Formater.formatWithCurrentDate("DTR",id.toString()));
 		return model;
 	}
 
 	@Override
 	public List<DebtTracker> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return debtTrackerRepository.findAll();
 	}	
 	
 	

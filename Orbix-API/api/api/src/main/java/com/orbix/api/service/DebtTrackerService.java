@@ -6,6 +6,7 @@ package com.orbix.api.service;
 import java.util.List;
 
 import com.orbix.api.domain.DebtTracker;
+import com.orbix.api.domain.User;
 import com.orbix.api.models.DebtTrackerModel;
 import com.orbix.api.models.RecordModel;
 
@@ -14,8 +15,8 @@ import com.orbix.api.models.RecordModel;
  *
  */
 public interface DebtTrackerService {
-	public boolean create(DebtTracker debtTracker);
-	public DebtTracker pay(DebtTracker debtTracker, double amount);
+	public boolean create(DebtTracker debtTracker, User user);
+	public DebtTracker pay(DebtTracker debtTracker, double amount, User user);
 	public RecordModel requestDebtTrackerNo();
 	List<DebtTracker>getAll();
 }

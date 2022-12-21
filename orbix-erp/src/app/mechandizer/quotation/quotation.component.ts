@@ -40,7 +40,9 @@ export class QuotationComponent implements OnInit {
   blank            : boolean = false
 
   logo!              : any
-  address  : any 
+  address  : any
+  paymentDetails : any 
+
   
   id               : any
   no               : string
@@ -125,6 +127,7 @@ export class QuotationComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.logo = await this.data.getLogo() 
     this.address = await this.data.getAddress()
+    this.paymentDetails = await this.data.getPaymentDetails()
     this.loadQuotations()
     this.loadCustomerNames()
     this.loadProductDescriptions()
@@ -955,12 +958,19 @@ export class QuotationComponent implements OnInit {
             ]
           },
         },
-        '  ',
+        ' ',
+        'Payment Details',
+        {
+          table : {
+            widths : [150, 150, 150],
+            body : [
+              this.paymentDetails
+            ]
+          },
+        },
+        ' ',
         ' ',
         ' ',   
-        ' ',
-        ' ',
-        ' ',
         'Verified ____________________________________', 
         ' ',
         ' ',

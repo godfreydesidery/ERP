@@ -39,6 +39,7 @@ export class SalesInvoiceComponent implements OnInit {
 
   logo!              : any
   address  : any 
+  paymentDetails : any 
 
   blank          : boolean = false
   
@@ -122,6 +123,7 @@ export class SalesInvoiceComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.logo = await this.data.getLogo() 
     this.address = await this.data.getAddress()
+    this.paymentDetails = await this.data.getPaymentDetails()
     this.loadInvoices()
     this.loadCustomerNames()
     this.loadProductDescriptions()
@@ -934,9 +936,17 @@ export class SalesInvoiceComponent implements OnInit {
           },
         },
         ' ',
+        'Payment Details',
+        {
+          table : {
+            widths : [150, 150, 150],
+            body : [
+              this.paymentDetails
+            ]
+          },
+        },
+        ' ',
         ' ',   
-        ' ',
-        ' ',
         ' ',
         'Verified ____________________________________', 
         ' ',

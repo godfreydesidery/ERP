@@ -20,6 +20,7 @@ import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.repositories.DebtAllocationRepository;
 import com.orbix.api.repositories.SalesAgentRepository;
 import com.orbix.api.repositories.SalesListRepository;
+import com.orbix.api.repositories.UserRepository;
 import com.orbix.api.repositories.DayRepository;
 import com.orbix.api.repositories.DebtRepository;
 
@@ -42,6 +43,9 @@ public class DebtAllocationServiceImpl implements DebtAllocationService {
 	private final DayService dayService;
 	private final DayRepository dayRepository;
 	private final SalesListRepository salesListRepository;
+	
+	private final DebtHistoryService debtHistoryService;
+	private final UserRepository userRepository;
 
 	@Override
 	public boolean allocate(SalesAgent salesAgent, Debt debt, HttpServletRequest request) {
@@ -73,6 +77,8 @@ public class DebtAllocationServiceImpl implements DebtAllocationService {
 				throw new InvalidOperationException("Could not process, reference document has no deficit");
 			}
 			Optional<SalesList> p = salesListRepository.findById(d.get().getSalesList().getId());
+			
+			debtHistoryService.create(debt.getBalance(), salesAgentBalance, debt, null, userRepository.findById(userService.getUserId(request)).get(), "Debt allocation "+debt.getNo());
 			
 			if(salesAgentBalance >= debt.getBalance()) {
 				double balance = debt.getBalance();
@@ -119,6 +125,6 @@ public class DebtAllocationServiceImpl implements DebtAllocationService {
 	private String generateDebtAllocationNo(DebtAllocation debtAllocation) {
 		Long number = debtAllocation.getId();		
 		String sNumber = number.toString();
-		return "DAC-"+Formater.formatSix(sNumber);
+		return Formater.formatWithCurrentDate("DAC",sNumber);
 	}
 }

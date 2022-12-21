@@ -40,6 +40,20 @@ export class CompanyProfileComponent implements OnInit, ICompanyProfile {
   bankName        : string;
   bankAccountNo   : string;
 
+  bankAccountName2 : string;
+  bankPhysicalAddress2: string;
+  bankPostCode2    : string;
+  bankPostAddress2 : string;
+  bankName2        : string;
+  bankAccountNo2   : string;
+
+  bankAccountName3 : string;
+  bankPhysicalAddress3: string;
+  bankPostCode3    : string;
+  bankPostAddress3 : string;
+  bankName3        : string;
+  bankAccountNo3   : string;
+
   logoUrl     : any
 
   constructor(private http : HttpClient, 
@@ -66,6 +80,20 @@ export class CompanyProfileComponent implements OnInit, ICompanyProfile {
     this.bankPostAddress  = ''
     this.bankName         = ''
     this.bankAccountNo    = ''
+
+    this.bankAccountName2  = ''
+    this.bankPhysicalAddress2 = ''
+    this.bankPostCode2     = ''
+    this.bankPostAddress2  = ''
+    this.bankName2         = ''
+    this.bankAccountNo2    = ''
+
+    this.bankAccountName3  = ''
+    this.bankPhysicalAddress3 = ''
+    this.bankPostCode3     = ''
+    this.bankPostAddress3  = ''
+    this.bankName3         = ''
+    this.bankAccountNo3    = ''
 
     this.logoUrl = ''
   }
@@ -106,6 +134,20 @@ export class CompanyProfileComponent implements OnInit, ICompanyProfile {
         this.bankPostAddress  = data!.bankPostAddress
         this.bankName         = data!.bankName
         this.bankAccountNo    = data!.bankAccountNo
+
+        this.bankAccountName2  = data!.bankAccountName2
+        this.bankPhysicalAddress2      = data!.bankPhysicalAddress2
+        this.bankPostCode2     = data!.bankPostCode2
+        this.bankPostAddress2  = data!.bankPostAddress2
+        this.bankName2         = data!.bankName2
+        this.bankAccountNo2    = data!.bankAccountNo2
+
+        this.bankAccountName3  = data!.bankAccountName3
+        this.bankPhysicalAddress3      = data!.bankPhysicalAddress3
+        this.bankPostCode3     = data!.bankPostCode3
+        this.bankPostAddress3  = data!.bankPostAddress3
+        this.bankName3         = data!.bankName3
+        this.bankAccountNo3    = data!.bankAccountNo3
         if(this.companyName == null){
           alert('Could not find company details')
         }       
@@ -156,7 +198,19 @@ export class CompanyProfileComponent implements OnInit, ICompanyProfile {
       bankPostCode     : this.bankPostCode,
       bankPostAddress  : this.bankPostAddress,
       bankName         : this.bankName,
-      bankAccountNo    : this.bankAccountNo
+      bankAccountNo    : this.bankAccountNo,
+      bankAccountName2  : this.bankAccountName2,
+      bankPhysicalAddress2      : this.bankPhysicalAddress2,
+      bankPostCode2     : this.bankPostCode2,
+      bankPostAddress2  : this.bankPostAddress2,
+      bankName2         : this.bankName2,
+      bankAccountNo2    : this.bankAccountNo2,
+      bankAccountName3  : this.bankAccountName3,
+      bankPhysicalAddress3      : this.bankPhysicalAddress3,
+      bankPostCode3     : this.bankPostCode3,
+      bankPostAddress3  : this.bankPostAddress3,
+      bankName3         : this.bankName3,
+      bankAccountNo3    : this.bankAccountNo3
     }
     this.spinner.show()
     await this.http.post<ICompanyProfile>(API_URL+'/company_profile/save', profile, options)
@@ -184,6 +238,20 @@ export class CompanyProfileComponent implements OnInit, ICompanyProfile {
         this.bankPostAddress  = data!.bankPostAddress
         this.bankName         = data!.bankName
         this.bankAccountNo    = data!.bankAccountNo
+
+        this.bankAccountName2  = data!.bankAccountName2
+        this.bankPhysicalAddress2      = data!.bankPhysicalAddress2
+        this.bankPostCode2     = data!.bankPostCode2
+        this.bankPostAddress2  = data!.bankPostAddress2
+        this.bankName2         = data!.bankName2
+        this.bankAccountNo2    = data!.bankAccountNo2
+
+        this.bankAccountName3  = data!.bankAccountName3
+        this.bankPhysicalAddress3      = data!.bankPhysicalAddress3
+        this.bankPostCode3     = data!.bankPostCode3
+        this.bankPostAddress3  = data!.bankPostAddress3
+        this.bankName3         = data!.bankName3
+        this.bankAccountNo3    = data!.bankAccountNo3
         try{
           this.onUpload()
         }catch(e : any){}
@@ -274,6 +342,18 @@ export interface ICompanyProfile{
   bankPostAddress : string
   bankName        : string
   bankAccountNo   : string
+  bankAccountName2 : string
+  bankPhysicalAddress2 : string
+  bankPostCode2    : string
+  bankPostAddress2 : string
+  bankName2        : string
+  bankAccountNo2  : string
+  bankAccountName3 : string
+  bankPhysicalAddress3 : string
+  bankPostCode3    : string
+  bankPostAddress3 : string
+  bankName3        : string
+  bankAccountNo3   : string
 
   getCompanyProfile() : void
   saveCompanyProfile() : void

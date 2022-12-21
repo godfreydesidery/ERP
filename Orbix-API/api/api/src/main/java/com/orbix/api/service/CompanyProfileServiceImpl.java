@@ -61,12 +61,27 @@ public class CompanyProfileServiceImpl implements CompanyProfileService {
 				profile.setEmail(companyProfile.getEmail());
 				profile.setWebsite(companyProfile.getWebsite());
 				profile.setFax(companyProfile.getFax());
+				
 				profile.setBankAccountName(companyProfile.getBankAccountName());
 				profile.setBankPhysicalAddress(companyProfile.getBankPhysicalAddress());
 				profile.setBankPostAddress(companyProfile.getBankPostAddress());
 				profile.setBankPostCode(companyProfile.getBankPostCode());
 				profile.setBankName(companyProfile.getBankName());
 				profile.setBankAccountNo(companyProfile.getBankAccountNo());
+				
+				profile.setBankAccountName2(companyProfile.getBankAccountName2());
+				profile.setBankPhysicalAddress2(companyProfile.getBankPhysicalAddress2());
+				profile.setBankPostAddress2(companyProfile.getBankPostAddress2());
+				profile.setBankPostCode2(companyProfile.getBankPostCode2());
+				profile.setBankName2(companyProfile.getBankName2());
+				profile.setBankAccountNo2(companyProfile.getBankAccountNo2());
+				
+				profile.setBankAccountName3(companyProfile.getBankAccountName3());
+				profile.setBankPhysicalAddress3(companyProfile.getBankPhysicalAddress3());
+				profile.setBankPostAddress3(companyProfile.getBankPostAddress3());
+				profile.setBankPostCode3(companyProfile.getBankPostCode3());
+				profile.setBankName3(companyProfile.getBankName3());
+				profile.setBankAccountNo3(companyProfile.getBankAccountNo3());
 			}else {
 				profile = companyProfile;
 			}
