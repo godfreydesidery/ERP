@@ -6,6 +6,7 @@ package com.orbix.api.api;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,6 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.orbix.api.domain.Customer;
+import com.orbix.api.domain.Supplier;
+import com.orbix.api.exceptions.NotFoundException;
+import com.orbix.api.repositories.CustomerRepository;
 import com.orbix.api.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 
@@ -37,6 +41,7 @@ import lombok.RequiredArgsConstructor;
 public class CustomerResource {
 
 	private final 	CustomerService customerService;
+	private final CustomerRepository customerRepository;
 	
 	@GetMapping("/customers")
 	public ResponseEntity<List<Customer>>getCustomers(){
@@ -72,7 +77,9 @@ public class CustomerResource {
 	@PreAuthorize("hasAnyAuthority('CUSTOMER-CREATE')")
 	public ResponseEntity<Customer>createCustomer(
 			@RequestBody Customer customer){
-		customer.setNo("NA");
+		if(customer.getNo().equals("")) {
+			customer.setNo("NA");
+		}		
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/customers/create").toUriString());
 		return ResponseEntity.created(uri).body(customerService.save(customer));
 	}
@@ -82,6 +89,21 @@ public class CustomerResource {
 	public ResponseEntity<Customer>updateCustomer(
 			@RequestBody Customer customer, 
 			HttpServletRequest request){
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/customers/update").toUriString());
+		return ResponseEntity.created(uri).body(customerService.save(customer));
+	}
+	
+	@PutMapping("/customers/update_by_no")
+	@PreAuthorize("hasAnyAuthority('CUSTOMER-CREATE','CUSTOMER-UPDATE')")
+	public ResponseEntity<Customer>updateCustomerByCode(
+			@RequestBody Customer customer, 
+			HttpServletRequest request){
+		Optional<Customer> c = customerRepository.findByNo(customer.getNo());
+		if(c.isPresent()) {
+			customer.setId(c.get().getId());
+		}else {
+			throw new NotFoundException("Customer not found");
+		}
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/customers/update").toUriString());
 		return ResponseEntity.created(uri).body(customerService.save(customer));
 	}

@@ -82,6 +82,7 @@ import { SalesAndPurchasesSummaryReportComponent } from './reports/sales-reports
 import { VatGroupsComponent } from './company/vat-groups/vat-groups.component';
 import { SalesAgentComponent } from './mechandizer/sales-agent/sales-agent.component';
 import { DebtTrackerComponent } from './mechandizer/debt-tracker/debt-tracker.component';
+import { CustomerMassManagerComponent } from './customer/customer-mass-manager/customer-mass-manager.component';
 
 const routes: Routes = [
   {path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard]},
@@ -125,6 +126,7 @@ const routes: Routes = [
   {path: 'supplier-master', component: SupplierMasterComponent, canActivate: [AuthGuard]},
   {path: 'supplier-mass-manager', component: SupplierMassManagerComponent, canActivate: [AuthGuard]},
   {path: 'customer-master', component: CustomerMasterComponent, canActivate: [AuthGuard]},
+  {path: 'customer-mass-manager', component: CustomerMassManagerComponent, canActivate: [AuthGuard]},
   {path: 'employee-register', component: EmployeeRegisterComponent, canActivate: [AuthGuard]},
   {path: 'group-level1', component: GroupLevel1Component, canActivate: [AuthGuard]},
   {path: 'group-level2', component: GroupLevel2Component, canActivate: [AuthGuard]},

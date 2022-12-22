@@ -103,7 +103,7 @@ public class CustomerServiceImpl implements CustomerService {
 	private String generateCustomerNo(Customer customer) {
 		Long number = customer.getId();		
 		String sNumber = number.toString();
-		return "CUS-"+Formater.formatSix(sNumber);
+		return "C"+sNumber;
 	}
 
 }

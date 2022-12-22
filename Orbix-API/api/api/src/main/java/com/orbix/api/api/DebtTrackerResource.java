@@ -16,21 +16,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.orbix.api.domain.Customer;
 import com.orbix.api.domain.Debt;
+import com.orbix.api.domain.DebtHistory;
 import com.orbix.api.domain.DebtTracker;
 import com.orbix.api.domain.Lpo;
 import com.orbix.api.domain.SalesAgent;
 import com.orbix.api.domain.Supplier;
+import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
+import com.orbix.api.models.DebtModel;
 import com.orbix.api.models.DebtTrackerModel;
 import com.orbix.api.models.LpoModel;
 import com.orbix.api.repositories.CustomerRepository;
 import com.orbix.api.repositories.DayRepository;
+import com.orbix.api.repositories.DebtHistoryRepository;
 import com.orbix.api.repositories.DebtRepository;
+import com.orbix.api.repositories.DebtTrackerRepository;
 import com.orbix.api.repositories.SalesAgentRepository;
 import com.orbix.api.repositories.UserRepository;
 import com.orbix.api.service.DayService;
@@ -55,15 +61,28 @@ public class DebtTrackerResource {
 	private final SalesAgentRepository salesAgentRepository;
 	private final CustomerRepository customerRepository;
 	private final DebtRepository debtRepository;
+	private final DebtTrackerRepository debtTrackerRepository;
 	private final UserService userService;
 	private final DayService dayService;
 	private final DebtTrackerService debtTrackerService;
 	private final DayRepository dayRepository;
 	private final UserRepository userRepository;
+	private final DebtHistoryRepository debtHistoryRepository;
+	
+	
 	
 	@GetMapping("/debt_trackers")
 	public ResponseEntity<List<DebtTracker>>getDebtTrackers(){
 		return ResponseEntity.ok().body(debtTrackerService.getAll());
+	}
+		
+	@GetMapping("/debt_trackers/history")
+	public ResponseEntity<List<DebtHistory>>getDebtHistory(@RequestParam(name = "id") Long id){
+		Optional<DebtTracker> dt = debtTrackerRepository.findById(id);
+		if(!dt.isPresent()) {
+			throw new NotFoundException("Debt not found");
+		}		
+		return ResponseEntity.ok().body(debtHistoryRepository.findAllByDebtTracker(dt.get()));
 	}
 	
 	@PostMapping("/debt_trackers/create")
@@ -98,5 +117,38 @@ public class DebtTrackerResource {
 		dt.setInceptionDay(dayRepository.getCurrentBussinessDay());
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/debt_trackers/create").toUriString());
 		return ResponseEntity.created(uri).body(debtTrackerService.create(dt, userRepository.findById(userService.getUserId(request)).get()));
+	}
+	
+	@GetMapping("/debt_trackers/get")
+	public ResponseEntity<DebtTrackerModel>getDebtTracker(
+			@RequestParam(name = "id") Long id){
+		Optional<DebtTracker> d = debtTrackerRepository.findById(id);
+		if(!d.isPresent()) {
+			throw new NotFoundException("Debt not found");
+		}
+		DebtTrackerModel m = new DebtTrackerModel();
+		m.setId(d.get().getId());
+		m.setNo(d.get().getNo());
+		m.setStatus(d.get().getStatus());
+		m.setAmount(d.get().getAmount());
+		m.setPaid(d.get().getPaid());
+		m.setBalance(d.get().getBalance());
+		
+		return ResponseEntity.ok().body(m);
+	}
+	
+	@PostMapping("/debt_trackers/pay")
+	//@PreAuthorize("hasAnyAuthority('LPO-CREATE')")
+	public ResponseEntity<DebtTracker>payDebtTracker(
+			@RequestBody DebtTracker debtTracker,
+			HttpServletRequest request){
+		
+		Optional<DebtTracker> d = debtTrackerRepository.findById(debtTracker.getId());
+		if(!d.isPresent()) {
+			throw new NotFoundException("Debt not present");
+		}
+		
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/debt_trackers/pay").toUriString());
+		return ResponseEntity.created(uri).body(debtTrackerService.pay(d.get(), debtTracker.getAmount(), userRepository.findById(userService.getUserId(request)).get()));
 	}
 }

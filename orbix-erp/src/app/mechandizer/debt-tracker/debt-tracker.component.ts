@@ -22,11 +22,14 @@ export class DebtTrackerComponent implements OnInit {
   totalAmount : number
   paid : number
   balance : number
+  amountToPay : number
   status : string
   customer! : ICustomer
   officerIncharge! : ISalesAgent
 
   debtTrackers : IDebtTracker[] = [] 
+
+  histories : IHistory[] = []
 
 
   closeResult    : string = ''
@@ -39,6 +42,7 @@ export class DebtTrackerComponent implements OnInit {
     this.totalAmount = 0
     this.paid = 0
     this.balance = 0
+    this.amountToPay = 0
     this.status = ''
   }
 
@@ -73,8 +77,75 @@ export class DebtTrackerComponent implements OnInit {
     return
   }
 
+  async get(id : any){
+    this.id = null
+        this.no = ''
+        this.status = ''
+        this.totalAmount = 0
+        this.paid = 0
+        this.balance = 0
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.hide()
+    await this.http.get<IDebtTracker>(API_URL+'/debt_trackers/get?id='+id, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        console.log(data)
+        this.id = data!.id
+        this.no = data!.no
+        this.status = data!.status
+        this.totalAmount = data!.amount
+        this.paid = data!.paid
+        this.balance = data!.balance
+      }
+    )
+    .catch(error => {
+      console.log(error)
+      ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load debt')
+    })
+  }
+
+  async pay() {
+    if(this.amountToPay <= 0){
+      alert("Invalid amount")
+      return
+    }
+    if(!window.confirm('Pay the specified amount?')){
+      return
+    }
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    var trc = {
+      id : this.id,
+      amount : this.amountToPay
+        
+    }
+    this.spinner.show()
+    await this.http.post(API_URL+'/debt_trackers/pay', trc, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      () => {
+        alert('Success')
+        this.getAll()
+      }
+    )
+    .catch(
+      error => {
+        console.log(error)
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Operation failed')
+      }
+    )
+  }
+
+
+
   openPay(contentPay : any, detailId : string) {
-   
+   this.amountToPay = 0
     this.modalService.open(contentPay, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -83,7 +154,7 @@ export class DebtTrackerComponent implements OnInit {
 
   openHistory(history : any, detailId : string) {
    
-    this.modalService.open(history, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    this.modalService.open(history, {ariaLabelledBy: 'modal-basic-title', size : 'xl'}).result.then((result) => {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
@@ -98,6 +169,32 @@ export class DebtTrackerComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
+
+  async loadHistory(id : any) : Promise<void>{
+    this.histories = []
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<IHistory[]>(API_URL+'/debt_trackers/history?id='+id, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        console.log(data)
+        data?.forEach(element => {
+          this.histories!.push(element)
+        })
+      }
+    )
+    .catch(error => {
+      console.log(error)
+      ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load history')
+    })
+  return
+  }
+
+  
 }
 
 export interface ICustomer {
@@ -186,4 +283,12 @@ export interface IDebtTracker{
 
 export interface IDay{
   bussinessDate : Date
+}
+
+export interface IHistory{
+  day : IDay
+  amount : number
+  paid : number
+  balance : number
+  reference : string
 }

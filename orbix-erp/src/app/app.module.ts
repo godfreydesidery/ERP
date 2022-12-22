@@ -110,6 +110,7 @@ import { SalesAndPurchasesSummaryReportComponent } from './reports/sales-reports
 import { VatGroupsComponent } from './company/vat-groups/vat-groups.component';
 import { SalesAgentComponent } from './mechandizer/sales-agent/sales-agent.component';
 import { DebtTrackerComponent } from './mechandizer/debt-tracker/debt-tracker.component';
+import { CustomerMassManagerComponent } from './customer/customer-mass-manager/customer-mass-manager.component';
 
 
 @NgModule({
@@ -210,6 +211,7 @@ import { DebtTrackerComponent } from './mechandizer/debt-tracker/debt-tracker.co
     VatGroupsComponent,
     SalesAgentComponent,
     DebtTrackerComponent,
+    CustomerMassManagerComponent,
     //BatchProductionComponent,
     //CustomProductionComponent,
   ],
@@ -267,6 +269,7 @@ import { DebtTrackerComponent } from './mechandizer/debt-tracker/debt-tracker.co
       {path : 'supplier-master', component: SupplierMasterComponent},
       {path : 'supplier-mass-manager', component: SupplierMassManagerComponent},
       {path : 'customer-master', component: CustomerMasterComponent},
+      {path : 'customer-mass-manager', component: CustomerMassManagerComponent},
       {path : 'employee-register', component: EmployeeRegisterComponent},
       {path : 'group-level1', component: GroupLevel1Component},
       {path : 'group-level2', component: GroupLevel2Component},

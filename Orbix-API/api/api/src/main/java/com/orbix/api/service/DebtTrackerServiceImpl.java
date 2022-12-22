@@ -96,8 +96,10 @@ public class DebtTrackerServiceImpl implements DebtTrackerService {
 		}else if(amount > debtTracker.getBalance()) {
 			throw new InvalidEntryException("Payment amount exceeds debt balance");
 		}
-		debtTracker.setBalance(debtTracker.getAmount() - amount);
-		if(debtTracker.getBalance() == 0) {
+		debtTracker.setBalance(debtTracker.getBalance() - amount);
+		debtTracker.setPaid(debtTracker.getPaid() + amount);
+		debtTrackerRepository.saveAndFlush(debtTracker);
+		if(debtTracker.getBalance() <= 0) {
 			debtTracker.setStatus("PAID");
 		}else {
 			debtTracker.setStatus("PARTIAL");

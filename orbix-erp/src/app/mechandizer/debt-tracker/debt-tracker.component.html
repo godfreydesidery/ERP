@@ -38,7 +38,7 @@
                                             <td style="text-align: right;"><small>{{d.paid | currency:'':''}}</small></td>
                                             <td style="text-align: right;"><small>{{d.balance | currency:'':''}}</small></td>
                                             <td><small>{{d.status}}</small></td>
-                                            <td><button (click)="openPay(contentPay, '')">Pay</button><button (click)="openHistory(history, '')">History</button></td>
+                                            <td><button (click)="openPay(contentPay, '')" (click)="get(d.id)">Pay</button><button (click)="openHistory(history, '')" (click)="loadHistory(d.id)">History</button></td>
                                             <!--<td><button (click)="open(content, '', '')" (click)="get(i.id)">Transfer to Debt Tracker</button></td>-->
                                         </tr>
                                     </tbody>
@@ -62,25 +62,25 @@
         <table class="table table-bordered">
             <tbody>
                 <tr>
-                    <td style="text-align: right;">Debt No</td><td style="padding: 0;"></td>
+                    <td style="text-align: right;">Debt No</td><td>{{no}}</td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;">Customer</td><td style="padding: 0;"></td>
+                    <td style="text-align: right;">Total Amount</td><td style="padding: 0; text-align: right;"><span style="text-align: right;">{{totalAmount | currency:'':''}}</span></td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;">Officer Incharge</td><td style="padding: 0;"></td>
+                    <td style="text-align: right;">Paid</td><td style="padding: 0; text-align: right;"><span style="text-align: right;">{{paid | currency:'':''}}</span></td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;">Initial Amount</td><td style="padding: 0;"></td>
+                    <td style="text-align: right;">Balance</td><td style="padding: 0; text-align: right;"><span style="text-align: right;">{{balance | currency:'':''}}</span></td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;">Amount to Pay</td><td style="padding: 0;"><input type="text" class="form-control special"></td>
+                    <td style="text-align: right;">Amount to Pay</td><td style="padding: 0;"><input type="text" [(ngModel)]="amountToPay" class="form-control special"></td>
                 </tr>
             </tbody>
         </table>
     </div>
     <div class="modal-footer">
-      <button type="button" (click)="modal.close('Save click')" class="btn btn-outline-dark">Pay</button>
+      <button type="button" (click)="modal.close('Save click')" (click)="pay()" class="btn btn-outline-dark">Pay</button>
     </div>
 </ng-template>
 
@@ -98,17 +98,21 @@
                     <thead style="position: sticky; top: 0;">
                         <tr class="table-dark">
                             <td>Date</td>
+                            <td>Amount</td>
                             <td>Paid</td>
                             <td>Balance</td>
+                            <td>Reference</td>
                         </tr>
                     </thead>
-                    <!--<tbody>
-                        <tr *ngFor="let c of productToProducts">
-                            <td>{{c.no}}</td>
-                            <td>{{c.status}}</td>
-                            <td><span (click)="get(c.id)" (click)="modal.close('Select click')" style="cursor: pointer;">[Select]</span></td>
+                    <tbody>
+                        <tr *ngFor="let h of histories">
+                            <td>{{h.day.bussinessDate | date: 'yyyy-MM-dd'}}</td>
+                            <td style="text-align: right;"><small>{{h.amount | currency:'':''}}</small></td>
+                            <td style="text-align: right;"><small>{{h.paid | currency:'':''}}</small></td>
+                            <td style="text-align: right;"><small>{{h.balance | currency:'':''}}</small></td>
+                            <td ><small>{{h.reference}}</small></td>
                         </tr>
-                    </tbody>-->
+                    </tbody>
                 </table>
             </div>
         </div>
