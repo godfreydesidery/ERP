@@ -82,6 +82,8 @@ export class SalesInvoiceComponent implements OnInit {
 
   descriptions : string[]
 
+  companyName : string = ''
+
   constructor(private auth : AuthService,
               private http :HttpClient,
               private shortcut : ShortCutHandlerService, 
@@ -124,6 +126,7 @@ export class SalesInvoiceComponent implements OnInit {
     this.logo = await this.data.getLogo() 
     this.address = await this.data.getAddress()
     this.paymentDetails = await this.data.getPaymentDetails()
+    this.companyName = await this.data.getCompanyName()
     this.loadInvoices()
     this.loadCustomerNames()
     this.loadProductDescriptions()
@@ -379,6 +382,8 @@ export class SalesInvoiceComponent implements OnInit {
       salesInvoice : {id : this.id},
       product : {id : this.productId, code : this.code},
       qty : this.qty,
+      costPriceVatIncl : this.costPriceVatIncl,
+      costPriceVatExcl : this.costPriceVatExcl,
       sellingPriceVatIncl : this.sellingPriceVatIncl,
       sellingPriceVatExcl : this.sellingPriceVatExcl
     }
@@ -586,6 +591,8 @@ export class SalesInvoiceComponent implements OnInit {
           this.barcode = data!.barcode
           this.code = data!.code
           this.description = data!.description
+          this.costPriceVatIncl = data!.costPriceVatIncl
+          this.costPriceVatExcl = data!.costPriceVatExcl
           this.sellingPriceVatIncl = data!.sellingPriceVatIncl
           this.sellingPriceVatExcl = data!.sellingPriceVatExcl
         }
@@ -604,6 +611,8 @@ export class SalesInvoiceComponent implements OnInit {
           this.barcode = data!.barcode
           this.code = data!.code
           this.description = data!.description
+          this.costPriceVatIncl = data!.costPriceVatIncl
+          this.costPriceVatExcl = data!.costPriceVatExcl
           this.sellingPriceVatIncl = data!.sellingPriceVatIncl
           this.sellingPriceVatExcl = data!.sellingPriceVatExcl
         }
@@ -624,6 +633,8 @@ export class SalesInvoiceComponent implements OnInit {
           this.barcode = data!.barcode
           this.code = data!.code
           this.description = data!.description
+          this.costPriceVatIncl = data!.costPriceVatIncl
+          this.costPriceVatExcl = data!.costPriceVatExcl
           this.sellingPriceVatIncl = data!.sellingPriceVatIncl
           this.sellingPriceVatExcl = data!.sellingPriceVatExcl
         }
@@ -660,8 +671,10 @@ export class SalesInvoiceComponent implements OnInit {
     .then(
       data => {
         this.detailId = data!.id
-        this.sellingPriceVatIncl = data!.sellingPriceVatIncl
-        this.sellingPriceVatExcl = data!.sellingPriceVatExcl
+        this.costPriceVatIncl = data!.costPriceVatIncl
+          this.costPriceVatExcl = data!.costPriceVatExcl
+          this.sellingPriceVatIncl = data!.sellingPriceVatIncl
+          this.sellingPriceVatExcl = data!.sellingPriceVatExcl
         this.qty = data!.qty
       }
     )
@@ -839,7 +852,7 @@ export class SalesInvoiceComponent implements OnInit {
     report.push(detailSummary)
     const docDefinition = {
       header: '',
-      watermark : { text : title, color: 'blue', opacity: 0.1, bold: true, italics: false },
+      watermark : { text : this.companyName, color: 'blue', opacity: 0.1, bold: true, italics: false },
         content : [
           {
             columns : 

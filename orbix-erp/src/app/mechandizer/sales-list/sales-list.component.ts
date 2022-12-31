@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/auth.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { ShortCutHandlerService } from 'src/app/services/short-cut-handler.service';
 import { environment } from 'src/environments/environment';
+import {  DatePipe} from '@angular/common'
 
 const pdfMakeX = require('pdfmake/build/pdfmake.js');
 const pdfFontsX = require('pdfmake-unicode/dist/pdfmake-unicode.js');
@@ -39,6 +40,7 @@ export class SalesListComponent implements OnInit {
   
   id             : any
   no             : string
+  issueDate!      : Date
   customer!      : ICustomer
   customerId     : any
   customerNo!    : string
@@ -91,13 +93,15 @@ export class SalesListComponent implements OnInit {
   descriptions : string[]
 
   address : any
+  companyName : string = ''
 
   constructor(private auth : AuthService,
               private http :HttpClient,
               private shortcut : ShortCutHandlerService, 
               private modalService: NgbModal,
               private data : DataService,
-              private spinner: NgxSpinnerService) {
+              private spinner: NgxSpinnerService,
+              public datepipe : DatePipe) {
     this.id               = ''
     this.no               = ''
     this.status           = ''
@@ -141,6 +145,7 @@ export class SalesListComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.address = await this.data.getAddress()
     this.logo = await this.data.getLogo()
+    this.companyName = await this.data.getCompanyName()
     this.loadSalesLists()
     this.loadCustomerNames()
     this.loadSalesAgentNames()
@@ -246,8 +251,10 @@ export class SalesListComponent implements OnInit {
     .toPromise()
     .then(
       data => {
+        console.log(data)
         this.id              = data?.id
         this.no              = data!.no
+        this.issueDate       = data!.issueDate
         this.customerId      = data!.customer.id
         this.customerNo      = data!.customer.no
         this.customerName    = data!.customer.name
@@ -295,6 +302,7 @@ export class SalesListComponent implements OnInit {
       data => {
         this.id            = data?.id
         this.no            = data!.no 
+        this.issueDate       = data!.issueDate
         this.customerId    = data!.customer.id
         this.customerNo    = data!.customer.no
         this.customerName  = data!.customer.name  
@@ -620,6 +628,8 @@ export class SalesListComponent implements OnInit {
           this.barcode = data!.barcode
           this.code = data!.code
           this.description = data!.description
+          this.costPriceVatIncl = data!.costPriceVatIncl
+          this.costPriceVatExcl = data!.costPriceVatExcl
           this.sellingPriceVatIncl = data!.sellingPriceVatIncl
           this.sellingPriceVatExcl = data!.sellingPriceVatExcl
         }
@@ -640,6 +650,8 @@ export class SalesListComponent implements OnInit {
           this.barcode = data!.barcode
           this.code = data!.code
           this.description = data!.description
+          this.costPriceVatIncl = data!.costPriceVatIncl
+          this.costPriceVatExcl = data!.costPriceVatExcl
           this.sellingPriceVatIncl = data!.sellingPriceVatIncl
           this.sellingPriceVatExcl = data!.sellingPriceVatExcl
         }
@@ -676,6 +688,8 @@ export class SalesListComponent implements OnInit {
     .then(
       data => {
         this.detailId = data!.id
+        this.costPriceVatIncl = data!.costPriceVatIncl
+        this.costPriceVatExcl = data!.costPriceVatExcl
         this.sellingPriceVatIncl = data!.sellingPriceVatIncl
         this.sellingPriceVatExcl = data!.sellingPriceVatExcl
         this.totalPacked         = data!.totalPacked
@@ -964,7 +978,7 @@ export class SalesListComponent implements OnInit {
 
     const docDefinition = {
       header: '',
-      watermark : { text : title, color: 'blue', opacity: 0.1, bold: true, italics: false },
+      watermark : { text : this.companyName, color: 'blue', opacity: 0.1, bold: true, italics: false },
         content : [
           {
             columns : 
@@ -994,7 +1008,7 @@ export class SalesListComponent implements OnInit {
                 ],
                 [
                   {text : 'Issue Date', fontSize : 9}, 
-                  {text : "", fontSize : 9} 
+                  {text : this.datepipe.transform(this.issueDate, 'yyyy-MM-dd') , fontSize : 9} 
                 ],
                 [
                   {text : 'Sales Officer', fontSize : 9}, 
@@ -1091,6 +1105,7 @@ export class SalesListComponent implements OnInit {
 interface ISalesList{
   id                 : any
   no                 : string
+  issueDate          : Date
   customer           : ICustomer
   salesAgent           : ISalesAgent
   status             : string

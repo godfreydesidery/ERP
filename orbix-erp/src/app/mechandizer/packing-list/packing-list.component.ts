@@ -92,6 +92,7 @@ export class PackingListComponent implements OnInit {
   descriptions : string[]
 
   address : any
+  companyName : string = ''
 
   constructor(private auth : AuthService,
               private http :HttpClient,
@@ -134,6 +135,7 @@ export class PackingListComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.address = await this.data.getAddress()
     this.logo = await this.data.getLogo()
+    this.companyName = await this.data.getCompanyName()
     this.loadPackingLists()
     this.loadCustomerNames()
     this.loadSalesAgentNames()
@@ -911,7 +913,7 @@ export class PackingListComponent implements OnInit {
     var title  = ''
     var logo : any = ''
     if(this.status == 'PENDING' || this.status == 'APPROVED' || this.status == 'CANCELED'){
-      title = 'Packing List and Returns'
+      title = 'Packing List'
     }else{
       title = 'Sales and Returns'
     }
@@ -943,7 +945,7 @@ export class PackingListComponent implements OnInit {
     })
     const docDefinition = {
       header: '',
-      watermark : { text : title, color: 'blue', opacity: 0.1, bold: true, italics: false },
+      watermark : { text : this.companyName, color: 'blue', opacity: 0.1, bold: true, italics: false },
         content : [
           {
             columns : 
@@ -970,10 +972,6 @@ export class PackingListComponent implements OnInit {
                 [
                   {text : 'Issue No', fontSize : 9}, 
                   {text : this.no, fontSize : 9} 
-                ],
-                [
-                  {text : 'Issue Date', fontSize : 9}, 
-                  {text : "", fontSize : 9} 
                 ],
                 [
                   {text : 'Sales Officer', fontSize : 9}, 

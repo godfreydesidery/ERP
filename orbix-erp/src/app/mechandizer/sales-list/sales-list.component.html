@@ -171,7 +171,7 @@
     </div>
     <hr>
     <div class="col-12">
-        <table class="table table-bordered">
+        <table class="table table-bordered table-striped">
             <thead style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
                 <tr>
                     <th>Code</th>
@@ -190,11 +190,11 @@
                     <td>{{d.product.code}}</td>
                     <td>{{d.product.description}}</td>
                     <td style="text-align: right;">{{d.sellingPriceVatIncl | currency:'':''}}</td>
-                    <td>{{d.totalPacked}}</td>
-                    <td>{{d.qtySold}}</td>
-                    <td>{{d.qtyOffered}}</td>
-                    <td>{{d.qtyReturned}}</td>
-                    <td>{{d.qtyDamaged}}</td>
+                    <td><span *ngIf="d.totalPacked === 0">-</span><span *ngIf="d.totalPacked != 0">{{d.totalPacked}}</span></td>
+                    <td><span *ngIf="d.qtySold === 0">-</span><span *ngIf="d.qtySold != 0">{{d.qtySold}}</span></td>
+                    <td><span *ngIf="d.qtyOffered === 0">-</span><span *ngIf="d.qtyOffered != 0">{{d.qtyOffered}}</span></td>
+                    <td><span *ngIf="d.qtyReturned === 0">-</span><span *ngIf="d.qtyReturned != 0">{{d.qtyReturned}}</span></td>
+                    <td><span *ngIf="d.qtyDamaged === 0">-</span><span *ngIf="d.qtyDamaged != 0">{{d.qtyDamaged}}</span></td>
                     <td><span style="cursor: pointer;" (click)="open(content, d.product.id, d.id)">[Edit]</span></td>
                 </tr>
             </tbody>

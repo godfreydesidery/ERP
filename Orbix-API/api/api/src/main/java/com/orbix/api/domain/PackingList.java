@@ -46,6 +46,7 @@ public class PackingList {
 	private String no;
 	@Column(unique = true)
 	private String salesListNo;
+	private LocalDate issueDate;
 	private String status;
 	private String comments;
 	

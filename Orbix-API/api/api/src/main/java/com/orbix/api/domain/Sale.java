@@ -55,6 +55,11 @@ public class Sale {
     @OnDelete(action = OnDeleteAction.NO_ACTION)	
     private Till till;
 	
+	@ManyToOne(targetEntity = SalesAgent.class, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "sales_agent_id", nullable = true , updatable = true)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)	
+    private SalesAgent salesAgent;
+	
 	
 	
 	

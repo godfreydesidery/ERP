@@ -459,6 +459,10 @@ export interface ISupplySalesReport {
   description : string
   qty         : number
   amount      : number
+  stock : number
+  discount : number
+  tax : number
+  profit : number
 }
 
 export interface ISupplier {

@@ -66,6 +66,7 @@ export class GrnComponent implements OnInit {
   product!             : IProduct
 
   address : any
+  companyName : string = ''
 
   constructor(private auth : AuthService,
               private http :HttpClient,
@@ -104,6 +105,7 @@ export class GrnComponent implements OnInit {
     this.address = await this.data.getAddress()
     this.loadGrns() 
     this.logo = await this.data.getLogo() 
+    this.companyName = await this.data.getCompanyName()
   }
 
   async save() {  
@@ -637,7 +639,7 @@ export class GrnComponent implements OnInit {
     report.push(detailSummary)
     const docDefinition = {
       header: '',
-      watermark : { text : title, color: 'blue', opacity: 0.1, bold: true, italics: false },
+      watermark : { text : this.companyName, color: 'blue', opacity: 0.1, bold: true, italics: false },
         content : [
           {
             columns : 

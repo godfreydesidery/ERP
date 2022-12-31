@@ -3,6 +3,7 @@
  */
 package com.orbix.api.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -362,8 +363,8 @@ public class PackingListServiceImpl implements PackingListService {
 
 	@Override
 	public boolean archive(PackingList packingList) {
-		if(!packingList.getStatus().equals("POSTED")) {
-			throw new InvalidOperationException("Could not process, only a posted packing list can be archived");
+		if(!packingList.getStatus().equals("APPROVED")) {
+			throw new InvalidOperationException("Could not process, only APPROVED packing list can be archived");
 		}		
 		packingList.setStatus("ARCHIVED");
 		packingListRepository.saveAndFlush(packingList);
@@ -372,7 +373,7 @@ public class PackingListServiceImpl implements PackingListService {
 
 	@Override
 	public boolean archiveAll() {
-		List<PackingList> packingLists = packingListRepository.findAllPosted("POSTED");
+		List<PackingList> packingLists = packingListRepository.findAllPosted("APPROVED");
 		if(packingLists.isEmpty()) {
 			throw new NotFoundException("No Packing List to archive");
 		}
@@ -403,6 +404,7 @@ public class PackingListServiceImpl implements PackingListService {
 		salesList.setPackingList(pcl);
 		salesList.setCustomer(pcl.getCustomer());
 		salesList.setSalesAgent(pcl.getSalesAgent());
+		salesList.setIssueDate(LocalDate.now());
 		salesList.setStatus("PENDING");
 		salesList.setCreatedBy(pcl.getApprovedBy());
 		salesList.setCreatedAt(pcl.getApprovedAt());

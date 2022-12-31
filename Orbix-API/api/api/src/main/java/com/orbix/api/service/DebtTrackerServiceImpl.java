@@ -5,6 +5,7 @@ package com.orbix.api.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -14,6 +15,7 @@ import com.orbix.api.accessories.Formater;
 import com.orbix.api.domain.Debt;
 import com.orbix.api.domain.DebtTracker;
 import com.orbix.api.domain.SalesAgent;
+import com.orbix.api.domain.SalesList;
 import com.orbix.api.domain.User;
 import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.models.DebtModel;
@@ -22,6 +24,7 @@ import com.orbix.api.models.LpoModel;
 import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.DebtRepository;
 import com.orbix.api.repositories.DebtTrackerRepository;
+import com.orbix.api.repositories.SalesListRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +41,7 @@ public class DebtTrackerServiceImpl implements DebtTrackerService {
 	private final DebtTrackerRepository debtTrackerRepository;
 	private final DebtRepository debtRepository;
 	private final DebtHistoryService debtHistoryService;
+	private final SalesListRepository salesListRepository;
 
 	@Override
 	public boolean create(DebtTracker debtTracker, User user) {
@@ -48,8 +52,15 @@ public class DebtTrackerServiceImpl implements DebtTrackerService {
 			throw new InvalidEntryException("Amount exceeds the sales debt balance");
 		}
 		Debt debt = debtTracker.getDebt();
-		//put here debt history
 		double debtBalance = debt.getBalance();
+		Optional<SalesList> s = salesListRepository.findById(debt.getSalesList().getId());
+		if(s.isPresent()) {
+			s.get().setTotalDeficit(s.get().getTotalDeficit() - debtTracker.getAmount());
+			salesListRepository.saveAndFlush(s.get());
+		}
+		
+		//put here debt history
+		
 		debt.setBalance(debt.getBalance() - debtTracker.getAmount());
 		debt = debtRepository.saveAndFlush(debt);
 		if(debt.getBalance() == 0) {

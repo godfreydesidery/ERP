@@ -111,6 +111,7 @@ import { VatGroupsComponent } from './company/vat-groups/vat-groups.component';
 import { SalesAgentComponent } from './mechandizer/sales-agent/sales-agent.component';
 import { DebtTrackerComponent } from './mechandizer/debt-tracker/debt-tracker.component';
 import { CustomerMassManagerComponent } from './customer/customer-mass-manager/customer-mass-manager.component';
+import { SupplySalesReportExtendedComponent } from './reports/sales-reports/supply-sales-report-extended/supply-sales-report-extended.component';
 
 
 @NgModule({
@@ -212,6 +213,7 @@ import { CustomerMassManagerComponent } from './customer/customer-mass-manager/c
     SalesAgentComponent,
     DebtTrackerComponent,
     CustomerMassManagerComponent,
+    SupplySalesReportExtendedComponent,
     //BatchProductionComponent,
     //CustomProductionComponent,
   ],
@@ -293,6 +295,7 @@ import { CustomerMassManagerComponent } from './customer/customer-mass-manager/c
       {path : 'z-history', component: ZHistoryComponent},
       {path : 'product-listing-report', component: ProductListingReportComponent},
       {path : 'supply-sales-report', component: SupplySalesReportComponent},
+      {path : 'supply-sales-report-extended', component: SupplySalesReportExtendedComponent},
       {path : 'fast-moving-items', component: FastMovingItemsComponent},
       {path : 'slow-moving-items', component: SlowMovingItemsComponent},
       {path : 'production-report', component: ProductionReportComponent},

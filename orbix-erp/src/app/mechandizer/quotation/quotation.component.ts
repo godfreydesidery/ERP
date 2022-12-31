@@ -86,6 +86,8 @@ export class QuotationComponent implements OnInit {
 
   descriptions : string[]
 
+  companyName : string = ''
+
   constructor(private auth : AuthService,
               private http :HttpClient,
               private shortcut : ShortCutHandlerService, 
@@ -127,6 +129,7 @@ export class QuotationComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.logo = await this.data.getLogo() 
     this.address = await this.data.getAddress()
+    this.companyName = await this.data.getCompanyName()
     this.paymentDetails = await this.data.getPaymentDetails()
     this.loadQuotations()
     this.loadCustomerNames()
@@ -862,7 +865,7 @@ export class QuotationComponent implements OnInit {
     report.push(detailSummary)
     const docDefinition = {
       header: '',
-      watermark : { text : title, color: 'blue', opacity: 0.1, bold: true, italics: false },
+      watermark : { text : this.companyName, color: 'blue', opacity: 0.1, bold: true, italics: false },
         content : [
           {
             columns : 

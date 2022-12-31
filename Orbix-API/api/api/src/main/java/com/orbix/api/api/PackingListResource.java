@@ -4,6 +4,7 @@
 package com.orbix.api.api;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -162,7 +163,8 @@ public class PackingListResource {
 		if(!l.isPresent()) {
 			throw new NotFoundException("PACKING_LIST not found");
 		}
-		if(l.get().getStatus().equals("PENDING")) {			
+		if(l.get().getStatus().equals("PENDING")) {
+			l.get().setIssueDate(LocalDate.now());
 			l.get().setApprovedBy(userService.getUserId(request));
 			l.get().setApprovedAt(dayService.getDayId());
 			l.get().setStatus("APPROVED");
@@ -292,7 +294,7 @@ public class PackingListResource {
 	}
 	
 	@DeleteMapping("/packing_list_details/delete")
-	@PreAuthorize("hasAnyAuthority('PACKING_LIST-DELETE')")
+	@PreAuthorize("hasAnyAuthority('PACKING_LIST-UPDATE')")
 	public ResponseEntity<Boolean> deleteDetail(
 			@RequestParam(name = "id") Long id){		
 		Optional<PackingListDetail> d = packingListDetailRepository.findById(id);

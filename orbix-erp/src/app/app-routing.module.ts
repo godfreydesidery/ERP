@@ -83,6 +83,7 @@ import { VatGroupsComponent } from './company/vat-groups/vat-groups.component';
 import { SalesAgentComponent } from './mechandizer/sales-agent/sales-agent.component';
 import { DebtTrackerComponent } from './mechandizer/debt-tracker/debt-tracker.component';
 import { CustomerMassManagerComponent } from './customer/customer-mass-manager/customer-mass-manager.component';
+import { SupplySalesReportExtendedComponent } from './reports/sales-reports/supply-sales-report-extended/supply-sales-report-extended.component';
 
 const routes: Routes = [
   {path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard]},
@@ -149,6 +150,7 @@ const routes: Routes = [
   {path: 'z-history', component: ZHistoryComponent, canActivate: [AuthGuard]},
   {path: 'product-listing-report', component: ProductListingReportComponent, canActivate: [AuthGuard]},
   {path: 'supply-sales-report', component: SupplySalesReportComponent, canActivate: [AuthGuard]},
+  {path: 'supply-sales-report-extended', component: SupplySalesReportExtendedComponent, canActivate: [AuthGuard]},
   {path: 'fast-moving-items', component: FastMovingItemsComponent, canActivate: [AuthGuard]},
   {path: 'slow-moving-items', component: SlowMovingItemsComponent, canActivate: [AuthGuard]},
   {path: 'production-report', component: ProductionReportComponent, canActivate: [AuthGuard]},

@@ -44,6 +44,7 @@ public class SalesList {
 	@NotBlank
 	@Column(unique = true)
 	private String no;
+	private LocalDate issueDate;
 	private String status;
 	private String comments;
 	

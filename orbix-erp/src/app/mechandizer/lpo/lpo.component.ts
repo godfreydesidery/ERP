@@ -75,6 +75,7 @@ export class LpoComponent implements OnInit {
   descriptions : string[]
 
   address : any
+  companyName : string = ''
 
   constructor(private auth : AuthService,
               private http :HttpClient,
@@ -114,6 +115,7 @@ export class LpoComponent implements OnInit {
     this.loadSupplierNames()
     this.loadProductDescriptions()
     this.logo = await this.data.getLogo()
+    this.companyName = await this.data.getCompanyName()
   }
   
   async save() {
@@ -864,7 +866,7 @@ export class LpoComponent implements OnInit {
     report.push(detailSummary)
     const docDefinition = {
       header: '',
-      watermark : { text : title, color: 'blue', opacity: 0.1, bold: true, italics: false },
+      watermark : { text : this.companyName, color: 'blue', opacity: 0.1, bold: true, italics: false },
         content : [
           {
             columns : 

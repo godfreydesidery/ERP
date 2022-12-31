@@ -196,6 +196,11 @@ export class DataService {
     return address
   }
 
+  async getCompanyName() : Promise<string>{
+    await this.getCompanyProfile()
+    return this.companyName
+  }
+
 
   async getPaymentDetails(){
     await this.getCompanyProfile()

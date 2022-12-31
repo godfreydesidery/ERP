@@ -85,6 +85,7 @@ public class SalesListServiceImpl implements SalesListService {
 		SalesListModel model = new SalesListModel();
 		model.setId(salesList.getId());
 		model.setNo(salesList.getNo());
+		model.setIssueDate(salesList.getIssueDate());
 		model.setCustomer(salesList.getCustomer());
 		model.setSalesAgent(salesList.getSalesAgent());
 		model.setStatus(salesList.getStatus());
@@ -154,6 +155,7 @@ public class SalesListServiceImpl implements SalesListService {
 		}
 		model.setId(pcl.get().getId());
 		model.setNo(pcl.get().getNo());
+		model.setIssueDate(pcl.get().getIssueDate());
 		model.setCustomer(pcl.get().getCustomer());
 		model.setSalesAgent(pcl.get().getSalesAgent());
 		model.setStatus(pcl.get().getStatus());
@@ -230,6 +232,7 @@ public class SalesListServiceImpl implements SalesListService {
 		}
 		model.setId(pcl.get().getId());
 		model.setNo(pcl.get().getNo());
+		model.setIssueDate(pcl.get().getIssueDate());
 		model.setCustomer(pcl.get().getCustomer());
 		model.setSalesAgent(pcl.get().getSalesAgent());
 		model.setStatus(pcl.get().getStatus());
@@ -440,6 +443,9 @@ public class SalesListServiceImpl implements SalesListService {
 		sale.setCreatedBy(userService.getUserId(request));
 		sale.setDay(dayRepository.getCurrentBussinessDay());
 		sale.setReference("Sales list sales Ref# "+slsl.getNo());
+		if(salesList.getSalesAgent() != null) {
+			sale.setSalesAgent(salesList.getSalesAgent());
+		}
 		sale = saleRepository.saveAndFlush(sale);
 		
 		double totalAmountPacked = 0;
@@ -506,18 +512,22 @@ public class SalesListServiceImpl implements SalesListService {
 			
 			/**
 			 * Post to sales
+			 * filter zero qtys
 			 */
-			SaleDetail sd = new SaleDetail();
-			sd.setProduct(product);
-			sd.setSale(sale);
-			sd.setQty(d.getQtySold());
-			sd.setCostPriceVatIncl(d.getCostPriceVatIncl());
-			sd.setCostPriceVatExcl(d.getCostPriceVatExcl());
-			sd.setSellingPriceVatIncl(d.getSellingPriceVatIncl());
-			sd.setSellingPriceVatExcl(d.getSellingPriceVatExcl());
-			sd.setDiscount(0);
-			sd.setTax(0);
-			saleDetailRepository.saveAndFlush(sd);
+			if(d.getQtySold() > 0) {
+				SaleDetail sd = new SaleDetail();
+				sd.setProduct(product);
+				sd.setSale(sale);
+				sd.setQty(d.getQtySold());
+				sd.setCostPriceVatIncl(d.getCostPriceVatIncl());
+				sd.setCostPriceVatExcl(d.getCostPriceVatExcl());
+				sd.setSellingPriceVatIncl(d.getSellingPriceVatIncl());
+				sd.setSellingPriceVatExcl(d.getSellingPriceVatExcl());
+				sd.setDiscount(0);
+				sd.setTax(0);
+				saleDetailRepository.saveAndFlush(sd);
+			}
+			
 			
 			totalAmountPacked = totalAmountPacked + d.getTotalPacked() * d.getSellingPriceVatIncl();
 			totalSales = totalSales + d.getQtySold() * d.getSellingPriceVatIncl();
@@ -567,6 +577,7 @@ public class SalesListServiceImpl implements SalesListService {
 		SalesListModel model = new SalesListModel();
 		model.setId(slsl.getId());
 		model.setNo(slsl.getNo());
+		model.setIssueDate(slsl.getIssueDate());
 		model.setCustomer(slsl.getCustomer());
 		model.setStatus(slsl.getStatus());
 		model.setComments(slsl.getComments());

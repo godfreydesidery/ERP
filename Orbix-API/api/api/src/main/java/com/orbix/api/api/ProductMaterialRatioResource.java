@@ -76,7 +76,7 @@ public class ProductMaterialRatioResource {
 	}
 	
 	@PostMapping("/product_material_ratios/create")
-	@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE')")
+	@PreAuthorize("hasAnyAuthority('PRODUCT-CREATE')")
 	public ResponseEntity<ProductMaterialRatioModel>createProductMaterialRatio(
 			@RequestBody ProductMaterialRatio productMaterialRatio,
 			HttpServletRequest request){
@@ -107,7 +107,7 @@ public class ProductMaterialRatioResource {
 	}
 	
 	@PutMapping("/product_material_ratios/update")
-	@PreAuthorize("hasAnyAuthority('PRODUCTION-CREATE','PRODUCTION-UPDATE')")
+	@PreAuthorize("hasAnyAuthority('PRODUCT-CREATE','PRODUCT-UPDATE')")
 	public ResponseEntity<ProductMaterialRatioModel>updateProductMaterialRatio(
 			@RequestBody ProductMaterialRatio productMaterialRatio,
 			HttpServletRequest request){
@@ -130,7 +130,7 @@ public class ProductMaterialRatioResource {
 	}
 	
 	@DeleteMapping("/product_material_ratios/delete")
-	@PreAuthorize("hasAnyAuthority('PRODUCTION-DELETE')")
+	@PreAuthorize("hasAnyAuthority('PRODUCT-UPDATE')")
 	public ResponseEntity<Boolean>deleteProductMaterialRatio(
 			@RequestParam(name = "id") Long id){				
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/product_material_ratios/delete").toUriString());

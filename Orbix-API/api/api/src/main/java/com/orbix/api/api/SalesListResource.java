@@ -298,7 +298,8 @@ public class SalesListResource {
 		SalesList salesList = d.get().getSalesList();
 		if(!salesList.getStatus().equals("PENDING")) {
 			throw new InvalidOperationException("Editing not allowed, only pending PACKING_LIST can be edited");
-		}		
+		}
+		//please update transactions concerning this deletion
 		salesListDetailRepository.delete(d.get());		
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/sales_list_details/delete").toUriString());
 		return ResponseEntity.created(uri).body(true);

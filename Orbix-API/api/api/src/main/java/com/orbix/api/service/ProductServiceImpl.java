@@ -77,7 +77,8 @@ public class ProductServiceImpl implements ProductService {
 		}
 		if(!p.getBarcode().equals("") && p.getBarcode().contains(" ")) {//validate barcode, reject barcode with spaces
 			p.setBarcode(p.getBarcode().replace(" ", ""));	
-		}	
+		}
+		p.setDescription(p.getDescription().trim());
 		Product product;
 		boolean isNew = false;
 		
