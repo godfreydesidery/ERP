@@ -26,21 +26,29 @@ import com.orbix.api.domain.Customer;
 import com.orbix.api.domain.SalesAgent;
 import com.orbix.api.domain.SalesList;
 import com.orbix.api.domain.SalesListDetail;
+import com.orbix.api.domain.SalesSheet;
+import com.orbix.api.domain.SalesSheetSale;
+import com.orbix.api.domain.SalesSheetSaleDetail;
 import com.orbix.api.domain.Product;
+import com.orbix.api.domain.ProductStockCard;
 import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.models.SalesListDetailModel;
 import com.orbix.api.models.SalesListModel;
 import com.orbix.api.repositories.CustomerRepository;
+import com.orbix.api.repositories.DayRepository;
 import com.orbix.api.repositories.SalesAgentRepository;
 import com.orbix.api.repositories.SalesListDetailRepository;
 import com.orbix.api.repositories.SalesListRepository;
+import com.orbix.api.repositories.SalesSheetRepository;
 import com.orbix.api.repositories.ProductRepository;
 import com.orbix.api.service.DayService;
+import com.orbix.api.service.ProductStockCardService;
 import com.orbix.api.service.SalesListService;
 import com.orbix.api.service.UserService;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -52,14 +60,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class SalesListResource {
-	private final 	UserService userService;
-	private final 	DayService dayService;
-	private final 	SalesListService salesListService;
-	private final 	SalesListRepository salesListRepository;
-	private final 	SalesListDetailRepository salesListDetailRepository;
-	private final 	CustomerRepository customerRepository;
-	private final 	SalesAgentRepository salesAgentRepository;
-	private final 	ProductRepository productRepository;
+	private final UserService userService;
+	private final DayService dayService;
+	private final SalesListService salesListService;
+	private final SalesListRepository salesListRepository;
+	private final SalesListDetailRepository salesListDetailRepository;
+	private final CustomerRepository customerRepository;
+	private final SalesAgentRepository salesAgentRepository;
+	private final ProductRepository productRepository;
+	private final SalesSheetRepository salesSheetRepository;
+	private final DayRepository dayRepository;
+	private final ProductStockCardService productStockCardService;
 	
 	@GetMapping("/sales_lists")
 	public ResponseEntity<List<SalesListModel>>getSalesLists(){
@@ -304,4 +315,121 @@ public class SalesListResource {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/sales_list_details/delete").toUriString());
 		return ResponseEntity.created(uri).body(true);
 	}
+	
+	@PostMapping("/sales_list_details/change")
+	@PreAuthorize("hasAnyAuthority('SALES_LIST-CREATE','SALES_LIST-UPDATE')")
+	public boolean changeDetailQty(
+			@RequestBody DetailChange detailChange){
+		change(detailChange);
+				
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/sales_list_details/change").toUriString());
+		return true;
+	}
+	
+	
+	private double getTotalSoldQtyFromSalesSheet(SalesList salesList, Product product) {
+		double qty = 0;
+		Optional<SalesSheet> ss = salesSheetRepository.findBySalesList(salesList);
+		if(!ss.isPresent()) {
+			return 0;
+		}
+		SalesSheet salesSheet = ss.get();
+		List<SalesSheetSale> salesSheetSales = salesSheet.getSalesSheetSales();
+		for(SalesSheetSale s : salesSheetSales) {
+			List<SalesSheetSaleDetail> salesSheetSaleDetails = s.getSalesSheetSaleDetails();
+			for(SalesSheetSaleDetail d : salesSheetSaleDetails) {
+				if(d.getProduct() == product) {
+					qty = qty + d.getQty();
+				}
+			}
+		}
+		return qty;
+	}
+	
+	
+	
+	private boolean change(DetailChange change) {
+		boolean changed = false;
+		if(change.finalQty < 0) {
+			throw new InvalidEntryException("Negative is not allowed");
+		}
+		Optional<SalesListDetail> d = salesListDetailRepository.findById(change.getId());
+		if(!d.isPresent()) {
+			throw new NotFoundException("Detail not found");
+		}
+		if(change.originalQty != d.get().getTotalPacked()) {
+			throw new InvalidOperationException("Operation failed, please reload the document");
+		}
+		SalesList salesList = d.get().getSalesList();
+		if(!salesList.getStatus().equals("PENDING")) {
+			throw new InvalidOperationException("Only Pending sales list can be edited");
+		}
+		if(d.get().getQtySold() != 0 || d.get().getQtyReturned() != 0 || d.get().getQtyOffered() != 0 || d.get().getQtyDamaged() != 0) {
+			throw new InvalidOperationException("Fields are already filled, please unfil the fields before editing qty");
+		}
+		double qtyAlreadySold = getTotalSoldQtyFromSalesSheet(d.get().getSalesList(), d.get().getProduct());
+		double remainingQty = d.get().getTotalPacked() - qtyAlreadySold;
+		double diff = change.finalQty - change.originalQty;
+		
+		if(diff == 0) {
+			throw new InvalidOperationException("No change detected");
+		}
+		if(diff < 0) {
+			if(remainingQty < Math.abs(diff)) {
+				throw new InvalidOperationException("Could not change, qty deducted exceeds sold qty");
+			}
+		}
+		/**
+		 * Update qty on sales list
+		 */
+		d.get().setTotalPacked(change.finalQty);
+		salesListDetailRepository.saveAndFlush(d.get());
+		
+		/**
+		 * Fill sales list ammendment, to be done later
+		 */
+		
+		
+		/**
+		 * Update stocks
+		 */
+		Product product =productRepository.findById(d.get().getProduct().getId()).get();
+		double stock = product.getStock();
+		if(diff < 0) {
+			stock = stock + (Math.abs(diff));							
+		}else {
+			stock = stock - (Math.abs(diff));
+		}
+		product.setStock(stock);
+		productRepository.saveAndFlush(product);
+		
+		/**
+		 * Update stock cards
+		 */
+		ProductStockCard stockCard = new ProductStockCard();
+		if(diff < 0) {
+			stockCard.setQtyIn(Math.abs(diff));
+			stockCard.setProduct(product);
+			stockCard.setBalance(stock);
+			stockCard.setDay(dayRepository.getCurrentBussinessDay());
+			stockCard.setReference("Returned in sales list ammendment. Ref #: "+salesList.getNo());
+		}else {
+			stockCard.setQtyOut(Math.abs(diff));
+			stockCard.setProduct(product);
+			stockCard.setBalance(stock);
+			stockCard.setDay(dayRepository.getCurrentBussinessDay());
+			stockCard.setReference("Issued in sales list ammendment. Ref #: "+salesList.getNo());
+		}
+		productStockCardService.save(stockCard);
+		
+		return changed;
+	}
+	
+}
+
+@Data
+class DetailChange{
+	Long id;
+	double originalQty;
+	double finalQty;
 }

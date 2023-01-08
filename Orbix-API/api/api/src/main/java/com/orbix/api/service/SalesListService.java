@@ -28,5 +28,5 @@ public interface SalesListService {
 	boolean archive(SalesList salesList);
 	boolean archiveAll();
 	SalesListModel approve(SalesList salesList, HttpServletRequest request);
-	String generateSalesListNo(SalesList salesList);
+	String generateSalesListNo(SalesList salesList);	
 }

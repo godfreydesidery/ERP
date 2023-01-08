@@ -16,6 +16,9 @@ import com.orbix.api.accessories.Formater;
 import com.orbix.api.domain.Debt;
 import com.orbix.api.domain.SalesList;
 import com.orbix.api.domain.SalesListDetail;
+import com.orbix.api.domain.SalesSheet;
+import com.orbix.api.domain.SalesSheetSale;
+import com.orbix.api.domain.SalesSheetSaleDetail;
 import com.orbix.api.domain.Product;
 import com.orbix.api.domain.ProductDamage;
 import com.orbix.api.domain.ProductOffer;
@@ -30,11 +33,13 @@ import com.orbix.api.models.SalesListModel;
 import com.orbix.api.repositories.DayRepository;
 import com.orbix.api.repositories.SalesListDetailRepository;
 import com.orbix.api.repositories.SalesListRepository;
+import com.orbix.api.repositories.SalesSheetRepository;
 import com.orbix.api.repositories.ProductRepository;
 import com.orbix.api.repositories.SaleDetailRepository;
 import com.orbix.api.repositories.SaleRepository;
 import com.orbix.api.repositories.UserRepository;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -60,6 +65,7 @@ public class SalesListServiceImpl implements SalesListService {
 	private final ProductDamageService productDamageService;
 	private final ProductOfferService productOfferService;
 	private final DebtService debtService;
+	private final SalesSheetRepository salesSheetRepository;
 
 	@Override
 	public SalesListModel save(SalesList salesList) {
@@ -656,4 +662,28 @@ public class SalesListServiceImpl implements SalesListService {
 		//return "SLR-"+Formater.formatNine(sNumber);
 		return Formater.formatWithCurrentDate("SLR",sNumber);
 	}
+	
+	private double getTotalSoldQtyFromSalesSheet(SalesList salesList, Product product) {
+		double qty = 0;
+		Optional<SalesSheet> ss = salesSheetRepository.findBySalesList(salesList);
+		if(!ss.isPresent()) {
+			return 0;
+		}
+		SalesSheet salesSheet = ss.get();
+		List<SalesSheetSale> salesSheetSales = salesSheet.getSalesSheetSales();
+		for(SalesSheetSale s : salesSheetSales) {
+			List<SalesSheetSaleDetail> salesSheetSaleDetails = s.getSalesSheetSaleDetails();
+			for(SalesSheetSaleDetail d : salesSheetSaleDetails) {
+				if(d.getProduct() == product) {
+					qty = qty + d.getQty();
+				}
+			}
+		}
+		return qty;
+	}
+	
+	
+	
 }
+
+

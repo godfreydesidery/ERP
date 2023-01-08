@@ -190,7 +190,7 @@
                     <td>{{d.product.code}}</td>
                     <td>{{d.product.description}}</td>
                     <td style="text-align: right;">{{d.sellingPriceVatIncl | currency:'':''}}</td>
-                    <td><span *ngIf="d.totalPacked === 0">-</span><span *ngIf="d.totalPacked != 0">{{d.totalPacked}}</span></td>
+                    <td><span *ngIf="d.totalPacked === 0">-</span><span *ngIf="d.totalPacked != 0">{{d.totalPacked}}</span><span *ngIf="status === 'PENDING'" class="badge badge-default" style="cursor: pointer;">c</span></td>
                     <td><span *ngIf="d.qtySold === 0">-</span><span *ngIf="d.qtySold != 0">{{d.qtySold}}</span></td>
                     <td><span *ngIf="d.qtyOffered === 0">-</span><span *ngIf="d.qtyOffered != 0">{{d.qtyOffered}}</span></td>
                     <td><span *ngIf="d.qtyReturned === 0">-</span><span *ngIf="d.qtyReturned != 0">{{d.qtyReturned}}</span></td>
@@ -252,6 +252,30 @@
       <button type="button" (click)="saveDetail()" (click)="modal.close('Save click')" class="btn btn-outline-dark">Update</button>
     </div>
 </ng-template>
+
+<!--<ng-template #change let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Change Qty</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td style="text-align: right;">Original Qty</td><td style="padding: 0;"><input type="text" [(ngModel)]="originalQty" class="form-control special" readonly></td>
+                </tr>
+                <hr>
+                <tr>
+                    <td style="text-align: right;">New Qty</td><td style="padding: 0;"><input type="text" [(ngModel)]="finalQty" class="form-control special"></td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="changeQty()" (click)="modal.close('Save click')" class="btn btn-outline-dark">Update</button>
+    </div>
+</ng-template>-->
 
 <ng-template #listContent let-modal>
     <div class="modal-header">

@@ -14,8 +14,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.OnDelete;
@@ -50,4 +52,9 @@ public class SalesSheet {
     @JoinColumn(name = "sales_list_id", nullable = true , updatable = true)
     @OnDelete(action = OnDeleteAction.NO_ACTION)	
     private SalesList salesList;
+	
+	@OneToMany(targetEntity = SalesSheetSale.class, mappedBy = "salesSheet", fetch = FetchType.EAGER, orphanRemoval = true)
+    @Valid
+    @JsonIgnoreProperties("salesSheet")
+    private List<SalesSheetSale> salesSheetSales;
 }
