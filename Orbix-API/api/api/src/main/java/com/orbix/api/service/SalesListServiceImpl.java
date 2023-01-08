@@ -464,19 +464,26 @@ public class SalesListServiceImpl implements SalesListService {
 			 * Grab stock qty and update stock
 			 */
 			Product product =productRepository.findById(d.getProduct().getId()).get();
-			double stock = product.getStock() + (d.getQtyReturned());
-			product.setStock(stock);
+			double stock = product.getStock();
+			if(d.getQtyReturned() > 0) {
+				stock = stock + (d.getQtyReturned());
+				product.setStock(stock);				
+			}
 			productRepository.saveAndFlush(product);
+			
 			/**
 			 * Create stock card
 			 */
-			ProductStockCard stockCard = new ProductStockCard();
-			stockCard.setQtyIn(d.getQtyReturned());
-			stockCard.setProduct(product);
-			stockCard.setBalance(stock);
-			stockCard.setDay(dayRepository.getCurrentBussinessDay());
-			stockCard.setReference("Returns. Ref #: "+slsl.getNo());
-			productStockCardService.save(stockCard);
+			if(d.getQtyReturned() > 0) {
+				ProductStockCard stockCard = new ProductStockCard();
+				stockCard.setQtyIn(d.getQtyReturned());
+				stockCard.setProduct(product);
+				stockCard.setBalance(stock);
+				stockCard.setDay(dayRepository.getCurrentBussinessDay());
+				stockCard.setReference("Returns. Ref #: "+slsl.getNo());
+				productStockCardService.save(stockCard);
+			}
+			
 			/**
 			 * Register damages
 			 */

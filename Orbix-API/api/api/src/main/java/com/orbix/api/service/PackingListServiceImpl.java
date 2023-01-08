@@ -8,22 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
 import com.orbix.api.accessories.Formater;
-import com.orbix.api.domain.Debt;
 import com.orbix.api.domain.PackingList;
 import com.orbix.api.domain.PackingListDetail;
 import com.orbix.api.domain.Product;
-import com.orbix.api.domain.ProductDamage;
-import com.orbix.api.domain.ProductOffer;
-import com.orbix.api.domain.Sale;
-import com.orbix.api.domain.SaleDetail;
 import com.orbix.api.domain.SalesList;
 import com.orbix.api.domain.SalesListDetail;
+import com.orbix.api.domain.SalesSheet;
 import com.orbix.api.domain.ProductStockCard;
 import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.exceptions.InvalidOperationException;
@@ -35,10 +30,9 @@ import com.orbix.api.repositories.DayRepository;
 import com.orbix.api.repositories.PackingListDetailRepository;
 import com.orbix.api.repositories.PackingListRepository;
 import com.orbix.api.repositories.ProductRepository;
-import com.orbix.api.repositories.SaleDetailRepository;
-import com.orbix.api.repositories.SaleRepository;
 import com.orbix.api.repositories.SalesListDetailRepository;
 import com.orbix.api.repositories.SalesListRepository;
+import com.orbix.api.repositories.SalesSheetRepository;
 import com.orbix.api.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -56,13 +50,15 @@ public class PackingListServiceImpl implements PackingListService {
 	
 	private final PackingListRepository packingListRepository;
 	private final SalesListRepository salesListRepository;
+	private final SalesSheetRepository salesSheetRepository;
 	private final SalesListDetailRepository salesListDetailRepository;
 	private final PackingListDetailRepository packingListDetailRepository;
 	private final UserRepository userRepository;
 	private final DayRepository dayRepository;
-	private final ProductRepository productRepository;
-	private final ProductStockCardService productStockCardService;
+	private final ProductRepository productRepository;	
+	private final ProductStockCardService productStockCardService;	
 	private final SalesListService salesListService;
+	private final SalesSheetService salesSheetService;
 
 	@Override
 	public PackingListModel save(PackingList packingList) {
@@ -417,6 +413,22 @@ public class PackingListServiceImpl implements PackingListService {
 		
 		pcl.setSalesListNo(salesList.getNo());
 		packingListRepository.saveAndFlush(pcl);
+		
+		/**
+		 * Create a new Sales sheet
+		 */
+		
+		SalesSheet salesSheet = new SalesSheet();
+		salesSheet.setNo("NA");
+		salesSheet.setSalesList(salesList);
+		salesSheet.setStatus("OPEN");
+		salesSheet = salesSheetRepository.saveAndFlush(salesSheet);
+		
+		if(salesSheet.getNo().equals("NA")) {
+			salesSheet.setNo(salesSheetService.generateSalesSheetNo(salesSheet));
+			salesSheet = salesSheetRepository.saveAndFlush(salesSheet);
+		}
+		
 		
 		for(PackingListDetail d : details) {				
 			/**
