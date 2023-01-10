@@ -25,6 +25,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.orbix.api.domain.Customer;
 import com.orbix.api.domain.SalesAgent;
 import com.orbix.api.domain.SalesList;
+import com.orbix.api.domain.SalesListAmendment;
 import com.orbix.api.domain.SalesListDetail;
 import com.orbix.api.domain.SalesSheet;
 import com.orbix.api.domain.SalesSheetSale;
@@ -39,6 +40,7 @@ import com.orbix.api.models.SalesListModel;
 import com.orbix.api.repositories.CustomerRepository;
 import com.orbix.api.repositories.DayRepository;
 import com.orbix.api.repositories.SalesAgentRepository;
+import com.orbix.api.repositories.SalesListAmendmentRepository;
 import com.orbix.api.repositories.SalesListDetailRepository;
 import com.orbix.api.repositories.SalesListRepository;
 import com.orbix.api.repositories.SalesSheetRepository;
@@ -71,6 +73,7 @@ public class SalesListResource {
 	private final SalesSheetRepository salesSheetRepository;
 	private final DayRepository dayRepository;
 	private final ProductStockCardService productStockCardService;
+	private final SalesListAmendmentRepository salesListAmendmentRepository;
 	
 	@GetMapping("/sales_lists")
 	public ResponseEntity<List<SalesListModel>>getSalesLists(){
@@ -258,7 +261,9 @@ public class SalesListResource {
 			
 			if(l.get().getStatus().equals("PENDING")) {
 				if(salesListDetail.getTotalPacked() != salesListDetail.getQtySold() + salesListDetail.getQtyOffered() + salesListDetail.getQtyReturned() + salesListDetail.getQtyDamaged()) {
-					throw new InvalidEntryException("Total quantity must be a sum of qty sold, qty offered, qty returned and qty damaged");
+					if(salesListDetail.getQtySold() + salesListDetail.getQtyOffered() + salesListDetail.getQtyReturned() + salesListDetail.getQtyDamaged() != 0) {
+						throw new InvalidEntryException("Total quantity must be a sum of qty sold, qty offered, qty returned and qty damaged");
+					}
 				}
 				detail.setQtySold(salesListDetail.getQtySold());
 				detail.setQtyOffered(salesListDetail.getQtyOffered());
@@ -319,8 +324,8 @@ public class SalesListResource {
 	@PostMapping("/sales_list_details/change")
 	@PreAuthorize("hasAnyAuthority('SALES_LIST-CREATE','SALES_LIST-UPDATE')")
 	public boolean changeDetailQty(
-			@RequestBody DetailChange detailChange){
-		change(detailChange);
+			@RequestBody DetailChange detailChange, HttpServletRequest request){
+		change(detailChange, request);
 				
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/sales_list_details/change").toUriString());
 		return true;
@@ -348,8 +353,11 @@ public class SalesListResource {
 	
 	
 	
-	private boolean change(DetailChange change) {
+	private boolean change(DetailChange change, HttpServletRequest request) {
 		boolean changed = false;
+		if(change.finalQty == 0) {
+			throw new InvalidOperationException("Deducting to zero is not allowed, please consider removing the product from the sales list");
+		}
 		if(change.finalQty < 0) {
 			throw new InvalidEntryException("Negative is not allowed");
 		}
@@ -421,6 +429,23 @@ public class SalesListResource {
 			stockCard.setReference("Issued in sales list ammendment. Ref #: "+salesList.getNo());
 		}
 		productStockCardService.save(stockCard);
+		
+		/**
+		 * Update Sales list amendment file
+		 */
+		SalesListAmendment amendment = new SalesListAmendment();
+		amendment.setSalesList(salesList);
+		amendment.setOriginalQty(change.getOriginalQty());
+		amendment.setFinalQty(change.getFinalQty());
+		amendment.setAmendedBy(userService.getUserId(request));
+		amendment.setAmendedAt(dayService.getDayId());
+		amendment.setProduct(product);
+		if(diff < 0) {
+			amendment.setReference("Deducted "+Math.abs(diff)+" units of "+product.getCode()+" "+product.getDescription());
+		}else {
+			amendment.setReference("Added "+Math.abs(diff)+" units of "+product.getCode()+" "+product.getDescription());
+		}		
+		salesListAmendmentRepository.saveAndFlush(amendment);
 		
 		return changed;
 	}

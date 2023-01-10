@@ -277,6 +277,7 @@ public class PackingListServiceImpl implements PackingListService {
 			model.setNo(pcl.getNo());
 			model.setSalesListNo(pcl.getSalesListNo());
 			model.setCustomer(pcl.getCustomer());
+			model.setSalesAgent(pcl.getSalesAgent());
 			model.setStatus(pcl.getStatus());
 			model.setComments(pcl.getComments());
 						

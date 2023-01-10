@@ -160,7 +160,7 @@
                     <td><span *ngIf="d.previousReturns === 0">-</span><span *ngIf="d.previousReturns != 0">{{d.previousReturns}}</span></td>
                     <td><span *ngIf="d.qtyIssued === 0">-</span><span *ngIf="d.qtyIssued != 0">{{d.qtyIssued}}</span></td>
                     <td><span *ngIf="d.totalPacked === 0">-</span><span *ngIf="d.totalPacked != 0">{{d.totalPacked}}</span></td>
-                    <td><span style="cursor: pointer;" (click)="deleteDetail(d.id)">[Remove]</span><span style="cursor: pointer;" (click)="open(content, d.product.id, d.id)">[Edit]</span></td>
+                    <td><span *ngIf="status === 'PENDING'" style="cursor: pointer;" (click)="open(content, d.product.id, d.id)"><i class="fas fa-pencil"></i></span>_____<span *ngIf="status === 'PENDING'" style="cursor: pointer;" (click)="deleteDetail(d.id)"><i class="fas fa-trash"></i></span></td>
                 </tr>
             </tbody>
         </table>
@@ -244,6 +244,8 @@
                         <tr class="table-dark">
                             <td>Packing List#</td>
                             <td>Sales List#</td>
+                            <td>Sales Agent/Route</td>
+                            <td>Customer</td>
                             <td>Status</td>
                             <td>Select</td>
                         </tr>
@@ -252,6 +254,8 @@
                         <tr *ngFor="let pcl of packingLists">
                             <td>{{pcl.no}}</td>
                             <td>{{pcl.salesListNo}}</td>
+                            <td>{{pcl.salesAgent.name}}</td>
+                            <td>{{pcl.customer.name}}</td>                           
                             <td>{{pcl.status}}</td>
                             <td><span (click)="get(pcl.id)" (click)="modal.close('Select click')" style="cursor: pointer;">[Select]</span></td>
                         </tr>

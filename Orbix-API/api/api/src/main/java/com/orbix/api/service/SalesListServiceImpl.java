@@ -329,6 +329,7 @@ public class SalesListServiceImpl implements SalesListService {
 			model.setId(pcl.getId());
 			model.setNo(pcl.getNo());
 			model.setCustomer(pcl.getCustomer());
+			model.setSalesAgent(pcl.getSalesAgent());
 			model.setStatus(pcl.getStatus());
 			model.setComments(pcl.getComments());
 			model.setTotalBank(pcl.getTotalBank());

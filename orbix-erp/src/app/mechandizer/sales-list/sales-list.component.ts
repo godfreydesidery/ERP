@@ -14,7 +14,7 @@ pdfMakeX.vfs = pdfFontsX.pdfMake.vfs;
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import { DataService } from 'src/app/services/data.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { finalize } from 'rxjs';
+import { ConnectableObservable, finalize } from 'rxjs';
 
 const API_URL = environment.apiUrl;
 
@@ -56,6 +56,7 @@ export class SalesListComponent implements OnInit {
   salesListDetails : ISalesListDetail[]
   salesLists       : ISalesList[]
 
+
   total            : number
 
   totalAmountPacked    : number
@@ -89,6 +90,8 @@ export class SalesListComponent implements OnInit {
   costPriceVatExcl    : number
   sellingPriceVatIncl : number
   sellingPriceVatExcl : number
+
+  finalQty            : number = 0
 
   descriptions : string[]
 
@@ -456,6 +459,8 @@ export class SalesListComponent implements OnInit {
     }
   }
 
+  
+
   getDetailByNo(no: string) {
     throw new Error('Method not implemented.');
   }
@@ -469,6 +474,7 @@ export class SalesListComponent implements OnInit {
     .toPromise()
     .then(
       data => {
+        console.log(data)
         data?.forEach(element => {
           this.salesLists.push(element)
         })
@@ -584,6 +590,8 @@ export class SalesListComponent implements OnInit {
     this.costPriceVatExcl    = 0
     this.sellingPriceVatIncl = 0
     this.sellingPriceVatExcl = 0
+
+    this.finalQty            = 0
   }
 
   createShortCut(shortCutName : string, link : string){
@@ -747,11 +755,70 @@ export class SalesListComponent implements OnInit {
 
   showList(listContent: any) {
     
-    this.modalService.open(listContent, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    this.modalService.open(listContent, {ariaLabelledBy: 'modal-basic-title', size : 'xl'}).result.then((result) => {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
+
+  showChangeQty1(changeQty: any, id : any) {
+    this.detailId = id
+    this.modalService.open(changeQty, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  showChangeQty(changeQty : any, productId : string, detailId : string) {
+     
+    if(productId != ''){
+      this.searchDetail(productId, detailId)
+    }
+    
+    
+    this.modalService.open(changeQty, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+    this.disablePriceChange = true
+  }
+
+  async change() {
+    if(window.confirm("Are you sure you want to change qty for this product?")){
+      //execute
+    }else{
+      //return
+      return
+    }
+    let options = {
+     headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+   }   
+   var detail = {
+     id                  : this.detailId,
+     originalQty         : this.totalPacked,
+     finalQty            : this.finalQty
+   }
+   this.spinner.show()
+   await this.http.post(API_URL+'/sales_list_details/change', detail, options)
+   .pipe(finalize(() => this.spinner.hide()))
+   .toPromise()
+   .then(
+     () => {
+       this.clearDetail()
+       this.get(this.id)
+       if(this.blank == true){
+         this.blank = false
+         this.loadSalesLists()
+       }
+     }
+   )
+   .catch(
+     error => {
+       console.log(error)
+       ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not save')
+     }
+   )
+ }
 
   private getDismissReason(reason: any): string {
     this.clearDetail()
@@ -1107,7 +1174,7 @@ interface ISalesList{
   no                 : string
   issueDate          : Date
   customer           : ICustomer
-  salesAgent           : ISalesAgent
+  salesAgent         : ISalesAgent
   status             : string
   comments           : string
   created            : string

@@ -39,12 +39,14 @@ D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\Cash
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\LpoDetailRepository.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\models\DrpModel.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\models\QuotationModel.java
+D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\SalesSheetRepository.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\models\DebtModel.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\CartRepository.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\DebtService.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\ProductToMaterialDetailRepository.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\CustomerService.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\ProductOfferRepository.java
+D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\SalesSheetSaleDetail.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\models\DebtTrackerModel.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\GrnServiceImpl.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\api\DayResource.java
@@ -89,6 +91,7 @@ D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\reports\serv
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\VatGroupServiceImpl.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\SalesInvoiceDetail.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\models\SalesInvoiceDetailModel.java
+D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\SalesSheetSaleRepository.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\MaterialStockRepository.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\CustomerClaim.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\models\SalesListDetailModel.java
@@ -152,6 +155,7 @@ D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\DebtA
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\ProductPriceChangeService.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\reports\service\ProductStockCardReportService.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\SaleDetailRepository.java
+D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\SalesSheet.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\exceptions\OperationFailedException.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\SalesDebtHistoryRepository.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\UserService.java
@@ -174,6 +178,7 @@ D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\reports\serv
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\CashBookRepository.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\models\SalesDebtModel.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\SubCategory.java
+D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\SalesSheetSale.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\filter\CustomAuthenticationFilter.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\models\ProductionMaterialModel.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\SalesList.java
@@ -191,6 +196,7 @@ D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\Cash
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\DebtTracker.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\GrnDetail.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\PurchaseDetail.java
+D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\SalesSheetSaleDetailRepository.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\models\ProductionProductModel.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\api\QuotationResource.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\api\SalesInvoiceResource.java
@@ -203,6 +209,7 @@ D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\api\LpoResou
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\reports\models\ProductStockSummaryReport.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\models\DebtReceiptModel.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\ProductRepository.java
+D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\SalesListAmendment.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\QuotationServiceImpl.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\DebtReceiptService.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\reports\models\ProductStockCardReport.java
@@ -252,6 +259,7 @@ D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\reports\models\SupplySalesReport.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\ProductStockCardService.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\SalesDebtService.java
+D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\SalesListAmendmentRepository.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\Product.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\FloatService.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\Allocation.java
@@ -315,8 +323,10 @@ D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\Sales
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\Cart.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\ProductToProductFinal.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\SalesReceipt.java
+D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\SalesSheetService.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\reports\models\SalesSummaryReport.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\reports\models\MaterialUsageReport.java
+D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\SalesSheetServiceImpl.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\PackingListDetailRepository.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\ProductionService.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\Production.java

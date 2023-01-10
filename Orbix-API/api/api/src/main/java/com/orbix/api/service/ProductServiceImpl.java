@@ -78,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
 		if(!p.getBarcode().equals("") && p.getBarcode().contains(" ")) {//validate barcode, reject barcode with spaces
 			p.setBarcode(p.getBarcode().replace(" ", ""));	
 		}
-		p.setDescription(p.getDescription().trim());
+		p.setDescription(p.getDescription().trim().replaceAll("\\s+", " "));
 		Product product;
 		boolean isNew = false;
 		
@@ -128,10 +128,10 @@ public class ProductServiceImpl implements ProductService {
 			product = productRepository.findById(p.getId()).get();
 			product.setId(p.getId());
 			product.setBarcode(p.getBarcode());
-			product.setCode(p.getCode());
-			product.setDescription(p.getDescription().replace("+", " "));
-			product.setShortDescription(p.getShortDescription());
-			product.setCommonName(p.getCommonName());
+			product.setCode(p.getCode().replace(" ", ""));
+			product.setDescription(p.getDescription().replace("+", "Plus"));
+			product.setShortDescription(p.getShortDescription().trim().replaceAll("\\s+", " "));
+			product.setCommonName(p.getCommonName().trim().replaceAll("\\s+", " "));
 			product.setSellable(p.isSellable());
 			product.setActive(p.isActive());
 		}
