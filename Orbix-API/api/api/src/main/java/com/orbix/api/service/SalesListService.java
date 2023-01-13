@@ -23,6 +23,7 @@ public interface SalesListService {
 	boolean delete(SalesList salesList);
 	List<SalesListModel>getAllVisible();
 	SalesListDetailModel saveDetail(SalesListDetail salesListDetail);
+	SalesListDetailModel addDetail(SalesListDetail salesListDetail);
 	SalesListDetailModel getDetail(Long id);
 	List<SalesListDetailModel>getAllDetails(SalesList salesList);	
 	boolean archive(SalesList salesList);

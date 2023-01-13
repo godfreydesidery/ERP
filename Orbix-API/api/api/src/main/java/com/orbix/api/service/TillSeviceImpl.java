@@ -88,7 +88,7 @@ public class TillSeviceImpl implements TillService {
 		/**
 		 * Put logic to allow till deletion, return false if not allowed, else return true
 		 */
-		return true;
+		return false;
 	}
 
 }

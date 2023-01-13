@@ -761,6 +761,53 @@ export class SalesListComponent implements OnInit {
     });
   }
 
+  show(add : any) {
+    this.clearDetail()
+    
+    this.modalService.open(add, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+    this.disablePriceChange = true
+  }
+
+  async addDetail() {
+    /**
+     * Enter Sales List Detail
+     */
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }  
+    var detail = {
+      salesList           : {id : this.id},
+      product             : {id : this.productId, code : this.code},
+      totalPacked         : this.totalPacked,  
+      costPriceVatIncl    : this.costPriceVatIncl,
+      costPriceVatExcl    : this.costPriceVatExcl,
+      sellingPriceVatIncl : this.sellingPriceVatIncl,
+      sellingPriceVatExcl : this.sellingPriceVatExcl
+    }      
+    this.spinner.show()
+    await this.http.post(API_URL+'/sales_list_details/add', detail, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      () => {
+        this.clearDetail()
+        this.get(this.id)
+        if(this.blank == true){
+          this.blank = false
+        }
+      }
+    )
+    .catch(
+      error => {
+        console.log(error)
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not save detail')
+      }
+    )
+  }
+
   showChangeQty1(changeQty: any, id : any) {
     this.detailId = id
     this.modalService.open(changeQty, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {

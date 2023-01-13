@@ -226,6 +226,7 @@
                     <thead style="position: sticky; top: 0;">
                         <tr class="table-dark">
                             <td>Quotation#</td>
+                            <td>Customer</td>
                             <td>Status</td>
                             <td>Select</td>
                         </tr>
@@ -233,6 +234,7 @@
                     <tbody>
                         <tr *ngFor="let q of quotations">
                             <td>{{q.no}}</td>
+                            <td>{{q.customer.name}}</td>
                             <td>{{q.status}}</td>
                             <td><span (click)="get(q.id)" (click)="modal.close('Select click')" style="cursor: pointer;">[Select]</span></td>
                         </tr>

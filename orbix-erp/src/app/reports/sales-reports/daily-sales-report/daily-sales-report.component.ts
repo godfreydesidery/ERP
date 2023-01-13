@@ -39,6 +39,12 @@ export class DailySalesReportComponent implements OnInit {
 
   closeResult    : string = ''
 
+  salesAgentId    : any
+  salesAgentNo  : string = ''
+  salesAgentName  : string = ''
+
+  salesAgentNames : string[] = []
+
   report : IDailySalesReport[] = []
 
   totalAmount : number = 0
@@ -55,6 +61,29 @@ export class DailySalesReportComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.logo = await this.data.getLogo() 
     this.address = await this.data.getAddress()
+    this.loadSalesAgentNames()
+  }
+
+  async loadSalesAgentNames(){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<string[]>(API_URL+'/sales_agents/get_names', options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        this.salesAgentNames = []
+        data?.forEach(element => {
+          this.salesAgentNames.push(element)
+        })
+      },
+      error => {
+        console.log(error)
+        alert('Could not load agent names')
+      }
+    )
   }
 
   createShortCut(shortCutName : string, link : string){
@@ -74,8 +103,7 @@ export class DailySalesReportComponent implements OnInit {
     })
   }
 
-
-  async getDailySalesReport(from: Date, to: Date) {
+  async getDailySalesReport(from: Date, to: Date, agentName : string) {
     if(from == null || to == null){
       alert('Could not run report, please select date range')
       return
@@ -89,7 +117,8 @@ export class DailySalesReportComponent implements OnInit {
     }
     var args = {
       from : from,
-      to   : to
+      to   : to,
+      salesAgentName : agentName
     }
     this.spinner.show()
     await this.http.post<IDailySalesReport[]>(API_URL + '/reports/daily_sales_report', args, options)
@@ -204,6 +233,10 @@ export class DailySalesReportComponent implements OnInit {
                 [
                   {text : 'To', fontSize : 9}, 
                   {text : this.to, fontSize : 9} 
+                ],
+                [
+                  {text : 'Agent/Route', fontSize : 9}, 
+                  {text : this.salesAgentName, fontSize : 9} 
                 ],
               ]
             },

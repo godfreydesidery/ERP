@@ -173,7 +173,7 @@ public class QuotationServiceImpl implements QuotationService {
 		if(!allowDelete(quotation)) {
 			throw new InvalidOperationException("Deleting the selected Sales Invoice is not allowed");
 		}
-		quotationRepository.delete(quotation);
+		//quotationRepository.delete(quotation);
 		return true;
 	}
 	
@@ -299,7 +299,7 @@ public class QuotationServiceImpl implements QuotationService {
 	}
 	
 	private boolean allowDelete(Quotation quotation) {
-		return true;
+		return false;
 	}
 	
 	private boolean validateDetail(QuotationDetail quotationDetail) {

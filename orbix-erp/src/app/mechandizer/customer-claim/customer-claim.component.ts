@@ -63,6 +63,8 @@ export class CustomerClaimComponent implements OnInit {
   claimedProductSellingPriceVatIncl : number
   claimedProductReason : string
   claimedProductRemarks : string
+
+  claimedDetailId : any
   
 
 
@@ -78,6 +80,8 @@ export class CustomerClaimComponent implements OnInit {
   claimReplacementProductSellingPriceVatExcl : number
   claimReplacementProductSellingPriceVatIncl : number
   claimReplacementProductRemarks             : string
+
+  replacementDetailId : any
 
 
   descriptions : string[]
@@ -102,6 +106,7 @@ export class CustomerClaimComponent implements OnInit {
     this.replacementProducts   = []
 
     this.claimedProductId                  = null
+    this.claimedDetailId                   = ''
     this.claimedProductBarcode             = ''
     this.claimedProductCode                = ''  
     this.claimedProductDescription   = ''
@@ -117,6 +122,7 @@ export class CustomerClaimComponent implements OnInit {
 
 
     this.claimReplacementProductId                  = null
+    this.replacementDetailId                        = ''
     this.claimReplacementProductBarcode             = ''
     this.claimReplacementProductCode                = ''  
     this.claimReplacementProductDescription   = ''
@@ -355,7 +361,7 @@ export class CustomerClaimComponent implements OnInit {
         headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
       }   
       var detail = {
-        id : this.claimedProductId,
+        id : this.claimedDetailId,
         customerClaim : {id : this.id},
         product : {id : this.claimedProductId},
         qty : this.claimedProductQty,
@@ -402,7 +408,7 @@ export class CustomerClaimComponent implements OnInit {
         headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
       }   
       var detail = {
-        id : this.claimReplacementProductId,
+        id : this.replacementDetailId,
         customerClaim : {id : this.id},
         product : {id : this.claimReplacementProductId},
         qty : this.claimReplacementProductQty,
@@ -567,6 +573,7 @@ export class CustomerClaimComponent implements OnInit {
 
   clearClaimed(){
     this.claimedProductId                  = null
+    this.claimedDetailId                   = null
     this.claimedProductBarcode             = ''
     this.claimedProductCode                = ''  
     this.claimedProductDescription   = ''
@@ -582,6 +589,7 @@ export class CustomerClaimComponent implements OnInit {
 
   clearReplacement(){
     this.claimReplacementProductId                  = null
+    this.replacementDetailId                        = null
     this.claimReplacementProductBarcode             = ''
     this.claimReplacementProductCode                = ''  
     this.claimReplacementProductDescription   = ''
@@ -799,7 +807,8 @@ export class CustomerClaimComponent implements OnInit {
     .toPromise()
     .then(
       data => {
-        this.claimedProductId = data!.id
+        this.claimedDetailId = data!.id
+        this.claimedProductId = data!.product.id
         this.claimedProductBarcode = data!.product.barcode
         this.claimedProductCode = data!.product.code
         this.claimedProductDescription = data!.product.description
@@ -838,7 +847,8 @@ export class CustomerClaimComponent implements OnInit {
     .toPromise()
     .then(
       data => {
-        this.claimReplacementProductId = data!.id
+        this.replacementDetailId = data!.id
+        this.claimReplacementProductId = data!.product.id
         this.claimReplacementProductBarcode = data!.product.barcode
         this.claimReplacementProductCode = data!.product.code
         this.claimReplacementProductDescription = data!.product.description
@@ -1090,15 +1100,15 @@ interface ICustomerClaim{
 
 interface IClaimedProduct{
   id                  : any
-  barcode             : string
-  code                : string
-  description         : string
-  uom                 : string
+  //barcode             : string
+  //code                : string
+  //description         : string
+  //uom                 : string
   qty                 : number
-  costPriceVatExcl    : number
-  costPriceVatIncl    : number
-  sellingPriceVatExcl : number
-  sellingPriceVatIncl : number
+  //costPriceVatExcl    : number
+  //costPriceVatIncl    : number
+  //sellingPriceVatExcl : number
+  //sellingPriceVatIncl : number
   product             : IProduct
   reason    : string
   remarks : string
@@ -1106,15 +1116,15 @@ interface IClaimedProduct{
 
 interface IClaimReplacementProduct{
   id                  : any
-  barcode             : string
-  code                : string
-  description         : string
-  uom                 : string
+  //barcode             : string
+  //code                : string
+  //description         : string
+  //uom                 : string
   qty                 : number
-  costPriceVatExcl    : number
-  costPriceVatIncl    : number
-  sellingPriceVatExcl : number
-  sellingPriceVatIncl : number
+  //costPriceVatExcl    : number
+  //costPriceVatIncl    : number
+  //sellingPriceVatExcl : number
+  //sellingPriceVatIncl : number
   product             : IProduct
   remarks : string
 }
@@ -1163,3 +1173,4 @@ interface ICustomer{
 interface ICustomerName{
   names : string[]
 }
+

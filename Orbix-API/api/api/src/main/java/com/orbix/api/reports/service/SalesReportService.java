@@ -29,6 +29,7 @@ public interface SalesReportService {
 	List<DailySalesReport> getDailySalesReport(
 			LocalDate fromDate,
 			LocalDate toDate,
+			String salesAgentName,
 			Department department,
 			Class clas,
 			SubClass subClass,
@@ -47,6 +48,7 @@ public interface SalesReportService {
 	List<SupplySalesReport> getSupplySalesReport(
 			LocalDate from,
 			LocalDate to,
+			String salesAgentName,
 			Supplier supplier,
 			List<Product> products);
 	

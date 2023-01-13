@@ -108,10 +108,9 @@ public class SupplierServiceImpl implements SupplierService {
 	private String generateSupplierCode(Supplier supplier) {
 		Long number = supplier.getId();		
 		String sNumber = number.toString();
-		return "SPL-"+Formater.formatSix(sNumber);
+		return "S-"+Formater.formatSix(sNumber);
 	}
-	
-	
+		
 	@Override
 	public RecordModel requestSupplierCode() {
 		Long id = 1L;
@@ -119,9 +118,7 @@ public class SupplierServiceImpl implements SupplierService {
 			id = supplierRepository.getLastId() + 1;
 		}catch(Exception e) {}
 		RecordModel model = new RecordModel();
-		model.setCode("S"+Formater.formatSix(id.toString()));		
+		model.setCode("S-"+Formater.formatSix(id.toString()));		
 		return model;
 	}	
-
-
 }

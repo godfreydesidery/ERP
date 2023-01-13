@@ -71,6 +71,7 @@ public class SalesReportServiceImpl implements SalesReportService {
 	public List<DailySalesReport> getDailySalesReport(
 			LocalDate fromDate, 
 			LocalDate toDate, 
+			String salesAgentName,
 			Department department, 
 			Class clas,
 			SubClass subClass, 
@@ -85,6 +86,9 @@ public class SalesReportServiceImpl implements SalesReportService {
 		if(department == null && category == null && levelOnes == null && levelTwos == null && levelThrees == null && levelFours == null) {
 			
 		}
+		if(!salesAgentName.equals("")) {
+			return saleRepository.getDailySalesReportBySalesAgent(fromDate, toDate, salesAgentName);
+		}
 		return saleRepository.getDailySalesReport(fromDate, toDate);
 	}
 
@@ -93,6 +97,7 @@ public class SalesReportServiceImpl implements SalesReportService {
 	public List<SupplySalesReport> getSupplySalesReport(
 			LocalDate from,
 			LocalDate to,
+			String salesAgentName,
 			Supplier supplier,
 			List<Product> products) {
 		if(!supplier.getName().equals("")) {
@@ -108,6 +113,9 @@ public class SalesReportServiceImpl implements SalesReportService {
 			}
 			return saleRepository.getSupplySalesReportByProducts(from, to, codes);
 		}else {
+			if(!salesAgentName.equals("")) {
+				return saleRepository.getSupplySalesReportBySalesAgent(from, to, salesAgentName);
+			}
 			return saleRepository.getSupplySalesReportAll(from, to);
 		}
 	}

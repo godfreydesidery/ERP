@@ -516,7 +516,7 @@ public class PackingListServiceImpl implements PackingListService {
 	}
 	
 	private boolean allowDelete(PackingList packingList) {
-		return true;
+		return false;
 	}
 	
 	private boolean validateDetail(PackingListDetail packingListDetail) {

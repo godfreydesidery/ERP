@@ -56,10 +56,20 @@
                         <input type="date"  [(ngModel)]="to" class="form-control">
                     </div>
                 </div>
+                <br>
+                <div class="row">
+                    <div class="col-12">
+                        <span><u>Select Sales Agent/Route</u></span>
+                        <select [(ngModel)]="salesAgentName" class="form-control">
+                            <option></option>
+                            <option *ngFor="let s of salesAgentNames">{{s}}</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div class="modal-footer">
-        <button (click)="getDailySalesReport(from, to)" (click)="modal.close('Run click')" class="btn btn-success" style="margin: 2px;">Run Report</button>
+        <button (click)="getDailySalesReport(from, to, salesAgentName)" (click)="modal.close('Run click')" class="btn btn-success" style="margin: 2px;">Run Report</button>
     </div>
 </ng-template>

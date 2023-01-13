@@ -202,6 +202,7 @@ public class CustomerClaimResource {
 	//@PreAuthorize("hasAnyAuthority('Claim-CREATE','Claim-UPDATE')")
 	public ResponseEntity<ClaimedProductModel>createClaimedProduct(
 			@RequestBody ClaimedProduct claimedProduct){
+		
 		if(claimedProduct.getQty() <= 0) {
 			throw new InvalidEntryException("Quantity value should be more than 0");
 		}
@@ -222,10 +223,15 @@ public class CustomerClaimResource {
 		}
 		
 		//Optional<ClaimedProduct> d = claimReplacementProductRepository.findByProductAndCustomerClaim(p.get(), l.get());
-		Optional<ClaimedProduct> d = claimedProductRepository.findById(claimedProduct.getId());
+		if(claimedProduct.getId() == null) {
+			
+		}
+		//Optional<ClaimedProduct> d = claimedProductRepository.findById(claimedProduct.getId());
 		
 		ClaimedProduct detail = new ClaimedProduct();
-		if(d.isPresent()) {
+		//if(d.isPresent()) {
+		if(claimedProduct.getId() != null) {
+			Optional<ClaimedProduct> d = claimedProductRepository.findById(claimedProduct.getId());
 			/**
 			 * Update existing detail
 			 */
@@ -276,11 +282,9 @@ public class CustomerClaimResource {
 			throw new NotFoundException("Product not found");
 		}
 		
-		//Optional<ClaimReplacement> d = claimReplacementProductRepository.findByProductAndCustomerClaim(p.get(), l.get());
-		Optional<ClaimReplacementProduct> d = claimReplacementProductRepository.findById(claimReplacementProduct.getId());
-		
 		ClaimReplacementProduct detail = new ClaimReplacementProduct();
-		if(d.isPresent()) {
+		if(claimReplacementProduct.getId() != null) {
+			Optional<ClaimReplacementProduct> d = claimReplacementProductRepository.findById(claimReplacementProduct.getId());
 			/**
 			 * Update existing detail
 			 */

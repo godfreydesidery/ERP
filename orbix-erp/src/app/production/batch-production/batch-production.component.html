@@ -431,6 +431,7 @@
                     <thead style="position: sticky; top: 0;">
                         <tr class="table-dark">
                             <td>Production No</td>
+                            <td>Batch No</td>
                             <td>Status</td>
                             <td>Select</td>
                         </tr>
@@ -438,6 +439,7 @@
                     <tbody>
                         <tr *ngFor="let p of productions">
                             <td>{{p.no}}</td>
+                            <td>{{p.batchNo}}</td>
                             <td>{{p.status}}</td>
                             <td><span (click)="get(p.id)" (click)="modal.close('Select click')" style="cursor: pointer;">[Select]</span></td>
                         </tr>

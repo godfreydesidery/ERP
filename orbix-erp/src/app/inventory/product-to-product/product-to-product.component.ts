@@ -316,7 +316,7 @@ export class ProductToProductComponent implements OnInit {
         headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
       }   
       var detail = {
-        id : this.initialId,
+        //id : this.initialId,
         productToProduct : {id : this.id},
         product : {id : this.initialId},
         qty : this.initialQty
@@ -361,7 +361,7 @@ export class ProductToProductComponent implements OnInit {
         headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
       }   
       var detail = {
-        id : this.finalId,
+        //id : this.finalId,
         productToProduct : {id : this.id},
         product : {id : this.finalId},
         qty : this.finalQty

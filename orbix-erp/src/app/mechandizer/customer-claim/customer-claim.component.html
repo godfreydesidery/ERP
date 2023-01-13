@@ -117,7 +117,7 @@
                                         <tr *ngFor="let d of claimedProducts">
                                             <td>{{d.product.code}}</td>
                                             <td>{{d.product.description}}</td>
-                                            <td><b>{{d.qty}}</b>  <i>    {{d.uom}}    </i></td>
+                                            <td><b>{{d.qty}}</b>  <i>    {{d.product.uom}}    </i></td>
                                             <td><span style="cursor: pointer;" (click)="deleteClaimedProduct(d.id)">[Remove]</span><span style="cursor: pointer;" (click)="openClaimed(contentClaimed, d.id)">[Edit]</span></td>
                                         </tr>
                                     </tbody>
@@ -153,7 +153,7 @@
                                         <tr *ngFor="let d of replacementProducts">
                                             <td>{{d.product.code}}</td>
                                             <td>{{d.product.description}}</td>
-                                            <td><b>{{d.qty}}</b>  <i>    {{d.uom}}    </i></td>
+                                            <td><b>{{d.qty}}</b>  <i>    {{d.product.uom}}    </i></td>
                                             <td><span style="cursor: pointer;" (click)="deleteFinal(d.id)">[Remove]</span><span style="cursor: pointer;" (click)="openReplacement(contentReplacement, d.id)">[Edit]</span></td>
                                         </tr>
                                     </tbody>

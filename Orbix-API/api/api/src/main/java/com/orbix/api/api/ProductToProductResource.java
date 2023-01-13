@@ -209,8 +209,7 @@ public class ProductToProductResource {
 			throw new NotFoundException("Product not found");
 		}
 		
-		//Optional<ProductToProductInitial> d = productToProductInitialRepository.findByProductAndProductToProduct(p.get(), l.get());
-		Optional<ProductToProductInitial> d = productToProductInitialRepository.findById(productToProductInitial.getId());
+		Optional<ProductToProductInitial> d = productToProductInitialRepository.findByProductAndProductToProduct(p.get(), l.get());		
 		
 		ProductToProductInitial detail = new ProductToProductInitial();
 		if(d.isPresent()) {
@@ -260,8 +259,7 @@ public class ProductToProductResource {
 			throw new NotFoundException("Product not found");
 		}
 		
-		//Optional<ProductToProductFinal> d = productToProductFinalRepository.findByProductAndProductToProduct(p.get(), l.get());
-		Optional<ProductToProductFinal> d = productToProductFinalRepository.findById(productToProductFinal.getId());
+		Optional<ProductToProductFinal> d = productToProductFinalRepository.findByProductAndProductToProduct(p.get(), l.get());
 		
 		ProductToProductFinal detail = new ProductToProductFinal();
 		if(d.isPresent()) {

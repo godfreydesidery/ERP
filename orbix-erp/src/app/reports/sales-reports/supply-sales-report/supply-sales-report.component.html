@@ -60,13 +60,22 @@
                 <div class="row">
                     <div class="col-12">
                         <span><u>Select Supplier</u></span>
-                        <select [(ngModel)]="supplierName" class="form-control" (ngModelChange)="clearList()">
+                        <select [(ngModel)]="supplierName" class="form-control" (ngModelChange)="clearList()" (ngModelChange)="clearSalesAgent()">
                             <option></option>
                             <option *ngFor="let s of supplierNames">{{s}}</option>
                         </select>
                     </div>
                 </div>
                 <br>
+                <div class="row">
+                    <div class="col-12">
+                        <span><u>Select Sales Agent/Route</u></span>
+                        <select [(ngModel)]="salesAgentName" class="form-control" (ngModelChange)="clearSupplier()">
+                            <option></option>
+                            <option *ngFor="let s of salesAgentNames">{{s}}</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-12">
                         <p><u>Select Product</u></p>
@@ -110,6 +119,6 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button (click)="getSupplySalesReport(from, to, supplierName)" (click)="modal.close('Run click')" class="btn btn-success" style="margin: 2px;">Run Report</button>
+        <button (click)="getSupplySalesReport(from, to, supplierName, salesAgentName)" (click)="modal.close('Run click')" class="btn btn-success" style="margin: 2px;">Run Report</button>
     </div>
 </ng-template>

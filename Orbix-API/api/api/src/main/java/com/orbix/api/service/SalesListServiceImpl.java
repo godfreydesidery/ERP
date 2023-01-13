@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.orbix.api.accessories.Formater;
 import com.orbix.api.domain.Debt;
+import com.orbix.api.domain.PackingListDetail;
 import com.orbix.api.domain.SalesList;
 import com.orbix.api.domain.SalesListDetail;
 import com.orbix.api.domain.SalesSheet;
@@ -28,6 +29,7 @@ import com.orbix.api.domain.SaleDetail;
 import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
+import com.orbix.api.models.PackingListDetailModel;
 import com.orbix.api.models.SalesListDetailModel;
 import com.orbix.api.models.SalesListModel;
 import com.orbix.api.repositories.DayRepository;
@@ -646,7 +648,7 @@ public class SalesListServiceImpl implements SalesListService {
 	}
 	
 	private boolean allowDelete(SalesList salesList) {
-		return true;
+		return false;
 	}
 	
 	private boolean validateDetail(SalesListDetail salesListDetail) {
@@ -656,6 +658,27 @@ public class SalesListServiceImpl implements SalesListService {
 	private boolean allowDeleteDetail(SalesListDetail salesListDetail) {
 		return true;
 	}
+	
+	
+	@Override
+	public SalesListDetailModel addDetail(SalesListDetail salesListDetail) {
+		if(!validateDetail(salesListDetail)) {
+			throw new InvalidEntryException("Could not save detail, Invalid entry");
+		}
+		SalesListDetailModel detail = new SalesListDetailModel();
+		SalesListDetail d = salesListDetailRepository.save(salesListDetail);
+		detail.setId(d.getId());
+		detail.setProduct(d.getProduct());
+		detail.setTotalPacked(d.getTotalPacked());
+		detail.setCostPriceVatIncl(d.getCostPriceVatIncl());
+		detail.setCostPriceVatExcl(d.getCostPriceVatExcl());
+		detail.setSellingPriceVatIncl(d.getSellingPriceVatIncl());
+		detail.setSellingPriceVatExcl(d.getSellingPriceVatExcl());
+		return detail;
+	}
+	
+	
+	
 	@Override
 	public String generateSalesListNo(SalesList salesList) {
 		Long number = salesList.getId();		

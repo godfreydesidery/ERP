@@ -82,6 +82,39 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 			)
 	List<DailySalesReport> getDailySalesReportByTill(LocalDate from, LocalDate to, String tillNo);
 	
+	
+	
+	@Query(
+			value = "SELECT\r\n" + 
+					"`days`.`bussiness_date` AS `date`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`selling_price_vat_incl`) AS `amount`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`discount`) AS `discount`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`selling_price_vat_excl`) AS `total_sales_vat_excl`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`selling_price_vat_incl`) AS `total_sales_vat_incl`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`tax`) AS `tax`,\r\n" + 
+					"`sales_agents`.`name` AS `salesAgentName`\r\n" + 
+					"FROM\r\n" + 
+					"(SELECT * FROM `days` WHERE `bussiness_date` BETWEEN :from AND :to)`days`\r\n" + 
+					"JOIN\r\n" + 
+					"`sales`\r\n" + 
+					"ON\r\n" + 
+					"`days`.`id`=`sales`.`day_id`\r\n" + 
+					"JOIN\r\n" + 
+					"`sale_details`\r\n" + 
+					"ON\r\n" + 
+					"`sale_details`.`sale_id`=`sales`.`id`\r\n" +
+					"LEFT JOIN `sales_agents` ON\r\n" + 
+					"`sales_agents`.`id`=`sales`.`sales_agent_id`\r\n" + 
+					"WHERE\r\n" +
+					"`days`.`bussiness_date` BETWEEN :from AND :to AND `sales_agents`.`name`=:salesAgentName\r\n" +
+					"GROUP BY\r\n" + 
+					"`date`",
+					nativeQuery = true					
+			)
+	List<DailySalesReport> getDailySalesReportBySalesAgent(LocalDate from, LocalDate to, String salesAgentName);
+	
+	
+	
 	@Query(
 			value = "SELECT\r\n" + 
 					"`days`.`bussiness_date` AS `date`,\r\n" + 					
@@ -353,6 +386,37 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 					nativeQuery = true					
 			)
 	List<SupplySalesReport> getSupplySalesReportAll(LocalDate from, LocalDate to);
+	
+	
+	@Query(
+			value = "SELECT \r\n" +
+					"`products`.`code` AS `code`,\r\n" + 
+					"`products`.`description` AS `description`,\r\n" + 
+					"`products`.`stock` AS `stock`,\r\n" + 
+					"SUM(`sale_details`.`qty`) AS `qty`,\r\n" + 
+					"SUM(`sale_details`.`qty`*(`sale_details`.`selling_price_vat_incl`-`sale_details`.`discount`)) AS `amount`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`discount`) AS `discount`,\r\n" + 
+					"SUM(`sale_details`.`qty`*`sale_details`.`tax`) AS `tax`,\r\n" + 
+					"SUM(`sale_details`.`qty`*(`sale_details`.`selling_price_vat_incl`-`sale_details`.`cost_price_vat_incl`-`sale_details`.`discount`)) AS `profit`,\r\n" + 
+					"`sales_agents`.`name` AS `salesAgentName`\r\n" + 
+					"FROM\r\n" + 
+					"`sales`\r\n" + 
+					"JOIN `days` ON\r\n" + 
+					"`days`.`id`=`sales`.`day_id`\r\n" + 
+					"JOIN `sale_details` ON\r\n" + 
+					"`sale_details`.`sale_id`=`sales`.`id`\r\n" + 
+					"LEFT JOIN `sales_agents` ON\r\n" + 
+					"`sales_agents`.`id`=`sales`.`sales_agent_id`\r\n" + 
+					"JOIN `products` ON\r\n" + 
+					"`sale_details`.`product_id`=`products`.`id`\r\n" + 
+					"JOIN `suppliers` ON\r\n" + 
+					"`suppliers`.`id`=`products`.`supplier_id`\r\n" + 
+					"WHERE\r\n" + 
+					"`days`.`bussiness_date` BETWEEN :from AND :to AND `sales_agents`.`name`=:salesAgentName\r\n" +
+					"GROUP BY `code`",
+					nativeQuery = true					
+			)
+	List<SupplySalesReport> getSupplySalesReportBySalesAgent(LocalDate from, LocalDate to, String salesAgentName);
 	
 	
 	@Query(

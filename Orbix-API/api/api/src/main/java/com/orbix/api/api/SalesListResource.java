@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.orbix.api.domain.Customer;
+import com.orbix.api.domain.PackingList;
+import com.orbix.api.domain.PackingListDetail;
 import com.orbix.api.domain.SalesAgent;
 import com.orbix.api.domain.SalesList;
 import com.orbix.api.domain.SalesListAmendment;
@@ -35,6 +37,7 @@ import com.orbix.api.domain.ProductStockCard;
 import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
+import com.orbix.api.models.PackingListDetailModel;
 import com.orbix.api.models.SalesListDetailModel;
 import com.orbix.api.models.SalesListModel;
 import com.orbix.api.repositories.CustomerRepository;
@@ -448,6 +451,89 @@ public class SalesListResource {
 		salesListAmendmentRepository.saveAndFlush(amendment);
 		
 		return changed;
+	}
+	
+	@PostMapping("/sales_list_details/add")
+	@PreAuthorize("hasAnyAuthority('SALES_LIST-CREATE','SALES_LIST-UPDATE')")
+	public ResponseEntity<SalesListDetailModel>addSalesListDetail(
+			@RequestBody SalesListDetail salesListDetail, HttpServletRequest request){
+		
+		if(salesListDetail.getTotalPacked() <= 0) {
+			throw new InvalidEntryException("Qty must be more than zero");
+		}
+						
+		Optional<SalesList> l = salesListRepository.findById(salesListDetail.getSalesList().getId());
+		if(!l.isPresent()) {
+			throw new NotFoundException("SALES_LIST not found");
+		}
+		if(!l.get().getStatus().equals("PENDING")) {
+			throw new InvalidOperationException("Only Pending sales list can be edited");
+		}
+		
+		Optional<Product> p = productRepository.findById(salesListDetail.getProduct().getId());
+		if(!p.isPresent()) {
+			throw new NotFoundException("Product not found");
+		}
+		Optional<SalesListDetail> d = salesListDetailRepository.findBySalesListAndProduct(l.get(), p.get());
+		SalesListDetail detail = new SalesListDetail();
+		if(d.isPresent()) {
+			/**
+			 * Throw an exception, product already exist
+			 */
+			throw new InvalidOperationException("Could not add, Product already exist in list");		
+		}else {
+			/**
+			 * Create new detail
+			 */
+			detail.setSalesList(l.get());			
+			detail.setProduct(salesListDetail.getProduct());
+			detail.setTotalPacked(salesListDetail.getTotalPacked());
+			detail.setQtySold(0);
+			detail.setQtyReturned(0);
+			detail.setQtyOffered(0);
+			detail.setQtyDamaged(0);
+			detail.setCostPriceVatIncl(salesListDetail.getCostPriceVatIncl());
+			detail.setCostPriceVatExcl(salesListDetail.getCostPriceVatExcl());
+			detail.setSellingPriceVatIncl(salesListDetail.getSellingPriceVatIncl());
+			detail.setSellingPriceVatExcl(salesListDetail.getSellingPriceVatExcl());
+			
+			detail = salesListDetailRepository.saveAndFlush(detail);
+			
+			/**
+			 * Update stock
+			 */
+			Product product =productRepository.findById(detail.getProduct().getId()).get();
+			double stock = product.getStock();			
+			stock = stock - salesListDetail.getTotalPacked();
+			product.setStock(stock);
+			productRepository.saveAndFlush(product);
+			
+			/**
+			 * Update stock card
+			 */
+			ProductStockCard stockCard = new ProductStockCard();
+			stockCard.setQtyOut(salesListDetail.getTotalPacked());
+			stockCard.setProduct(product);
+			stockCard.setBalance(stock);
+			stockCard.setDay(dayRepository.getCurrentBussinessDay());
+			stockCard.setReference("Issued in sales list ammendment. Ref #: "+salesListDetail.getSalesList().getNo());
+			productStockCardService.save(stockCard);
+			
+			/**
+			 * Update Sales list amendment file
+			 */
+			SalesListAmendment amendment = new SalesListAmendment();
+			amendment.setSalesList(salesListDetail.getSalesList());
+			amendment.setOriginalQty(0);
+			amendment.setFinalQty(salesListDetail.getTotalPacked());
+			amendment.setAmendedBy(userService.getUserId(request));
+			amendment.setAmendedAt(dayService.getDayId());
+			amendment.setProduct(product);				
+			amendment.setReference("Added "+salesListDetail.getTotalPacked()+" units of "+product.getCode()+" "+product.getDescription());
+			salesListAmendmentRepository.saveAndFlush(amendment);
+		}		
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/sales_list_details/add").toUriString());
+		return ResponseEntity.created(uri).body(salesListService.saveDetail(detail));
 	}
 	
 }

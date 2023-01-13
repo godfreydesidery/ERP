@@ -81,8 +81,8 @@ public class ReportResource {
 	
 	@PostMapping("/reports/daily_sales_report")
 	public ResponseEntity<List<DailySalesReport>> dailySalesReport(
-			@RequestBody DailySalesReportArgs args){
-		return ResponseEntity.ok().body(salesReportService.getDailySalesReport(args.from, args.to, null, null, null, null, null, null, null, null, null));
+			@RequestBody DailySalesReportArgs args){		
+		return ResponseEntity.ok().body(salesReportService.getDailySalesReport(args.from, args.to, args.salesAgentName, null, null, null, null, null, null, null, null, null));					
 	}
 	
 	@PostMapping("/reports/daily_purchase_report")
@@ -149,7 +149,7 @@ public class ReportResource {
 	@PostMapping("/reports/supply_sales_report")
 	public ResponseEntity<List<SupplySalesReport>> supplySalesReport(
 			@RequestBody SupplySalesReportArgs args){
-		return ResponseEntity.ok().body(salesReportService.getSupplySalesReport(args.from, args.to, args.supplier, args.products));
+		return ResponseEntity.ok().body(salesReportService.getSupplySalesReport(args.from, args.to, args.salesAgentName, args.supplier, args.products));
 	}	
 	
 	@PostMapping("/reports/supplier_stock_status_report")
@@ -210,7 +210,7 @@ public class ReportResource {
 class DailySalesReportArgs {
 	LocalDate from;
 	LocalDate to;
-	
+	String salesAgentName;
 }
 
 @Data
@@ -260,6 +260,7 @@ class ProductStockCardReportArgs {
 class SupplySalesReportArgs {
 	LocalDate from;
 	LocalDate to;
+	String salesAgentName;
 	Supplier supplier;
 	List<Product> products;
 }

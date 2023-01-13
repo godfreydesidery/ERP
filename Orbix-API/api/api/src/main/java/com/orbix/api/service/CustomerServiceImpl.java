@@ -67,7 +67,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public boolean delete(Customer customer) {
 		if(allowDelete(customer)) {
-			customerRepository.delete(customer);
+			//customerRepository.delete(customer);
 		}else {
 			return false;
 		}
@@ -92,7 +92,7 @@ public class CustomerServiceImpl implements CustomerService {
 		/**
 		 * Put logic to allow till deletion, return false if not allowed, else return true
 		 */
-		return true;
+		return false;
 	}
 
 	@Override

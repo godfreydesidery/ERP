@@ -62,7 +62,7 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 	@Override
 	public boolean delete(SalesAgent salesAgent) {
 		if(allowDelete(salesAgent)) {
-			salesAgentRepository.delete(salesAgent);
+			//salesAgentRepository.delete(salesAgent);
 		}else {
 			return false;
 		}

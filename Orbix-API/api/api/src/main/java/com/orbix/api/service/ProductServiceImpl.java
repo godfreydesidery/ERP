@@ -404,7 +404,7 @@ public class ProductServiceImpl implements ProductService {
 		if(!allowDelete(product)) {
 			throw new InvalidOperationException("Deleting this product is not allowed");
 		}
-		productRepository.delete(product);
+		//productRepository.delete(product);
 		return true;
 	}
 
