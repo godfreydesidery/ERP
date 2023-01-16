@@ -7,6 +7,9 @@ import java.util.List;
 
 import com.orbix.api.domain.Employee;
 import com.orbix.api.domain.SalesAgent;
+import com.orbix.api.models.LCustomerModel;
+import com.orbix.api.models.LProductModel;
+import com.orbix.api.models.LSalesListObjectModel;
 import com.orbix.api.models.RecordModel;
 
 /**
@@ -22,4 +25,8 @@ public interface SalesAgentService {
 	List<SalesAgent>getAll(); //edit this to limit the number, for perfomance.
 	List<String> getNames();
 	RecordModel requestSalesAgentNo();
+	
+	LSalesListObjectModel passIn(String passName, String passCode);
+	List<LCustomerModel> loadCustomers();
+	List<LProductModel> loadAvailableProducts(String salesListNo, Long salesAgentId);
 }

@@ -35,4 +35,10 @@ public interface SalesAgentRepository extends JpaRepository<SalesAgent, Long> {
 	@Query("SELECT MAX(s.id) FROM SalesAgent s")
 	Long getLastId();
 
+	/**
+	 * @param passName
+	 * @return
+	 */
+	Optional<SalesAgent> findByPassName(String passName);
+
 }

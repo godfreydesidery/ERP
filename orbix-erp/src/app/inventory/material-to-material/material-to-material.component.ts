@@ -38,6 +38,7 @@ export class MaterialToMaterialComponent implements OnInit {
 
   //initials
   initialId                  : any
+  initialMaterialId          : any
   initialCode                : any
   initialDescription         : any
   initialQty                 : number
@@ -51,6 +52,7 @@ export class MaterialToMaterialComponent implements OnInit {
 
   //finals
   finalId                  : any
+  finalMaterialId          : any
   finalCode                : any
   finalDescription         : any
   finalQty                 : number
@@ -311,9 +313,9 @@ export class MaterialToMaterialComponent implements OnInit {
         headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
       }   
       var detail = {
-        //id : this.initialId,
+        id : this.initialId,
         materialToMaterial : {id : this.id},
-        material : {id : this.initialId},
+        material : {id : this.initialMaterialId},
         qty : this.initialQty
       }
       this.spinner.show()
@@ -356,9 +358,9 @@ export class MaterialToMaterialComponent implements OnInit {
         headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
       }   
       var detail = {
-        //id : this.finalId,
+        id : this.finalId,
         materialToMaterial : {id : this.id},
-        material : {id : this.finalId},
+        material : {id : this.finalMaterialId},
         qty : this.finalQty
       }
       this.spinner.show()
@@ -518,6 +520,7 @@ export class MaterialToMaterialComponent implements OnInit {
 
   clearInitials(){
     this.initialId                  = null
+    this.initialMaterialId          = null
     this.initialCode                = ''
     this.initialDescription         = ''  
     this.initialQty                 = 0
@@ -530,6 +533,7 @@ export class MaterialToMaterialComponent implements OnInit {
 
   clearFinals(){
     this.finalId                  = null
+    this.finalMaterialId          = null
     this.finalCode                = '' 
     this.finalDescription         = '' 
     this.finalQty                 = 0
@@ -581,7 +585,7 @@ export class MaterialToMaterialComponent implements OnInit {
       .toPromise()
       .then(
         data => {
-          this.initialId                  = data!.id
+          this.initialMaterialId          = data!.id
           this.initialCode                = data!.code
           this.initialDescription         = data!.description
           this.initialCostPriceVatExcl    = data!.costPriceVatExcl
@@ -603,7 +607,7 @@ export class MaterialToMaterialComponent implements OnInit {
       .toPromise()
       .then(
         data => {
-          this.initialId                  = data!.id
+          this.initialMaterialId          = data!.id
           this.initialCode                = data!.code
           this.initialDescription         = data!.description
           this.initialCostPriceVatExcl    = data!.costPriceVatExcl
@@ -632,7 +636,7 @@ export class MaterialToMaterialComponent implements OnInit {
       .toPromise()
       .then(
         data => {
-          this.finalId                  = data!.id
+          this.finalMaterialId          = data!.id
           this.finalCode                = data!.code
           this.finalDescription         = data!.description
           this.finalCostPriceVatExcl    = data!.costPriceVatExcl
@@ -654,7 +658,7 @@ export class MaterialToMaterialComponent implements OnInit {
       .toPromise()
       .then(
         data => {
-          this.finalId                  = data!.id
+          this.finalMaterialId          = data!.id
           this.finalCode                = data!.code
           this.finalDescription         = data!.description
           this.finalCostPriceVatExcl    = data!.costPriceVatExcl
@@ -683,10 +687,11 @@ export class MaterialToMaterialComponent implements OnInit {
     .toPromise()
     .then(
       data => {
-        this.initialId = data!.id
-        this.initialCode = data!.material.code
+        this.initialId          = data!.id
+        this.initialMaterialId  = data!.material.id
+        this.initialCode        = data!.material.code
         this.initialDescription = data!.material.description
-        this.initialQty = data!.qty
+        this.initialQty         = data!.qty
       }
     )
     .catch(error => {
@@ -719,10 +724,11 @@ export class MaterialToMaterialComponent implements OnInit {
     .toPromise()
     .then(
       data => {
-        this.finalId = data!.id
-        this.finalCode = data!.material.code
+        this.finalId          = data!.id
+        this.finalMaterialId  = data!.material.id
+        this.finalCode        = data!.material.code
         this.finalDescription = data!.material.description
-        this.finalQty = data!.qty
+        this.finalQty         = data!.qty
       }
     )
     .catch(error => {

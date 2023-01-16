@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -43,6 +44,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {		
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
 	}
+	
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+	    web.ignoring().antMatchers("/api/auth/**","/v2/api-docs","/wms/**", 
+	            "/configuration/ui", 
+	            "/swagger-resources", 
+	            "/configuration/security",
+	            "/swagger-ui.html", 
+	            "/webjars/**",
+	            "/favicon.ico",
+	            "/**/*.png",
+	            "/**/*.gif",
+	            "/**/*.svg",
+	            "/**/*.jpg",
+	            "/**/*.html",
+	            "/**/*.css",
+	            "/**/*.js");
+	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -58,7 +77,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 		.antMatchers("/swagger-ui.html").permitAll()
 		.antMatchers("/swagger-ui").permitAll()
 		.antMatchers("/api/login/**").permitAll()
-		.antMatchers("/api/token/refresh/**").permitAll();		
+		.antMatchers("/api/token/refresh/**").permitAll()	
+		.antMatchers("/wms/**").permitAll();
 		//Private endpoints
 		//.anyRequest().authenticated();
 		

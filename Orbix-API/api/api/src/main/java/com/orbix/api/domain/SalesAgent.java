@@ -50,4 +50,9 @@ public class SalesAgent {
 	private String mobile;
 	private String email;
 	private String fax;
+	
+	@Column(unique = true)
+	private String passName;
+	@Column(unique = true)
+	private String passCode;
 }

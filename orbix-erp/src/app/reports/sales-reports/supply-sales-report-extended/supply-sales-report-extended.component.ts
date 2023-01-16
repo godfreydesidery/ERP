@@ -41,6 +41,12 @@ export class SupplySalesReportExtendedComponent implements OnInit {
 
   supplierNames : string[] = []
 
+  salesAgentId    : any
+  salesAgentNo  : string = ''
+  salesAgentName  : string = ''
+
+  salesAgentNames : string[] = []
+
   report : ISupplySalesReport[] = []
 
   totalAmount : number = 0
@@ -65,7 +71,20 @@ export class SupplySalesReportExtendedComponent implements OnInit {
     this.logo = await this.data.getLogo() 
     this.address = await this.data.getAddress()
     this.loadSupplierNames()
+    this.loadSalesAgentNames()
     this.loadProductDescriptions()
+  }
+
+  clearSupplier(){
+    this.supplierId   = null
+    this.supplierCode = ''
+    this.supplierName = ''
+  }
+
+  clearSalesAgent(){
+    this.salesAgentId   = null
+    this.salesAgentNo   = ''
+    this.salesAgentName = ''
   }
   
   async loadSupplierNames(){
@@ -90,6 +109,28 @@ export class SupplySalesReportExtendedComponent implements OnInit {
     )
   }
 
+  async loadSalesAgentNames(){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<string[]>(API_URL+'/sales_agents/get_names', options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        this.salesAgentNames = []
+        data?.forEach(element => {
+          this.salesAgentNames.push(element)
+        })
+      },
+      error => {
+        console.log(error)
+        alert('Could not load agent names')
+      }
+    )
+  }
+
   refresh(){
     this.totalAmount = 0
     this.report.forEach(element => {
@@ -98,7 +139,7 @@ export class SupplySalesReportExtendedComponent implements OnInit {
   }
 
 
-  async getSupplySalesReport(from: Date, to: Date, supplierName : string) {
+  async getSupplySalesReport(from: Date, to: Date, supplierName : string, salesAgentName : string) {
     if(from == null || to == null){
       alert('Could not run report, please select date range')
       return
@@ -113,6 +154,7 @@ export class SupplySalesReportExtendedComponent implements OnInit {
     var args = {
       from : from,
       to   : to,
+      salesAgentName : salesAgentName,
       supplier : {
         name : supplierName
       },
@@ -397,6 +439,10 @@ export class SupplySalesReportExtendedComponent implements OnInit {
                 [
                   {text : 'Supplier', fontSize : 9}, 
                   {text : supp, fontSize : 9} 
+                ],
+                [
+                  {text : 'Agent/Route', fontSize : 9}, 
+                  {text : this.salesAgentName, fontSize : 9} 
                 ],
               ]
             },

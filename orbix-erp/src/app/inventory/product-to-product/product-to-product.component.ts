@@ -39,6 +39,7 @@ export class ProductToProductComponent implements OnInit {
 
   //initials
   initialId                  : any
+  initialProductId           : any
   initialBarcode             : string
   initialCode                : any
   initialDescription         : any
@@ -53,6 +54,7 @@ export class ProductToProductComponent implements OnInit {
 
   //finals
   finalId                  : any
+  finalProductId           : any
   finalBarcode             : string
   finalCode                : any
   finalDescription         : any
@@ -84,6 +86,7 @@ export class ProductToProductComponent implements OnInit {
     this.productToProductFinals   = []
 
     this.initialId                  = null
+    this.initialProductId           = null
     this.initialBarcode             = ''
     this.initialCode                = ''  
     this.initialQty                 = 0
@@ -94,6 +97,7 @@ export class ProductToProductComponent implements OnInit {
     this.initialSellingPriceVatIncl = 0
 
     this.finalId                  = null
+    this.finalProductId           = null
     this.finalBarcode             = ''
     this.finalCode                = ''  
     this.finalQty                 = 0
@@ -316,9 +320,9 @@ export class ProductToProductComponent implements OnInit {
         headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
       }   
       var detail = {
-        //id : this.initialId,
+        id : this.initialId,
         productToProduct : {id : this.id},
-        product : {id : this.initialId},
+        product : {id : this.initialProductId},
         qty : this.initialQty
       }
       this.spinner.show()
@@ -361,9 +365,9 @@ export class ProductToProductComponent implements OnInit {
         headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
       }   
       var detail = {
-        //id : this.finalId,
+        id : this.finalId,
         productToProduct : {id : this.id},
-        product : {id : this.finalId},
+        product : {id : this.finalProductId},
         qty : this.finalQty
       }
       this.spinner.show()
@@ -523,6 +527,7 @@ export class ProductToProductComponent implements OnInit {
 
   clearInitials(){
     this.initialId                  = null
+    this.initialProductId           = null
     this.initialBarcode             = ''
     this.initialCode                = ''
     this.initialDescription         = ''  
@@ -536,6 +541,7 @@ export class ProductToProductComponent implements OnInit {
 
   clearFinals(){
     this.finalId                  = null
+    this.finalProductId           = null
     this.finalBarcode             = ''
     this.finalCode                = '' 
     this.finalDescription         = '' 
@@ -589,7 +595,7 @@ export class ProductToProductComponent implements OnInit {
       .toPromise()
       .then(
         data => {
-          this.initialId                  = data!.id
+          this.initialProductId           = data!.id
           this.initialBarcode             = data!.barcode
           this.initialCode                = data!.code
           this.initialDescription         = data!.description
@@ -613,7 +619,7 @@ export class ProductToProductComponent implements OnInit {
       .toPromise()
       .then(
         data => {
-          this.initialId                  = data!.id
+          this.initialProductId           = data!.id
           this.initialBarcode             = data!.barcode
           this.initialCode                = data!.code
           this.initialDescription         = data!.description
@@ -638,7 +644,7 @@ export class ProductToProductComponent implements OnInit {
       .toPromise()
       .then(
         data => {
-          this.initialId                  = data!.id
+          this.initialProductId           = data!.id
           this.initialBarcode             = data!.barcode
           this.initialCode                = data!.code
           this.initialDescription         = data!.description
@@ -671,7 +677,7 @@ export class ProductToProductComponent implements OnInit {
       .toPromise()
       .then(
         data => {
-          this.finalId                  = data!.id
+          this.finalProductId           = data!.id
           this.finalBarcode             = data!.barcode
           this.finalCode                = data!.code
           this.finalDescription         = data!.description
@@ -695,7 +701,7 @@ export class ProductToProductComponent implements OnInit {
       .toPromise()
       .then(
         data => {
-          this.finalId                  = data!.id
+          this.finalProductId           = data!.id
           this.finalBarcode             = data!.barcode
           this.finalCode                = data!.code
           this.finalDescription         = data!.description
@@ -720,7 +726,7 @@ export class ProductToProductComponent implements OnInit {
       .toPromise()
       .then(
         data => {
-          this.finalId                  = data!.id
+          this.finalProductId           = data!.id
           this.finalBarcode             = data!.barcode
           this.finalCode                = data!.code
           this.finalDescription         = data!.description
@@ -752,11 +758,12 @@ export class ProductToProductComponent implements OnInit {
     .toPromise()
     .then(
       data => {
-        this.initialId = data!.id
-        this.initialBarcode = data!.product.barcode
-        this.initialCode = data!.product.code
+        this.initialId          = data!.id
+        this.initialProductId   = data!.product.id
+        this.initialBarcode     = data!.product.barcode
+        this.initialCode        = data!.product.code
         this.initialDescription = data!.product.description
-        this.initialQty = data!.qty
+        this.initialQty         = data!.qty
       }
     )
     .catch(error => {
@@ -789,11 +796,12 @@ export class ProductToProductComponent implements OnInit {
     .toPromise()
     .then(
       data => {
-        this.finalId = data!.id
-        this.finalBarcode = data!.product.barcode
-        this.finalCode = data!.product.code
+        this.finalId          = data!.id
+        this.finalProductId   = data!.product.id
+        this.finalBarcode     = data!.product.barcode
+        this.finalCode        = data!.product.code
         this.finalDescription = data!.product.description
-        this.finalQty = data!.qty
+        this.finalQty         = data!.qty
       }
     )
     .catch(error => {

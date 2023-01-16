@@ -41,6 +41,9 @@ export class SalesAgentComponent implements OnInit {
   email               : string
   fax                 : string
 
+  passName            : string
+  passCode            : string
+
   salesAgents : ISalesAgent[] = []
   names     : string[] =[]
 
@@ -65,6 +68,9 @@ export class SalesAgentComponent implements OnInit {
     this.mobile              = ''
     this.email               = ''
     this.fax                 = ''
+
+    this.passName            = ''
+    this.passCode            = ''
   }
   ngOnInit(): void {
     this.getAll()
@@ -97,7 +103,9 @@ export class SalesAgentComponent implements OnInit {
       telephone           : this.telephone,
       mobile              : this.mobile,
       email               : this.email,
-      fax                 : this.fax
+      fax                 : this.fax,
+      passName            : this.passName,
+      passCode            : this.passCode
     }
     
     let options = {
@@ -169,6 +177,9 @@ export class SalesAgentComponent implements OnInit {
     this.mobile              = salesAgent['mobile']
     this.email               = salesAgent['email']
     this.fax                 = salesAgent['fax']
+    this.passName            = salesAgent['passName']
+    this.passCode            = salesAgent['passCode']
+
   }
   validateInputs() : boolean{
     let valid : boolean = true
@@ -198,6 +209,8 @@ export class SalesAgentComponent implements OnInit {
     this.mobile = ''
     this.email = ''
     this.fax = ''
+    this.passName = ''
+    this.passCode = ''
     this.unlockAll()
     if (this.id == null || this.id == '') {
       this.noLocked = true
@@ -409,6 +422,9 @@ export interface ISalesAgent {
   mobile : string
   email : string
   fax : string
+
+  passName : string
+  passCode : string
   
 
   save() : void

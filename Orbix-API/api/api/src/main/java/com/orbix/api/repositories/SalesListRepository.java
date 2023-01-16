@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.orbix.api.domain.PackingList;
+import com.orbix.api.domain.SalesAgent;
 import com.orbix.api.domain.SalesList;
 
 /**
@@ -29,5 +30,19 @@ public interface SalesListRepository extends JpaRepository<SalesList, Long> {
 	
 	@Query("SELECT s FROM SalesList s WHERE s.status =:status")
 	List<SalesList> findAllPosted(String status);
+
+	/**
+	 * @param salesListNo
+	 * @param salesAgent
+	 * @return
+	 */
+	Optional<SalesList> findByNoAndSalesAgent(String salesListNo, SalesAgent salesAgent);
+
+	/**
+	 * @param salesAgent
+	 * @param string
+	 * @return
+	 */
+	List<SalesList> findBySalesAgentAndStatus(SalesAgent salesAgent, String string);
 
 }
