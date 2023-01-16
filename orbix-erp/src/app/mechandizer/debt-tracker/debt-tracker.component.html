@@ -39,7 +39,17 @@
                                             <td style="text-align: right;"><small>{{d.balance | currency:'':''}}</small></td>
                                             <td><small>{{d.status}}</small></td>
                                             <td><button (click)="openPay(contentPay, '')" (click)="get(d.id)">Pay</button><button (click)="openHistory(history, '')" (click)="loadHistory(d.id)">History</button></td>
-                                            <!--<td><button (click)="open(content, '', '')" (click)="get(i.id)">Transfer to Debt Tracker</button></td>-->
+                                        </tr>
+                                        <tr>
+                                            <td><small></small></td>
+                                            <td><small></small></td>
+                                            <td><small></small></td>
+                                            <td><small></small></td>
+                                            <td style="text-align: right;"><small><b>{{totalAmountToPay | currency:'':''}}</b></small></td>
+                                            <td style="text-align: right;"><small><b>{{totalPaid | currency:'':''}}</b></small></td>
+                                            <td style="text-align: right;"><small><b>{{totalBalance | currency:'':''}}</b></small></td>
+                                            <td><small></small></td>
+                                            <td></td>
                                         </tr>
                                     </tbody>
                                 </table>

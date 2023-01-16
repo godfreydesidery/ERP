@@ -96,7 +96,7 @@ public class MaterialServiceImpl implements MaterialService {
 		if(!allowDelete(material)) {
 			throw new InvalidOperationException("Deleting this material is not allowed");
 		}
-		materialRepository.delete(material);
+		//materialRepository.delete(material);
 		return true;
 	}
 
@@ -110,7 +110,7 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 	
 	private boolean allowDelete(Material material) {
-		return true;
+		return false;
 	}
 	
 	@Override
@@ -125,7 +125,7 @@ public class MaterialServiceImpl implements MaterialService {
 			id = materialRepository.getLastId() + 1;
 		}catch(Exception e) {}
 		RecordModel model = new RecordModel();
-		model.setCode("MC"+Formater.formatNine(id.toString()));
+		model.setCode("MT"+id.toString());
 		return model;
 	}	
 

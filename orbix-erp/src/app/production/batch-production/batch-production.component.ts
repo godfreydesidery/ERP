@@ -539,6 +539,7 @@ export class BatchProductionComponent implements OnInit {
     .toPromise()
     .then(
       data => {
+        console.log(data)
         data?.forEach(element => {
           this.productions.push(element)
         })

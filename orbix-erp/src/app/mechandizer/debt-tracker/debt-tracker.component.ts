@@ -31,6 +31,10 @@ export class DebtTrackerComponent implements OnInit {
 
   histories : IHistory[] = []
 
+  totalAmountToPay   : number = 0
+  totalPaid    : number = 0
+  totalBalance : number = 0
+
 
   closeResult    : string = ''
   constructor(private auth : AuthService, 
@@ -52,6 +56,7 @@ export class DebtTrackerComponent implements OnInit {
   
   
   async getAll(): Promise<void> {
+    this.totalBalance = 0;
     this.debtTrackers = []
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer ' + this.auth.user.access_token)
@@ -66,6 +71,9 @@ export class DebtTrackerComponent implements OnInit {
           data?.forEach(
             element => {
               this.debtTrackers.push(element)
+              this.totalAmountToPay = this.totalAmountToPay + element.amount
+              this.totalPaid = this.totalPaid + element.paid
+              this.totalBalance = this.totalBalance + element.balance
             }
           )
         }
@@ -181,7 +189,6 @@ export class DebtTrackerComponent implements OnInit {
     .toPromise()
     .then(
       data => {
-        console.log(data)
         data?.forEach(element => {
           this.histories!.push(element)
         })

@@ -651,7 +651,7 @@ public class ProductionServiceImpl implements ProductionService {
 	public boolean removeProduct(Production production, Product product) {
 		Optional<ProductionUnverifiedProduct> prod = productionUnverifiedProductRepository.findByProductionAndProduct(production, product);
 		if(prod.isPresent()) {
-			productionUnverifiedProductRepository.delete(prod.get());
+			//productionUnverifiedProductRepository.delete(prod.get());
 			return true;
 		}
 		return false;
@@ -676,7 +676,7 @@ public class ProductionServiceImpl implements ProductionService {
 	}
 	
 	private boolean allowDelete(Production production) {
-		return true;
+		return false;
 	}
 	
 	
@@ -708,6 +708,7 @@ public class ProductionServiceImpl implements ProductionService {
 			ProductionModel model = new ProductionModel();
 			model.setId(p.getId());
 			model.setNo(p.getNo());
+			model.setBatchNo(p.getBatchNo());
 			model.setStatus(p.getStatus());
 			model.setComments(p.getComments());
 			if(p.getCreatedAt() != null && p.getCreatedBy() != null) {
