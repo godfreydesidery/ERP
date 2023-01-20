@@ -295,6 +295,8 @@ public class SalesListResource {
 		detail.setId(d.get().getId());
 		detail.setProduct((d.get().getProduct()));
 		detail.setTotalPacked((d.get().getTotalPacked()));
+		detail.setCostPriceVatIncl((d.get().getCostPriceVatIncl()));
+		detail.setCostPriceVatExcl((d.get().getCostPriceVatExcl()));
 		detail.setSellingPriceVatIncl((d.get().getSellingPriceVatIncl()));
 		detail.setSellingPriceVatExcl((d.get().getSellingPriceVatExcl()));
 		detail.setQtySold((d.get().getQtySold()));

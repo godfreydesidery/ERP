@@ -614,14 +614,14 @@ export class PackingListComponent implements OnInit {
     }
   }
 
-  searchProduct(barcode : string, code : string, description : string){
+  async searchProduct(barcode : string, code : string, description : string){
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
     if(barcode != ''){
       //search by barcode
       this.spinner.show()
-      this.http.get<IProduct>(API_URL+'/products/get_by_barcode?barcode='+barcode, options)
+      await this.http.get<IProduct>(API_URL+'/products/get_by_barcode?barcode='+barcode, options)
       .pipe(finalize(() => this.spinner.hide()))
       .toPromise()
       .then(
@@ -641,7 +641,7 @@ export class PackingListComponent implements OnInit {
       })
     }else if(code != ''){
       this.spinner.show()
-      this.http.get<IProduct>(API_URL+'/products/get_by_code?code='+code, options)
+      await this.http.get<IProduct>(API_URL+'/products/get_by_code?code='+code, options)
       .pipe(finalize(() => this.spinner.hide()))
       .toPromise()
       .then(
@@ -663,7 +663,7 @@ export class PackingListComponent implements OnInit {
     }else{
       //search by description
       this.spinner.show()
-      this.http.get<IProduct>(API_URL+'/products/get_by_description?description='+description, options)
+      await this.http.get<IProduct>(API_URL+'/products/get_by_description?description='+description, options)
       .pipe(finalize(() => this.spinner.hide()))
       .toPromise()
       .then(
@@ -684,12 +684,12 @@ export class PackingListComponent implements OnInit {
     }
   }
 
-  searchDetail(productId : any, detailId :any){    
+  async searchDetail(productId : any, detailId :any){    
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
     this.spinner.show()
-    this.http.get<IProduct>(API_URL+'/products/get?id='+productId, options)
+    await this.http.get<IProduct>(API_URL+'/products/get?id='+productId, options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
@@ -704,14 +704,12 @@ export class PackingListComponent implements OnInit {
       ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load product')
     })
     this.spinner.show()
-    this.http.get<IPackingListDetail>(API_URL+'/packing_list_details/get?id='+detailId, options)
+    await this.http.get<IPackingListDetail>(API_URL+'/packing_list_details/get?id='+detailId, options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       data => {
         this.detailId = data!.id
-        this.sellingPriceVatIncl = data!.sellingPriceVatIncl
-        this.sellingPriceVatExcl = data!.sellingPriceVatExcl
         this.previousReturns     = data!.previousReturns
         this.qtyIssued           = data!.qtyIssued
         this.totalPacked         = data!.totalPacked

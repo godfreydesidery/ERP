@@ -479,7 +479,7 @@ export class SalesListComponent implements OnInit {
           this.salesLists.push(element)
         })
       }
-    )
+    ).catch(error => {console.log(error)})
   }
 
   async archive(id: any) {
@@ -600,14 +600,14 @@ export class SalesListComponent implements OnInit {
     }
   }
 
-  searchProduct(barcode : string, code : string, description : string){
+  async searchProduct(barcode : string, code : string, description : string){
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
     if(barcode != ''){
       //search by barcode
       this.spinner.show()
-      this.http.get<IProduct>(API_URL+'/products/get_by_barcode?barcode='+barcode, options)
+      await this.http.get<IProduct>(API_URL+'/products/get_by_barcode?barcode='+barcode, options)
       .pipe(finalize(() => this.spinner.hide()))
       .toPromise()
       .then(
@@ -627,7 +627,7 @@ export class SalesListComponent implements OnInit {
       })
     }else if(code != ''){
       this.spinner.show()
-      this.http.get<IProduct>(API_URL+'/products/get_by_code?code='+code, options)
+      await this.http.get<IProduct>(API_URL+'/products/get_by_code?code='+code, options)
       .pipe(finalize(() => this.spinner.hide()))
       .toPromise()
       .then(
@@ -649,7 +649,7 @@ export class SalesListComponent implements OnInit {
     }else{
       //search by description
       this.spinner.show()
-      this.http.get<IProduct>(API_URL+'/products/get_by_description?description='+description, options)
+      await this.http.get<IProduct>(API_URL+'/products/get_by_description?description='+description, options)
       .pipe(finalize(() => this.spinner.hide()))
       .toPromise()
       .then(
@@ -670,12 +670,12 @@ export class SalesListComponent implements OnInit {
     }
   }
 
-  searchDetail(productId : any, detailId :any){    
+  async searchDetail(productId : any, detailId :any){    
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
     this.spinner.show()
-    this.http.get<IProduct>(API_URL+'/products/get?id='+productId, options)
+    await this.http.get<IProduct>(API_URL+'/products/get?id='+productId, options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
@@ -690,7 +690,7 @@ export class SalesListComponent implements OnInit {
       ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load product')
     })
     this.spinner.show()
-    this.http.get<ISalesListDetail>(API_URL+'/sales_list_details/get?id='+detailId, options)
+    await this.http.get<ISalesListDetail>(API_URL+'/sales_list_details/get?id='+detailId, options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
@@ -1089,6 +1089,189 @@ export class SalesListComponent implements OnInit {
       totalCash         = ''
       totalDeficit      = ''
     }
+
+    const docDefinition = {
+      header: '',
+      watermark : { text : this.companyName, color: 'blue', opacity: 0.1, bold: true, italics: false },
+        content : [
+          {
+            columns : 
+            [
+              logo,
+              {width : 10, columns : [[]]},
+              {
+                width : 300,
+                columns : [
+                  this.address
+                ]
+              },
+            ]
+          },
+          '  ',
+          '  ',
+          {text : title, fontSize : 12, bold : true},
+          '  ',
+          {
+            layout : 'noBorders',
+            table : {
+              widths : [75, 300],
+              body : [
+                [
+                  {text : 'Issue No', fontSize : 9}, 
+                  {text : this.no, fontSize : 9} 
+                ],
+                [
+                  {text : 'Issue Date', fontSize : 9}, 
+                  {text : this.datepipe.transform(this.issueDate, 'yyyy-MM-dd') , fontSize : 9} 
+                ],
+                [
+                  {text : 'Sales Officer', fontSize : 9}, 
+                  {text : this.salesAgentName, fontSize : 9} 
+                ],
+                [
+                  {text : 'Customer', fontSize : 9}, 
+                  {text : this.customerName, fontSize : 9} 
+                ],
+                [
+                  {text : 'Status', fontSize : 9}, 
+                  {text : this.status, fontSize : 9} 
+                ]
+              ]
+            },
+          },
+          '  ',
+          {
+            table : {
+                headerRows : 1,
+                widths : ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+                body : report
+            }
+        },
+        ' ',
+        ' ',
+        {text : 'Summary', fontSize : 10, bold : true},
+        {
+          layout: 'lightHorizontalLines',
+          table : {
+            widths : [100, 200],
+            body : [
+              [
+                {text : 'Issue No', fontSize : 9}, 
+                {text : this.no, fontSize : 9} 
+              ],
+              [
+                {text : 'Total Packed', fontSize : 9}, 
+                {text : this.totalAmountPacked.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Total Sales', fontSize : 9}, 
+                {text : totalSales, fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Total Offer/Giveaway', fontSize : 9}, 
+                {text : totalOffered, fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Total Returns', fontSize : 9}, 
+                {text : totalReturns, fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Total Damages', fontSize : 9}, 
+                {text : totalDamages, fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Total Discounts', fontSize : 9}, 
+                {text : totalDiscounts, fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Total Expenditures', fontSize : 9}, 
+                {text : totalExpenditures, fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Total Bank', fontSize : 9}, 
+                {text : totalBank, fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Total Cash', fontSize : 9}, 
+                {text : totalCash, fontSize : 9, alignment : 'right'} 
+              ],
+              [
+                {text : 'Total Deficit', fontSize : 9}, 
+                {text : totalDeficit, fontSize : 9, alignment : 'right'} 
+              ]
+            ]
+          }         
+        },
+        ' ',
+        ' ',
+        ' ',
+        'Verified ____________________________________', 
+        ' ',
+        ' ',
+        'Approved __________________________________',             
+      ]     
+    };
+    pdfMake.createPdf(docDefinition).open();
+  }
+
+  exportToPdfX = () => {
+    if(this.id == '' || this.id == null){
+      return
+    }
+    var header = ''
+    var footer = ''
+    var title  = ''
+    var logo : any = ''
+    if(this.status == 'PENDING' || this.status == 'APPROVED' || this.status == 'CANCELED'){
+      title = 'Sales List and Returns - Extended'
+    }else{
+      title = 'Sales and Returns'
+    }
+    if(this.logo == ''){
+      logo = { text : '', width : 70, height : 70, absolutePosition : {x : 40, y : 40}}
+    }else{
+      logo = {image : this.logo, width : 70, height : 70, absolutePosition : {x : 40, y : 40}}
+    }
+    var report = [
+      [
+        {text : 'Code', fontSize : 9}, 
+        {text : 'Description', fontSize : 9}, 
+        {text : 'Price', fontSize : 9}, 
+        {text : 'Total', fontSize : 9}, 
+        {text : 'Sold_____', fontSize : 9}, 
+        {text : 'Offered__', fontSize : 9}, 
+        {text : 'Returned_', fontSize : 9}, 
+        {text : 'Damaged__', fontSize : 9}
+      ]
+    ]   
+    this.salesListDetails.forEach((element) => {
+      var qtySold     : string = element.qtySold.toString()
+      var qtyOffered  : string = element.qtyOffered.toString()
+      var qtyReturned : string = element.qtyReturned.toString()
+      var qtyDamaged  : string = element.qtyDamaged.toString()
+      
+      var detail = [
+        {text : element.product.code.toString(), fontSize : 9}, 
+        {text : element.product.description.toString(), fontSize : 9}, 
+        {text : element.sellingPriceVatIncl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'},  
+        {text : element.totalPacked.toString(), fontSize : 9}, 
+        {text : qtySold, fontSize : 9}, 
+        {text : qtyOffered, fontSize : 9}, 
+        {text : qtyReturned, fontSize : 9}, 
+        {text : qtyDamaged, fontSize : 9}
+      ]
+      report.push(detail)
+    })
+
+    var totalSales = this.totalSales.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalOffered = this.totalOffered.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalReturns = this.totalReturns.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalDamages = this.totalDamages.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalDiscounts = this.totalDiscounts.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalExpenditures = this.totalExpenditures.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalBank = this.totalBank.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalCash = this.totalCash.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalDeficit = this.totalDeficit.toLocaleString('en-US', { minimumFractionDigits: 2 })
 
     const docDefinition = {
       header: '',
