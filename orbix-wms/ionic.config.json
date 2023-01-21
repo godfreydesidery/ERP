@@ -1,0 +1,7 @@
+{
+  "name": "ORBIX-WMS",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

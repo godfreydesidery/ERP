@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <br><br><br><br>
+  <ion-card>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-input style="text-align: center;" placeholder="PASS NAME" [(ngModel)]="passName"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input style="text-align: center;" placeholder="PASS CODE" [(ngModel)]="passCode"></ion-input>
+        </ion-item>
+      </ion-list>
+      <br><br>
+      <ion-button color="primary" expand="full" (click)="login()">Log In</ion-button>
+      <ion-button color="danger" expand="full" (click)="reset()">Reset</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  
+
+</ion-content>
