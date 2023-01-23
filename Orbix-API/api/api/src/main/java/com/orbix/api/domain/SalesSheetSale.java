@@ -40,6 +40,7 @@ public class SalesSheetSale {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	@NotBlank
 	@Column(unique = true)
 	private String no;
@@ -49,15 +50,14 @@ public class SalesSheetSale {
 	private double totalPaid = 0;
 	private double totalDue = 0;
 	
+	private String customerName = "";
+	private String customerMobile = "";
+	private String customerLocation = "";
+		
 	@ManyToOne(targetEntity = SalesSheet.class, fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "sales_sheet_id", nullable = true , updatable = true)
     @OnDelete(action = OnDeleteAction.NO_ACTION)	
     private SalesSheet salesSheet;
-	
-	@ManyToOne(targetEntity = Customer.class, fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name = "customer_id", nullable = true , updatable = true)
-    @OnDelete(action = OnDeleteAction.NO_ACTION)	
-    private Customer customer;
 	
 	@OneToMany(targetEntity = SalesSheetSaleDetail.class, mappedBy = "salesSheetSale", fetch = FetchType.EAGER, orphanRemoval = true)
     @Valid

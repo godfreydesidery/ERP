@@ -63,8 +63,14 @@ export class AuthService {
         let currentUser : {
           passName      : string, 
           access_token  : string, 
-          refresh_token : string
+          refresh_token : string,
+          salesAgentName : string
         } = JSON.parse(localStorage.getItem('current-user')!)
+
+        let sn : {
+          salesAgentName : string
+        } = JSON.parse(localStorage.getItem('current-user')!)
+        localStorage.setItem('sales-agent-name', sn.salesAgentName)
 
         if(this.tokenExpired(currentUser.access_token)){
           //should clear user information

@@ -420,9 +420,11 @@ export class SalesListComponent implements OnInit {
       /**
        * Enter Sales List Detail
        */
+
       let options = {
         headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
-      }   
+      }  
+      
       var detail = {
         salesList           : {id : this.id},
         product             : {id : this.productId, code : this.code},
@@ -777,7 +779,11 @@ export class SalesListComponent implements OnInit {
      */
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
-    }  
+    } 
+    if(this.costPriceVatExcl == 0 && this.costPriceVatIncl == 0 && this.sellingPriceVatExcl == 0 && this.sellingPriceVatIncl == 0){
+      alert('Could not save detail, invalid price values')
+      return
+    }   
     var detail = {
       salesList           : {id : this.id},
       product             : {id : this.productId, code : this.code},

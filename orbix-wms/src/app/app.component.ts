@@ -7,8 +7,7 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit {
 
-  public agentName : string = ''
-
+salesAgentName : string = ''
   public appPages = [
     { title: 'Home', url: '/home', icon: 'home' },
     { title: 'Sale', url: '/sale', icon: 'paper-plane' },
@@ -20,6 +19,8 @@ export class AppComponent implements OnInit {
   ];
   public labels = [];
   //public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+
+  
   constructor(
     private router: Router
   ) {}
@@ -35,8 +36,10 @@ export class AppComponent implements OnInit {
       localStorage.setItem('logged-in', 'false')
       await this.router.navigate([''])
     }
-    if(localStorage.getItem('agent-name') != null){
-      this.agentName = localStorage.getItem('agent-name')!
+    if(localStorage.getItem('sales-agent-name') == null){
+      this.salesAgentName = ''
+    }else{
+      this.salesAgentName = localStorage.getItem('sales-agent-name')!
     }
     
   }

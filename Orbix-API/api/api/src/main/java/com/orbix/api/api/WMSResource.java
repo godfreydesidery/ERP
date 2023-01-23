@@ -24,6 +24,7 @@ import com.orbix.api.models.LAgentModel;
 import com.orbix.api.models.LCustomerModel;
 import com.orbix.api.models.LProductModel;
 import com.orbix.api.models.LSalesListObjectModel;
+import com.orbix.api.models.WMSSalesModel;
 import com.orbix.api.repositories.VatGroupRepository;
 import com.orbix.api.service.SalesAgentService;
 import com.orbix.api.service.VatGroupService;
@@ -62,5 +63,13 @@ public class WMSResource {
 		}
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/wms/wms_load_available_products").toUriString());
 		return ResponseEntity.created(uri).body(salesAgentService.passIn(agent.getPassName(), agent.getPassCode()));
+	}
+	
+	@PostMapping("/wms_sale/confirm")
+	public Object confirmSale(
+			@RequestBody WMSSalesModel sale){
+		
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/wms/wms_sale/confirm").toUriString());
+		return salesAgentService.confirmSale(sale);
 	}
 }

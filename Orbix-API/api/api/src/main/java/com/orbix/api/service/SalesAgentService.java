@@ -11,6 +11,7 @@ import com.orbix.api.models.LCustomerModel;
 import com.orbix.api.models.LProductModel;
 import com.orbix.api.models.LSalesListObjectModel;
 import com.orbix.api.models.RecordModel;
+import com.orbix.api.models.WMSSalesModel;
 
 /**
  * @author Godfrey
@@ -29,4 +30,6 @@ public interface SalesAgentService {
 	LSalesListObjectModel passIn(String passName, String passCode);
 	List<LCustomerModel> loadCustomers();
 	List<LProductModel> loadAvailableProducts(String salesListNo, Long salesAgentId);
+	
+	Object confirmSale(WMSSalesModel sale);
 }

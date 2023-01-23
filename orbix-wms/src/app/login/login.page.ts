@@ -69,6 +69,7 @@ export class LoginPage implements OnInit {
           this.router.navigate([''])
           location.reload()
           
+          
         }
       )
       .catch(async error => {

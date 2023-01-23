@@ -443,7 +443,11 @@ export class PackingListComponent implements OnInit {
       costPriceVatExcl    : this.costPriceVatExcl,
       sellingPriceVatIncl : this.sellingPriceVatIncl,
       sellingPriceVatExcl : this.sellingPriceVatExcl
-    }      
+    }  
+    if(this.costPriceVatExcl == 0 && this.costPriceVatIncl == 0 && this.sellingPriceVatExcl == 0 && this.sellingPriceVatIncl == 0){
+      alert('Could not save detail, invalid price values')
+      return
+    }    
     this.spinner.show()
     await this.http.post(API_URL+'/packing_list_details/save', detail, options)
     .pipe(finalize(() => this.spinner.hide()))

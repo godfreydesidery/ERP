@@ -18,6 +18,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.orbix.api.accessories.Formater;
 import com.orbix.api.domain.Customer;
+import com.orbix.api.domain.Product;
 import com.orbix.api.domain.SalesAgent;
 import com.orbix.api.domain.SalesList;
 import com.orbix.api.domain.SalesListDetail;
@@ -31,11 +32,16 @@ import com.orbix.api.models.LCustomerModel;
 import com.orbix.api.models.LProductModel;
 import com.orbix.api.models.LSalesListObjectModel;
 import com.orbix.api.models.RecordModel;
+import com.orbix.api.models.WMSProductModel;
+import com.orbix.api.models.WMSSalesModel;
 import com.orbix.api.repositories.CustomerRepository;
 import com.orbix.api.repositories.EmployeeRepository;
+import com.orbix.api.repositories.ProductRepository;
 import com.orbix.api.repositories.SalesAgentRepository;
 import com.orbix.api.repositories.SalesListRepository;
 import com.orbix.api.repositories.SalesSheetRepository;
+import com.orbix.api.repositories.SalesSheetSaleDetailRepository;
+import com.orbix.api.repositories.SalesSheetSaleRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +59,9 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 	private final CustomerRepository customerRepository;
 	private final SalesListRepository salesListRepository;
 	private final SalesSheetRepository salesSheetRepository;
+	private final SalesSheetSaleRepository salesSheetSaleRepository;
+	private final SalesSheetSaleDetailRepository salesSheetSaleDetailRepository;
+	private final ProductRepository productRepository;
 
 	@Override
 	public SalesAgent save(SalesAgent salesAgent) {
@@ -179,6 +188,7 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 				.sign(algorithm);
 		
 		obj.setSalesAgentId(s.get().getId());
+		obj.setSalesAgentName(s.get().getName());
 		obj.setSalesListNo(agentNos);
 		obj.setAccessToken(access_token);
 		
@@ -234,7 +244,7 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 			pm.setId(x.getProduct().getId());
 			pm.setBarcode(x.getProduct().getBarcode());
 			pm.setCode(x.getProduct().getCode());
-			pm.setDescription(x.getProduct().getDescription());
+			pm.setDescription(x.getProduct().getDescription().trim());
 			pm.setPrice(x.getSellingPriceVatIncl());
 			pm.setAvailable(x.getTotalPacked());
 			for(SalesSheetSaleDetail y : sssd) {
@@ -248,5 +258,42 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 		}
 		
 		return l;
+	}
+
+	@Override
+	public Object confirmSale(WMSSalesModel saleModel) {
+		Optional<SalesList> l = salesListRepository.findByNo(saleModel.getSalesListNo());
+		if(!l.isPresent()) {
+			throw new NotFoundException("Operation failed, corresponding sales list not found");
+		}
+		Optional<SalesSheet> s = salesSheetRepository.findBySalesList(l.get());
+		if(!s.isPresent()) {
+			throw new NotFoundException("Operation failed, sales sheet not found");
+		}
+		SalesSheet sheet = salesSheetRepository.saveAndFlush(s.get());
+		
+		SalesSheetSale sale = new SalesSheetSale();
+		sale.setNo(saleModel.getNo());
+		sale.setCustomerName(saleModel.getCustomerName());
+		sale.setCustomerMobile(saleModel.getCustomerMobile());
+		sale.setCustomerLocation(saleModel.getCustomerLocation());
+		sale.setSalesSheet(sheet);
+		sale = salesSheetSaleRepository.saveAndFlush(sale);
+		
+		List<WMSProductModel> products = saleModel.getProducts();
+		for(WMSProductModel p : products) {
+			Optional<Product> pr = productRepository.findById(p.getId());
+			if(!pr.isPresent()) {
+				continue;
+			}
+			SalesSheetSaleDetail sd = new SalesSheetSaleDetail();
+			sd.setProduct(pr.get());
+			sd.setQty(p.getQty());
+			sd.setSellingPriceVatIncl(p.getSellingPriceVatIncl());
+			sd.setSalesSheetSale(sale);
+			salesSheetSaleDetailRepository.saveAndFlush(sd);
+		}
+		return products;
+		
 	}	
 }

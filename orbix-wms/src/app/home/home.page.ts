@@ -16,6 +16,8 @@ export class HomePage implements OnInit {
     if(localStorage.getItem('current-user') == null){
       this.router.navigate(['login'], {replaceUrl : true})
     }
+    
+
     this.showLists()
   }
 

@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 public class LSalesListObjectModel {
 	Long salesAgentId;
+	String salesAgentName;
 	String[] salesListNo;
 	String accessToken;
 }
