@@ -10,7 +10,7 @@
 <ion-content>
   <ion-header>
     <ion-toolbar>
-      <ion-title>{{customerName}} <span style="cursor: pointer;">[<ion-icon slot="start" name="pencil-sharp"></ion-icon>]</span></ion-title>
+      <ion-title> <span (click)="presentCustomerPopover($event)" style="cursor: pointer;">[<ion-icon slot="start" name="pencil-sharp"></ion-icon>]</span> {{customerName}}</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
@@ -21,7 +21,7 @@
           <ion-row>
             <ion-col>
               <b>{{p.qty}}</b> *  [{{p.code}}] {{p.description}} @{{p.sellingPriceVatIncl | currency:'':''}} = {{p.sellingPriceVatIncl*p.qty | currency:'':''}}
-              <span>[<ion-icon slot="start" name="pencil-sharp"></ion-icon>]</span>_____
+              <span (click)="presentEditPopover($event, p.id)" (click)="setRecordMode('edit')">[<ion-icon slot="start" name="pencil-sharp"></ion-icon>]</span>_____
               <span (click)="remove(p.id)">[<ion-icon slot="start" name="trash-sharp"></ion-icon>]</span>
             </ion-col>
           </ion-row>
@@ -47,14 +47,19 @@
             <ion-row>
               <ion-col size="6">Amount Paid: </ion-col>
               
-              <ion-col style="text-align: right;"><ion-input type="number" style="text-align: right;" [(ngModel)]="amountPaid" (ngModelChange)="calculateAmounts()" placeholder="Amount Paid"></ion-input></ion-col>
+              <ion-col style="text-align: right;"><ion-input type="number" style="text-align: right;" [(ngModel)]="amountPaid" placeholder="Amount Paid"></ion-input></ion-col>
             </ion-row>
             <ion-row>
-              <ion-col size="6">Amount Due: </ion-col>
+              <ion-col size="6">Discount: </ion-col>
+              
+              <ion-col style="text-align: right;"><ion-input type="number" style="text-align: right;" [(ngModel)]="discount" placeholder="Discount"></ion-input></ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="6"><button (click)="calculateAmounts()">Amount Due</button></ion-col>
               <ion-col style="text-align: right;">{{amountDue | currency:'':''}}</ion-col>
             </ion-row>
 
-            <ion-row *ngIf="amountDue === 0">
+            <ion-row *ngIf="totalAmount === (amountPaid + discount + amountDue)">
               <ion-col></ion-col>
               <ion-col><ion-button (click)="confirmSale()" size="medium" color="primary" expand="full"><ion-icon slot="start" name="save-sharp"></ion-icon>Confirm Sale</ion-button></ion-col>
               <ion-col></ion-col>
@@ -144,9 +149,6 @@
             </ion-row>
           </ion-grid>
 
-          
-
-
         </ion-content>
         <ion-footer>
           <ion-toolbar>
@@ -160,12 +162,144 @@
         </ion-footer>
       </ng-template>
     </ion-modal>
+
+    <ion-popover trigger="open-edit" triggerAction="click" size="auto">
+      <ng-template>
+        
+        <ion-content>
+          
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-input type="text" [(ngModel)]="customerLocation" style="text-align: center;" placeholder="Customer Location"></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
+
+    <ion-popover trigger="set-customer" triggerAction="click" size="auto">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title >Set Customer</ion-title>
+          </ion-toolbar>
+        </ion-header>
+
+        <ion-content>
+          
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-input type="text" [(ngModel)]="customerName" style="text-align: center;" placeholder="Customer Name"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input type="text" [(ngModel)]="customerMobile" style="text-align: center;" placeholder="Customer Mobile"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input type="text" [(ngModel)]="customerLocation" style="text-align: center;" placeholder="Customer Location"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-button (click)="dismissPopover($event)">Click Me</ion-button>
+                </ion-item>
+                
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
+
   </ion-content>
 
 
   <ion-fab slot="fixed" horizontal="left" vertical="bottom">
-    <ion-fab-button id="open-modal" expand="block" (click)="clearProduct()">
+    <ion-fab-button id="open-modal" expand="block" (click)="clearProduct()" (click)="setRecordMode('add')">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>
+
+
+<ion-popover #popover [isOpen]="isOpen" (didDismiss)="isOpen = false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title >Set Customer</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-input type="text" [(ngModel)]="customerName" style="text-align: center;" placeholder="Customer Name"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input type="text" [(ngModel)]="customerMobile" style="text-align: center;" placeholder="Customer Mobile"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input type="text" [(ngModel)]="customerLocation" style="text-align: center;" placeholder="Customer Location"></ion-input>
+            </ion-item>            
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-content>
+    <ion-footer>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="dismissCustomerPopover($event)">Set</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-footer>   
+  </ng-template>
+</ion-popover>
+
+
+<ion-popover #productPopover [isOpen]="isProductOpen" (didDismiss)="isProductOpen = false">
+  <ng-template style="width: auto;">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title >Edit Product</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-input type="text" [(ngModel)]="description" readonly="true"></ion-input>
+            </ion-item>
+            <ion-item>
+              Available : <ion-input type="text" [(ngModel)]="available" readonly="true"></ion-input>
+            </ion-item>
+            <ion-item>
+              <button (click)="decrement()">DEC</button><ion-input type="number" [(ngModel)]="qty" style="text-align: center;"></ion-input><button (click)="increment()">INC</button>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-content>
+    <ion-footer>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="confirmEditPopover($event, productId)">Update</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-footer>
+  </ng-template>
+</ion-popover>
+
+
+
+
+
+
+
+
+
+

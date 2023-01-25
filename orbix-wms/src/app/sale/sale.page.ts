@@ -3,12 +3,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonModal } from '@ionic/angular';
+import { IonModal, PopoverController } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { ToastController } from '@ionic/angular';
 
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth.service';
+
+import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+
+import { ModalController, NavParams } from '@ionic/angular';
+
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 const API_URL = environment.apiUrl;
 
@@ -19,6 +25,12 @@ const API_URL = environment.apiUrl;
 })
 export class SalePage implements OnInit {
 
+  @ViewChild('popover') popover : any;
+  isOpen = false;
+
+  @ViewChild('popover') productPopover : any;
+  isProductOpen = false;
+
 
   @ViewChild(IonModal)
   modal!: IonModal;
@@ -26,7 +38,7 @@ export class SalePage implements OnInit {
   name: string = '';
 
 
-  add : boolean = false
+  recordMode : string = 'add'
 
   
 
@@ -48,6 +60,7 @@ export class SalePage implements OnInit {
   totalAmount : number = 0
   amountPaid : number = 0
   amountDue : number = 0
+  discount : number = 0
 
 
   product! : LProduct
@@ -60,7 +73,14 @@ export class SalePage implements OnInit {
 
   no : string
 
+  closeResult = '';
+
+  currentModal : any = null
+
   constructor(private router : Router,
+    public modalCtrl: ModalController,
+    private modalService: NgbModal,
+    public popoverController: PopoverController,
     private toastController: ToastController,
     private http : HttpClient) {
       this.descriptions = []
@@ -71,6 +91,74 @@ export class SalePage implements OnInit {
    this.loadSalesList()
    this.refreshSummary()
   }
+
+
+  
+
+  presentPopover(e: Event) {
+    this.popover.event = e;
+    this.isOpen = true;
+  }
+
+  dismissPopover(e : Event){
+    this.popover.event = e;
+    this.isOpen = false;
+  }
+
+  presentCustomerPopover(e: Event) {
+    this.popover.event = e;
+    this.isOpen = true;
+  }
+
+  dismissCustomerPopover(e : Event){
+    this.popover.event = e;
+    this.isOpen = false;
+  }
+
+  presentEditPopover(e: Event, id : any) {
+    this.productPopover.event = e;
+    this.isProductOpen = true;
+    this.clearProduct()
+    this.productList.forEach(element => {
+      if(id === element.id){
+        this.productId = element.id
+        this.description = element.description
+        this.available = element.available
+        this.qty = element.qty
+      }
+    })
+  }
+
+  confirmEditPopover(e : Event, id : any){
+    this.popover.event = e;
+    this.productList.forEach(element => {
+      if(element.id == this.productId){
+        if(!isNaN(this.qty)){
+          if(this.qty > this.available){
+            alert('Insufficient qty')
+            this.clearProduct()
+            this.isProductOpen = false
+            return
+          }
+          if(this.qty <= 0){
+            alert('Invalid qty, zero is not allowed')
+            this.clearProduct()
+            this.isProductOpen = false
+            return
+          }
+          element.qty = this.qty
+          this.isProductOpen = false;
+          this.clearProduct()
+          return
+        }else{
+          alert('Invalid entry, qty must be a number')
+        }
+      }
+    })
+    this.isProductOpen = false;
+  }
+
+  
 
   randomString(length : number, chars : any) {
     var result = '';
@@ -92,6 +180,12 @@ export class SalePage implements OnInit {
       this.message = `Confirmed, ${ev.detail.data}!`;
     }
   }
+
+  editQty(){
+
+  }
+
+
 
   async loadSalesList(){
     if(localStorage.getItem('active-list') == null){
@@ -204,6 +298,7 @@ export class SalePage implements OnInit {
     }
   }
 
+
   async refreshQty(){
     if(this.qty < 0){
       this.qty = 0
@@ -252,23 +347,40 @@ export class SalePage implements OnInit {
       code: this.code,
       description: this.description,
       sellingPriceVatIncl: this.sellingPriceVatIncl,
-      qty: this.qty
+      qty: this.qty,
+      available : this.available
     }
 
     this.productList.forEach(element => {
-      if(element.id == product.id){
-        element.qty = product.qty
+      if(element.id == product.id){       
         present = true
       }
-      if(present == true){
+      if(present == true && this.recordMode == 'edit'){
+        /**
+         * Edit qty
+         */
+        element.qty = product.qty
         this.refreshSummary()
         return  
+      }else if(present == true && this.recordMode == 'add'){
+        /**
+         * Adding an already present product, not allowed
+         */
+        alert('Product already present, consider editing qty')
+        this.refreshSummary()
+        return
       }
     })
     if(present == false){
       this.productList.push(product)
     }
     this.refreshSummary()
+  }
+
+  showEdit(id : string){
+    /**
+     * 
+     */
   }
 
   remove(id : any){
@@ -287,15 +399,25 @@ export class SalePage implements OnInit {
     this.totalAmount = 0
     this.amountPaid = 0
     this.amountDue = 0
+    this.discount = 0
     this.productList.forEach(element => {
       this.totalQty = this.totalQty + element.qty
       this.totalAmount = this.totalAmount + (element.qty * element.sellingPriceVatIncl)
-      this.amountDue = this.totalAmount - this.amountPaid
     })
   }
 
   calculateAmounts(){
-    this.amountDue = this.totalAmount - this.amountPaid
+    if(!isNaN(this.amountPaid) && !isNaN(this.discount)){
+      if(this.amountPaid >= 0 && this.discount >= 0){
+        this.amountDue = this.totalAmount - this.amountPaid - this.discount
+        return
+      }
+    }
+    alert('Invalid entries')
+  }
+
+  setRecordMode(mode : string){
+    this.recordMode = mode
   }
 
   async cancelSale(){
@@ -311,6 +433,12 @@ export class SalePage implements OnInit {
   }
 
   async confirmSale(){
+    if(window.confirm('Confirm this sale?')){
+      //confirm the sale
+    }else{
+      //do  not confirm
+      return
+    }
     /**
      * Sale confirmation logic here
      */
@@ -354,6 +482,8 @@ export class SalePage implements OnInit {
 
     
   }
+
+ 
 }
 
 interface LProductModel{
@@ -372,6 +502,7 @@ interface LProduct {
   description : string
   sellingPriceVatIncl       : number
   qty         : number
+  available   : number
 }
 
 interface Sale{
@@ -382,3 +513,5 @@ interface Sale{
   customerLocation : string
   products          : LProduct[]
 }
+
+

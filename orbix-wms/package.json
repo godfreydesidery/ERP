@@ -27,9 +27,12 @@
     "@capacitor/keyboard": "4.1.1",
     "@capacitor/status-bar": "4.1.1",
     "@ionic/angular": "^6.1.9",
-    "bootstrap": "^5.2.3",
+    "@ng-bootstrap/ng-bootstrap": "^14.0.1",
+    "@popperjs/core": "^2.11.6",
+    "bootstrap": "^4.2.2",
     "ionicons": "^6.0.3",
     "moment": "^2.29.4",
+    "ngb-modal": "^1.0.5",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -44,6 +47,7 @@
     "@angular/compiler": "^15.0.0",
     "@angular/compiler-cli": "^15.0.0",
     "@angular/language-service": "^15.0.0",
+    "@angular/localize": "^15.0.0",
     "@capacitor/cli": "4.6.2",
     "@ionic/angular-toolkit": "^6.0.0",
     "@types/jasmine": "~4.0.0",
@@ -68,5 +72,5 @@
   "description": "An Ionic project",
   "config": {
     "ionic_sass": "./sass.config.js"
-}
+  }
 }
