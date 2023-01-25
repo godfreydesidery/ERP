@@ -230,23 +230,16 @@ export class SalePage implements OnInit {
     let options = {
       //headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
-    //this.spinner.show()
     await this.http.get<LProductModel[]>(API_URL+'/wms_load_available_products?sales_list_no='+no +'&sales_agent_id='+agentId, options)
-    //.pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       data => {
-        console.log(data)
         data!.forEach(element => {
-          //element.description.trim()
           this.availableProducts.push(element)
-          console.log(element)
         });
         this.availableProducts.forEach(element => {
-
           this.descriptions.push(element.description)
         })
-        console.log(this.descriptions)
 
       }
     )
@@ -449,6 +442,11 @@ export class SalePage implements OnInit {
       customerName : this.customerName,
       customerMobile : this.customerMobile,
       customerLocation : this.customerLocation,
+      totalAmount : this.totalAmount,
+      totalPaid : this.amountPaid,
+      totalDiscount : this.discount,
+      totalDue : this.amountDue,
+      totalCharges : 0,
       products : this.productList
     }
 
@@ -511,7 +509,12 @@ interface Sale{
   customerName     : string
   customerMobile   : string
   customerLocation : string
-  products          : LProduct[]
+  totalAmount      : number
+  totalPaid       : number
+  totalDiscount         : number
+  totalCharges     : number
+  totalDue        : number
+  products         : LProduct[]
 }
 
 

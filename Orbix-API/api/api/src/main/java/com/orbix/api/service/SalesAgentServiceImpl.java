@@ -32,6 +32,9 @@ import com.orbix.api.models.LCustomerModel;
 import com.orbix.api.models.LProductModel;
 import com.orbix.api.models.LSalesListObjectModel;
 import com.orbix.api.models.RecordModel;
+import com.orbix.api.models.SalesSheetModel;
+import com.orbix.api.models.SalesSheetSaleDetailModel;
+import com.orbix.api.models.SalesSheetSaleModel;
 import com.orbix.api.models.WMSProductModel;
 import com.orbix.api.models.WMSSalesModel;
 import com.orbix.api.repositories.CustomerRepository;
@@ -277,6 +280,11 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 		sale.setCustomerName(saleModel.getCustomerName());
 		sale.setCustomerMobile(saleModel.getCustomerMobile());
 		sale.setCustomerLocation(saleModel.getCustomerLocation());
+		sale.setTotalAmount(saleModel.getTotalAmount());
+		sale.setTotalDiscount(saleModel.getTotalDiscount());
+		sale.setTotalCharges(saleModel.getTotalCharges());
+		sale.setTotalPaid(saleModel.getTotalPaid());
+		sale.setTotalDue(saleModel.getTotalDue());
 		sale.setSalesSheet(sheet);
 		sale = salesSheetSaleRepository.saveAndFlush(sale);
 		
@@ -294,6 +302,47 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 			salesSheetSaleDetailRepository.saveAndFlush(sd);
 		}
 		return products;
+		
+	}
+
+	@Override
+	public SalesSheetModel getSalesSheet(Long id) {
+		Optional<SalesSheet> ss = salesSheetRepository.findById(id);
+		if(!ss.isPresent()) {
+			throw new NotFoundException("Sales sheet not found");
+		}
+		SalesSheet salesSheet = ss.get();
+		SalesSheetModel salesSheetModel = new SalesSheetModel();
+		
+		salesSheetModel.setNo(salesSheet.getNo());
+		List<SalesSheetSaleModel> saleSheetSaleModels = new ArrayList<>();
+		for(SalesSheetSale salesSheetSale : salesSheet.getSalesSheetSales()) {
+			SalesSheetSaleModel salesSheetSaleModel = new SalesSheetSaleModel();
+			salesSheetSaleModel.setNo(salesSheetSale.getNo());
+			salesSheetSaleModel.setCustomerName(salesSheetSale.getCustomerName());
+			salesSheetSaleModel.setCustomerMobile(salesSheetSale.getCustomerMobile());
+			salesSheetSaleModel.setCustomerLocation(salesSheetSale.getCustomerLocation());
+			salesSheetSaleModel.setTotalAmount(salesSheetSale.getTotalAmount());
+			salesSheetSaleModel.setTotalPaid(salesSheetSale.getTotalPaid());
+			salesSheetSaleModel.setTotalDiscount(salesSheetSale.getTotalDiscount());
+			salesSheetSaleModel.setTotalCharges(salesSheetSale.getTotalCharges());
+			salesSheetSaleModel.setTotalDue(salesSheetSale.getTotalDue());
+			List<SalesSheetSaleDetailModel> salesSheetSaleDetailModels = new ArrayList<>();
+			for(SalesSheetSaleDetail  salesSheetSaleDetail : salesSheetSale.getSalesSheetSaleDetails()) {
+				SalesSheetSaleDetailModel salesSheetSaleDetailModel = new SalesSheetSaleDetailModel();
+				salesSheetSaleDetailModel.setBarcode(salesSheetSaleDetail.getProduct().getBarcode());
+				salesSheetSaleDetailModel.setCode(salesSheetSaleDetail.getProduct().getCode());
+				salesSheetSaleDetailModel.setDescription(salesSheetSaleDetail.getProduct().getDescription());
+				salesSheetSaleDetailModel.setQty(salesSheetSaleDetail.getQty());
+				salesSheetSaleDetailModel.setPrice(salesSheetSaleDetail.getSellingPriceVatIncl());
+				salesSheetSaleDetailModels.add(salesSheetSaleDetailModel);				
+			}
+			salesSheetSaleModel.setSalesSheetSaleDetails(salesSheetSaleDetailModels);
+			saleSheetSaleModels.add(salesSheetSaleModel);
+			
+		}
+		salesSheetModel.setSalesSheetSales(saleSheetSaleModels);
+		return salesSheetModel;
 		
 	}	
 }

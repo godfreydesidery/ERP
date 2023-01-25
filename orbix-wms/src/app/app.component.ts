@@ -10,9 +10,10 @@ export class AppComponent implements OnInit {
 salesAgentName : string = ''
   public appPages = [
     { title: 'Home', url: '/home', icon: 'home' },
-    { title: 'Sale', url: '/sale', icon: 'paper-plane' },
-    { title: 'Profile', url: '/profile', icon: 'heart' },
-    { title: 'Logout', url: '/logout', icon: 'heart' },
+    { title: 'Sale', url: '/sale', icon: 'cash' },
+    { title: 'Sales Sheet', url: '/sales-sheet', icon: 'document' },
+    { title: 'Profile', url: '/profile', icon: 'person' },
+    { title: 'Logout', url: '/logout', icon: 'exit' },
     //{ title: 'Archived', url: '/folder/Archived', icon: 'archive' },
     //{ title: 'Trash', url: '/folder/Trash', icon: 'trash' },
     //{ title: 'Spam', url: '/folder/Spam', icon: 'warning' },

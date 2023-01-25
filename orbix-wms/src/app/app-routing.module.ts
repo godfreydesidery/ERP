@@ -36,6 +36,12 @@ const routes: Routes = [
     path: 'login',
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   },
+  {
+    path: 'sales-sheet',
+    loadChildren: () => import('./sales-sheet/sales-sheet.module').then( m => m.SalesSheetPageModule),
+    canActivate : [AuthGuard]
+  },
+
 ];
 
 @NgModule({

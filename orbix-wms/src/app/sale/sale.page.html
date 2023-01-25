@@ -15,12 +15,12 @@
   </ion-header>
   <ion-content class="ion-padding">
 
-    <ion-card *ngFor="let p of productList">
-      <ion-card-content>
+    <ion-card *ngFor="let p of productList" style="margin: 0px; padding: 0px;">
+      <ion-card-content style="margin: 0px; padding: 0px;">
         <ion-grid>
           <ion-row>
             <ion-col>
-              <b>{{p.qty}}</b> *  [{{p.code}}] {{p.description}} @{{p.sellingPriceVatIncl | currency:'':''}} = {{p.sellingPriceVatIncl*p.qty | currency:'':''}}
+              <b>{{p.qty}}</b> *  [{{p.code}}] {{p.description}} @{{p.sellingPriceVatIncl | currency:'':''}} = {{p.sellingPriceVatIncl*p.qty | currency:'':''}}<br>
               <span (click)="presentEditPopover($event, p.id)" (click)="setRecordMode('edit')">[<ion-icon slot="start" name="pencil-sharp"></ion-icon>]</span>_____
               <span (click)="remove(p.id)">[<ion-icon slot="start" name="trash-sharp"></ion-icon>]</span>
             </ion-col>
@@ -28,6 +28,7 @@
         </ion-grid>
       </ion-card-content>
     </ion-card>
+
     <ion-footer>
       
       <ion-card *ngIf="totalQty > 0">
@@ -58,6 +59,8 @@
               <ion-col size="6"><button (click)="calculateAmounts()">Amount Due</button></ion-col>
               <ion-col style="text-align: right;">{{amountDue | currency:'':''}}</ion-col>
             </ion-row>
+
+            <hr>
 
             <ion-row *ngIf="totalAmount === (amountPaid + discount + amountDue)">
               <ion-col></ion-col>
@@ -181,38 +184,7 @@
       </ng-template>
     </ion-popover>
 
-    <ion-popover trigger="set-customer" triggerAction="click" size="auto">
-      <ng-template>
-        <ion-header>
-          <ion-toolbar>
-            <ion-title >Set Customer</ion-title>
-          </ion-toolbar>
-        </ion-header>
-
-        <ion-content>
-          
-          <ion-grid>
-            <ion-row>
-              <ion-col>
-                <ion-item>
-                  <ion-input type="text" [(ngModel)]="customerName" style="text-align: center;" placeholder="Customer Name"></ion-input>
-                </ion-item>
-                <ion-item>
-                  <ion-input type="text" [(ngModel)]="customerMobile" style="text-align: center;" placeholder="Customer Mobile"></ion-input>
-                </ion-item>
-                <ion-item>
-                  <ion-input type="text" [(ngModel)]="customerLocation" style="text-align: center;" placeholder="Customer Location"></ion-input>
-                </ion-item>
-                <ion-item>
-                  <ion-button (click)="dismissPopover($event)">Click Me</ion-button>
-                </ion-item>
-                
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-content>
-      </ng-template>
-    </ion-popover>
+    
 
   </ion-content>
 
