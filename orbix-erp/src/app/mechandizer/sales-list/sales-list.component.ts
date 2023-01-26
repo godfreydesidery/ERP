@@ -290,6 +290,33 @@ export class SalesListComponent implements OnInit {
     )
   }
 
+  async downloadFromSalesSheet(id: any) {
+    if(window.confirm('Confirm download from sales sheet')){
+      //continue download
+    }else{
+      return
+    }
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<ISalesList>(API_URL+'/sales_lists/download_from_sales_sheet?id='+id, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        this.get(this.id)
+        alert('Download complete')
+      }
+    )
+    .catch(
+      error => {
+        console.log(error)
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not Download')
+      }
+    )
+  }
+
   async getByNo(no: string) {
     if(no == ''){
       return

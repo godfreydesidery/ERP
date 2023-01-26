@@ -84,6 +84,7 @@ import { SalesAgentComponent } from './mechandizer/sales-agent/sales-agent.compo
 import { DebtTrackerComponent } from './mechandizer/debt-tracker/debt-tracker.component';
 import { CustomerMassManagerComponent } from './customer/customer-mass-manager/customer-mass-manager.component';
 import { SupplySalesReportExtendedComponent } from './reports/sales-reports/supply-sales-report-extended/supply-sales-report-extended.component';
+import { SalesSheetComponent } from './mechandizer/sales-sheet/sales-sheet.component';
 
 const routes: Routes = [
   {path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard]},
@@ -119,6 +120,7 @@ const routes: Routes = [
   {path: 'bill-reprint', component: BillReprintComponent, canActivate: [AuthGuard]},
   {path: 'packing-list', component: PackingListComponent, canActivate: [AuthGuard]},
   {path: 'sales-list', component: SalesListComponent, canActivate: [AuthGuard]},
+  {path: 'sales-sheet', component: SalesSheetComponent, canActivate: [AuthGuard]},
   {path: 'customer-returns', component: CustomerReturnComponent, canActivate: [AuthGuard]},
   {path: 'customer-claims', component: CustomerClaimComponent, canActivate: [AuthGuard]},
   {path: 'return-to-vendor', component: ReturnToVendorComponent, canActivate: [AuthGuard]},
@@ -165,6 +167,7 @@ const routes: Routes = [
   {path: 'sales-and-purchases-summary-report', component: SalesAndPurchasesSummaryReportComponent, canActivate: [AuthGuard]},
   {path: 'vat-group', component: VatGroupsComponent, canActivate: [AuthGuard]},
   {path: 'sales-agents', component: SalesAgentComponent, canActivate: [AuthGuard]},
+  {path: 'debt-tracker', component: DebtTrackerComponent, canActivate: [AuthGuard]},
   {path: 'debt-tracker', component: DebtTrackerComponent, canActivate: [AuthGuard]},
 ];
 

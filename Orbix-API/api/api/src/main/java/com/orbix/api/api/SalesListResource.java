@@ -95,6 +95,16 @@ public class SalesListResource {
 		return ResponseEntity.ok().body(salesListService.getByNo(no));
 	}
 	
+	@GetMapping("/sales_lists/download_from_sales_sheet")
+	public ResponseEntity<Boolean> downloadFromSalesSheet(
+			@RequestParam(name = "id") Long id){
+		Optional<SalesList> l = salesListRepository.findById(id);
+		if(!l.isPresent()) {
+			throw new NotFoundException("Sales list not found");
+		}
+		return ResponseEntity.ok().body(salesListService.downnloadFromSalesSheet(l.get()));
+	}
+	
 	@GetMapping("/sales_list_details/get_by_sales_list")
 	public ResponseEntity<List<SalesListDetailModel>>getSalesListDetails(
 			@RequestParam(name = "id") Long id){		

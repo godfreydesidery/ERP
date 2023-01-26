@@ -23,5 +23,6 @@ public class SalesSheetSaleModel {
 	double totalDiscount = 0;
 	double totalCharges = 0;
 	double totalDue = 0;
+	String completedAt = "";
 	List<SalesSheetSaleDetailModel> salesSheetSaleDetails;	
 }

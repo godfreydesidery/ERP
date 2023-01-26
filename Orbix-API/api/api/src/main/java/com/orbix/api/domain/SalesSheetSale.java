@@ -3,6 +3,8 @@
  */
 package com.orbix.api.domain;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -15,6 +17,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
@@ -52,7 +56,9 @@ public class SalesSheetSale {
 	
 	private String customerName = "";
 	private String customerMobile = "";
-	private String customerLocation = "";
+	private String customerLocation = "";	
+	
+	//private LocalDateTime completedAt = LocalDateTime.now();
 		
 	@ManyToOne(targetEntity = SalesSheet.class, fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "sales_sheet_id", nullable = true , updatable = true)

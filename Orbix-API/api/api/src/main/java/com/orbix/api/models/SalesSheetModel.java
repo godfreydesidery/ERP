@@ -15,5 +15,13 @@ import lombok.Data;
 public class SalesSheetModel {
 	Long id = null;
 	String no = "";
+	double totalSales = 0;
+	double totalPaid = 0;
+	double totalDiscount = 0;
+	double totalCharges = 0;
+	double totalDue = 0;
+	
+	String salesAgentName = "";
+	String confirmed = "";
 	List<SalesSheetSaleModel> salesSheetSales;
 }

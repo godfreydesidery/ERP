@@ -45,4 +45,10 @@ public interface SalesListRepository extends JpaRepository<SalesList, Long> {
 	 */
 	List<SalesList> findBySalesAgentAndStatus(SalesAgent salesAgent, String string);
 
+	/**
+	 * @param string
+	 * @return
+	 */
+	List<SalesList> findByStatus(String string);
+
 }

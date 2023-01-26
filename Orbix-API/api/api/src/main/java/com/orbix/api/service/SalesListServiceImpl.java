@@ -705,6 +705,42 @@ public class SalesListServiceImpl implements SalesListService {
 		}
 		return qty;
 	}
+
+	@Override
+	public boolean downnloadFromSalesSheet(SalesList salesList) {
+		Optional<SalesList> s = salesListRepository.findById(salesList.getId());
+		if(!s.isPresent()) {
+			throw new NotFoundException("SalesList not found");
+		}
+		Optional<SalesSheet> ss = salesSheetRepository.findBySalesList(s.get());
+		if(!ss.isPresent()) {
+			throw new NotFoundException("Correspoding sales sheet not found");
+			
+		}
+		
+		List<SalesListDetail> salesListDetails =  s.get().getSalesListDetails();
+		double qtySold = 0;
+		for(SalesListDetail salesListDetail : salesListDetails) {
+			List<SalesSheetSale> salesSheetSales = ss.get().getSalesSheetSales();
+			for(SalesSheetSale salesSheetSale : salesSheetSales) {
+				List<SalesSheetSaleDetail> slesSheetSaleDetails = salesSheetSale.getSalesSheetSaleDetails();
+				for(SalesSheetSaleDetail salesSheetSaleDetail : slesSheetSaleDetails) {
+					if(salesSheetSaleDetail.getProduct().getId() == salesListDetail.getProduct().getId()) {
+						qtySold = qtySold + salesSheetSaleDetail.getQty();
+					}
+				}
+			}
+			SalesListDetail detail = salesListDetailRepository.findById(salesListDetail.getId()).get();
+			detail.setQtySold(qtySold);
+			detail.setQtyReturned(detail.getTotalPacked() - qtySold);
+			detail.setQtyOffered(0);
+			detail.setQtyDamaged(0);
+			salesListDetailRepository.saveAndFlush(detail);
+			qtySold = 0;
+		}
+		
+		return false;
+	}
 	
 	
 	

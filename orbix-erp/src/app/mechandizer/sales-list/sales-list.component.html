@@ -173,6 +173,7 @@
     <hr>
     <div class="col-12">
         <span  class="badge bg-default" *ngIf="status === 'PENDING'" style="cursor: pointer; border-radius: 4mm;" (click)="show(add)">+</span>
+        <span  class="badge bg-default" *ngIf="status === 'PENDING'" style="cursor: pointer; border-radius: 4mm;" (click)="downloadFromSalesSheet(id)">Download</span>
     </div>
     <div class="col-12">
         <table class="table table-bordered table-striped">

@@ -112,6 +112,7 @@ import { SalesAgentComponent } from './mechandizer/sales-agent/sales-agent.compo
 import { DebtTrackerComponent } from './mechandizer/debt-tracker/debt-tracker.component';
 import { CustomerMassManagerComponent } from './customer/customer-mass-manager/customer-mass-manager.component';
 import { SupplySalesReportExtendedComponent } from './reports/sales-reports/supply-sales-report-extended/supply-sales-report-extended.component';
+import { SalesSheetComponent } from './mechandizer/sales-sheet/sales-sheet.component';
 
 
 @NgModule({
@@ -214,6 +215,7 @@ import { SupplySalesReportExtendedComponent } from './reports/sales-reports/supp
     DebtTrackerComponent,
     CustomerMassManagerComponent,
     SupplySalesReportExtendedComponent,
+    SalesSheetComponent,
     //BatchProductionComponent,
     //CustomProductionComponent,
   ],

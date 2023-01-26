@@ -22,4 +22,10 @@ public interface SalesSheetRepository extends JpaRepository<SalesSheet, Long> {
 	 */
 	Optional<SalesSheet> findBySalesList(SalesList salesList);
 
+	/**
+	 * @param no
+	 * @return
+	 */
+	Optional<SalesSheet> findByNo(String no);
+
 }
