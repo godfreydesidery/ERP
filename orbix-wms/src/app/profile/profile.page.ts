@@ -52,16 +52,6 @@ export class ProfilePage implements OnInit {
       //headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
     
-    if(localStorage.getItem('active-list') == null){
-      const toast = await this.toastController.create({
-        message: 'No active sales list selected',
-        duration: 2000,
-        position: 'top'
-      });
-      await toast.present();
-      this.router.navigate(['home'])
-      location.reload()
-    }
     await this.http.get<SalesAgentProfile>(API_URL+'/wms_get_profile?sales_agent_name='+localStorage.getItem('sales-agent-name'), options)
     .toPromise()
     .then(

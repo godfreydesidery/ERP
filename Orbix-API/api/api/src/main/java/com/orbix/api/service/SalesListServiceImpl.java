@@ -61,7 +61,6 @@ public class SalesListServiceImpl implements SalesListService {
 	private final DayRepository dayRepository;
 	private final ProductRepository productRepository;
 	private final ProductStockCardService productStockCardService;
-	private final SaleService saleService;
 	private final SaleRepository saleRepository;
 	private final SaleDetailRepository saleDetailRepository;
 	private final ProductDamageService productDamageService;
@@ -417,7 +416,7 @@ public class SalesListServiceImpl implements SalesListService {
 	@Override
 	public boolean archive(SalesList salesList) {
 		if(!salesList.getStatus().equals("APPROVED")) {
-			throw new InvalidOperationException("Could not process, only a posted sales list can be archived");
+			throw new InvalidOperationException("Could not process, only a approved sales list can be archived");
 		}
 		if(salesList.getTotalDeficit() > 0) {
 			throw new InvalidOperationException("Could not process, non debt free document can not be archived");
@@ -656,7 +655,7 @@ public class SalesListServiceImpl implements SalesListService {
 	}
 	
 	private boolean allowDeleteDetail(SalesListDetail salesListDetail) {
-		return true;
+		return false;
 	}
 	
 	
@@ -711,6 +710,9 @@ public class SalesListServiceImpl implements SalesListService {
 		Optional<SalesList> s = salesListRepository.findById(salesList.getId());
 		if(!s.isPresent()) {
 			throw new NotFoundException("SalesList not found");
+		}
+		if(!s.get().getStatus().equals("PENDING")) {
+			throw new InvalidOperationException("Not a pending sales list");
 		}
 		Optional<SalesSheet> ss = salesSheetRepository.findBySalesList(s.get());
 		if(!ss.isPresent()) {

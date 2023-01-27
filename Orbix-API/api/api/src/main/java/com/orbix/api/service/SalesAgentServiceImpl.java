@@ -269,6 +269,9 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 		if(!l.isPresent()) {
 			throw new NotFoundException("Operation failed, corresponding sales list not found");
 		}
+		if(!l.get().getStatus().equals("PENDING")) {
+			throw new InvalidOperationException("Corresponding sales list not pending, please login afresh to view pending sales list");
+		}
 		Optional<SalesSheet> s = salesSheetRepository.findBySalesList(l.get());
 		if(!s.isPresent()) {
 			throw new NotFoundException("Operation failed, sales sheet not found");
