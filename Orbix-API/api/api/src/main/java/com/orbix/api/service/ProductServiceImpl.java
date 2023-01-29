@@ -110,9 +110,12 @@ public class ProductServiceImpl implements ProductService {
 			}
 			
 			product.setCostPriceVatIncl(Math.round(product.getCostPriceVatIncl() *100.0)/100.0);
-			product.setCostPriceVatExcl(Math.round((product.getCostPriceVatIncl() * (100 - product.getVat()) / 100) *100.0) / 100.0);
+			product.setCostPriceVatExcl(Math.round(((p.getCostPriceVatIncl() * 100) / (100 + p.getVat())) *100.0)/100.0);
 			product.setSellingPriceVatIncl(Math.round(product.getSellingPriceVatIncl() *100.0)/100.0);
-			product.setSellingPriceVatExcl(Math.round((product.getSellingPriceVatIncl() * (100 - product.getVat()) / 100) *100.0) / 100.0);			
+			product.setSellingPriceVatExcl(Math.round(((p.getSellingPriceVatIncl() * 100) / (100 + p.getVat())) *100.0)/100.0);
+			
+			
+
 		}else {
 			if(!p.getBarcode().equals("")) {
 				Optional<Product> pr = productRepository.findByBarcode(p.getBarcode());				
@@ -305,9 +308,9 @@ public class ProductServiceImpl implements ProductService {
 		finalVatGroup = p.getVatGroup();
 		finalProfitMargin = p.getProfitMargin();
 		finalCostPriceVatIncl = Math.round(p.getCostPriceVatIncl() *100.0)/100.0;
-		finalCostPriceVatExcl = Math.round(((p.getCostPriceVatIncl() * (100 - p.getVat()) / 100)) *100.0)/100.0;
-		finalSellingPriceVatIncl = Math.round(p.getSellingPriceVatIncl() *100.0)/100.0;
-		finalSellingPriceVatExcl = Math.round(((p.getSellingPriceVatIncl() * (100 - p.getVat()) / 100)) *100.0)/100.0;
+		finalCostPriceVatExcl = Math.round(((p.getCostPriceVatIncl() * 100) / (100 + p.getVat())) *100.0)/100.0;
+		finalSellingPriceVatIncl = Math.round(p.getSellingPriceVatIncl() *100.0)/100.0;		
+		finalSellingPriceVatExcl = Math.round(((p.getSellingPriceVatIncl() * 100) / (100 + p.getVat())) *100.0)/100.0;
 		
 		pr.setDiscount(finalDiscount);
 		pr.setVat(finalVat);

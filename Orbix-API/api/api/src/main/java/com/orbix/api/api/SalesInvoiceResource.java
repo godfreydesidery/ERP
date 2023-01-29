@@ -265,7 +265,7 @@ public class SalesInvoiceResource {
 			detail.setCostPriceVatIncl(salesInvoiceDetail.getCostPriceVatIncl());
 			detail.setCostPriceVatExcl(salesInvoiceDetail.getCostPriceVatExcl());	
 			detail.setSellingPriceVatIncl(salesInvoiceDetail.getSellingPriceVatIncl());
-			detail.setSellingPriceVatExcl(salesInvoiceDetail.getSellingPriceVatExcl());			
+			detail.setSellingPriceVatExcl(Math.round((salesInvoiceDetail.getSellingPriceVatIncl() * 100) / (100 + p.get().getVat()) * 100.0) / 100.0);
 		}else {
 			/**
 			 * Create new detail
@@ -276,7 +276,7 @@ public class SalesInvoiceResource {
 			detail.setCostPriceVatIncl(salesInvoiceDetail.getCostPriceVatIncl());
 			detail.setCostPriceVatExcl(salesInvoiceDetail.getCostPriceVatExcl());	
 			detail.setSellingPriceVatIncl(salesInvoiceDetail.getSellingPriceVatIncl());
-			detail.setSellingPriceVatExcl(salesInvoiceDetail.getSellingPriceVatExcl());
+			detail.setSellingPriceVatExcl(Math.round((salesInvoiceDetail.getSellingPriceVatIncl() * 100) / (100 + p.get().getVat()) * 100.0) / 100.0);
 		}		
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/sales_invoice_details/save").toUriString());
 		return ResponseEntity.created(uri).body(salesInvoiceService.saveDetail(detail));

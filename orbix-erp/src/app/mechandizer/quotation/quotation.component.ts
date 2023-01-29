@@ -31,6 +31,8 @@ export class QuotationComponent implements OnInit {
   public quotationNoLocked  : boolean = true
   public inputsLocked : boolean = true
 
+  public priceLocked  : boolean = true
+
   public enableSearch : boolean = false
   public enableDelete : boolean = false
   public enableSave   : boolean = false
@@ -513,6 +515,7 @@ export class QuotationComponent implements OnInit {
   }
 
   refresh(){
+    this.priceLocked = true
     this.total = 0
     this.amountVatExcl = 0
     this.amountVatIncl = 0
@@ -524,7 +527,12 @@ export class QuotationComponent implements OnInit {
       this.amountVatIncl = this.amountVatIncl + element.sellingPriceVatIncl*element.qty
     })
     this.totalVat = this.amountVatIncl - this.amountVatExcl
+    
     this.showNet()
+  }
+
+  unlockPrice(){
+    this.priceLocked = false
   }
 
   showNet(){

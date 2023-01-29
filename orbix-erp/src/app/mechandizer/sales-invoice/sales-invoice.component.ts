@@ -31,6 +31,8 @@ export class SalesInvoiceComponent implements OnInit {
   public invoiceNoLocked  : boolean = true
   public inputsLocked : boolean = true
 
+  public priceLocked  : boolean = true
+
   public enableSearch : boolean = false
   public enableDelete : boolean = false
   public enableSave   : boolean = false
@@ -551,6 +553,7 @@ export class SalesInvoiceComponent implements OnInit {
   }
 
   refresh(){
+    this.priceLocked = true
     this.total = 0
     this.amountVatExcl = 0
     this.amountVatIncl = 0
@@ -567,6 +570,10 @@ export class SalesInvoiceComponent implements OnInit {
 
   showNet(){
     this.netAmount = this.amountVatIncl - (this.otherCharges * -1) - this.discount
+  }
+
+  unlockPrice(){
+    this.priceLocked = false
   }
 
   createShortCut(shortCutName : string, link : string){

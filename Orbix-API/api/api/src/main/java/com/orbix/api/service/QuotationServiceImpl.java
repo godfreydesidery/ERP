@@ -229,6 +229,7 @@ public class QuotationServiceImpl implements QuotationService {
 		model.setSellingPriceVatIncl(d.getSellingPriceVatIncl());
 		model.setSellingPriceVatExcl(d.getSellingPriceVatExcl());
 		model.setQuotation(d.getQuotation());
+		
 		return model;
 	}
 	

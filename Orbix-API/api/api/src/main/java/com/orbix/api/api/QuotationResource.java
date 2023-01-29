@@ -249,7 +249,8 @@ public class QuotationResource {
 			detail = d.get();
 			detail.setQty(quotationDetail.getQty());
 			detail.setSellingPriceVatIncl(quotationDetail.getSellingPriceVatIncl());
-			detail.setSellingPriceVatExcl(quotationDetail.getSellingPriceVatExcl());			
+			detail.setSellingPriceVatExcl(Math.round((quotationDetail.getSellingPriceVatIncl() * 100) / (100 + p.get().getVat()) * 100.0) / 100.0);
+			
 		}else {
 			/**
 			 * Create new detail
@@ -258,7 +259,7 @@ public class QuotationResource {
 			detail.setProduct(quotationDetail.getProduct());
 			detail.setQty(quotationDetail.getQty());
 			detail.setSellingPriceVatIncl(quotationDetail.getSellingPriceVatIncl());
-			detail.setSellingPriceVatExcl(quotationDetail.getSellingPriceVatExcl());
+			detail.setSellingPriceVatExcl(Math.round((quotationDetail.getSellingPriceVatIncl() * 100) / (100 + p.get().getVat()) * 100.0) / 100.0);
 		}		
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/quotation_details/save").toUriString());
 		return ResponseEntity.created(uri).body(quotationService.saveDetail(detail));
