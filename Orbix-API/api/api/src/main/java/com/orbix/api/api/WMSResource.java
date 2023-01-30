@@ -28,6 +28,7 @@ import com.orbix.api.models.LAgentModel;
 import com.orbix.api.models.LCustomerModel;
 import com.orbix.api.models.LProductModel;
 import com.orbix.api.models.LSalesListObjectModel;
+import com.orbix.api.models.SalesListModel;
 import com.orbix.api.models.SalesSheetModel;
 import com.orbix.api.models.WMSSalesModel;
 import com.orbix.api.repositories.SalesAgentRepository;
@@ -78,6 +79,17 @@ public class WMSResource {
 			throw new NotFoundException("Sales Sheet not found");
 		}
 		return ResponseEntity.ok().body(salesAgentService.getSalesSheet(ss.get().getId()));
+	}
+	
+	@GetMapping("/wms_load_sales_list")	
+	public ResponseEntity<SalesListModel> getSalesList(
+			@RequestParam(name = "sales_list_no") String salesListNo){
+		Optional<SalesList> sl = salesListRepository.findByNo(salesListNo);
+		if(!sl.isPresent()) {
+			throw new NotFoundException("Sales list not found");
+		}
+		
+		return ResponseEntity.ok().body(salesAgentService.getSalesList(sl.get().getId()));
 	}
 	
 	@GetMapping("/wms_load_available_products")	

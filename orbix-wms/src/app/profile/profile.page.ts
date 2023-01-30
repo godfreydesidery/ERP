@@ -15,6 +15,8 @@ import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalController, NavParams } from '@ionic/angular';
 
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { finalize } from 'rxjs';
 
 const API_URL = environment.apiUrl;
 
@@ -38,7 +40,8 @@ export class ProfilePage implements OnInit {
     private modalService: NgbModal,
     public popoverController: PopoverController,
     private toastController: ToastController,
-    private http : HttpClient) { }
+    private http : HttpClient,
+    private spinner : NgxSpinnerService) { }
 
 
 
@@ -51,8 +54,9 @@ export class ProfilePage implements OnInit {
     let options = {
       //headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
-    
+    this.spinner.show()
     await this.http.get<SalesAgentProfile>(API_URL+'/wms_get_profile?sales_agent_name='+localStorage.getItem('sales-agent-name'), options)
+    .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       data => {

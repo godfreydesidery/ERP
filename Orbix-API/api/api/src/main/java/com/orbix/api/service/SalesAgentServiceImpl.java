@@ -32,6 +32,8 @@ import com.orbix.api.models.LCustomerModel;
 import com.orbix.api.models.LProductModel;
 import com.orbix.api.models.LSalesListObjectModel;
 import com.orbix.api.models.RecordModel;
+import com.orbix.api.models.SalesListDetailModel;
+import com.orbix.api.models.SalesListModel;
 import com.orbix.api.models.SalesSheetModel;
 import com.orbix.api.models.SalesSheetSaleDetailModel;
 import com.orbix.api.models.SalesSheetSaleModel;
@@ -347,5 +349,33 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 		salesSheetModel.setSalesSheetSales(saleSheetSaleModels);
 		return salesSheetModel;
 		
-	}	
+	}
+	
+	@Override
+	public SalesListModel getSalesList(Long id) {
+		Optional<SalesList> sl = salesListRepository.findById(id);
+		if(!sl.isPresent()) {
+			throw new NotFoundException("Sales list not found");
+		}
+		if(!sl.get().getStatus().equals("PENDING")) {
+			throw new InvalidOperationException("Could not display list, not a pending list");
+		}
+		SalesList salesList = sl.get();
+		SalesListModel salesListModel = new SalesListModel();
+		
+		salesListModel.setNo(salesList.getNo());
+		List<SalesListDetailModel> saleListDetailModels = new ArrayList<>();
+		for(SalesListDetail salesListDetail : salesList.getSalesListDetails()) {
+			SalesListDetailModel salesListDetailModel = new SalesListDetailModel();
+			salesListDetailModel.setBarcode(salesListDetail.getProduct().getBarcode());
+			salesListDetailModel.setCode(salesListDetail.getProduct().getCode());
+			salesListDetailModel.setDescription(salesListDetail.getProduct().getDescription());
+			salesListDetailModel.setTotalPacked(salesListDetail.getTotalPacked());
+			salesListDetailModel.setSellingPriceVatIncl(salesListDetail.getSellingPriceVatIncl());
+			saleListDetailModels.add(salesListDetailModel);			
+		}
+		salesListModel.setSalesListDetails(saleListDetailModels);
+		return salesListModel;
+		
+	}
 }

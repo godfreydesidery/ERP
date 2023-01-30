@@ -11,6 +11,7 @@ import com.orbix.api.models.LCustomerModel;
 import com.orbix.api.models.LProductModel;
 import com.orbix.api.models.LSalesListObjectModel;
 import com.orbix.api.models.RecordModel;
+import com.orbix.api.models.SalesListModel;
 import com.orbix.api.models.SalesSheetModel;
 import com.orbix.api.models.WMSSalesModel;
 
@@ -36,4 +37,5 @@ public interface SalesAgentService {
 	
 	
 	SalesSheetModel getSalesSheet(Long id);
+	SalesListModel getSalesList(Long id);
 }

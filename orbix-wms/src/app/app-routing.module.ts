@@ -40,7 +40,11 @@ const routes: Routes = [
     path: 'sales-sheet',
     loadChildren: () => import('./sales-sheet/sales-sheet.module').then( m => m.SalesSheetPageModule),
     canActivate : [AuthGuard]
+  },  {
+    path: 'sales-list',
+    loadChildren: () => import('./sales-list/sales-list.module').then( m => m.SalesListPageModule)
   },
+
 
 ];
 

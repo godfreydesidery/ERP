@@ -11,6 +11,7 @@ salesAgentName : string = ''
   public appPages = [
     { title: 'Home', url: '/home', icon: 'home' },
     { title: 'Sale', url: '/sale', icon: 'cash' },
+    { title: 'Sales List', url: '/sales-list', icon: 'document-attach' },
     { title: 'Sales Sheet', url: '/sales-sheet', icon: 'document' },
     { title: 'Profile', url: '/profile', icon: 'person' },
     { title: 'Logout', url: '/logout', icon: 'exit' },

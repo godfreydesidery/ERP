@@ -26,5 +26,10 @@ public class SalesListDetailModel {
 	double sellingPriceVatIncl = 0;
 	double sellingPriceVatExcl = 0;
 	
+	String barcode = "";
+	String code = "";
+	String description = "";
+			
+	
     Product product = null;
 }

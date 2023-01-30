@@ -1,0 +1,37 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>My Sales List</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-card>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="5">Amount Packed: </ion-col>
+          <ion-col style="text-align: right;">{{totalPacked | currency:'':''}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="5">Qty Packed: </ion-col>
+          <ion-col>{{totalQty}}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngFor="let p of salesListDetails" style="margin: 0px; padding: 0px;">
+    <ion-card-content style="margin: 0px; padding: 0px;">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <b>{{p.totalPacked}}</b> *  [{{p.code}}] {{p.description}} @{{p.sellingPriceVatIncl | currency:'':''}} = {{p.sellingPriceVatIncl*p.totalPacked | currency:'':''}}<br>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

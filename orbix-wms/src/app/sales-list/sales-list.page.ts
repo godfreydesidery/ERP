@@ -20,24 +20,19 @@ import { finalize } from 'rxjs';
 
 const API_URL = environment.apiUrl;
 
-
 @Component({
-  selector: 'app-sales-sheet',
-  templateUrl: './sales-sheet.page.html',
-  styleUrls: ['./sales-sheet.page.scss'],
+  selector: 'app-sales-list',
+  templateUrl: './sales-list.page.html',
+  styleUrls: ['./sales-list.page.scss'],
 })
-export class SalesSheetPage implements OnInit {
+export class SalesListPage implements OnInit {
 
-  salesSheet: SalesSheetModel | undefined 
+  salesList: SalesListModel | undefined 
 
-  salesSheetSales : SalesSheetSaleModel[] = []
+  salesListDetails : SalesListDetailModel[] = []
 
-
-  totalSales : number = 0
-  totalPaid : number = 0
-  totalDiscount : number = 0
-  totalCharges : number = 0
-  totalDue : number = 0
+  totalPacked : number = 0
+  totalQty : number = 0
 
   constructor(private router : Router,
     public modalCtrl: ModalController,
@@ -48,20 +43,18 @@ export class SalesSheetPage implements OnInit {
     private spinner : NgxSpinnerService) { }
 
   ngOnInit() {
-    this.getSalesSheet()
+    this.getSalesList()
   }
 
   clearValues(){
-    this.totalSales  = 0
-    this.totalPaid  = 0
-    this.totalDiscount  = 0
-    this.totalCharges  = 0
-    this.totalDue  = 0
+
+    this.totalPacked  = 0
+    this.totalQty = 0
   }
 
 
-  async getSalesSheet(): Promise<void> {
-    this.salesSheetSales = []
+  async getSalesList(): Promise<void> {
+    this.salesListDetails = []
     this.clearValues()
     let options = {
       //headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
@@ -78,27 +71,23 @@ export class SalesSheetPage implements OnInit {
       location.reload()
     }
     this.spinner.show()
-    await this.http.get<SalesSheetModel>(API_URL+'/wms_load_sales_sheet?sales_list_no='+localStorage.getItem('active-list'), options)
+    await this.http.get<SalesListModel>(API_URL+'/wms_load_sales_list?sales_list_no='+localStorage.getItem('active-list'), options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       data => {
-        let sales : SalesSheetSaleModel[] = data!.salesSheetSales
+        let sales : SalesListDetailModel[] = data!.salesListDetails
         sales.forEach(element => {
-          this.salesSheetSales.push(element)
-
-          this.totalSales  = this.totalSales + element.totalAmount
-          this.totalPaid  = this.totalPaid + element.totalPaid
-          this.totalDiscount  = this.totalDiscount + element.totalDiscount
-          this.totalCharges  = this.totalCharges + element.totalCharges
-          this.totalDue  = this.totalDue + element.totalDue
+          this.salesListDetails.push(element)
+          this.totalPacked  = this.totalPacked + (element.sellingPriceVatIncl * element.totalPacked)
+          this.totalQty  = this.totalQty + element.totalPacked
         })
       }
     )
     .catch(
       error => {
         console.log(error)
-        alert('could not load  sales sheet')
+        alert('could not load  sales list')
         this.router.navigate(['home'])
         location.reload()
       }
@@ -106,31 +95,18 @@ export class SalesSheetPage implements OnInit {
   }
 }
 
-export interface SalesSheetModel{
+export interface SalesListModel{
   id : any
   no : string
-  salesSheetSales : SalesSheetSaleModel[]
+  totalPacked : number
+  salesListDetails : SalesListDetailModel[]
 }
 
-export interface SalesSheetSaleModel{
-  id : any
-  no : string
-  customerName : string
-  customerMobile : string
-  customerLocation : string
-  totalAmount : number
-  totalPaid : number
-  totalDiscount : number
-  totalCharges : number
-  totalDue : number
-  salesSheetSaleDetails : SalesSheetSaleDetailModel[]
-}
-
-export interface SalesSheetSaleDetailModel{
+export interface SalesListDetailModel{
   id : any
   code : string
   barcode : string
   description : string
-  qty : number
-  price : number
+  totalPacked : number
+  sellingPriceVatIncl : number
 }

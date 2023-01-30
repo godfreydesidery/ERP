@@ -3,10 +3,11 @@ import { Injectable } from '@angular/core'
 import * as moment from "moment"
 import { BehaviorSubject, Observable } from 'rxjs'
 import { IUser } from './IUser'
-import { map } from 'rxjs/operators'
+import { finalize, map } from 'rxjs/operators'
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { DatePipe } from '@angular/common'
 import { environment } from '../environments/environment';
+import { NgxSpinnerService } from 'ngx-spinner'
 
 const API_URL = environment.apiUrl;
 
@@ -40,7 +41,8 @@ export class AuthService {
 
   constructor(
     private http : HttpClient,
-    private datePipe : DatePipe
+    private datePipe : DatePipe,
+    private spinner : NgxSpinnerService
     ) {
     this.currentUserSubject = new BehaviorSubject<IUser>(JSON.parse(localStorage.getItem('current-user') || '{}'));
     this.currentUser = this.currentUserSubject.asObservable()
@@ -56,7 +58,9 @@ export class AuthService {
       passCode : passCode
     }
 
+    this.spinner.show()
     return this.http.post<any>(API_URL+'/wms_pass_in', user)
+      .pipe(finalize(() => this.spinner.hide()))
       .pipe(map(user => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem('current-user', JSON.stringify(user))

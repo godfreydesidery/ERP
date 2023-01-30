@@ -15,6 +15,8 @@ import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalController, NavParams } from '@ionic/angular';
 
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { finalize } from 'rxjs';
 
 const API_URL = environment.apiUrl;
 
@@ -82,7 +84,8 @@ export class SalePage implements OnInit {
     private modalService: NgbModal,
     public popoverController: PopoverController,
     private toastController: ToastController,
-    private http : HttpClient) {
+    private http : HttpClient,
+    private spinner: NgxSpinnerService) {
       this.descriptions = []
       this.no = localStorage.getItem('active-list')?.toString()!+this.randomString(10, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
     }
@@ -203,24 +206,14 @@ export class SalePage implements OnInit {
       /**
        * Loading sales list data
        */
-      const toast = await this.toastController.create({
-        message: 'Loading sales list ' +localStorage.getItem('active-list') +' Please wait...',
-        duration: 2000,
-        position: 'top'
-      });
-      await toast.present();
-
+      
       var salesListNo = localStorage.getItem('active-list')
 
       let agent : {
         salesAgentId : number
       } = JSON.parse(localStorage.getItem('current-user')!)
       var agentId = agent.salesAgentId
-
-      this.getSalesList(salesListNo, agentId)
-
-      
-
+      await this.getSalesList(salesListNo, agentId)
     }
   }
 
@@ -230,7 +223,9 @@ export class SalePage implements OnInit {
     let options = {
       //headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
+    this.spinner.show()
     await this.http.get<LProductModel[]>(API_URL+'/wms_load_available_products?sales_list_no='+no +'&sales_agent_id='+agentId, options)
+    .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       data => {
@@ -455,8 +450,9 @@ export class SalePage implements OnInit {
       return
     }
 
+    this.spinner.show()
     await this.http.post(API_URL+'/wms_sale/confirm', sale)
-    //.pipe(finalize(() => this.spinner.hide()))
+    .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       () => {
