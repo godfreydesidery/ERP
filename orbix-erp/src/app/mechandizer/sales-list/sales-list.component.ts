@@ -146,7 +146,7 @@ export class SalesListComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.address = await this.data.getAddress()
+    this.address = await this.data.getAddress2()
     this.logo = await this.data.getLogo()
     this.companyName = await this.data.getCompanyName()
     this.loadSalesLists()
@@ -1061,9 +1061,9 @@ export class SalesListComponent implements OnInit {
       title = 'Sales and Returns'
     }
     if(this.logo == ''){
-      logo = { text : '', width : 70, height : 70, absolutePosition : {x : 40, y : 40}}
+      logo = { text : '', width : 70, height : 70, absolutePosition : {x : 500, y : 40}}
     }else{
-      logo = {image : this.logo, width : 70, height : 70, absolutePosition : {x : 40, y : 40}}
+      logo = {image : this.logo, width : 70, height : 70, absolutePosition : {x : 500, y : 40}}
     }
     var report = [
       [
@@ -1082,6 +1082,18 @@ export class SalesListComponent implements OnInit {
       var qtyOffered  : string = element.qtyOffered.toString()
       var qtyReturned : string = element.qtyReturned.toString()
       var qtyDamaged  : string = element.qtyDamaged.toString()
+      if(element.qtySold == 0){
+        qtySold = '-'
+      }
+      if(element.qtyOffered == 0){
+        qtyOffered = '-'
+      }
+      if(element.qtyReturned == 0){
+        qtyReturned = '-'
+      }
+      if(element.qtyDamaged == 0){
+        qtyDamaged = '-'
+      }
       if(this.status == 'PENDING'){
         qtySold      = ''
         qtyOffered   = ''
@@ -1130,47 +1142,47 @@ export class SalesListComponent implements OnInit {
           {
             columns : 
             [
-              logo,
-              {width : 10, columns : [[]]},
               {
-                width : 300,
+                width : 240,
+                layout : 'noBorders',
+                table : {
+                  widths : [220],
+                  body : [
+                    [
+                      ' '
+                    ],
+                    [
+                      {text : title, fontSize : 12, bold : true}
+                    ],
+                    [
+                      ' '
+                    ],
+                    [
+                      {text : 'Issue No     '+this.no, fontSize : 8}
+                    ],
+                    [
+                      {text : 'Issue Date   '+this.datepipe.transform(this.issueDate, 'yyyy-MM-dd'), fontSize : 8}
+                    ],
+                    [
+                      {text : 'Sales Agent  '+this.salesAgentName, fontSize : 8}
+                    ],
+                    [
+                      {text : 'Customer     '+this.customerName, fontSize : 8}
+                    ],
+                    [
+                      {text : 'Status       '+this.status, fontSize : 8}
+                    ],
+                  ]
+                }
+              },
+              {
+                width : 200,
                 columns : [
                   this.address
                 ]
               },
-            ]
-          },
-          '  ',
-          '  ',
-          {text : title, fontSize : 12, bold : true},
-          '  ',
-          {
-            layout : 'noBorders',
-            table : {
-              widths : [75, 300],
-              body : [
-                [
-                  {text : 'Issue No', fontSize : 9}, 
-                  {text : this.no, fontSize : 9} 
-                ],
-                [
-                  {text : 'Issue Date', fontSize : 9}, 
-                  {text : this.datepipe.transform(this.issueDate, 'yyyy-MM-dd') , fontSize : 9} 
-                ],
-                [
-                  {text : 'Sales Officer', fontSize : 9}, 
-                  {text : this.salesAgentName, fontSize : 9} 
-                ],
-                [
-                  {text : 'Customer', fontSize : 9}, 
-                  {text : this.customerName, fontSize : 9} 
-                ],
-                [
-                  {text : 'Status', fontSize : 9}, 
-                  {text : this.status, fontSize : 9} 
-                ]
-              ]
-            },
+              logo
+            ],
           },
           '  ',
           {
@@ -1261,16 +1273,16 @@ export class SalesListComponent implements OnInit {
       title = 'Sales and Returns'
     }
     if(this.logo == ''){
-      logo = { text : '', width : 70, height : 70, absolutePosition : {x : 40, y : 40}}
+      logo = { text : '', width : 70, height : 70, absolutePosition : {x : 500, y : 40}}
     }else{
-      logo = {image : this.logo, width : 70, height : 70, absolutePosition : {x : 40, y : 40}}
+      logo = {image : this.logo, width : 70, height : 70, absolutePosition : {x : 500, y : 40}}
     }
     var report = [
       [
         {text : 'Code', fontSize : 9}, 
         {text : 'Description', fontSize : 9}, 
         {text : 'Price', fontSize : 9}, 
-        {text : 'Total', fontSize : 9}, 
+        {text : 'Total Packed', fontSize : 9}, 
         {text : 'Sold_____', fontSize : 9}, 
         {text : 'Offered__', fontSize : 9}, 
         {text : 'Returned_', fontSize : 9}, 
@@ -1282,6 +1294,20 @@ export class SalesListComponent implements OnInit {
       var qtyOffered  : string = element.qtyOffered.toString()
       var qtyReturned : string = element.qtyReturned.toString()
       var qtyDamaged  : string = element.qtyDamaged.toString()
+
+      if(element.qtySold == 0){
+        qtySold = '-'
+      }
+      if(element.qtyOffered == 0){
+        qtyOffered = '-'
+      }
+      if(element.qtyReturned == 0){
+        qtyReturned = '-'
+      }
+      if(element.qtyDamaged == 0){
+        qtyDamaged = '-'
+      }
+
       
       var detail = [
         {text : element.product.code.toString(), fontSize : 9}, 
@@ -1313,48 +1339,49 @@ export class SalesListComponent implements OnInit {
           {
             columns : 
             [
-              logo,
-              {width : 10, columns : [[]]},
               {
-                width : 300,
+                width : 240,
+                layout : 'noBorders',
+                table : {
+                  widths : [220],
+                  body : [
+                    [
+                      ' '
+                    ],
+                    [
+                      {text : title, fontSize : 12, bold : true}
+                    ],
+                    [
+                      ' '
+                    ],
+                    [
+                      {text : 'Issue No     '+this.no, fontSize : 8}
+                    ],
+                    [
+                      {text : 'Issue Date   '+this.datepipe.transform(this.issueDate, 'yyyy-MM-dd'), fontSize : 8}
+                    ],
+                    [
+                      {text : 'Sales Agent  '+this.salesAgentName, fontSize : 8}
+                    ],
+                    [
+                      {text : 'Customer     '+this.customerName, fontSize : 8}
+                    ],
+                    [
+                      {text : 'Status       '+this.status, fontSize : 8}
+                    ],
+                  ]
+                }
+              },
+              {
+                width : 200,
                 columns : [
                   this.address
                 ]
               },
-            ]
+              logo
+            ],
           },
-          '  ',
-          '  ',
-          {text : title, fontSize : 12, bold : true},
-          '  ',
-          {
-            layout : 'noBorders',
-            table : {
-              widths : [75, 300],
-              body : [
-                [
-                  {text : 'Issue No', fontSize : 9}, 
-                  {text : this.no, fontSize : 9} 
-                ],
-                [
-                  {text : 'Issue Date', fontSize : 9}, 
-                  {text : this.datepipe.transform(this.issueDate, 'yyyy-MM-dd') , fontSize : 9} 
-                ],
-                [
-                  {text : 'Sales Officer', fontSize : 9}, 
-                  {text : this.salesAgentName, fontSize : 9} 
-                ],
-                [
-                  {text : 'Customer', fontSize : 9}, 
-                  {text : this.customerName, fontSize : 9} 
-                ],
-                [
-                  {text : 'Status', fontSize : 9}, 
-                  {text : this.status, fontSize : 9} 
-                ]
-              ]
-            },
-          },
+
           '  ',
           {
             table : {

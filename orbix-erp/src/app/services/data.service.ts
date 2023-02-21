@@ -177,21 +177,51 @@ export class DataService {
   async getAddress(){
     await this.getCompanyProfile()
     var cName = this.companyName
+    var cPostalAddress = 'P.O. Box '+this.postCode
     var cPhysicalAddress = this.physicalAddress
-    var cPostalAddress = 'P.O. Box '+this.postCode+' '+this.postAddress
     var cTelephone = 'Tel: '+this.telephone
     var cMobile = 'Mob: '+this.mobile
     var cFax = 'Fax: '+this.fax
     var cEmail = 'Email: '+this.email
     var cWebsite = this.website
+    var tin = 'TIN: '+this.tin
+    var vrn = 'VRN: '+this.vrn
     
     var address = [
       {text : cName, fontSize : 12, bold : true},
-      {text : cPhysicalAddress, fontSize : 9},
       {text : cPostalAddress, fontSize : 9},
+      {text : cPhysicalAddress, fontSize : 9},
       {text : cTelephone, fontSize : 9},
       {text : cEmail, fontSize : 9, italic : true},
-      {text : cWebsite, fontSize : 9, italic : true}
+      {text : cWebsite, fontSize : 9, italic : true},
+      {text : tin, fontSize : 9, italic : true},
+      {text : vrn, fontSize : 9, italic : true}
+    ]
+    return address
+  }
+
+  async getAddress2(){
+    await this.getCompanyProfile()
+    var cName = this.companyName
+    var cPostalAddress = 'P.O. Box '+this.postCode
+    var cPhysicalAddress = this.physicalAddress
+    var cTelephone = 'Tel: '+this.telephone
+    var cMobile = 'Mob: '+this.mobile
+    var cFax = 'Fax: '+this.fax
+    var cEmail = 'Email: '+this.email
+    var cWebsite = this.website
+    var tin = 'TIN: '+this.tin
+    var vrn = 'VRN: '+this.vrn
+    
+    var address = [
+      {text : cName, fontSize : 12, bold : true, alignment : 'right'},
+      {text : cPostalAddress, fontSize : 9, alignment : 'right'},
+      {text : cPhysicalAddress, fontSize : 9, alignment : 'right'},
+      {text : cTelephone, fontSize : 9, alignment : 'right'},
+      {text : cEmail, fontSize : 9, italic : true, alignment : 'right'},
+      {text : cWebsite, fontSize : 9, italic : true, alignment : 'right'},
+      {text : tin, fontSize : 9, italic : true, alignment : 'right'},
+      {text : vrn, fontSize : 9, italic : true, alignment : 'right'}
     ]
     return address
   }

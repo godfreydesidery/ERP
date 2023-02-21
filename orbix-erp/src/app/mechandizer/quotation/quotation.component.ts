@@ -130,7 +130,7 @@ export class QuotationComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.logo = await this.data.getLogo() 
-    this.address = await this.data.getAddress()
+    this.address = await this.data.getAddress2()
     this.companyName = await this.data.getCompanyName()
     this.paymentDetails = await this.data.getPaymentDetails()
     this.loadQuotations()
@@ -839,16 +839,16 @@ export class QuotationComponent implements OnInit {
     var logo : any = ''
     var total : number = 0
     if(this.logo == ''){
-      logo = { text : '', width : 70, height : 70, absolutePosition : {x : 40, y : 40}}
+      logo = { text : '', width : 70, height : 70, absolutePosition : {x : 500, y : 40}}
     }else{
-      logo = {image : this.logo, width : 70, height : 70, absolutePosition : {x : 40, y : 40}}
+      logo = {image : this.logo, width : 70, height : 70, absolutePosition : {x : 500, y : 40}}
     }
     var report = [
       [
         {text : 'Code', fontSize : 9}, 
         {text : 'Description', fontSize : 9},
         {text : 'Qty', fontSize : 9},
-        {text : 'Price', fontSize : 9},
+        {text : 'Price(VAT Incl)', fontSize : 9},
         {text : 'Total', fontSize : 9}
       ]
     ]    
@@ -870,7 +870,7 @@ export class QuotationComponent implements OnInit {
       {text : '', fontSize : 9},
       {text : total.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'},        
     ]
-    report.push(detailSummary)
+    //report.push(detailSummary)
     const docDefinition = {
       header: '',
       watermark : { text : this.companyName, color: 'blue', opacity: 0.1, bold: true, italics: false },
@@ -878,42 +878,46 @@ export class QuotationComponent implements OnInit {
           {
             columns : 
             [
-              logo,
-              {width : 10, columns : [[]]},
               {
-                width : 300,
+                width : 240,
+                layout : 'noBorders',
+                table : {
+                  widths : [220],
+                  body : [
+                    [
+                      ' '
+                    ],
+                    [
+                      {text : title, fontSize : 12, bold : true}
+                    ],
+                    [
+                      ' '
+                    ],
+                    [
+                      {text : 'Quotation No     '+this.no, fontSize : 8}
+                    ],
+                    [
+                      {text : 'Customer     '+this.customerName, fontSize : 8}
+                    ],
+                    [
+                      {text : 'Status       '+this.status, fontSize : 8}
+                    ],
+                  ]
+                }
+              },
+              {
+                width : 200,
                 columns : [
                   this.address
                 ]
               },
-            ]
+              logo
+            ],
           },
-          '  ',
-          '  ',
-          {text : title, fontSize : 12, bold : true},
-          '  ',
-          {
-            layout : 'noBorders',
-            table : {
-              widths : [75, 300],
-              body : [
-                [
-                  {text : 'Quotation No', fontSize : 9}, 
-                  {text : this.no, fontSize : 9} 
-                ],
-                [
-                  {text : 'Customer', fontSize : 9}, 
-                  {text : this.customerName, fontSize : 9} 
-                ],
-                [
-                  {text : 'Status', fontSize : 9}, 
-                  {text : this.status, fontSize : 9} 
-                ]
-              ]
-            },
-          },
+         
           ' ',
           {
+            layout : 'noBorders',
             table : {
               widths : [160, 160],
               body : [
@@ -930,6 +934,7 @@ export class QuotationComponent implements OnInit {
           },
           ' ',
           {
+            layout : 'headerLineOnly',
             table : {
                 headerRows : 1,
                 widths : ['auto', 230, 'auto', 70, 80],
@@ -939,6 +944,7 @@ export class QuotationComponent implements OnInit {
         ' ',
         ' ',
         {
+          layout : 'noBorders',
           table : {
             widths : [75, 75],
             body : [
@@ -964,7 +970,7 @@ export class QuotationComponent implements OnInit {
               ],
               [
                 {text : 'Net Amount', fontSize : 9}, 
-                {text : this.netAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+                {text : this.netAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right', bold : true} 
               ]
             ]
           },
@@ -972,6 +978,7 @@ export class QuotationComponent implements OnInit {
         ' ',
         'Payment Details',
         {
+          layout : 'noBorders',
           table : {
             widths : [150, 150, 150],
             body : [

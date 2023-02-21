@@ -133,7 +133,7 @@ export class PackingListComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.address = await this.data.getAddress()
+    this.address = await this.data.getAddress2()
     this.logo = await this.data.getLogo()
     this.companyName = await this.data.getCompanyName()
     this.loadPackingLists()
@@ -920,9 +920,9 @@ export class PackingListComponent implements OnInit {
       title = 'Sales and Returns'
     }
     if(this.logo == ''){
-      logo = { text : '', width : 70, height : 70, absolutePosition : {x : 40, y : 40}}
+      logo = { text : '', width : 70, height : 70, absolutePosition : {x : 500, y : 40}}
     }else{
-      logo = {image : this.logo, width : 70, height : 70, absolutePosition : {x : 40, y : 40}}
+      logo = {image : this.logo, width : 70, height : 70, absolutePosition : {x : 500, y : 40}}
     }
     var report = [
       [
@@ -935,12 +935,20 @@ export class PackingListComponent implements OnInit {
       ]
     ]   
     this.packingListDetails.forEach((element) => {
+      var prevReturn : string = '-'
+      var issued : string = '-'
+      if(element.previousReturns != 0){
+        prevReturn = element.previousReturns.toString()
+      }
+      if(element.qtyIssued != 0){
+        issued = element.qtyIssued.toString()
+      }
       var detail = [
         {text : element.product.code.toString(), fontSize : 9}, 
         {text : element.product.description.toString(), fontSize : 9}, 
         {text : element.sellingPriceVatIncl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'}, 
-        {text : element.previousReturns.toString(), fontSize : 9}, 
-        {text : element.qtyIssued.toString(), fontSize : 9}, 
+        {text : prevReturn, fontSize : 9}, 
+        {text : issued.toString(), fontSize : 9}, 
         {text : element.totalPacked.toString(), fontSize : 9} 
       ]
       report.push(detail)
@@ -952,49 +960,50 @@ export class PackingListComponent implements OnInit {
           {
             columns : 
             [
-              logo,
-              {width : 10, columns : [[]]},
               {
-                width : 300,
+                width : 240,
+                layout : 'noBorders',
+                table : {
+                  widths : [220],
+                  body : [
+                    [
+                      ' '
+                    ],
+                    [
+                      {text : title, fontSize : 12, bold : true}
+                    ],
+                    [
+                      ' '
+                    ],
+                    [
+                      {text : 'Issue No     '+this.no, fontSize : 8}
+                    ],
+                    [
+                      {text : 'Sales Agent  '+this.salesAgentName, fontSize : 8}
+                    ],
+                    [
+                      {text : 'Customer     '+this.customerName, fontSize : 8}
+                    ],
+                    [
+                      {text : 'Status       '+this.status, fontSize : 8}
+                    ],
+                  ]
+                }
+              },
+              {
+                width : 200,
                 columns : [
                   this.address
                 ]
               },
-            ]
-          },
-          '  ',
-          '  ',
-          {text : title, fontSize : 12, bold : true},
-          '  ',
-          {
-            layout : 'noBorders',
-            table : {
-              widths : [75, 300],
-              body : [
-                [
-                  {text : 'Issue No', fontSize : 9}, 
-                  {text : this.no, fontSize : 9} 
-                ],
-                [
-                  {text : 'Sales Officer', fontSize : 9}, 
-                  {text : this.salesAgentName, fontSize : 9} 
-                ],
-                [
-                  {text : 'Customer', fontSize : 9}, 
-                  {text : this.customerName, fontSize : 9} 
-                ],
-                [
-                  {text : 'Status', fontSize : 9}, 
-                  {text : this.status, fontSize : 9} 
-                ]
-              ]
-            },
+              logo
+            ],
           },
           '  ',
           {
             table : {
                 headerRows : 1,
-                widths : ['auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+                widths : [40, 250, 70, 'auto', 'auto', 'auto'],
                 body : report
             }
         },
