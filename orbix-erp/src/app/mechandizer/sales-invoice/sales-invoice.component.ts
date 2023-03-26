@@ -126,7 +126,7 @@ export class SalesInvoiceComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.logo = await this.data.getLogo() 
-    this.address = await this.data.getAddress2()
+    this.address = await this.data.getAddress()
     this.paymentDetails = await this.data.getPaymentDetails()
     this.companyName = await this.data.getCompanyName()
     this.loadInvoices()
@@ -825,16 +825,16 @@ export class SalesInvoiceComponent implements OnInit {
     var logo : any = ''
     var total : number = 0
     if(this.logo == ''){
-      logo = { text : '', width : 70, height : 70, absolutePosition : {x : 500, y : 40}}
+      logo = { text : '', width : 80, height : 70, absolutePosition : {x : 40, y : 40}}
     }else{
-      logo = {image : this.logo, width : 70, height : 70, absolutePosition : {x : 500, y : 40}}
+      logo = {image : this.logo, width : 80, height : 70, absolutePosition : {x : 40, y : 40}}
     }
     var report = [
       [
-        {text : 'Code', fontSize : 9}, 
-        {text : 'Description', fontSize : 9},
-        {text : 'Qty', fontSize : 9},
-        {text : 'Price(VAT Incl)', fontSize : 9},
+        {text : 'Code', fontSize : 9, bold : true}, 
+        {text : 'Description', fontSize : 9, bold : true},
+        {text : 'Qty', fontSize : 9, bold : true},
+        {text : 'Price(VAT Incl)', fontSize : 9, bold : true},
         {text : 'Total', fontSize : 9}
       ]
     ]    
@@ -861,11 +861,25 @@ export class SalesInvoiceComponent implements OnInit {
       header: '',
       watermark : { text : this.companyName, color: 'blue', opacity: 0.1, bold: true, italics: false },
         content : [
+          
           {
             columns : 
             [
+              logo,
+              {
+                width : 10,
+                columns : [
+                  {text : ''}
+                ]
+              },
               {
                 width : 240,
+                columns : [
+                  this.address
+                ]
+              },
+              {
+                width : 200,
                 layout : 'noBorders',
                 table : {
                   widths : [220],
@@ -877,27 +891,22 @@ export class SalesInvoiceComponent implements OnInit {
                       {text : title, fontSize : 12, bold : true}
                     ],
                     [
-                      ' '
+                      {text : '# '+ this.no, fontSize : 11, bold : true}
                     ],
                     [
-                      {text : 'Invoice No     '+this.no, fontSize : 8}
+                      ''
                     ],
                     [
-                      {text : 'Customer     '+this.customerName, fontSize : 8}
+                      {text : 'Customer: '+this.customerName, fontSize : 8}
                     ],
                     [
-                      {text : 'Status       '+this.status, fontSize : 8}
+                      {text : 'Status: '+this.status, fontSize : 8}
                     ],
                   ]
                 }
               },
-              {
-                width : 200,
-                columns : [
-                  this.address
-                ]
-              },
-              logo
+              
+              
             ],
           },
           '  ',
@@ -920,7 +929,7 @@ export class SalesInvoiceComponent implements OnInit {
           },
           ' ',
           {
-            layout : 'headerLineOnly',
+            //layout : 'headerLineOnly',
             table : {
                 headerRows : 1,
                 widths : ['auto', 230, 'auto', 70, 80],
@@ -935,28 +944,28 @@ export class SalesInvoiceComponent implements OnInit {
             widths : [75, 75],
             body : [
               [
-                {text : 'Total VAT', fontSize : 9}, 
-                {text : this.totalVat.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+                {text : 'Total VAT', fontSize : 8}, 
+                {text : this.totalVat.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right'} 
               ],
               [
-                {text : 'Amount VAT Excl', fontSize : 9}, 
-                {text : this.amountVatExcl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+                {text : 'Amount VAT Excl', fontSize : 8}, 
+                {text : this.amountVatExcl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right'} 
               ],
               [
-                {text : 'Amount VAT Incl', fontSize : 9}, 
-                {text : this.amountVatIncl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+                {text : 'Amount VAT Incl', fontSize : 8}, 
+                {text : this.amountVatIncl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right'} 
               ],
               [
-                {text : 'Discount', fontSize : 9}, 
-                {text : this.discount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+                {text : 'Discount', fontSize : 8}, 
+                {text : this.discount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right'} 
               ],
               [
-                {text : 'Other Charges', fontSize : 9}, 
-                {text : this.otherCharges.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'} 
+                {text : 'Other Charges', fontSize : 8}, 
+                {text : this.otherCharges.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right'} 
               ],
               [
-                {text : 'Net Amount', fontSize : 9}, 
-                {text : this.netAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right', bold : true} 
+                {text : 'Net Amount', fontSize : 8}, 
+                {text : this.netAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right', bold : true} 
               ]
             ]
           },

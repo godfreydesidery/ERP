@@ -133,7 +133,7 @@ export class PackingListComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.address = await this.data.getAddress2()
+    this.address = await this.data.getAddress()
     this.logo = await this.data.getLogo()
     this.companyName = await this.data.getCompanyName()
     this.loadPackingLists()
@@ -920,9 +920,9 @@ export class PackingListComponent implements OnInit {
       title = 'Sales and Returns'
     }
     if(this.logo == ''){
-      logo = { text : '', width : 70, height : 70, absolutePosition : {x : 500, y : 40}}
+      logo = { text : '', width : 80, height : 70, absolutePosition : {x : 40, y : 40}}
     }else{
-      logo = {image : this.logo, width : 70, height : 70, absolutePosition : {x : 500, y : 40}}
+      logo = {image : this.logo, width : 80, height : 70, absolutePosition : {x : 40, y : 40}}
     }
     var report = [
       [
@@ -960,8 +960,21 @@ export class PackingListComponent implements OnInit {
           {
             columns : 
             [
+              logo,
+              {
+                width : 10,
+                columns : [
+                  {text : ''}
+                ]
+              },
               {
                 width : 240,
+                columns : [
+                  this.address
+                ]
+              },
+              {
+                width : 200,
                 layout : 'noBorders',
                 table : {
                   widths : [220],
@@ -973,30 +986,23 @@ export class PackingListComponent implements OnInit {
                       {text : title, fontSize : 12, bold : true}
                     ],
                     [
-                      ' '
+                      {text : '# '+ this.no, fontSize : 9, bold : true}
                     ],
                     [
-                      {text : 'Issue No     '+this.no, fontSize : 8}
+                      ''
                     ],
                     [
-                      {text : 'Sales Agent  '+this.salesAgentName, fontSize : 8}
+                      {text : 'Sales Agent: '+this.salesAgentName, fontSize : 8}
                     ],
                     [
-                      {text : 'Customer     '+this.customerName, fontSize : 8}
+                      {text : 'Customer: '+this.customerName, fontSize : 8}
                     ],
                     [
-                      {text : 'Status       '+this.status, fontSize : 8}
+                      {text : 'Status: '+this.status, fontSize : 8}
                     ],
                   ]
                 }
-              },
-              {
-                width : 200,
-                columns : [
-                  this.address
-                ]
-              },
-              logo
+              }
             ],
           },
           '  ',
