@@ -38,6 +38,7 @@ public class SalesListModel {
 	
 	double totalDiscounts = 0;
 	double totalExpenditures = 0;
+	double totalCommission = 0;
 	double totalBank = 0;
 	double totalCash = 0;
 	double totalDeficit = 0;

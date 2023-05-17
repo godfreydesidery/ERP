@@ -16,8 +16,11 @@
                 <tr>
                     <th>Date</th>
                     <th>Amount</th>
-                    <th>Discounts</th>
-                    <th>Tax</th>
+                    <th>Discount</th>
+                    <th>VAT</th>
+                    <th>Sales Discount</th>
+                    <th>Sales Expenses</th>
+                    <th>Sales Commission</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,12 +29,18 @@
                     <td style="text-align: right;">{{r.amount | currency:'':''}}</td>
                     <td style="text-align: right;">{{r.discount | currency:'':''}}</td>
                     <td style="text-align: right;">{{r.tax | currency:'':''}}</td>
+                    <td style="text-align: right;">{{r.salesDiscount | currency:'':''}}</td>
+                    <td style="text-align: right;">{{r.salesExpenses | currency:'':''}}</td>
+                    <td style="text-align: right;">{{r.salesCommission | currency:'':''}}</td>
                 </tr>               
                 <tr>
                     <th></th>
                     <th style="text-align: right;">{{totalAmount | currency:'':''}}</th>
                     <th style="text-align: right;">{{totalDiscount | currency:'':''}}</th>
                     <th style="text-align: right;">{{totalTax | currency:'':''}}</th>
+                    <th style="text-align: right;">{{totalSalesDiscount | currency:'':''}}</th>
+                    <th style="text-align: right;">{{totalSalesExpenses | currency:'':''}}</th>
+                    <th style="text-align: right;">{{totalSalesCommission | currency:'':''}}</th>
                 </tr>
             </tbody>
         </table>

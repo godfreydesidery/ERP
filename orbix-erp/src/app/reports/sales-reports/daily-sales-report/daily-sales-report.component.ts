@@ -50,6 +50,9 @@ export class DailySalesReportComponent implements OnInit {
   totalAmount : number = 0
   totalDiscount : number = 0
   totalTax : number = 0
+  totalSalesDiscount : number = 0
+  totalSalesExpenses : number = 0
+  totalSalesCommission : number = 0
 
   constructor(private auth : AuthService,
               private http :HttpClient,
@@ -96,10 +99,16 @@ export class DailySalesReportComponent implements OnInit {
     this.totalAmount = 0
     this.totalDiscount = 0
     this.totalTax = 0
+    this.totalSalesDiscount = 0
+    this.totalSalesExpenses = 0
+    this.totalSalesCommission = 0
     this.report.forEach(element => {
       this.totalAmount = this.totalAmount + element.amount
       this.totalDiscount = this.totalDiscount + element.discount
       this.totalTax = this.totalTax + element.tax
+      this.totalSalesDiscount = this.totalSalesDiscount + element.salesDiscount
+      this.totalSalesExpenses = this.totalSalesExpenses + element.salesExpenses
+      this.totalSalesCommission = this.totalSalesCommission + element.salesCommission
     })
   }
 
@@ -301,4 +310,7 @@ export interface IDailySalesReport {
   amount   : number
   discount : number
   tax      : number
+  salesDiscount : number
+  salesExpenses : number
+  salesCommission : number
 }

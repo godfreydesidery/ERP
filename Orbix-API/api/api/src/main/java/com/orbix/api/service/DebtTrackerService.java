@@ -18,5 +18,6 @@ public interface DebtTrackerService {
 	public boolean create(DebtTracker debtTracker, User user);
 	public DebtTracker pay(DebtTracker debtTracker, double amount, User user);
 	public RecordModel requestDebtTrackerNo();
-	List<DebtTracker>getAll();
+	List<DebtTracker>getAllVisible();
+	boolean archiveAll();
 }

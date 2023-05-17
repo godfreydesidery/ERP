@@ -187,6 +187,7 @@ public class SalesListResource {
 			l.get().setTotalDeficit(salesList.getTotalDeficit());
 			l.get().setTotalDiscounts(salesList.getTotalDiscounts());
 			l.get().setTotalExpenditures(salesList.getTotalExpenditures());
+			l.get().setTotalCommission(salesList.getTotalCommission());
 			l.get().setTotalBank(salesList.getTotalBank());
 			l.get().setTotalCash(salesList.getTotalCash());
 			

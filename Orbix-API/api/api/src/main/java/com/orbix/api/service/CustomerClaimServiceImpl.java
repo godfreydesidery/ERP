@@ -380,7 +380,7 @@ public class CustomerClaimServiceImpl implements CustomerClaimService {
 		String sNumber = number.toString();
 		//return "PTM-"+Formater.formatSix(sNumber);
 		//return "PTM-"+sNumber;
-		return Formater.formatWithCurrentDate("PTP",sNumber);
+		return Formater.formatWithCurrentDate("CCL",sNumber);
 	}
 
 	@Override

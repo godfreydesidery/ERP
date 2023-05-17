@@ -63,7 +63,7 @@ public class PackingListServiceImpl implements PackingListService {
 	@Override
 	public PackingListModel save(PackingList packingList) {
 		if(!validate(packingList)) {
-			throw new InvalidEntryException("Could not save, Sales Issue pclalid");
+			throw new InvalidEntryException("Could not save, Sales Issue invalid");
 		}
 		PackingList pcl = packingListRepository.saveAndFlush(packingList);
 		if(pcl.getNo().equals("NA")) {

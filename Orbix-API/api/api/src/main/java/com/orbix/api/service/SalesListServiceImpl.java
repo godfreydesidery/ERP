@@ -85,6 +85,7 @@ public class SalesListServiceImpl implements SalesListService {
 		double totalDamages = 0;
 		double totalDiscounts = salesList.getTotalDiscounts();
 		double totalExpenditures = salesList.getTotalExpenditures();
+		double totalCommission = salesList.getTotalCommission();
 		double totalBank = salesList.getTotalBank();
 		double totalCash = salesList.getTotalCash();
 		double totalDeficit = salesList.getTotalDeficit();
@@ -102,7 +103,8 @@ public class SalesListServiceImpl implements SalesListService {
 		model.setTotalDamages(salesList.getTotalDamages());
 		model.setTotalDeficit(salesList.getTotalDeficit());
 		model.setTotalDiscounts(salesList.getTotalDiscounts());
-		model.setTotalExpenditures(salesList.getTotalReturns());
+		model.setTotalExpenditures(salesList.getTotalExpenditures());
+		model.setTotalCommission(salesList.getTotalCommission());
 		model.setTotalReturns(salesList.getTotalReturns());
 		if(salesList.getCreatedAt() != null && salesList.getCreatedBy() != null) {
 			model.setCreated(dayRepository.findById(salesList.getCreatedAt()).get().getBussinessDate() +" "+ userRepository.getAlias(salesList.getCreatedBy()));
@@ -145,6 +147,7 @@ public class SalesListServiceImpl implements SalesListService {
 			
 			model.setTotalDiscounts(totalDiscounts);
 			model.setTotalExpenditures(totalExpenditures);
+			model.setTotalCommission(totalCommission);
 			model.setTotalBank(totalBank);
 			model.setTotalCash(totalCash);
 			model.setTotalDeficit(totalDeficit);
@@ -177,6 +180,7 @@ public class SalesListServiceImpl implements SalesListService {
 		double totalDamages = 0;
 		double totalDiscounts = pcl.get().getTotalDiscounts();
 		double totalExpenditures = pcl.get().getTotalExpenditures();
+		double totalCommission = pcl.get().getTotalCommission();
 		double totalBank = pcl.get().getTotalBank();
 		double totalCash = pcl.get().getTotalCash();
 		double totalDeficit = pcl.get().getTotalDeficit();
@@ -223,6 +227,7 @@ public class SalesListServiceImpl implements SalesListService {
 		
 		model.setTotalDiscounts(totalDiscounts);
 		model.setTotalExpenditures(totalExpenditures);
+		model.setTotalCommission(totalCommission);
 		model.setTotalBank(totalBank);
 		model.setTotalCash(totalCash);
 		model.setTotalDeficit(totalDeficit);
@@ -254,6 +259,7 @@ public class SalesListServiceImpl implements SalesListService {
 		double totalDamages = 0;
 		double totalDiscounts = pcl.get().getTotalDiscounts();
 		double totalExpenditures = pcl.get().getTotalExpenditures();
+		double totalCommission = pcl.get().getTotalCommission();
 		double totalBank = pcl.get().getTotalBank();
 		double totalCash = pcl.get().getTotalCash();
 		double totalDeficit = pcl.get().getTotalDeficit();
@@ -300,6 +306,7 @@ public class SalesListServiceImpl implements SalesListService {
 		
 		model.setTotalDiscounts(totalDiscounts);
 		model.setTotalExpenditures(totalExpenditures);
+		model.setTotalCommission(totalCommission);
 		model.setTotalBank(totalBank);
 		model.setTotalCash(totalCash);
 		model.setTotalDeficit(totalDeficit);
@@ -338,7 +345,7 @@ public class SalesListServiceImpl implements SalesListService {
 			model.setTotalDamages(pcl.getTotalDamages());
 			model.setTotalDeficit(pcl.getTotalDeficit());
 			model.setTotalDiscounts(pcl.getTotalDiscounts());
-			model.setTotalExpenditures(pcl.getTotalReturns());
+			model.setTotalExpenditures(pcl.getTotalExpenditures());
 			model.setTotalReturns(pcl.getTotalReturns());
 			
 			if(pcl.getCreatedAt() != null && pcl.getCreatedBy() != null) {
@@ -447,6 +454,9 @@ public class SalesListServiceImpl implements SalesListService {
 		SalesList slsl = salesListRepository.saveAndFlush(salesList);
 		List<SalesListDetail> details = slsl.getSalesListDetails();
 		Sale sale = new Sale();
+		sale.setSalesDiscount(salesList.getTotalDiscounts());
+		sale.setSalesExpenses(salesList.getTotalExpenditures());
+		sale.setSalesCommission(salesList.getTotalCommission());
 		sale.setCreatedAt(dayRepository.getCurrentBussinessDay().getId());
 		sale.setCreatedBy(userService.getUserId(request));
 		sale.setDay(dayRepository.getCurrentBussinessDay());
@@ -463,6 +473,7 @@ public class SalesListServiceImpl implements SalesListService {
 		double totalDamages = 0;
 		double totalDiscounts = slsl.getTotalDiscounts();
 		double totalExpenditures = slsl.getTotalExpenditures();
+		double totalCommission = slsl.getTotalCommission();
 		double totalBank = slsl.getTotalBank();
 		double totalCash = slsl.getTotalCash();
 		double totalDeficit = slsl.getTotalDeficit();
@@ -572,6 +583,9 @@ public class SalesListServiceImpl implements SalesListService {
 		if(totalExpenditures < 0) {
 			throw new InvalidEntryException("Could not process, invalid expenses amount");
 		}
+		if(totalCommission < 0) {
+			throw new InvalidEntryException("Could not process, invalid commission amount");
+		}
 		if(totalBank < 0) {
 			throw new InvalidEntryException("Could not process, invalid bank amount");
 		}
@@ -582,7 +596,7 @@ public class SalesListServiceImpl implements SalesListService {
 			throw new InvalidEntryException("Could not process, invalid deficit amount");
 		}
 		
-		if(totalSales != totalDiscounts + totalExpenditures + totalBank + totalCash + totalDeficit) {
+		if(totalSales != totalDiscounts + totalExpenditures + totalCommission + totalBank + totalCash + totalDeficit) {
 			throw new InvalidEntryException("Could not process, amounts do not tally ");
 		}
 		if(totalAmountPacked != totalSales +totalReturns + totalOffered + totalDamages) {
@@ -721,9 +735,21 @@ public class SalesListServiceImpl implements SalesListService {
 		}
 		
 		List<SalesListDetail> salesListDetails =  s.get().getSalesListDetails();
+		double totalDiscount = 0;
+		double totalExpenses = 0;
+		double totalCommission = 0;
+		List<SalesSheetSale> ssss = ss.get().getSalesSheetSales();
+		for(SalesSheetSale salesSheetSale : ssss) {
+			totalDiscount = totalDiscount + salesSheetSale.getTotalDiscount();
+		}
+		s.get().setTotalDiscounts(totalDiscount);
+		salesListRepository.saveAndFlush(s.get());
+		
 		double qtySold = 0;
 		for(SalesListDetail salesListDetail : salesListDetails) {
 			List<SalesSheetSale> salesSheetSales = ss.get().getSalesSheetSales();
+			
+			
 			for(SalesSheetSale salesSheetSale : salesSheetSales) {
 				List<SalesSheetSaleDetail> slesSheetSaleDetails = salesSheetSale.getSalesSheetSaleDetails();
 				for(SalesSheetSaleDetail salesSheetSaleDetail : slesSheetSaleDetails) {

@@ -67,7 +67,8 @@ export class SalesListComponent implements OnInit {
   totalDeficit         : number
 
   totalDiscounts       : number
-  totalExpenditures     : number
+  totalExpenditures    : number
+  totalCommission      : number
   totalBank            : number
   totalCash            : number
 
@@ -124,7 +125,8 @@ export class SalesListComponent implements OnInit {
     this.totalDeficit         = 0
 
     this.totalDiscounts       = 0
-    this.totalExpenditures     = 0
+    this.totalExpenditures    = 0
+    this.totalCommission      = 0
     this.totalBank            = 0
     this.totalCash            = 0
 
@@ -185,7 +187,8 @@ export class SalesListComponent implements OnInit {
           this.totalDamages         = data!.totalDamages
           this.totalDeficit         = data!.totalDeficit
           this.totalDiscounts       = data!.totalDiscounts
-          this.totalExpenditures     = data!.totalExpenditures
+          this.totalExpenditures    = data!.totalExpenditures
+          this.totalCommission      = data!.totalCommission
           this.totalBank            = data!.totalBank
           this.totalCash            = data!.totalCash
           this.get(this.id)
@@ -219,7 +222,8 @@ export class SalesListComponent implements OnInit {
           this.totalDamages         = data!.totalDamages
           this.totalDeficit         = data!.totalDeficit
           this.totalDiscounts       = data!.totalDiscounts
-          this.totalExpenditures     = data!.totalExpenditures
+          this.totalExpenditures    = data!.totalExpenditures
+          this.totalCommission      = data!.totalCommission
           this.totalBank            = data!.totalBank
           this.totalCash            = data!.totalCash
           this.get(this.id)
@@ -275,7 +279,8 @@ export class SalesListComponent implements OnInit {
         this.totalDamages         = data!.totalDamages
         this.totalDeficit         = data!.totalDeficit
         this.totalDiscounts       = data!.totalDiscounts
-        this.totalExpenditures     = data!.totalExpenditures
+        this.totalExpenditures    = data!.totalExpenditures
+        this.totalCommission      = data!.totalCommission
         this.totalBank            = data!.totalBank
         this.totalCash            = data!.totalCash
         this.refresh()
@@ -351,6 +356,7 @@ export class SalesListComponent implements OnInit {
         this.totalDeficit         = data!.totalDeficit
         this.totalDiscounts       = data!.totalDiscounts
         this.totalExpenditures    = data!.totalExpenditures
+        this.totalCommission      = data!.totalCommission
         this.totalBank            = data!.totalBank
         this.totalCash            = data!.totalCash
         this.refresh()
@@ -382,9 +388,10 @@ export class SalesListComponent implements OnInit {
       totalDamages         : this.totalDamages,         
       totalDeficit         : this.totalDeficit,         
       totalDiscounts       : this.totalDiscounts,       
-      totalExpenditures    : this.totalExpenditures,     
+      totalExpenditures    : this.totalExpenditures, 
       totalBank            : this.totalBank,            
-      totalCash            : this.totalCash
+      totalCash            : this.totalCash,
+      totalCommission      : this.totalCommission
     }
     this.spinner.show()
     await this.http.put(API_URL+'/sales_lists/approve', slst, options)
@@ -513,7 +520,7 @@ export class SalesListComponent implements OnInit {
 
   async archive(id: any) {
     if(id == null || id == ''){
-      window.alert('Please select Invoice to archive')
+      window.alert('Please select Document to archive')
       return
     }
     if(!window.confirm('Confirm archiving of the selected Invoice')){
@@ -601,6 +608,7 @@ export class SalesListComponent implements OnInit {
     this.totalDeficit         = 0
     this.totalDiscounts       = 0
     this.totalExpenditures    = 0
+    this.totalCommission      = 0
     this.totalBank            = 0
     this.totalCash            = 0
   }
@@ -1040,7 +1048,7 @@ export class SalesListComponent implements OnInit {
   }
 
   calculateTotalDeficit(){
-    this.totalDeficit = +this.totalSales - (+this.totalExpenditures + +this.totalDiscounts + +this.totalBank + +this.totalCash)
+    this.totalDeficit = +this.totalSales - (+this.totalExpenditures + +this.totalDiscounts + +this.totalCommission + +this.totalBank + +this.totalCash)
   }
 
   enablePriceChange(){
@@ -1119,6 +1127,7 @@ export class SalesListComponent implements OnInit {
     var totalDamages = this.totalDamages.toLocaleString('en-US', { minimumFractionDigits: 2 })
     var totalDiscounts = this.totalDiscounts.toLocaleString('en-US', { minimumFractionDigits: 2 })
     var totalExpenditures = this.totalExpenditures.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalCommission = this.totalCommission.toLocaleString('en-US', { minimumFractionDigits: 2 })
     var totalBank = this.totalBank.toLocaleString('en-US', { minimumFractionDigits: 2 })
     var totalCash = this.totalCash.toLocaleString('en-US', { minimumFractionDigits: 2 })
     var totalDeficit = this.totalDeficit.toLocaleString('en-US', { minimumFractionDigits: 2 })
@@ -1130,6 +1139,7 @@ export class SalesListComponent implements OnInit {
       totalDamages      = ''
       totalDiscounts    = ''
       totalExpenditures = ''
+      totalCommission   = ''
       totalBank         = ''
       totalCash         = ''
       totalDeficit      = ''
@@ -1236,6 +1246,10 @@ export class SalesListComponent implements OnInit {
                 {text : totalExpenditures, fontSize : 9, alignment : 'right'} 
               ],
               [
+                {text : 'Total Commission', fontSize : 9}, 
+                {text : totalCommission, fontSize : 9, alignment : 'right'} 
+              ],
+              [
                 {text : 'Total Bank', fontSize : 9}, 
                 {text : totalBank, fontSize : 9, alignment : 'right'} 
               ],
@@ -1331,6 +1345,7 @@ export class SalesListComponent implements OnInit {
     var totalDamages = this.totalDamages.toLocaleString('en-US', { minimumFractionDigits: 2 })
     var totalDiscounts = this.totalDiscounts.toLocaleString('en-US', { minimumFractionDigits: 2 })
     var totalExpenditures = this.totalExpenditures.toLocaleString('en-US', { minimumFractionDigits: 2 })
+    var totalCommission = this.totalCommission.toLocaleString('en-US', { minimumFractionDigits: 2 })
     var totalBank = this.totalBank.toLocaleString('en-US', { minimumFractionDigits: 2 })
     var totalCash = this.totalCash.toLocaleString('en-US', { minimumFractionDigits: 2 })
     var totalDeficit = this.totalDeficit.toLocaleString('en-US', { minimumFractionDigits: 2 })
@@ -1437,6 +1452,10 @@ export class SalesListComponent implements OnInit {
                 {text : totalExpenditures, fontSize : 9, alignment : 'right'} 
               ],
               [
+                {text : 'Total Commission', fontSize : 9}, 
+                {text : totalCommission, fontSize : 9, alignment : 'right'} 
+              ],
+              [
                 {text : 'Total Bank', fontSize : 9}, 
                 {text : totalBank, fontSize : 9, alignment : 'right'} 
               ],
@@ -1485,7 +1504,8 @@ interface ISalesList{
   totalDamages         : number
 
   totalDiscounts       : number
-  totalExpenditures     : number
+  totalExpenditures    : number
+  totalCommission      : number
   totalBank            : number
   totalCash            : number
 

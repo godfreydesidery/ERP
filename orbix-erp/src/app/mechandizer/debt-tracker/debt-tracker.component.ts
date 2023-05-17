@@ -201,6 +201,31 @@ export class DebtTrackerComponent implements OnInit {
   return
   }
 
+  async archiveAll() {
+    if(!window.confirm('Confirm archiving Paid Debts. All paid debts will be archived')){
+      return
+    }
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.put<boolean>(API_URL+'/debt_trackers/archive_all', null, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        this.getAll()
+        alert('All paid debts archived successifully')
+      }
+    )
+    .catch(
+      error => {
+        console.log(error)
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not archive')
+      }
+    )
+  }
+
   
 }
 

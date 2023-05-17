@@ -18,6 +18,7 @@ import com.orbix.api.domain.SalesAgent;
 import com.orbix.api.domain.SalesList;
 import com.orbix.api.domain.User;
 import com.orbix.api.exceptions.InvalidEntryException;
+import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.models.DebtModel;
 import com.orbix.api.models.DebtTrackerModel;
 import com.orbix.api.models.LpoModel;
@@ -136,9 +137,28 @@ public class DebtTrackerServiceImpl implements DebtTrackerService {
 	}
 
 	@Override
-	public List<DebtTracker> getAll() {
-		return debtTrackerRepository.findAll();
-	}	
+	public List<DebtTracker> getAllVisible() {
+		List<String> statuses = new ArrayList<String>();
+		statuses.add("PAID");
+		statuses.add("UNPAID");
+		statuses.add("PARTIAL");
+		return debtTrackerRepository.findAllVisible(statuses);
+	}
+	
+	@Override
+	public boolean archiveAll() {
+		List<DebtTracker> debtTracker = debtTrackerRepository.findAllPaid("PAID");
+		if(debtTracker.isEmpty()) {
+			throw new NotFoundException("No Debts to archive");
+		}
+		for(DebtTracker d : debtTracker) {	
+			if((d.getStatus().equals("PAID"))) {
+				d.setStatus("ARCHIVED");
+				debtTrackerRepository.saveAndFlush(d);
+			}		
+		}
+		return true;
+	}
 	
 	
 

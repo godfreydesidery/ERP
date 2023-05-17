@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -73,7 +74,7 @@ public class DebtTrackerResource {
 	
 	@GetMapping("/debt_trackers")
 	public ResponseEntity<List<DebtTracker>>getDebtTrackers(){
-		return ResponseEntity.ok().body(debtTrackerService.getAll());
+		return ResponseEntity.ok().body(debtTrackerService.getAllVisible());
 	}
 		
 	@GetMapping("/debt_trackers/history")
@@ -150,5 +151,12 @@ public class DebtTrackerResource {
 		
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/debt_trackers/pay").toUriString());
 		return ResponseEntity.created(uri).body(debtTrackerService.pay(d.get(), debtTracker.getAmount(), userRepository.findById(userService.getUserId(request)).get()));
+	}
+	
+	@PutMapping("/debt_trackers/archive_all")
+	@PreAuthorize("hasAnyAuthority('DEBT_TRACKER-ARCHIVE')")
+	public ResponseEntity<Boolean>archiveDebtTrackers(){			
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/debt_trackers/archive_all").toUriString());
+		return ResponseEntity.created(uri).body(debtTrackerService.archiveAll());
 	}
 }

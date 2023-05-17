@@ -17,6 +17,9 @@ import lombok.Data;
 @Data
 public class SaleModel {
 	Long id = null;	
+	double salesDiscount = 0;
+	double salesExpenses = 0;
+	double salesCommission = 0;
 	String created = "";	
     Day day = null;
     Till till = null;

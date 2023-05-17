@@ -28,10 +28,13 @@ import com.orbix.api.reports.models.SupplySalesReport;
 @Repository
 public interface SaleRepository extends JpaRepository<Sale, Long> {
 	
-	
+	/*
 	@Query(
 			value = "SELECT\r\n" + 
-					"`days`.`bussiness_date` AS `date`,\r\n" + 
+					"`days`.`bussiness_date` AS `date`,\r\n" +
+					"SUM(`sales`.`sales_discount`) AS `salesDiscount`,\r\n" +
+					"SUM(`sales`.`sales_expenses`) AS `salesExpenses`,\r\n" +
+					"SUM(`sales`.`sales_commission`) AS `salesCommission`,\r\n" +
 					"SUM(`sale_details`.`qty`*`sale_details`.`selling_price_vat_incl`) AS `amount`,\r\n" + 
 					"SUM(`sale_details`.`qty`*`sale_details`.`discount`) AS `discount`,\r\n" + 
 					"SUM(`sale_details`.`qty`*`sale_details`.`selling_price_vat_excl`) AS `total_sales_vat_excl`,\r\n" + 
@@ -49,6 +52,49 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 					"`sale_details`.`sale_id`=`sales`.`id`\r\n" + 
 					"GROUP BY\r\n" + 
 					"`date`",
+					nativeQuery = true					
+			)
+			*/
+	
+	@Query(
+			value = "SELECT\r\n" + 
+						"`gross_sales`.`date` AS `date`,`salesDiscount`,`salesExpenses`,`salesCommission`,`amount`,`discount`,`total_sales_vat_excl`,`total_sales_vat_incl`,`tax`\r\n" +					
+					"FROM\r\n" + 
+						"(SELECT\r\n" +
+						"`days`.`bussiness_date` AS `date`,\r\n" +
+						"SUM(`sales`.`sales_discount`) AS `salesDiscount`,\r\n" +
+						"SUM(`sales`.`sales_expenses`) AS `salesExpenses`,\r\n" +
+						"SUM(`sales`.`sales_commission`) AS `salesCommission`\r\n" +
+						"FROM\r\n" +
+						"(SELECT * FROM `days` WHERE `bussiness_date` BETWEEN :from AND :to)`days`\r\n" +
+						"JOIN\r\n" + 
+						"`sales`\r\n" + 
+						"ON\r\n" + 
+						"`days`.`id`=`sales`.`day_id`\r\n" +
+						"GROUP BY\r\n" + 
+						"`date`) `gross_sales`" +					
+					"JOIN\r\n" + 
+						"(SELECT\r\n" +
+						"`days`.`bussiness_date` AS `date`,\r\n" +
+						"SUM(`sale_details`.`qty`*`sale_details`.`selling_price_vat_incl`) AS `amount`,\r\n" + 
+						"SUM(`sale_details`.`qty`*`sale_details`.`discount`) AS `discount`,\r\n" + 
+						"SUM(`sale_details`.`qty`*`sale_details`.`selling_price_vat_excl`) AS `total_sales_vat_excl`,\r\n" + 
+						"SUM(`sale_details`.`qty`*`sale_details`.`selling_price_vat_incl`) AS `total_sales_vat_incl`,\r\n" + 
+						"SUM(`sale_details`.`qty`*`sale_details`.`tax`) AS `tax`\r\n" + 
+						"FROM\r\n" +
+						"(SELECT * FROM `days` WHERE `bussiness_date` BETWEEN :from AND :to)`days`\r\n" +
+						"JOIN\r\n" + 
+						"`sales`\r\n" + 
+						"ON\r\n" + 
+						"`days`.`id`=`sales`.`day_id`\r\n" +
+						"JOIN\r\n" + 
+						"`sale_details`\r\n" + 
+						"ON\r\n" + 
+						"`sale_details`.`sale_id`=`sales`.`id`\r\n" +
+						"GROUP BY\r\n" + 
+						"`date`) `gross_sale_details`" +					
+					"ON\r\n" + 
+						"`gross_sales`.`date`=`gross_sale_details`.`date`\r\n",					
 					nativeQuery = true					
 			)
 	List<DailySalesReport> getDailySalesReport(LocalDate from, LocalDate to);

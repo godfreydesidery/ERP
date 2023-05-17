@@ -50,7 +50,8 @@ public class Object_ {
 	public static String SALES_JOURNAL = "SALES_JOURNAL";
 	public static String PACKING_LIST = "PACKING_LIST";
 	public static String SALES_LIST = "SALES_LIST";
-	public static String DEBT_RECEIPT = "DEBT_RECEIPT";	
+	public static String DEBT_RECEIPT = "DEBT_RECEIPT";
+	public static String DEBT_TRACKER = "DEBT_TRACKER";
 	public static String BILL_REPRINT = "BILL_REPRINT";
 	public static String CUSTOMER_RETURN = "CUSTOMER_RETURN";
 	public static String CUSTOMER_CLAIM = "CUSTOMER_CLAIM";

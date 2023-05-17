@@ -59,6 +59,7 @@ public class SalesList {
 	private double totalDamages = 0;
 	private double totalDiscounts = 0;
 	private double totalExpenditures = 0;
+	private double totalCommission = 0;
 	private double totalBank = 0;
 	private double totalCash = 0;
 	private double totalOther = 0;

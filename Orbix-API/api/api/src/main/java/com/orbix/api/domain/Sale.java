@@ -39,6 +39,10 @@ public class Sale {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	private double salesDiscount = 0;
+	private double salesExpenses = 0;
+	private double salesCommission = 0;
+	
 	private Long createdBy;
 	private Long createdAt;
 	

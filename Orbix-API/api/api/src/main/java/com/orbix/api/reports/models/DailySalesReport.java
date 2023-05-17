@@ -16,5 +16,7 @@ public interface DailySalesReport {
 	double getAmount();
 	double getDiscount();
 	double getTax();
-	
+	double getSalesDiscount();
+	double getSalesExpenses();
+	double getSalesCommission();	
 }
