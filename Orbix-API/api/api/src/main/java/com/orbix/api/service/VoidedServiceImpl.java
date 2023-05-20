@@ -43,7 +43,7 @@ public class VoidedServiceImpl implements VoidedService {
 		// setCreatedBy(userService.getUserId(request));
 		Voided voided = new Voided();
 		voided.setTill(till);
-		voided.setNo(till.getNo()+refId.toString());
+		voided.setNo(till.getNo()+refId.toString()+Math.random());//sets  a random unique string
 		voided.setBarcode(barcode);
 		voided.setCode(code);
 		voided.setDescription(description);
