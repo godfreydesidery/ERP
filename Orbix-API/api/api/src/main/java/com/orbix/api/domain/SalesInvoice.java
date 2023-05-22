@@ -68,6 +68,11 @@ public class SalesInvoice {
     @OnDelete(action = OnDeleteAction.NO_ACTION)	
     private Customer customer;
 	
+	@ManyToOne(targetEntity = SalesAgent.class, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "sales_agent_id", nullable = true , updatable = true)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)	
+    private SalesAgent salesAgent;
+	
 	@OneToMany(targetEntity = SalesInvoiceDetail.class, mappedBy = "salesInvoice", fetch = FetchType.EAGER, orphanRemoval = true)
     @Valid
     @JsonIgnoreProperties("salesInvoice")

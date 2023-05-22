@@ -51,6 +51,10 @@ export class SalesInvoiceComponent implements OnInit {
   customerId     : any
   customerNo!    : string
   customerName!  : string
+  salesAgent!     : ISalesAgent
+  salesAgentId    : any
+  salesAgentNo!   : string
+  salesAgentName! : string
   status         : string
   billingAddress   : string
   shippingAddress  : string
@@ -69,6 +73,7 @@ export class SalesInvoiceComponent implements OnInit {
   total            : number
 
   customerNames  : string[] = []
+  salesAgentNames  : string[] = []
 
   //detail
   detailId            : any
@@ -131,12 +136,17 @@ export class SalesInvoiceComponent implements OnInit {
     this.companyName = await this.data.getCompanyName()
     this.loadInvoices()
     this.loadCustomerNames()
+    this.loadSalesAgentNames()
     this.loadProductDescriptions()
   }
   
   async save() {
     if(this.customerId == null || this.customerId == ''){
-      alert('Customer information missing')
+      alert('Customer information required')
+      return
+    }
+    if(this.salesAgentId == null || this.salesAgentId == ''){
+      alert('Sales Agent information required')
       return
     }
     let options = {
@@ -145,6 +155,7 @@ export class SalesInvoiceComponent implements OnInit {
     var sales_invoices = {
       id           : this.id,
       customer     : {no : this.customerNo, name : this.customerName},
+      salesAgent   : {no : this.salesAgentNo, alias : this.salesAgentName},
       billingAddress      : this.billingAddress,
       shippingAddress     : this.shippingAddress,
       totalVat            : this.totalVat,
@@ -235,9 +246,12 @@ export class SalesInvoiceComponent implements OnInit {
         this.lockAll()
         this.id             = data?.id
         this.no             = data!.no
-        this.customerId     = data!.customer.id
-        this.customerNo     = data!.customer.no
-        this.customerName   = data!.customer.name
+        this.customerId     = data!.customer?.id
+        this.customerNo     = data!.customer?.no
+        this.customerName   = data!.customer?.name
+        this.salesAgentId     = data!.salesAgent?.id
+        this.salesAgentNo     = data!.salesAgent?.no   
+        this.salesAgentName   = data!.salesAgent?.name
         this.status         = data!.status
         this.billingAddress   = data!.customer.billingAddress
         this.shippingAddress  = data!.customer.shippingAddress
@@ -256,6 +270,7 @@ export class SalesInvoiceComponent implements OnInit {
     )
     .catch(
       error => {
+        console.log(error)
         ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load Invoice')
       }
     )
@@ -277,9 +292,12 @@ export class SalesInvoiceComponent implements OnInit {
         this.lockAll()
         this.id           = data?.id
         this.no           = data!.no 
-        this.customerId   = data!.customer.id
-        this.customerNo   = data!.customer.no
-        this.customerName = data!.customer.name  
+        this.customerId     = data!.customer?.id
+        this.customerNo     = data!.customer?.no
+        this.customerName   = data!.customer?.name
+        this.salesAgentId     = data!.salesAgent?.id
+        this.salesAgentNo     = data!.salesAgent?.no   
+        this.salesAgentName   = data!.salesAgent?.name
         this.status       = data!.status
         this.billingAddress   = data!.customer.billingAddress
         this.shippingAddress  = data!.customer.shippingAddress
@@ -538,6 +556,8 @@ export class SalesInvoiceComponent implements OnInit {
     this.invoiceDetails = []
     this.customerNo     = ''
     this.customerName   = ''
+    this.salesAgentNo           = ''
+    this.salesAgentName         = ''
   }
 
   clearDetail(){
@@ -815,6 +835,59 @@ export class SalesInvoiceComponent implements OnInit {
     )
   }
 
+  async searchSalesAgent(name: string) {
+    if(name == ''){
+      this.salesAgentId   = ''
+      this.salesAgentNo   = ''
+      this.salesAgentName = ''
+      return
+    }
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<ISalesAgent>(API_URL+'/sales_agents/get_by_name?name='+name, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data=>{
+        this.salesAgentId = data?.id
+        this.salesAgentNo = data!.no
+      }
+    )
+    .catch(
+      error=>{
+        console.log(error)        
+        alert('SalesAgent not found')
+        this.salesAgentId   = ''
+        this.salesAgentNo   = ''
+        this.salesAgentName = ''
+      }
+    )
+  }
+
+  async loadSalesAgentNames(){
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    await this.http.get<string[]>(API_URL+'/sales_agents/get_names', options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        this.salesAgentNames = []
+        data?.forEach(element => {
+          this.salesAgentNames.push(element)
+        })
+      },
+      error => {
+        console.log(error)
+        alert('Could not load sales agent names')
+      }
+    )
+  }
+
   exportToPdf = () => {
     if(this.id == '' || this.id == null){
       return
@@ -998,6 +1071,7 @@ interface ISalesInvoice{
   id           : any
   no           : string
   customer     : ICustomer
+  salesAgent   : ISalesAgent
   status       : string
   billingAddress : string
   shippingAddress : string
@@ -1068,4 +1142,10 @@ interface ICustomer{
 
 interface ICustomerName{
   names : string[]
+}
+
+interface ISalesAgent{
+  id                  : any
+  no                  : string
+  name                : string
 }

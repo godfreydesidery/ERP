@@ -42,7 +42,6 @@ import { TillAdministrationComponent } from './till/till-administration/till-adm
 import { CompanyProfileComponent } from './company/company-profile/company-profile.component';
 import { ProductMassManagerComponent } from './inventory/product-mass-manager/product-mass-manager.component';
 import { MaterialMassManagerComponent } from './inventory/material-mass-manager/material-mass-manager.component';
-import { WebPosComponent } from './web-pos/web-pos.component';
 import { ReportMenuComponent } from './menu/report-menu/report-menu.component';
 import { SalesReportsSubMenuComponent } from './reports/sales-reports-sub-menu/sales-reports-sub-menu.component';
 import { InventoryReportsSubMenuComponent } from './reports/inventory-reports-sub-menu/inventory-reports-sub-menu.component';
@@ -113,6 +112,7 @@ import { DebtTrackerComponent } from './mechandizer/debt-tracker/debt-tracker.co
 import { CustomerMassManagerComponent } from './customer/customer-mass-manager/customer-mass-manager.component';
 import { SupplySalesReportExtendedComponent } from './reports/sales-reports/supply-sales-report-extended/supply-sales-report-extended.component';
 import { SalesSheetComponent } from './mechandizer/sales-sheet/sales-sheet.component';
+import { WebPosComponent } from './mechandizer/web-pos/web-pos.component';
 
 
 @NgModule({
@@ -249,7 +249,6 @@ import { SalesSheetComponent } from './mechandizer/sales-sheet/sales-sheet.compo
       {path : 'sub-category', component :SubCategoryComponent},
       {path : 'product-mass-manager', component :ProductMassManagerComponent},
       {path : 'material-mass-manager', component :MaterialMassManagerComponent},
-      {path : 'web-pos', component :WebPosComponent},
       {path : 'sales-reports-sub-menu', component :SalesReportsSubMenuComponent},
       {path : 'inventory-reports-sub-menu', component :InventoryReportsSubMenuComponent},
       {path : 'production-reports-sub-menu', component :ProductionReportsSubMenuComponent},
@@ -260,6 +259,7 @@ import { SalesSheetComponent } from './mechandizer/sales-sheet/sales-sheet.compo
       {path : 'sales-invoices', component: SalesInvoiceComponent},
       {path : 'sales-receipts', component: SalesReceiptComponent},
       {path : 'allocations', component: AllocationComponent},
+      {path : 'web-pos', component: WebPosComponent},
       {path : 'sales-ledge', component: SalesLedgeComponent},
       {path : 'sales-journal', component: SalesJournalComponent},
       {path : 'bill-reprint', component: BillReprintComponent},

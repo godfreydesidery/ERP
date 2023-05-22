@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.orbix.api.domain.Customer;
+import com.orbix.api.domain.SalesAgent;
 
 import lombok.Data;
 
@@ -22,6 +23,7 @@ public class SalesInvoiceModel {
 	String comments = "";
 	double balance = 0;
 	Customer customer = null;
+	SalesAgent salesAgent = null;
 	String created = "";
 	String approved = "";
 	

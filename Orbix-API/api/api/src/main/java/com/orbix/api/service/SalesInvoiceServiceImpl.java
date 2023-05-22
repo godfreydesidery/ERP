@@ -71,6 +71,7 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 		model.setId(inv.getId());
 		model.setNo(inv.getNo());
 		model.setCustomer(inv.getCustomer());
+		model.setSalesAgent(inv.getSalesAgent());
 		model.setStatus(inv.getStatus());
 		model.setBillingAddress(inv.getBillingAddress());
 		model.setShippingAddress(inv.getShippingAddress());
@@ -101,6 +102,7 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 		model.setId(inv.get().getId());
 		model.setNo(inv.get().getNo());
 		model.setCustomer(inv.get().getCustomer());
+		model.setSalesAgent(inv.get().getSalesAgent());
 		model.setStatus(inv.get().getStatus());
 		model.setBillingAddress(inv.get().getBillingAddress());
 		model.setShippingAddress(inv.get().getShippingAddress());
@@ -146,6 +148,7 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 		model.setId(inv.get().getId());
 		model.setNo(inv.get().getNo());
 		model.setCustomer(inv.get().getCustomer());
+		model.setSalesAgent(inv.get().getSalesAgent());
 		model.setStatus(inv.get().getStatus());
 		model.setBillingAddress(inv.get().getBillingAddress());
 		model.setShippingAddress(inv.get().getShippingAddress());
@@ -205,6 +208,7 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 			model.setId(inv.getId());
 			model.setNo(inv.getNo());
 			model.setCustomer(inv.getCustomer());
+			model.setSalesAgent(inv.getSalesAgent());
 			model.setStatus(inv.getStatus());
 			model.setBillingAddress(inv.getBillingAddress());
 			model.setShippingAddress(inv.getShippingAddress());
@@ -239,6 +243,7 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 			model.setId(inv.getId());
 			model.setNo(inv.getNo());
 			model.setCustomer(inv.getCustomer());
+			model.setSalesAgent(inv.getSalesAgent());
 			model.setStatus(inv.getStatus());
 			model.setBillingAddress(inv.getBillingAddress());
 			model.setShippingAddress(inv.getShippingAddress());
@@ -385,6 +390,7 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 		//SalesInvoice sinc = inv;
 		//sinc = salesInvoiceRepository.saveAndFlush(sinc);
 		sale.setSalesInvoice(inv);
+		sale.setSalesAgent(inv.getSalesAgent());
 		sale = saleRepository.saveAndFlush(sale);
 		
 		for(SalesInvoiceDetail d : details) {
@@ -440,6 +446,7 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 		model.setId(inv.getId());
 		model.setNo(inv.getNo());
 		model.setCustomer(inv.getCustomer());
+		model.setSalesAgent(inv.getSalesAgent());
 		model.setStatus(inv.getStatus());
 		model.setBillingAddress(inv.getBillingAddress());
 		model.setShippingAddress(inv.getShippingAddress());

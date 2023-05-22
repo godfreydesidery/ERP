@@ -38,6 +38,7 @@ public class SalesAgent {
 	private String contactName;
 	private String alias;
 	private boolean active = true;
+	private boolean webPosEnabled = false;
 	private double creditLimit = 0;
 	private double invoiceLimit = 0;
 	private double balance = 0;

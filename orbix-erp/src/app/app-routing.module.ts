@@ -21,7 +21,6 @@ import { TillAdministrationComponent } from './till/till-administration/till-adm
 import { CompanyProfileComponent } from './company/company-profile/company-profile.component';
 import { ProductMassManagerComponent } from './inventory/product-mass-manager/product-mass-manager.component';
 import { MaterialMassManagerComponent } from './inventory/material-mass-manager/material-mass-manager.component';
-import { WebPosComponent } from './web-pos/web-pos.component';
 import { SalesReportsSubMenuComponent } from './reports/sales-reports-sub-menu/sales-reports-sub-menu.component';
 import { InventoryReportsSubMenuComponent } from './reports/inventory-reports-sub-menu/inventory-reports-sub-menu.component';
 import { ProductionReportsSubMenuComponent } from './reports/production-reports-sub-menu/production-reports-sub-menu.component';
@@ -85,6 +84,7 @@ import { DebtTrackerComponent } from './mechandizer/debt-tracker/debt-tracker.co
 import { CustomerMassManagerComponent } from './customer/customer-mass-manager/customer-mass-manager.component';
 import { SupplySalesReportExtendedComponent } from './reports/sales-reports/supply-sales-report-extended/supply-sales-report-extended.component';
 import { SalesSheetComponent } from './mechandizer/sales-sheet/sales-sheet.component';
+import { WebPosComponent } from './mechandizer/web-pos/web-pos.component';
 
 const routes: Routes = [
   {path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard]},
@@ -104,7 +104,6 @@ const routes: Routes = [
   {path: 'sub-category', component: SubCategoryComponent, canActivate: [AuthGuard]},
   {path: 'product-mass-manager', component: ProductMassManagerComponent, canActivate: [AuthGuard]},
   {path: 'material-mass-manager', component: MaterialMassManagerComponent, canActivate: [AuthGuard]},
-  {path: 'web-pos', component: WebPosComponent, canActivate: [AuthGuard]},
   {path: 'sales-reports-sub-menu', component: SalesReportsSubMenuComponent, canActivate: [AuthGuard]},
   {path: 'inventory-reports-sub-menu', component: InventoryReportsSubMenuComponent, canActivate: [AuthGuard]},
   {path: 'production-reports-sub-menu', component: ProductionReportsSubMenuComponent, canActivate: [AuthGuard]},
@@ -115,6 +114,7 @@ const routes: Routes = [
   {path: 'sales-invoices', component: SalesInvoiceComponent, canActivate: [AuthGuard]},
   {path: 'sales-receipts', component: SalesReceiptComponent, canActivate: [AuthGuard]},
   {path: 'allocations', component: AllocationComponent, canActivate: [AuthGuard]},
+  {path: 'web-pos', component: WebPosComponent, canActivate: [AuthGuard]},
   {path: 'sales-ledge', component: SalesLedgeComponent, canActivate: [AuthGuard]},
   {path: 'sales-journal', component: SalesJournalComponent, canActivate: [AuthGuard]},
   {path: 'bill-reprint', component: BillReprintComponent, canActivate: [AuthGuard]},

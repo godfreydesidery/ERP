@@ -26,6 +26,7 @@ import com.orbix.api.domain.SalesInvoice;
 import com.orbix.api.domain.SalesInvoiceDetail;
 import com.orbix.api.domain.Customer;
 import com.orbix.api.domain.Product;
+import com.orbix.api.domain.SalesAgent;
 import com.orbix.api.domain.Supplier;
 import com.orbix.api.exceptions.InvalidEntryException;
 import com.orbix.api.exceptions.InvalidOperationException;
@@ -37,6 +38,7 @@ import com.orbix.api.repositories.CustomerRepository;
 import com.orbix.api.repositories.SalesInvoiceDetailRepository;
 import com.orbix.api.repositories.SalesInvoiceRepository;
 import com.orbix.api.repositories.ProductRepository;
+import com.orbix.api.repositories.SalesAgentRepository;
 import com.orbix.api.repositories.SalesInvoiceDetailRepository;
 import com.orbix.api.repositories.SalesInvoiceRepository;
 import com.orbix.api.repositories.SupplierRepository;
@@ -65,6 +67,7 @@ public class SalesInvoiceResource {
 	private final 	SalesInvoiceRepository salesInvoiceRepository;
 	private final 	SalesInvoiceDetailRepository salesInvoiceDetailRepository;
 	private final 	CustomerRepository customerRepository;
+	private final 	SalesAgentRepository salesAgentRepository;
 	private final 	ProductRepository productRepository;
 	
 	@GetMapping("/sales_invoices")
@@ -114,9 +117,14 @@ public class SalesInvoiceResource {
 		if(!c.isPresent()) {
 			throw new NotFoundException("Customer not found");
 		}
+		Optional<SalesAgent> a = salesAgentRepository.findByNo(salesInvoice.getSalesAgent().getNo());
+		if(!a.isPresent()) {
+			throw new NotFoundException("Sales Agent not found");
+		}
 		SalesInvoice inv = new SalesInvoice();
 		inv.setNo("NA");
 		inv.setCustomer(c.get());
+		inv.setSalesAgent(a.get());
 		inv.setStatus("BLANK");
 		inv.setBillingAddress(salesInvoice.getBillingAddress());
 		inv.setShippingAddress(salesInvoice.getShippingAddress());
@@ -142,6 +150,10 @@ public class SalesInvoiceResource {
 		if(!c.isPresent()) {
 			throw new NotFoundException("Customer not found");
 		}
+		Optional<SalesAgent> a = salesAgentRepository.findByNo(salesInvoice.getSalesAgent().getNo());
+		if(!a.isPresent()) {
+			throw new NotFoundException("Sales Agent not found");
+		}
 		Optional<SalesInvoice> l = salesInvoiceRepository.findById(salesInvoice.getId());
 		if(!l.isPresent()) {
 			throw new NotFoundException("SALES_INVOICE not found");
@@ -159,6 +171,7 @@ public class SalesInvoiceResource {
 			throw new InvalidOperationException("Changing Customer is not allowed for non blank Sales Invoices");
 		}		
 		l.get().setCustomer(c.get());
+		l.get().setSalesAgent(a.get());
 		l.get().setComments(salesInvoice.getComments());
 		
 		l.get().setBillingAddress(salesInvoice.getBillingAddress());
