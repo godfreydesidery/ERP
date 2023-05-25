@@ -47,9 +47,10 @@ export class WebPosComponent implements OnInit {
   
   created        : string
   approved       : string
-  invoiceDetails : ISalesInvoiceDetail[]
+  webPoss : IWebPos[]
 
   total            : number
+  amount           : number
 
   salesAgentNames  : string[] = []
 
@@ -79,9 +80,10 @@ export class WebPosComponent implements OnInit {
     
     this.created          = ''
     this.approved         = ''
-    this.invoiceDetails   = []
+    this.webPoss   = []
 
     this.total            = 0
+    this.amount           = 0
 
     this.detailId            = ''
     this.barcode             = ''
@@ -100,49 +102,57 @@ export class WebPosComponent implements OnInit {
     this.companyName = await this.data.getCompanyName()
     this.loadSalesAgentNames()
     this.loadProductDescriptions()
+    this.get()
   }
   
 
-  approve(id: any) {
-    if(!window.confirm('Confirm approval of the selected Invoice')){
+  approve(amount : number) {
+    if(this.salesAgentId == null){
+      alert('Please select Sales Agent')
+      return
+    }
+    if(amount != this.total){
+      alert('Amount entered does not match total sale')
       return
     }
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
-    var invoice = {
-      id : this.id   
+
+    var approveData : IApproveData = {
+      amount : this.total,
+      salesAgent : {id : this.salesAgentId, no : this.salesAgentNo, name : this.salesAgentName}
     }
+    
     this.spinner.show()
-    this.http.put(API_URL+'/sales_invoices/approve', invoice, options)
+    this.http.put(API_URL+'/web_pos/approve', approveData, options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       () => {
-       
+        this.clear()
+        this.clearDetail()
+        this.get()
+        alert('Sale approved successifully')
       }
     )
     .catch(
       error => {
         console.log(error)
-        ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not approve')
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not approve')  
+        this.clear()
+        this.clearDetail()
+        this.get()  
       }
     )
   }
 
-  
-
-  delete(id: any) {
-    throw new Error('Method not implemented.');
-  }
-  
   async saveDetail() {
- 
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }   
     var detail = {
-      salesInvoice : {id : this.id},
+      id : this.detailId,
       product : {id : this.productId, code : this.code},
       qty : this.qty,
       costPriceVatIncl : this.costPriceVatIncl,
@@ -151,15 +161,13 @@ export class WebPosComponent implements OnInit {
       sellingPriceVatExcl : this.sellingPriceVatExcl
     }
     this.spinner.show()
-    await this.http.post(API_URL+'/sales_invoice_details/save', detail, options)
+    await this.http.post(API_URL+'/web_pos/save', detail, options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       () => {
         this.clearDetail()
-        if(this.blank == true){
-          this.blank = false
-        }
+        this.get()
       }
     )
     .catch(
@@ -170,19 +178,44 @@ export class WebPosComponent implements OnInit {
     )
   }
 
-  
-
-  deleteDetail(id: any) {
+  async get() {
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
     this.spinner.show()
-    this.http.delete(API_URL+'/sales_invoice_details/delete?id='+id, options)
+    await this.http.get<IWebPos[]>(API_URL+'/web_poses', options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       data => {
+        this.webPoss = data!
+        this.refresh()
+      }
+    )
+    .catch(
+      error => {
+        console.log(error)
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load Details')
+      }
+    )
+  }
 
+  
+
+  deleteDetail(id: any) {
+    if(!window.confirm('Remove detail?')){
+      return
+    }
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    this.spinner.show()
+    this.http.delete(API_URL+'/web_pos/delete?id='+id, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        this.get()
       }
     )
     .catch(
@@ -197,7 +230,8 @@ export class WebPosComponent implements OnInit {
     this.id             = ''
     this.created        = ''
     this.approved       = ''
-    this.invoiceDetails = []
+    this.webPoss = []
+    this.salesAgentId   = ''
     this.salesAgentNo           = ''
     this.salesAgentName         = ''
   }
@@ -216,7 +250,8 @@ export class WebPosComponent implements OnInit {
 
   refresh(){
     this.total = 0
-    this.invoiceDetails.forEach(element => {
+    this.amount = 0
+    this.webPoss.forEach(element => {
       this.total = this.total + element.sellingPriceVatIncl*element.qty
       
     })
@@ -297,12 +332,12 @@ export class WebPosComponent implements OnInit {
     }
   }
 
-  searchDetail(productId : any, detailId :any){    
+  async searchDetail(productId : any, detailId :any){    
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
     this.spinner.show()
-    this.http.get<IProduct>(API_URL+'/products/get?id='+productId, options)
+    await this.http.get<IProduct>(API_URL+'/products/get?id='+productId, options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
@@ -317,7 +352,7 @@ export class WebPosComponent implements OnInit {
       ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load product')
     })
     this.spinner.show()
-    this.http.get<ISalesInvoiceDetail>(API_URL+'/sales_invoice_details/get?id='+detailId, options)
+    await this.http.get<IWebPos>(API_URL+'/web_pos/get?id='+detailId, options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
@@ -338,8 +373,11 @@ export class WebPosComponent implements OnInit {
   
 
   showList(listContent: any) {
-    
-    this.modalService.open(listContent, {ariaLabelledBy: 'modal-basic-title', size : 'xl'}).result.then((result) => {
+    if(this.salesAgentId == null || this.salesAgentId == '' ){
+      alert('Please select Sales Agent')
+      return
+    }
+    this.modalService.open(listContent, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
@@ -455,7 +493,7 @@ export class WebPosComponent implements OnInit {
 
 
 
-interface ISalesInvoiceDetail{
+interface IWebPos{
   id               : any
   qty              : number
   sellingPriceVatIncl : number
@@ -463,6 +501,7 @@ interface ISalesInvoiceDetail{
   costPriceVatIncl    : number
   costPriceVatExcl    : number
   product          : IProduct
+  created          : string
 }
 
 interface IProduct{
@@ -514,4 +553,9 @@ interface ISalesAgent{
   id                  : any
   no                  : string
   name                : string
+}
+
+interface IApproveData{
+  amount : number
+  salesAgent : ISalesAgent
 }

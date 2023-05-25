@@ -30,6 +30,7 @@ import com.orbix.api.models.LProductModel;
 import com.orbix.api.models.LSalesListObjectModel;
 import com.orbix.api.models.SalesListModel;
 import com.orbix.api.models.SalesSheetModel;
+import com.orbix.api.models.WMSExpenseModel;
 import com.orbix.api.models.WMSSalesModel;
 import com.orbix.api.repositories.SalesAgentRepository;
 import com.orbix.api.repositories.SalesListRepository;
@@ -114,5 +115,13 @@ public class WMSResource {
 		
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/wms/wms_sale/confirm").toUriString());
 		return salesAgentService.confirmSale(sale);
+	}
+	
+	@PostMapping("/wms_expense/save")
+	public Object saveExpense(
+			@RequestBody WMSExpenseModel expense){
+		
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/wms/wms_expense/save").toUriString());
+		return salesAgentService.saveExpense(expense);
 	}
 }

@@ -28,6 +28,7 @@ export class SalesAgentComponent implements OnInit {
   name                : string
   contactName         : string
   active              : boolean
+  webPosEnabled       : boolean
   creditLimit         : number
   invoiceLimit        : number
   creditDays          : number
@@ -56,6 +57,7 @@ export class SalesAgentComponent implements OnInit {
     this.name                = ''
     this.contactName         = ''
     this.active              = true
+    this.webPosEnabled       = false
     this.creditLimit         = 0
     this.invoiceLimit        = 0
     this.creditDays          = 0
@@ -92,6 +94,7 @@ export class SalesAgentComponent implements OnInit {
       name                : this.name,
       contactName         : this.contactName,
       active              : this.active,
+      webPosEnabled       : this.webPosEnabled,
       creditLimit         : this.creditLimit,
       invoiceLimit        : this.invoiceLimit,
       creditDays          : this.creditDays,
@@ -165,6 +168,7 @@ export class SalesAgentComponent implements OnInit {
     this.name                = salesAgent['name']
     this.contactName         = salesAgent['contactName']
     this.active              = salesAgent['active']
+    this.webPosEnabled       = salesAgent['webPosEnabled']
     this.creditLimit         = salesAgent['creditLimit']
     this.invoiceLimit        = salesAgent['invoiceLimit']
     this.creditDays          = salesAgent['creditDays']
@@ -400,6 +404,7 @@ export interface ISalesAgent {
   name   : string
   contactName   : string 
   active : boolean 
+  webPosEnabled : boolean
   
   /**
    * Contract Inf

@@ -56,6 +56,7 @@ export class SalesInvoiceComponent implements OnInit {
   salesAgentNo!   : string
   salesAgentName! : string
   status         : string
+  balance  : number
   billingAddress   : string
   shippingAddress  : string
   totalVat         : number
@@ -100,6 +101,7 @@ export class SalesInvoiceComponent implements OnInit {
     this.id               = ''
     this.no               = ''
     this.status           = ''
+    this.balance          = 0
     this.billingAddress      = ''
     this.shippingAddress     = ''
     this.totalVat            = 0
@@ -176,6 +178,7 @@ export class SalesInvoiceComponent implements OnInit {
           this.id           = data?.id
           this.no           = data!.no         
           this.status       = data!.status
+          this.balance      = data!.balance
           this.billingAddress      = data!.billingAddress
           this.shippingAddress     = data!.shippingAddress
           this.totalVat            = data!.totalVat
@@ -208,6 +211,7 @@ export class SalesInvoiceComponent implements OnInit {
           this.id           = data?.id
           this.no           = data!.no
           this.status       = data!.status
+          this.balance      = data!.balance
           this.billingAddress      = data!.billingAddress
           this.shippingAddress     = data!.shippingAddress
           this.totalVat            = data!.totalVat
@@ -253,6 +257,7 @@ export class SalesInvoiceComponent implements OnInit {
         this.salesAgentNo     = data!.salesAgent?.no   
         this.salesAgentName   = data!.salesAgent?.name
         this.status         = data!.status
+        this.balance      = data!.balance
         this.billingAddress   = data!.customer.billingAddress
         this.shippingAddress  = data!.customer.shippingAddress
         this.totalVat         = data!.totalVat
@@ -299,6 +304,7 @@ export class SalesInvoiceComponent implements OnInit {
         this.salesAgentNo     = data!.salesAgent?.no   
         this.salesAgentName   = data!.salesAgent?.name
         this.status       = data!.status
+        this.balance      = data!.balance
         this.billingAddress   = data!.customer.billingAddress
         this.shippingAddress  = data!.customer.shippingAddress
         this.totalVat         = data!.totalVat
@@ -542,6 +548,7 @@ export class SalesInvoiceComponent implements OnInit {
     this.id             = ''
     this.no             = ''
     this.status         = ''
+    this.balance        = 0
     this.billingAddress      = ''
     this.shippingAddress     = ''
     this.totalVat            = 0
@@ -1073,6 +1080,7 @@ interface ISalesInvoice{
   customer     : ICustomer
   salesAgent   : ISalesAgent
   status       : string
+  balance :  number
   billingAddress : string
   shippingAddress : string
   totalVat : number

@@ -6,6 +6,9 @@
         <div class="row">
             <div class="col-sm-4">
                 <a routerLink="/home"><button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+                <button class="btn" (click)="showRunOptions(runOptions)" style="margin: 2px; width: 35mm;" data-mdb-toggle="tooltip" title="Enter Options to filter"><mdb-icon fas icon="filter"></mdb-icon><br>Filter</button>
+                <button class="btn" (click)="exportToPdf()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Export report to PDF"><mdb-icon fas icon="file-pdf"></mdb-icon><br>PDF</button>
+                <button class="btn" (click)="exportToSpreadsheet()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Export report to Spreadsheet"><mdb-icon fas icon="file-excel"></mdb-icon><br>Excel</button>
                 <button (click)="archiveAll()" class="btn"style="margin: 2px; width: 30mm;" data-mdb-toggle="tooltip" title="Send all Approved Sales List to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive All</button>
             </div>
         </div>
@@ -131,5 +134,32 @@
     </div>
     <div class="modal-footer">
       
+    </div>
+</ng-template>
+
+<ng-template #runOptions let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title" id="modal-basic-title">Filter Debt Tracker</h6>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-2" style="min-width: 50mm;">
+                        <span>From</span>
+                        <input type="date" [(ngModel)]="from" class="form-control">
+                    </div>
+                    <div class="col-2" style="min-width: 50mm;">
+                        <span>To</span>
+                        <input type="date"  [(ngModel)]="to" class="form-control">
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button (click)="getDebtTrackerReport(from, to)" (click)="modal.close('Run click')" class="btn btn-success" style="margin: 2px;">Run Report</button>
     </div>
 </ng-template>

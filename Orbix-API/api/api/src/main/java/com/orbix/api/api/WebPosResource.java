@@ -56,8 +56,7 @@ public class WebPosResource {
 	
 	
 	@GetMapping("/web_poses")
-	public ResponseEntity<List<WebPosModel>>getWebPoses(
-			@RequestParam(name = "id") Long id){		
+	public ResponseEntity<List<WebPosModel>>getWebPoses(){		
 		return ResponseEntity.ok().body(webPosService.getAll());
 	}
 	
@@ -88,17 +87,19 @@ public class WebPosResource {
 		WebPos detail = new WebPos();
 		
 		
-			/**
-			 * Create new detail
-			 */
-			detail.setProduct(webPos.getProduct());
-			detail.setQty(webPos.getQty());
-			detail.setCostPriceVatIncl(webPos.getCostPriceVatIncl());
-			detail.setCostPriceVatExcl(webPos.getCostPriceVatExcl());	
-			detail.setSellingPriceVatIncl(webPos.getSellingPriceVatIncl());
-			detail.setSellingPriceVatExcl(Math.round((webPos.getSellingPriceVatIncl() * 100) / (100 + p.get().getVat()) * 100.0) / 100.0);
-			detail.setCreatedBy(userService.getUserId(request));
-			detail.setCreatedAt(dayService.getDayId());
+		
+		/**
+		 * Create new detail
+		 */
+		detail.setId(webPos.getId());
+		detail.setProduct(webPos.getProduct());
+		detail.setQty(webPos.getQty());
+		detail.setCostPriceVatIncl(webPos.getCostPriceVatIncl());
+		detail.setCostPriceVatExcl(webPos.getCostPriceVatExcl());	
+		detail.setSellingPriceVatIncl(webPos.getSellingPriceVatIncl());
+		detail.setSellingPriceVatExcl(Math.round((webPos.getSellingPriceVatIncl() * 100) / (100 + p.get().getVat()) * 100.0) / 100.0);
+		detail.setCreatedBy(userService.getUserId(request));
+		detail.setCreatedAt(dayService.getDayId());
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/web_pos/save").toUriString());
 		return ResponseEntity.created(uri).body(webPosService.save(detail));
 	}
@@ -111,6 +112,7 @@ public class WebPosResource {
 			throw new NotFoundException("Detail not found");
 		}		
 		WebPosModel detail = new WebPosModel();
+		detail.setId(d.get().getId());
 		detail.setCostPriceVatIncl(d.get().getCostPriceVatIncl());
 		detail.setCostPriceVatExcl(d.get().getCostPriceVatExcl());	
 		detail.setSellingPriceVatIncl(d.get().getSellingPriceVatIncl());

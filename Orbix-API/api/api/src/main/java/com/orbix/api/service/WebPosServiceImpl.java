@@ -151,13 +151,13 @@ public class WebPosServiceImpl implements WebPosService{
 		List<WebPos> details = webPosRepository.findAll();
 		double amount = 0;
 		for(WebPos w : details) {
-			amount = amount + w.getSellingPriceVatIncl();
+			amount = amount + w.getQty() * w.getSellingPriceVatIncl();
 		}
 		if(amount != data.getAmount()) {
 			throw new InvalidOperationException("Input amount does not match with till amount");
 		}
 		
-		Optional<SalesAgent> a = salesAgentRepository.findByName(data.getSalesAgentName());
+		Optional<SalesAgent> a = salesAgentRepository.findById(data.getSalesAgent().getId());
 		if(!a.isPresent()) {
 			throw new NotFoundException("Sales Agent not found");
 		}
@@ -172,6 +172,7 @@ public class WebPosServiceImpl implements WebPosService{
 		sale.setCreatedAt(dayRepository.getCurrentBussinessDay().getId());
 		sale.setCreatedBy(userService.getUserId(request));
 		sale.setDay(dayRepository.getCurrentBussinessDay());
+		sale.setSalesAgent(a.get());
 		sale.setReference("Web POS");
 		sale = saleRepository.saveAndFlush(sale);
 		
@@ -220,6 +221,10 @@ public class WebPosServiceImpl implements WebPosService{
 			stockCard.setReference("Web POS Sale");
 			productStockCardService.save(stockCard);			
 		}
+		/*
+		 * Clear Web POS
+		 */
+		webPosRepository.deleteAll();
 				
 		return true;
 	}

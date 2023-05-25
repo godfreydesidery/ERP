@@ -22,6 +22,7 @@ import com.orbix.api.reports.models.DailyProductionReport;
 import com.orbix.api.reports.models.DailyPurchaseReport;
 import com.orbix.api.reports.models.DailySalesReport;
 import com.orbix.api.reports.models.DailySummaryReport;
+import com.orbix.api.reports.models.DebtTrackerReport;
 import com.orbix.api.reports.models.FastMovingProductsReport;
 import com.orbix.api.reports.models.GrnReport;
 import com.orbix.api.reports.models.LpoReport;
@@ -35,6 +36,7 @@ import com.orbix.api.reports.models.SalesSummaryReport;
 import com.orbix.api.reports.models.SlowMovingProductsReport;
 import com.orbix.api.reports.models.SupplierStockStatusReport;
 import com.orbix.api.reports.models.SupplySalesReport;
+import com.orbix.api.reports.service.DebtTrackerReportService;
 import com.orbix.api.reports.service.FastMovingProductsReportService;
 import com.orbix.api.reports.service.GrnReportService;
 import com.orbix.api.reports.service.LpoReportService;
@@ -77,6 +79,7 @@ public class ReportResource {
 	private final ProductStockRepository productStockRepository;
 	private final SaleRepository saleRepository;
 	private final PurchaseRepository purchaseRepository;
+	private final DebtTrackerReportService debtTrackerReportService;
 	
 	
 	@PostMapping("/reports/daily_sales_report")
@@ -204,6 +207,12 @@ public class ReportResource {
 			@RequestBody GrnReportArgs args){
 		return ResponseEntity.ok().body(grnReportService.getGrnReport(args.from, args.to, args.supplier, args.products));
 	}
+	
+	@PostMapping("/reports/debt_tracker_report")
+	public ResponseEntity<List<DebtTrackerReport>> debtTrackerReport(
+			@RequestBody DebtTrackerReportArgs args){
+		return ResponseEntity.ok().body(debtTrackerReportService.getDebtTrackerReport(args.from, args.to));
+	}
 }
 
 @Data
@@ -326,6 +335,12 @@ class SalesSummaryReportArgs{
 
 @Data
 class ProductStockSummaryReportArgs{
+	LocalDate from;
+	LocalDate to;
+}
+
+@Data
+class DebtTrackerReportArgs{
 	LocalDate from;
 	LocalDate to;
 }

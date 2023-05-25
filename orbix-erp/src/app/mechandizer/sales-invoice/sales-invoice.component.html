@@ -104,6 +104,14 @@
                         <small>{{approved}}</small>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-3">
+                        <small>Balance</small>
+                    </div>
+                    <div class="col-9">
+                        <small>{{balance}}</small>
+                    </div>
+                </div>
             </div>
         </div>
         <br>
@@ -170,6 +178,15 @@
                         <tr>
                             <td><small>Net Amount</small></td>
                             <td style="text-align: right;">{{netAmount | currency:'':''}}</td>
+                        </tr>
+                        <hr>
+                        <tr>
+                            <td><small>Balance Outstanding</small></td>
+                            <td style="text-align: right;">{{balance | currency:'':''}}</td>
+                        </tr>
+                        <tr>
+                            <td><small>Action</small></td>
+                            <td style="text-align: right;"><button>Send to Debt Tracker</button></td>
                         </tr>
                     </tbody>
                     

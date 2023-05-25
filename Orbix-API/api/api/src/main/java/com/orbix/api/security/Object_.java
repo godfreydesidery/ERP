@@ -59,6 +59,7 @@ public class Object_ {
 	public static String VENDOR_CREDIT_NOTE = "VENDOR_CREDIT_NOTE";
 	public static String CUSTOMER_CREDIT_NOTE = "CUSTOMER_CREDIT_NOTE";
 	public static String POS_SALE = "POS_SALE";
+	public static String WEB_POS = "WEB_POS";
 	/**
 	 * Production
 	 */

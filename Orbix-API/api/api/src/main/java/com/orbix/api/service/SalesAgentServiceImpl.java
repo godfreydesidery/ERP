@@ -23,6 +23,7 @@ import com.orbix.api.domain.SalesAgent;
 import com.orbix.api.domain.SalesList;
 import com.orbix.api.domain.SalesListDetail;
 import com.orbix.api.domain.SalesSheet;
+import com.orbix.api.domain.SalesSheetExpense;
 import com.orbix.api.domain.SalesSheetSale;
 import com.orbix.api.domain.SalesSheetSaleDetail;
 import com.orbix.api.domain.SalesAgent;
@@ -37,6 +38,7 @@ import com.orbix.api.models.SalesListModel;
 import com.orbix.api.models.SalesSheetModel;
 import com.orbix.api.models.SalesSheetSaleDetailModel;
 import com.orbix.api.models.SalesSheetSaleModel;
+import com.orbix.api.models.WMSExpenseModel;
 import com.orbix.api.models.WMSProductModel;
 import com.orbix.api.models.WMSSalesModel;
 import com.orbix.api.repositories.CustomerRepository;
@@ -44,6 +46,7 @@ import com.orbix.api.repositories.EmployeeRepository;
 import com.orbix.api.repositories.ProductRepository;
 import com.orbix.api.repositories.SalesAgentRepository;
 import com.orbix.api.repositories.SalesListRepository;
+import com.orbix.api.repositories.SalesSheetExpenseRepository;
 import com.orbix.api.repositories.SalesSheetRepository;
 import com.orbix.api.repositories.SalesSheetSaleDetailRepository;
 import com.orbix.api.repositories.SalesSheetSaleRepository;
@@ -67,6 +70,7 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 	private final SalesSheetSaleRepository salesSheetSaleRepository;
 	private final SalesSheetSaleDetailRepository salesSheetSaleDetailRepository;
 	private final ProductRepository productRepository;
+	private final SalesSheetExpenseRepository salesSheetExpenseRepository;
 
 	@Override
 	public SalesAgent save(SalesAgent salesAgent) {
@@ -376,6 +380,43 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 		}
 		salesListModel.setSalesListDetails(saleListDetailModels);
 		return salesListModel;
+		
+	}
+	
+	@Override
+	public Object saveExpense(WMSExpenseModel expenseModel) {
+		Optional<SalesList> l = salesListRepository.findByNo(expenseModel.getSalesListNo());
+		if(!l.isPresent()) {
+			throw new NotFoundException("Operation failed, corresponding sales list not found");
+		}
+		if(!l.get().getStatus().equals("PENDING")) {
+			throw new InvalidOperationException("Corresponding sales list not pending, please login afresh to view pending sales list");
+		}
+		Optional<SalesSheet> s = salesSheetRepository.findBySalesList(l.get());
+		if(!s.isPresent()) {
+			throw new NotFoundException("Operation failed, sales sheet not found");
+		}
+		SalesSheet sheet = salesSheetRepository.saveAndFlush(s.get());
+		
+		SalesSheetExpense expense = new SalesSheetExpense();
+		expense.setDescription(expenseModel.getDescription());
+		expense.setAmount(expenseModel.getAmount());
+		expense.setSalesSheet(sheet);
+		expense = salesSheetExpenseRepository.saveAndFlush(expense);
+		
+		List<WMSExpenseModel> expenses = new ArrayList<WMSExpenseModel>();
+		List<SalesSheetExpense> es = salesSheetExpenseRepository.findAllBySalesSheet(sheet);
+		
+		for(SalesSheetExpense e : es) {
+			WMSExpenseModel mod = new WMSExpenseModel();
+			mod.setId(e.getId());
+			mod.setDescription(e.getDescription());
+			mod.setAmount(e.getAmount());
+			mod.setSalesListNo("");
+			expenses.add(mod);
+		}
+		
+		return expenses;
 		
 	}
 }

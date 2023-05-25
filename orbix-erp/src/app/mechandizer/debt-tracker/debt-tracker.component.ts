@@ -5,7 +5,13 @@ import { AuthService } from 'src/app/auth.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { environment } from 'src/environments/environment';
 import { NgxSpinnerService } from 'ngx-spinner';
+import * as pdfMake from 'pdfmake/build/pdfmake';
 import { finalize } from 'rxjs/operators';
+import { Workbook } from 'exceljs';
+import { formatDate } from '@angular/common';
+import { isFakeTouchstartFromScreenReader } from '@angular/cdk/a11y';
+import { DataService } from 'src/app/services/data.service';
+const fs = require('file-saver');
 
 const API_URL = environment.apiUrl;
 
@@ -15,6 +21,12 @@ const API_URL = environment.apiUrl;
   styleUrls: ['./debt-tracker.component.scss']
 })
 export class DebtTrackerComponent implements OnInit {
+
+  logo!    : any
+  address  : any 
+
+  from! : Date
+  to!   : Date
 
   id : any
   no : string
@@ -35,12 +47,16 @@ export class DebtTrackerComponent implements OnInit {
   totalPaid    : number = 0
   totalBalance : number = 0
 
+  report : IDebtTrackerReport[] = []
+  
+
 
   closeResult    : string = ''
   constructor(private auth : AuthService, 
               private http :HttpClient, 
               private modalService: NgbModal,
-              private spinner : NgxSpinnerService) {
+              private spinner : NgxSpinnerService,
+              private data : DataService) {
     this.id = null
     this.no = ''
     this.totalAmount = 0
@@ -50,7 +66,9 @@ export class DebtTrackerComponent implements OnInit {
     this.status = ''
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.logo = await this.data.getLogo() 
+    this.address = await this.data.getAddress()
     this.getAll()
   }
   
@@ -178,6 +196,63 @@ export class DebtTrackerComponent implements OnInit {
     }
   }
 
+
+  async getDebtTrackerReport(from: Date, to: Date) {
+    if(from == null || to == null){
+      alert('Could not run report, please select date range')
+      return
+    }
+    if(from > to){
+      alert('Could not run report, invalid date range, final date must be later or same as the initial date')
+      return
+    }
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer ' + this.auth.user.access_token)
+    }
+    var args = {
+      from : from,
+      to   : to
+    }
+    this.spinner.show()
+    this.debtTrackers = []
+    this.totalAmountToPay = 0
+    this.totalPaid = 0
+    this.totalBalance = 0
+    await this.http.post<IDebtTrackerReport[]>(API_URL + '/reports/debt_tracker_report', args, options)
+      .pipe(finalize(() => this.spinner.hide()))
+      .toPromise()
+      .then(
+        data => {
+          data?.forEach(element => {
+            this.debtTrackers.push(
+              {id : element.id, 
+              no : element.no, 
+              customer : {id : null, name : element.customerName, contactName : ''},
+              officerIncharge : {id : '', no : '', name : element.officerIncharge},
+              inceptionDay : {bussinessDate : element.inceptionDate},
+              amount : element.totalAmount,
+              paid : element.amountPaid,
+              balance : element.balance,
+              status : element.status
+            })
+            
+          }
+         
+        )
+        
+        }
+      )
+      .catch(error => {
+        console.log(error)
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load')
+      })
+      this.debtTrackers.forEach(element => {
+        this.totalAmountToPay = this.totalAmountToPay + element.amount
+        this.totalPaid = this.totalPaid + element.paid
+        this.totalBalance = this.totalBalance + element.balance
+      })
+  }
+
   async loadHistory(id : any) : Promise<void>{
     this.histories = []
     let options = {
@@ -226,6 +301,190 @@ export class DebtTrackerComponent implements OnInit {
     )
   }
 
+
+  showRunOptions(content: any) {
+    
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+
+
+  exportToPdf = () => {
+    var header = ''
+    var footer = ''
+    var title  = 'Debt Tracker'
+    var logo : any = ''
+    var total : number = 0
+    var totalPaid : number = 0
+    var totalBalance : number = 0
+    if(this.logo == ''){
+      logo = { text : '', width : 70, height : 70, absolutePosition : {x : 40, y : 40}}
+    }else{
+      logo = {image : this.logo, width : 70, height : 70, absolutePosition : {x : 40, y : 40}}
+    }
+    var report = [
+      [
+        {text : 'No', fontSize : 9, fillColor : '#bdc6c7'}, 
+        {text : 'Customer Name', fontSize : 9, fillColor : '#bdc6c7'},
+        {text : 'Officer Incharge', fontSize : 9, fillColor : '#bdc6c7'},
+        {text : 'Inception Date', fontSize : 9, fillColor : '#bdc6c7'},
+        {text : 'Total Amount', fontSize : 9, fillColor : '#bdc6c7'}, 
+        {text : 'Amount Paid', fontSize : 9, fillColor : '#bdc6c7'},
+        {text : 'Balance', fontSize : 9, fillColor : '#bdc6c7'},
+        {text : 'Status', fontSize : 9, fillColor : '#bdc6c7'},
+      ]
+    ]    
+    this.debtTrackers.forEach((element) => {
+      total = total + element.amount
+      totalPaid = totalPaid + element.paid
+      totalBalance = totalBalance + element.balance
+      var detail = [
+        {text : element.no, fontSize : 9, fillColor : '#ffffff'},
+        {text : element.customer.name, fontSize : 9, fillColor : '#ffffff'},
+        {text : element.officerIncharge.name, fontSize : 9, fillColor : '#ffffff'},
+        {text : formatDate(element.inceptionDay.bussinessDate, 'yyyy-MM-dd', 'en-US'), fontSize : 9, fillColor : '#ffffff'}, 
+        {text : element.amount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right', fillColor : '#ffffff'},
+        {text : element.paid.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right', fillColor : '#ffffff'},  
+        {text : element.balance.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right', fillColor : '#ffffff'},
+        {text : element.status, fontSize : 9, fillColor : '#ffffff'},
+      ]
+      report.push(detail)
+    })
+    var detailSummary = [
+      {text : '', fontSize : 9, fillColor : '#CCCCCC'},
+      {text : '', fontSize : 9, fillColor : '#CCCCCC'},
+      {text : '', fontSize : 9, fillColor : '#CCCCCC'},
+      {text : '', fontSize : 9, fillColor : '#CCCCCC'}, 
+      {text : total.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right', fillColor : '#CCCCCC'},
+      {text : totalPaid.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right', fillColor : '#CCCCCC'},  
+      {text : totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right', fillColor : '#CCCCCC'},
+      {text : '', fontSize : 9, fillColor : '#CCCCCC'},
+    ]
+    report.push(detailSummary)
+    const docDefinition = {
+      header: '',
+      watermark : { text : '', color: 'blue', opacity: 0.1, bold: true, italics: false },
+        content : [
+          {
+            columns : 
+            [
+              logo,
+              {width : 10, columns : [[]]},
+              {
+                width : 300,
+                columns : [
+                  this.address
+                ]
+              },
+              {
+                width : 200,
+                layout : 'noBorders',
+                table : {
+                  widths : [220],
+                  body : [
+                    [
+                      ' '
+                    ],
+                    [
+                      {text : title, fontSize : 12, bold : true}
+                    ],
+                    
+                    [
+                      ''
+                    ],
+                    [
+                      {
+                        layout : 'noBorders',
+                        table : {
+                          widths : [75, 300],
+                          body : [
+                            [
+                              {text : 'From', fontSize : 9}, 
+                              {text : this.from, fontSize : 9} 
+                            ],
+                            [
+                              {text : 'To', fontSize : 9}, 
+                              {text : this.to, fontSize : 9} 
+                            ],
+                          ]
+                        },
+                      }, 
+                    ]
+                  ]
+                }
+              },
+            ]
+          },
+          '  ',
+          {
+            layout : 'noBorders',
+            table : {
+                headerRows : 1,
+                widths : [50, 60, 60, 50, 60, 60, 60, 50],
+                body : report
+            }
+        },                   
+      ]     
+    };
+    pdfMake.createPdf(docDefinition).open(); 
+  }
+
+
+
+  async exportToSpreadsheet() {
+    let workbook = new Workbook();
+    let worksheet = workbook.addWorksheet('Debt Tracker')
+   
+    worksheet.columns = [
+      { header: 'NO', key: 'NO'},
+      { header: 'CUSTOMER NAME', key: 'CUSTOMER'},
+      { header: 'SALES AGENT', key: 'AGENT'},
+      { header: 'INCEPTION DATE', key: 'DATE'},
+      { header: 'TOTAL AMOUNT', key: 'AMOUNT'},
+      { header: 'AMOUNT PAID', key: 'PAID'},
+      { header: 'OUTSTANDING BALANCE', key: 'BALANCE'},
+      { header: 'STATUS', key: 'STATUS'}
+      
+    ];
+    this.spinner.show()
+    this.debtTrackers.forEach(element => {
+      worksheet.addRow(
+        {
+          NO    : element.no,
+          CUSTOMER : element.customer.name,
+          AGENT : element.officerIncharge.name,
+          DATE      : formatDate(element.inceptionDay.bussinessDate, 'yyyy-MM-dd', 'en-US'),
+          AMOUNT : element.amount,
+          PAID : element.paid,
+          BALANCE : element.balance,
+          STATUS : element.status
+        },"n"
+      )
+    })
+    worksheet.addRow(
+      {
+        NO    : '',
+        CUSTOMER : '',
+        AGENT : '',
+        DATE      : '',
+        AMOUNT : this.totalAmountToPay,
+        PAID : this.totalPaid,
+        BALANCE : this.totalBalance,
+        STATUS : ''
+      },"n"
+    )
+    
+    this.spinner.hide()
+    workbook.xlsx.writeBuffer().then((data) => {
+      let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      fs.saveAs(blob, 'Debt Tracker '+this.from+' to '+this.to+'.xlsx');
+    })
+   
+  }
+
   
 }
 
@@ -236,36 +495,36 @@ export interface ICustomer {
   id          : any
   name        : string
   contactName : string 
-  active      : boolean 
-  tin         : string
-  vrn         : string
+  //active      : boolean 
+  //tin         : string
+  //vrn         : string
   /**
    * Credit Inf
    */
-  creditLimit  : number
-  invoiceLimit : number
-  creditDays   : number
+  //creditLimit  : number
+  //invoiceLimit : number
+  //creditDays   : number
   /**
    * Contact Inf
    */
-  physicalAddress : string
-  postCode        : string
-  postAddress     : string
-  telephone       : string
-  mobile          : string
-  email           : string
-  fax             : string
+  //physicalAddress : string
+  //postCode        : string
+  //postAddress     : string
+  //telephone       : string
+  //mobile          : string
+  //email           : string
+  //fax             : string
   /**
    * Bank Inf
    */
-  bankAccountName     : string
-  bankPhysicalAddress : string
-  bankPostAddress     : string
-  bankPostCode        : string
-  bankName            : string
-  bankAccountNo       : string
-  shippingAddress     : string
-  billingAddress      : string
+  //bankAccountName     : string
+  //bankPhysicalAddress : string
+  //bankPostAddress     : string
+  //bankPostCode        : string
+  //bankName            : string
+  //bankAccountNo       : string
+  //shippingAddress     : string
+  //billingAddress      : string
 }
 
 export interface ISalesAgent {
@@ -275,30 +534,30 @@ export interface ISalesAgent {
   id         : any
   no : string
   name   : string
-  contactName   : string 
-  active : boolean 
+  //contactName   : string 
+  //active : boolean 
   
   /**
    * Contract Inf
    */
-  termsOfContract : string
+  //termsOfContract : string
   /**
    * Credit Inf
    */
-   creditLimit  : number
-   invoiceLimit : number
-   creditDays   : number
-   salesTarget  : number
+   //creditLimit  : number
+   //invoiceLimit : number
+   //creditDays   : number
+   //salesTarget  : number
   /**
    * Contact Inf
    */
-  physicalAddress : string
-  postCode : string
-  postAddress : string
-  telephone : string
-  mobile : string
-  email : string
-  fax : string
+  //physicalAddress : string
+  //postCode : string
+  //postAddress : string
+  //telephone : string
+  //mobile : string
+  //email : string
+  //fax : string
 }
 
 export interface IDebtTracker{
@@ -323,4 +582,16 @@ export interface IHistory{
   paid : number
   balance : number
   reference : string
+}
+
+export interface IDebtTrackerReport {
+  id : any
+  no : string
+  customerName : string
+  officerIncharge : string
+  inceptionDate : Date
+  totalAmount : number
+  amountPaid : number
+  balance : number
+  status : string
 }

@@ -12,5 +12,6 @@ import lombok.Data;
 @Data
 public class WebPosApproveData {
 	double amount;
-	String salesAgentName;
+	//String salesAgentName;
+	SalesAgent salesAgent;
 }
