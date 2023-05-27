@@ -23,6 +23,7 @@ import com.orbix.api.domain.SaleDetail;
 import com.orbix.api.domain.SalesList;
 import com.orbix.api.domain.SalesListDetail;
 import com.orbix.api.domain.SalesSheet;
+import com.orbix.api.domain.SalesSheetExpense;
 import com.orbix.api.domain.SalesSheetSale;
 import com.orbix.api.domain.SalesSheetSaleDetail;
 import com.orbix.api.exceptions.InvalidEntryException;
@@ -30,6 +31,7 @@ import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
 import com.orbix.api.models.SalesListDetailModel;
 import com.orbix.api.models.SalesListModel;
+import com.orbix.api.models.SalesSheetExpenseModel;
 import com.orbix.api.models.SalesSheetModel;
 import com.orbix.api.models.SalesSheetSaleDetailModel;
 import com.orbix.api.models.SalesSheetSaleModel;
@@ -178,6 +180,17 @@ public class SalesSheetServiceImpl implements SalesSheetService{
 			salesSheetSaleModels.add(salesSheetSaleModel);			
 		}
 		salesSheetModel.setSalesSheetSales(salesSheetSaleModels);
+		
+		List<SalesSheetExpense> salesSheetExpenses = pcl.get().getSalesSheetExpenses();
+		List<SalesSheetExpenseModel> salesSheetExpenseModels = new ArrayList<SalesSheetExpenseModel>();
+		for(SalesSheetExpense salesSheetExpense : salesSheetExpenses) {
+			SalesSheetExpenseModel salesSheetExpenseModel = new SalesSheetExpenseModel();
+			salesSheetExpenseModel.setId(salesSheetExpense.getId());
+			salesSheetExpenseModel.setDescription(salesSheetExpense.getDescription());
+			salesSheetExpenseModel.setAmount(salesSheetExpense.getAmount());
+			salesSheetExpenseModels.add(salesSheetExpenseModel);			
+		}
+		salesSheetModel.setSalesSheetExpenses(salesSheetExpenseModels);
 		
 		return salesSheetModel;
 	}

@@ -18,6 +18,7 @@ import com.orbix.api.domain.PackingListDetail;
 import com.orbix.api.domain.SalesList;
 import com.orbix.api.domain.SalesListDetail;
 import com.orbix.api.domain.SalesSheet;
+import com.orbix.api.domain.SalesSheetExpense;
 import com.orbix.api.domain.SalesSheetSale;
 import com.orbix.api.domain.SalesSheetSaleDetail;
 import com.orbix.api.domain.Product;
@@ -743,6 +744,11 @@ public class SalesListServiceImpl implements SalesListService {
 			totalDiscount = totalDiscount + salesSheetSale.getTotalDiscount();
 		}
 		s.get().setTotalDiscounts(totalDiscount);
+		List<SalesSheetExpense> expenses = ss.get().getSalesSheetExpenses();
+		for(SalesSheetExpense salesSheetExpense : expenses) {
+			totalExpenses = totalExpenses + salesSheetExpense.getAmount();
+		}
+		s.get().setTotalExpenditures(totalExpenses);
 		salesListRepository.saveAndFlush(s.get());
 		
 		double qtySold = 0;

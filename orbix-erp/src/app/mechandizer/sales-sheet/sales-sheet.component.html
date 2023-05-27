@@ -74,6 +74,14 @@
                         <small style="text-align: right;">{{totalDue | currency:'':''}}</small>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <small>Total Expenses</small>
+                    </div>
+                    <div class="col-sm-8" style="text-align: right;">
+                        <small style="text-align: right;">{{totalExpenses | currency:'':''}}</small>
+                    </div>
+                </div>
             </div>
             <div class="col-sm-3">
                 
@@ -131,9 +139,40 @@
             </tbody>
         </table>
 
-
-        
-        <br>
+        <table class="table table-bordered table-sm">
+            <tbody>
+                <tr style="border-color:grey; border-width: 1px;">
+                    <td>
+                        <table>
+                            <tbody>
+                               
+                                <tr><td>Expenses</td></tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="table table-bordered table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <td>Description</td>
+                                    <td>Amount</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let expense of salesSheetExpenses">
+                                    <td>{{expense.description}}</td>
+                                    <td style="text-align: right;">{{expense.amount | currency:'':''}}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Total</b></td>
+                                    <td style="text-align: right;"><b>{{totalExpenses | currency:'':''}}</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>    
 </div>
 

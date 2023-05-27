@@ -42,12 +42,16 @@ export class SalesSheetComponent implements OnInit {
   totalDiscount : number = 0
   totalCharges : number = 0
   totalDue : number = 0
+
+  totalExpenses : number = 0
  
 
   
   salesSheets       : ISalesSheet[]
 
   salesSheetSales : ISalesSheetSale[] = []
+
+  salesSheetExpenses : ISalesSheetExpense[] = []
 
 
   
@@ -90,6 +94,7 @@ export class SalesSheetComponent implements OnInit {
   }
   async get(id: any) {
     this.salesSheetSales = []
+    this.salesSheetExpenses = []
     let options = {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
@@ -108,6 +113,9 @@ export class SalesSheetComponent implements OnInit {
         data?.salesSheetSales.forEach(element => {
           this.salesSheetSales.push(element)
         })
+        data?.salesSheetExpenses.forEach(element => {
+          this.salesSheetExpenses.push(element)
+        })
         this.refresh()       
       }
     )
@@ -121,6 +129,7 @@ export class SalesSheetComponent implements OnInit {
 
   async getByNo(no: string) {
     this.salesSheetSales = []
+    this.salesSheetExpenses = []
     if(no == ''){
       return
     }
@@ -142,6 +151,9 @@ export class SalesSheetComponent implements OnInit {
         data?.salesSheetSales.forEach(element => {
           this.salesSheetSales.push(element)
         })
+        data?.salesSheetExpenses.forEach(element => {
+          this.salesSheetExpenses.push(element)
+        })
         this.refresh()
         
       }
@@ -159,6 +171,7 @@ export class SalesSheetComponent implements OnInit {
     this.totalDiscount  = 0
     this.totalCharges  = 0
     this.totalDue  = 0
+    this.totalExpenses = 0
     this.salesSheetSales.forEach(element => {
       this.totalAmount = this.totalAmount + element.totalAmount
       this.totalPaid = this.totalPaid + element.totalPaid
@@ -166,14 +179,10 @@ export class SalesSheetComponent implements OnInit {
       this.totalCharges = this.totalCharges + element.totalCharges
       this.totalDue = this.totalDue + element.totalDue
     })
+    this.salesSheetExpenses.forEach(element => {
+      this.totalExpenses = this.totalExpenses + element.amount
+    })
   }
-
-  
-
-  
-
-  
-
   loadSalesLists(){
     this.salesSheets = []
     let options = {
@@ -191,15 +200,11 @@ export class SalesSheetComponent implements OnInit {
     ).catch(error => {console.log(error)})
   }
 
-  
-
   createShortCut(shortCutName : string, link : string){
     if(confirm('Create shortcut for this page?')){
       this.shortcut.createShortCut(shortCutName, link)
     }
   }
-
- 
 
   showList(listContent: any) {
     
@@ -208,10 +213,6 @@ export class SalesSheetComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-
-  
-
-  
 
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
@@ -439,6 +440,7 @@ interface ISalesSheet{
   salesAgentName : string
   confirmed : string
   salesSheetSales : ISalesSheetSale[]
+  salesSheetExpenses : ISalesSheetExpense[]
 }
 
 interface ISalesSheetSale{
@@ -463,5 +465,11 @@ interface ISalesSheetSaleDetail{
   description : string
   qty : number
   price : number
+}
+
+interface ISalesSheetExpense{
+  id : any
+  description : string
+  amount : number
 }
 

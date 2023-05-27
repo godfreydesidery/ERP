@@ -24,4 +24,5 @@ public class SalesSheetModel {
 	String salesAgentName = "";
 	String confirmed = "";
 	List<SalesSheetSaleModel> salesSheetSales;
+	List<SalesSheetExpenseModel> salesSheetExpenses;
 }

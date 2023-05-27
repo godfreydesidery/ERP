@@ -33,6 +33,7 @@ import com.orbix.api.models.LCustomerModel;
 import com.orbix.api.models.LProductModel;
 import com.orbix.api.models.LSalesListObjectModel;
 import com.orbix.api.models.RecordModel;
+import com.orbix.api.models.SalesExpenseModel;
 import com.orbix.api.models.SalesListDetailModel;
 import com.orbix.api.models.SalesListModel;
 import com.orbix.api.models.SalesSheetModel;
@@ -418,5 +419,69 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 		
 		return expenses;
 		
+	}
+	
+	@Override
+	public Object deleteExpense(WMSExpenseModel expenseModel) {
+		Optional<SalesList> l = salesListRepository.findByNo(expenseModel.getSalesListNo());
+		if(!l.isPresent()) {
+			throw new NotFoundException("Operation failed, corresponding sales list not found");
+		}
+		if(!l.get().getStatus().equals("PENDING")) {
+			throw new InvalidOperationException("Corresponding sales list not pending, please login afresh to view pending sales list");
+		}
+		Optional<SalesSheet> s = salesSheetRepository.findBySalesList(l.get());
+		if(!s.isPresent()) {
+			throw new NotFoundException("Operation failed, sales sheet not found");
+		}
+		SalesSheet sheet = salesSheetRepository.saveAndFlush(s.get());
+		
+		Optional<SalesSheetExpense> se = salesSheetExpenseRepository.findById(expenseModel.getId());
+		if(!se.isPresent()) {
+			throw new NotFoundException("Expense not found");
+		}
+		salesSheetExpenseRepository.delete(se.get());
+		
+		List<WMSExpenseModel> expenses = new ArrayList<WMSExpenseModel>();
+		List<SalesSheetExpense> es = salesSheetExpenseRepository.findAllBySalesSheet(sheet);
+		
+		for(SalesSheetExpense e : es) {
+			WMSExpenseModel mod = new WMSExpenseModel();
+			mod.setId(e.getId());
+			mod.setDescription(e.getDescription());
+			mod.setAmount(e.getAmount());
+			mod.setSalesListNo("");
+			expenses.add(mod);
+		}
+		
+		return expenses;
+		
+	}
+	
+	@Override
+	public List<SalesExpenseModel> loadSalesExpenses(String salesListNo) {
+		Optional<SalesList> sl = salesListRepository.findByNo(salesListNo);
+		if(!sl.isPresent()) {
+			throw new NotFoundException("Could not find a matching sales list");
+		}
+		if(!sl.get().getStatus().equals("PENDING")) {
+			throw new InvalidOperationException("Operation is only available in a pending list");
+		}
+		
+		Optional<SalesSheet> ss = salesSheetRepository.findBySalesList(sl.get());
+		if(!ss.isPresent()) {
+			throw new NotFoundException("Coresponding Sales sheet not found");
+		}
+		
+		List<SalesSheetExpense> sss = ss.get().getSalesSheetExpenses();
+		List<SalesExpenseModel> sm = new ArrayList<SalesExpenseModel>();
+		for(SalesSheetExpense m : sss) {
+			SalesExpenseModel model = new SalesExpenseModel();
+			model.setId(m.getId());
+			model.setDescription(m.getDescription());
+			model.setAmount(m.getAmount());
+			sm.add(model);
+		}
+		return sm;
 	}
 }

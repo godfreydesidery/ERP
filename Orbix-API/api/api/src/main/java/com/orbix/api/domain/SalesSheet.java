@@ -61,4 +61,9 @@ public class SalesSheet {
     @Valid
     @JsonIgnoreProperties("salesSheet")
     private List<SalesSheetSale> salesSheetSales;
+	
+	@OneToMany(targetEntity = SalesSheetExpense.class, mappedBy = "salesSheet", fetch = FetchType.LAZY, orphanRemoval = true)
+    @Valid
+    @JsonIgnoreProperties("salesSheet")
+    private List<SalesSheetExpense> salesSheetExpenses;
 }

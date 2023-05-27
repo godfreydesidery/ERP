@@ -345,6 +345,7 @@ D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\ProductToProductService.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\models\PackingListDetailModel.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\repositories\ProductToProductInitialRepository.java
+D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\models\SalesExpenseModel.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\models\SalesReceiptModel.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\service\UserServiceImpl.java
 D:\My Works\Orbix\ERP\Orbix-API\api\api\src\main\java\com\orbix\api\domain\Till.java

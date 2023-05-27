@@ -28,6 +28,7 @@ import com.orbix.api.models.LAgentModel;
 import com.orbix.api.models.LCustomerModel;
 import com.orbix.api.models.LProductModel;
 import com.orbix.api.models.LSalesListObjectModel;
+import com.orbix.api.models.SalesExpenseModel;
 import com.orbix.api.models.SalesListModel;
 import com.orbix.api.models.SalesSheetModel;
 import com.orbix.api.models.WMSExpenseModel;
@@ -93,6 +94,8 @@ public class WMSResource {
 		return ResponseEntity.ok().body(salesAgentService.getSalesList(sl.get().getId()));
 	}
 	
+	
+	
 	@GetMapping("/wms_load_available_products")	
 	public ResponseEntity<List<LProductModel>>getAvailableProducts(
 			@RequestParam(name = "sales_list_no") String salesListNo, @RequestParam(name = "sales_agent_id") Long salesAgentId){
@@ -123,5 +126,24 @@ public class WMSResource {
 		
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/wms/wms_expense/save").toUriString());
 		return salesAgentService.saveExpense(expense);
+	}
+	
+	
+	@PostMapping("/wms_expense/delete")
+	public Object deleteExpense(
+			@RequestBody WMSExpenseModel expense){
+		
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/wms/wms_expense/delete").toUriString());
+		return salesAgentService.deleteExpense(expense);
+	}
+	
+	@GetMapping("/wms_load_sales_expenses")	
+	public ResponseEntity<List<SalesExpenseModel>> getSalesExpense(
+			@RequestParam(name = "sales_list_no") String salesListNo){
+		Optional<SalesList> sl = salesListRepository.findByNo(salesListNo);
+		if(!sl.isPresent()) {
+			throw new NotFoundException("Sales list not found");
+		}		
+		return ResponseEntity.ok().body(salesAgentService.loadSalesExpenses(salesListNo));
 	}
 }

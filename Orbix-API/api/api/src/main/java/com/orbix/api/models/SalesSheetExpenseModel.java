@@ -14,5 +14,6 @@ import lombok.Data;
 @Data
 public class SalesSheetExpenseModel {
 	Long id = null;
+	String description = "";
 	double amount = 0;
 }

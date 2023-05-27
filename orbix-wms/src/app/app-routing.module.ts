@@ -44,6 +44,10 @@ const routes: Routes = [
     path: 'sales-list',
     loadChildren: () => import('./sales-list/sales-list.module').then( m => m.SalesListPageModule)
   },
+  {
+    path: 'sales-expense',
+    loadChildren: () => import('./sales-expense/sales-expense.module').then( m => m.SalesExpensePageModule)
+  },
 
 
 ];
