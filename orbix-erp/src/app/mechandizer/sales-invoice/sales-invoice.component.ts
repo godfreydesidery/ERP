@@ -92,6 +92,17 @@ export class SalesInvoiceComponent implements OnInit {
 
   companyName : string = ''
 
+
+  //Debt Track
+
+  amountToTransfer : number = 0
+  amount : number = 0
+
+  officerIncharge!      : ISalesAgent
+  officerInchargeId     : any
+  officerInchargeNo    : string = ''
+  officerInchargeName  : string = ''
+
   constructor(private auth : AuthService,
               private http :HttpClient,
               private shortcut : ShortCutHandlerService, 
@@ -335,7 +346,9 @@ export class SalesInvoiceComponent implements OnInit {
       headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
     var invoice = {
-      id : this.id   
+      id : this.id,
+      discount : this.discount,
+      otherCharges : this.otherCharges  
     }
     this.spinner.show()
     this.http.put(API_URL+'/sales_invoices/approve', invoice, options)
@@ -895,6 +908,84 @@ export class SalesInvoiceComponent implements OnInit {
     )
   }
 
+  async searchOfficerIncharge(name: string) {
+    if (name == '') {
+      this.officerInchargeId = ''
+      this.officerInchargeNo = ''
+      return
+    }
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+
+    this.spinner.show()
+    await this.http.get<ISalesAgent>(API_URL+'/sales_agents/get_by_name?name='+name, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data=>{
+        this.officerInchargeId = data?.id
+        this.officerInchargeNo = data!.no
+      }
+    )
+    .catch(
+      error=>{
+        console.log(error)        
+        alert('Name not found')
+        this.officerInchargeId = ''
+        this.officerInchargeNo = ''
+        this.officerInchargeName = ''
+      }
+    )
+  }
+
+
+  async post() {
+    if(this.customerName == ''){
+      alert('Please select customer')
+      return
+    }
+    if(this.officerInchargeName == ''){
+      alert('Please select officer incharge')
+      return
+    }
+    if(!window.confirm('Transfer the specified amount to debt tracker?')){
+      return
+    }
+    let options = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    var trc = {
+      debt : {id : null},
+      salesInvoice          : {id : this.id},
+      customer : {id : this.customerId},
+      officerIncharge : {id : this.officerInchargeId}, 
+      amount : this.amountToTransfer
+        
+    }
+    this.spinner.show()
+    await this.http.post(API_URL+'/debt_trackers/create_from_sales_invoice', trc, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      () => {
+        //this.searchSalesAgent(this.salesAgentName)
+        alert('Transfer successiful')
+        this.get(this.id)
+        this.amountToTransfer    = 0
+        this.officerInchargeId   = ''
+        this.officerInchargeNo   = ''
+        this.officerInchargeName = ''
+      }
+    )
+    .catch(
+      error => {
+        console.log(error)
+        ErrorHandlerService.showHttpErrorMessage(error, '', 'Could process')
+      }
+    )
+  }
+
   exportToPdf = () => {
     if(this.id == '' || this.id == null){
       return
@@ -1016,36 +1107,41 @@ export class SalesInvoiceComponent implements OnInit {
                 body : report
             }
         },
-        ' ',
-        ' ',
         {
           layout : 'noBorders',
           table : {
-            widths : [75, 75],
+            widths : [295, 75, 80],
             body : [
               [
+                {},
                 {text : 'Total VAT', fontSize : 8}, 
                 {text : this.totalVat.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right'} 
               ],
               [
+                {},
                 {text : 'Amount VAT Excl', fontSize : 8}, 
                 {text : this.amountVatExcl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right'} 
               ],
               [
+
+                {},
                 {text : 'Amount VAT Incl', fontSize : 8}, 
                 {text : this.amountVatIncl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right'} 
               ],
               [
+                {},
                 {text : 'Discount', fontSize : 8}, 
                 {text : this.discount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right'} 
               ],
               [
+                {},
                 {text : 'Other Charges', fontSize : 8}, 
                 {text : this.otherCharges.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right'} 
               ],
               [
-                {text : 'Net Amount', fontSize : 8}, 
-                {text : this.netAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right', bold : true} 
+                {},
+                {text : 'Net Amount', fontSize : 12}, 
+                {text : this.netAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 12, alignment : 'right', bold : true} 
               ]
             ]
           },

@@ -54,7 +54,7 @@ public class DebtServiceImpl implements DebtService {
 		/**
 		 * Register history
 		 */
-		debtHistoryService.create(debt.getBalance(), 0, debt, null, user, "New sales debt created "+debt.getNo());
+		debtHistoryService.create(debt.getBalance(), 0, debt, null, null, user, "New sales debt created "+debt.getNo());
 		return d;
 		
 	}
@@ -64,7 +64,7 @@ public class DebtServiceImpl implements DebtService {
 		/**
 		 * Register history
 		 */
-		debtHistoryService.create(debt.getBalance(), amount, debt, null, user, "Received from sales debt "+debt.getNo());		
+		debtHistoryService.create(debt.getBalance(), amount, debt, null, null, user, "Received from sales debt "+debt.getNo());		
 		/**
 		 * Now receive debt
 		 */

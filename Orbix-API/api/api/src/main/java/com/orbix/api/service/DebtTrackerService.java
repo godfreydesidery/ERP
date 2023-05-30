@@ -15,7 +15,8 @@ import com.orbix.api.models.RecordModel;
  *
  */
 public interface DebtTrackerService {
-	public boolean create(DebtTracker debtTracker, User user);
+	public boolean createFromSalesList(DebtTracker debtTracker, User user);
+	public boolean createFromSalesInvoice(DebtTracker debtTracker, User user);
 	public DebtTracker pay(DebtTracker debtTracker, double amount, User user);
 	public RecordModel requestDebtTrackerNo();
 	List<DebtTracker>getAllVisible();

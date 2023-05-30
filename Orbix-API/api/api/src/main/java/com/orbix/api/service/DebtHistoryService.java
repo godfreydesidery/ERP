@@ -7,6 +7,7 @@ import com.orbix.api.domain.Debt;
 import com.orbix.api.domain.DebtHistory;
 import com.orbix.api.domain.DebtTracker;
 import com.orbix.api.domain.SalesDebt;
+import com.orbix.api.domain.SalesInvoice;
 import com.orbix.api.domain.User;
 
 /**
@@ -14,5 +15,5 @@ import com.orbix.api.domain.User;
  *
  */
 public interface DebtHistoryService {
-	public DebtHistory create(double amount, double paid, Debt debt, DebtTracker debtTracker, User user, String reference);	
+	public DebtHistory create(double amount, double paid, Debt debt, SalesInvoice salesInvoice, DebtTracker debtTracker, User user, String reference);	
 }

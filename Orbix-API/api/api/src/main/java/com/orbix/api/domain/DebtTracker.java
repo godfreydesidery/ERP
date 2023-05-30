@@ -75,5 +75,11 @@ public class DebtTracker {
 	@JsonIgnoreProperties("salesList")
     private Debt debt;
 	
+	@ManyToOne(targetEntity = SalesInvoice.class, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "sales_invoice_id", nullable = true , updatable = false)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
+	@JsonIgnoreProperties("salesInvoice")
+    private SalesInvoice salesInvoice;
+	
 	
 }

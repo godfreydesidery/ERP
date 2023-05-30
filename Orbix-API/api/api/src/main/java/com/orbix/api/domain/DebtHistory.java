@@ -54,6 +54,11 @@ public class DebtHistory {
     @OnDelete(action = OnDeleteAction.NO_ACTION)	
     private Debt debt;
 	
+	@ManyToOne(targetEntity = SalesInvoice.class, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "sales_invoice_id", nullable = true , updatable = true)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)	
+    private SalesInvoice salesInvoice;
+	
 	@ManyToOne(targetEntity = DebtTracker.class, fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "debt_tracker_id", nullable = true , updatable = true)
     @OnDelete(action = OnDeleteAction.NO_ACTION)	

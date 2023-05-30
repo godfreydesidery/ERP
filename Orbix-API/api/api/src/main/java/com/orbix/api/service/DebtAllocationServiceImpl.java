@@ -78,7 +78,7 @@ public class DebtAllocationServiceImpl implements DebtAllocationService {
 			}
 			Optional<SalesList> p = salesListRepository.findById(d.get().getSalesList().getId());
 			
-			debtHistoryService.create(debt.getBalance(), salesAgentBalance, debt, null, userRepository.findById(userService.getUserId(request)).get(), "Debt allocation "+debt.getNo());
+			debtHistoryService.create(debt.getBalance(), salesAgentBalance, debt, null, null, userRepository.findById(userService.getUserId(request)).get(), "Debt allocation "+debt.getNo());
 			
 			if(salesAgentBalance >= debt.getBalance()) {
 				double balance = debt.getBalance();

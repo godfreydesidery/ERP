@@ -27,6 +27,7 @@ import com.orbix.api.domain.DebtHistory;
 import com.orbix.api.domain.DebtTracker;
 import com.orbix.api.domain.Lpo;
 import com.orbix.api.domain.SalesAgent;
+import com.orbix.api.domain.SalesInvoice;
 import com.orbix.api.domain.Supplier;
 import com.orbix.api.exceptions.InvalidOperationException;
 import com.orbix.api.exceptions.NotFoundException;
@@ -39,6 +40,7 @@ import com.orbix.api.repositories.DebtHistoryRepository;
 import com.orbix.api.repositories.DebtRepository;
 import com.orbix.api.repositories.DebtTrackerRepository;
 import com.orbix.api.repositories.SalesAgentRepository;
+import com.orbix.api.repositories.SalesInvoiceRepository;
 import com.orbix.api.repositories.UserRepository;
 import com.orbix.api.service.DayService;
 import com.orbix.api.service.DebtService;
@@ -62,6 +64,7 @@ public class DebtTrackerResource {
 	private final SalesAgentRepository salesAgentRepository;
 	private final CustomerRepository customerRepository;
 	private final DebtRepository debtRepository;
+	private final SalesInvoiceRepository salesInvoiceRepository;
 	private final DebtTrackerRepository debtTrackerRepository;
 	private final UserService userService;
 	private final DayService dayService;
@@ -108,6 +111,7 @@ public class DebtTrackerResource {
 		dt.setOfficerIncharge(s.get());
 		dt.setCustomer(c.get());
 		dt.setDebt(d.get());
+		dt.setSalesInvoice(null);
 		dt.setAmount(debtTracker.getAmount());
 		dt.setPaid(0);
 		dt.setBalance(debtTracker.getAmount());
@@ -117,7 +121,42 @@ public class DebtTrackerResource {
 		dt.setCreatedAt(dayService.getDayId());
 		dt.setInceptionDay(dayRepository.getCurrentBussinessDay());
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/debt_trackers/create").toUriString());
-		return ResponseEntity.created(uri).body(debtTrackerService.create(dt, userRepository.findById(userService.getUserId(request)).get()));
+		return ResponseEntity.created(uri).body(debtTrackerService.createFromSalesList(dt, userRepository.findById(userService.getUserId(request)).get()));
+	}
+	
+	@PostMapping("/debt_trackers/create_from_sales_invoice")
+	//@PreAuthorize("hasAnyAuthority('LPO-CREATE')")
+	public ResponseEntity<Boolean>createDebtTrackerFromSalesInvoice(
+			@RequestBody DebtTracker debtTracker,
+			HttpServletRequest request){
+		Optional<SalesAgent> s = salesAgentRepository.findById(debtTracker.getOfficerIncharge().getId());
+		if(!s.isPresent()) {
+			throw new NotFoundException("Officer in charge not found");
+		}
+		Optional<Customer> c = customerRepository.findById(debtTracker.getCustomer().getId());
+		if(!c.isPresent()) {
+			throw new NotFoundException("Customer not found");
+		}
+		Optional<SalesInvoice> d = salesInvoiceRepository.findById(debtTracker.getSalesInvoice().getId());
+		if(!d.isPresent()) {
+			throw new NotFoundException("Sales iinvoice not present");
+		}
+		DebtTracker dt = new DebtTracker();
+		dt.setNo("NA");
+		dt.setOfficerIncharge(s.get());
+		dt.setCustomer(c.get());
+		dt.setDebt(null);
+		dt.setSalesInvoice(d.get());
+		dt.setAmount(debtTracker.getAmount());
+		dt.setPaid(0);
+		dt.setBalance(debtTracker.getAmount());
+		dt.setStatus("UNPAID");		
+		dt.setComments(debtTracker.getComments());
+		dt.setCreatedBy(userService.getUserId(request));
+		dt.setCreatedAt(dayService.getDayId());
+		dt.setInceptionDay(dayRepository.getCurrentBussinessDay());
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/debt_trackers/create_from_sales_invoice").toUriString());
+		return ResponseEntity.created(uri).body(debtTrackerService.createFromSalesInvoice(dt, userRepository.findById(userService.getUserId(request)).get()));
 	}
 	
 	@GetMapping("/debt_trackers/get")

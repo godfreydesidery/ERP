@@ -186,7 +186,7 @@
                         </tr>
                         <tr>
                             <td><small>Action</small></td>
-                            <td style="text-align: right;"><button>Send to Debt Tracker</button></td>
+                            <td style="text-align: right;"><button *ngIf="balance != 0" (click)="open(transfer, '', '')">Send to Debt Tracker</button></td>
                         </tr>
                     </tbody>
                     
@@ -273,5 +273,55 @@
     </div>
     <div class="modal-footer">
       
+    </div>
+</ng-template>
+
+
+<ng-template #transfer let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Transfer to Debt Tracker</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td style="text-align: right;">Current Balance</td><td style="padding: 0; text-align: right;"><span style="text-align: right;">{{balance | currency:'':''}}</span></td>
+                </tr>  
+                <tr>
+                    <td style="text-align: right;">Amount to Transfer</td><td style="padding: 0;"><input type="text" [(ngModel)]="amountToTransfer" class="form-control special"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Balance Remaining</td><td style="padding: 0; text-align: right;"><span style="text-align: right;">{{balance - amountToTransfer | currency:'':''}}</span></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Customer</td>
+                    <td style="padding: 0;">
+                        <input type="text" [(ngModel)]="customerNo" class="form-control special" placeholder="Customer No" readonly>
+                        <input type="text" [(ngModel)]="customerName" class="form-control special" placeholder="Customer Name" readonly>
+                        <!--<select [(ngModel)]="customerName" (ngModelChange)="searchCustomer(customerName)" class="form-control input-sm">
+                            <option></option>
+                            <option *ngFor="let c of customerNames">{{c}}</option>
+                        </select>-->
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Officer Incharge</td>
+                    <td style="padding: 0;">
+                        <input type="text" [(ngModel)]="officerInchargeNo" class="form-control special" readonly>
+                        <select [(ngModel)]="officerInchargeName" (ngModelChange)="searchOfficerIncharge(officerInchargeName)" class="form-control input-sm">
+                            <option></option>
+                            <option *ngFor="let e of salesAgentNames">{{e}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Comments</td><td style="padding: 0;"><textarea class="form-control special"></textarea></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+      <button type="button" *ngIf="balance - amountToTransfer >= 0" (click)="modal.close('Save click')" (click)="post()" class="btn btn-outline-dark">Transfer</button>
     </div>
 </ng-template>

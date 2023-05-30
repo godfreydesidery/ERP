@@ -440,7 +440,8 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 			
 			amount = amount + (d.getQty() * d.getSellingPriceVatIncl());
 		}
-		inv.setBalance(amount);
+		
+		inv.setBalance(amount - salesInvoice.getDiscount() + salesInvoice.getOtherCharges());
 		inv = salesInvoiceRepository.saveAndFlush(inv);
 		SalesInvoiceModel model = new SalesInvoiceModel();
 		model.setId(inv.getId());

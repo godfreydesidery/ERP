@@ -15,6 +15,7 @@ import com.orbix.api.accessories.Formater;
 import com.orbix.api.domain.Debt;
 import com.orbix.api.domain.DebtTracker;
 import com.orbix.api.domain.SalesAgent;
+import com.orbix.api.domain.SalesInvoice;
 import com.orbix.api.domain.SalesList;
 import com.orbix.api.domain.User;
 import com.orbix.api.exceptions.InvalidEntryException;
@@ -25,6 +26,7 @@ import com.orbix.api.models.LpoModel;
 import com.orbix.api.models.RecordModel;
 import com.orbix.api.repositories.DebtRepository;
 import com.orbix.api.repositories.DebtTrackerRepository;
+import com.orbix.api.repositories.SalesInvoiceRepository;
 import com.orbix.api.repositories.SalesListRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -43,9 +45,10 @@ public class DebtTrackerServiceImpl implements DebtTrackerService {
 	private final DebtRepository debtRepository;
 	private final DebtHistoryService debtHistoryService;
 	private final SalesListRepository salesListRepository;
+	private final SalesInvoiceRepository salesInvoiceRepository;
 
 	@Override
-	public boolean create(DebtTracker debtTracker, User user) {
+	public boolean createFromSalesList(DebtTracker debtTracker, User user) {
 		if(debtTracker.getAmount() <= 0) {
 			throw new InvalidEntryException("Invalid debt amount");
 		}
@@ -76,8 +79,8 @@ public class DebtTrackerServiceImpl implements DebtTrackerService {
 			d = debtTrackerRepository.saveAndFlush(d);
 		}
 		//put condition latter, if debt is null
-		debtHistoryService.create(debtBalance, debtTracker.getAmount(), debt, null, user, "Amount transfered to debt tracker "+debtTracker.getNo());
-		debtHistoryService.create(debtTracker.getBalance(), 0, null, debtTracker, user, "New registered debt on debt tracker "+debtTracker.getNo());
+		debtHistoryService.create(debtBalance, debtTracker.getAmount(), debt, null, null, user, "Transfered to debt tracker "+debtTracker.getNo()+" from sales debt "+debt.getNo());
+		debtHistoryService.create(debtTracker.getBalance(), 0, null, null, debtTracker, user, "Registered on debt tracker "+debtTracker.getNo()+" from sales list "+s.get().getNo());
 		
 		DebtTrackerModel model = new DebtTrackerModel();
 		model.setId(d.getId());
@@ -89,7 +92,60 @@ public class DebtTrackerServiceImpl implements DebtTrackerService {
 		model.setOfficerIncharge(d.getOfficerIncharge());
 		model.setInceptionDay(d.getInceptionDay());
 		model.setCustomer(d.getCustomer());
-		model.setDebt(d.getDebt());		
+		model.setDebt(d.getDebt());	
+		model.setSalesInvoice(null);
+		model.setComments(d.getComments());		
+		return true;		
+	}
+	
+	
+	@Override
+	public boolean createFromSalesInvoice(DebtTracker debtTracker, User user) {
+		if(debtTracker.getAmount() <= 0) {
+			throw new InvalidEntryException("Invalid debt amount");
+		}
+		if(debtTracker.getAmount() > debtTracker.getSalesInvoice().getBalance()) {
+			throw new InvalidEntryException("Amount exceeds the sales invoice balance");
+		}
+		SalesInvoice salesInvoice = debtTracker.getSalesInvoice();
+		double debtBalance = salesInvoice.getBalance();
+		Optional<SalesInvoice> s = salesInvoiceRepository.findById(salesInvoice.getId());
+		if(s.isPresent()) {
+			s.get().setBalance(s.get().getBalance() - debtTracker.getAmount());
+			salesInvoiceRepository.saveAndFlush(s.get());
+		}
+		
+		//put here debt history
+		
+		//debt.setBalance(debt.getBalance() - debtTracker.getAmount());
+		//debt = debtRepository.saveAndFlush(debt);
+		//if(debt.getBalance() == 0) {
+			//debt.setStatus("PAID");
+			//debt = debtRepository.saveAndFlush(debt);
+		//}
+		debtTracker.setSalesInvoice(s.get());
+		
+		DebtTracker d = debtTrackerRepository.saveAndFlush(debtTracker);
+		if(d.getNo().equals("NA")) {
+			d.setNo(generateDebtTrackerNo(d));
+			d = debtTrackerRepository.saveAndFlush(d);
+		}
+		//put condition latter, if debt is null
+		//debtHistoryService.create(debtBalance, debtTracker.getAmount(), null, s.get(), null, user, "Transfered to debt tracker "+debtTracker.getNo()+" from sales invoice "+s.get().getNo());
+		debtHistoryService.create(debtTracker.getBalance(), 0, null, s.get(), debtTracker, user, "Registered on debt tracker "+debtTracker.getNo()+" from sales invoice "+s.get().getNo());
+		
+		DebtTrackerModel model = new DebtTrackerModel();
+		model.setId(d.getId());
+		model.setNo(d.getNo());
+		model.setStatus(d.getStatus());
+		model.setAmount(d.getAmount());
+		model.setPaid(d.getPaid());
+		model.setBalance(d.getBalance());
+		model.setOfficerIncharge(d.getOfficerIncharge());
+		model.setInceptionDay(d.getInceptionDay());
+		model.setCustomer(d.getCustomer());
+		model.setDebt(null);
+		model.setSalesInvoice(d.getSalesInvoice());
 		model.setComments(d.getComments());		
 		return true;		
 	}
@@ -99,7 +155,7 @@ public class DebtTrackerServiceImpl implements DebtTrackerService {
 		/**
 		 * Register history
 		 */
-		debtHistoryService.create(debtTracker.getBalance(), amount, null, debtTracker, user, "Received from debt tracker "+debtTracker.getNo());
+		debtHistoryService.create(debtTracker.getBalance(), amount, null, null, debtTracker, user, "Received from debt tracker "+debtTracker.getNo());
 		/**
 		 * Now pay debt
 		 */

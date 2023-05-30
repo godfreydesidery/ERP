@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.orbix.api.domain.Debt;
 import com.orbix.api.domain.DebtHistory;
 import com.orbix.api.domain.DebtTracker;
+import com.orbix.api.domain.SalesInvoice;
 import com.orbix.api.domain.User;
 import com.orbix.api.repositories.DayRepository;
 import com.orbix.api.repositories.DebtHistoryRepository;
@@ -31,12 +32,13 @@ public class DebtHistoryServiceImpl implements DebtHistoryService {
 	private final DayRepository dayRepository;
 
 	@Override
-	public DebtHistory create(double amount, double paid, Debt debt, DebtTracker debtTracker, User user, String reference) {
+	public DebtHistory create(double amount, double paid, Debt debt, SalesInvoice salesInvoice, DebtTracker debtTracker, User user, String reference) {
 		DebtHistory dh = new DebtHistory();
 		dh.setAmount(amount);
 		dh.setPaid(paid);
 		dh.setBalance(amount - paid);
 		dh.setDebt(debt);
+		dh.setSalesInvoice(salesInvoice);
 		dh.setDebtTracker(debtTracker);
 		dh.setDay(dayRepository.getCurrentBussinessDay());
 		dh.setCreatedBy(user.getId());

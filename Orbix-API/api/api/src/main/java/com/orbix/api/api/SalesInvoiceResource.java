@@ -197,6 +197,9 @@ public class SalesInvoiceResource {
 			throw new NotFoundException("SALES_INVOICE not found");
 		}
 		if(l.get().getStatus().equals("PENDING")) {
+			if(salesInvoice.getDiscount() != l.get().getDiscount() || salesInvoice.getOtherCharges() != l.get().getOtherCharges()) {
+				throw new InvalidOperationException("Values do not match, please save the invoice before approving");
+			}
 			l.get().setApprovedBy(userService.getUserId(request));
 			l.get().setApprovedAt(dayService.getDayId());
 			l.get().setStatus("APPROVED");

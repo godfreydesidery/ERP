@@ -180,7 +180,7 @@ export class DebtTrackerComponent implements OnInit {
 
   openHistory(history : any, detailId : string) {
    
-    this.modalService.open(history, {ariaLabelledBy: 'modal-basic-title', size : 'xl'}).result.then((result) => {
+    this.modalService.open(history, {ariaLabelledBy: 'modal-basic-title', size : 'lg'}).result.then((result) => {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
