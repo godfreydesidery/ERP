@@ -58,7 +58,7 @@ public class SalesSheetSale {
 	private String customerMobile = "";
 	private String customerLocation = "";	
 	
-	//private LocalDateTime completedAt = LocalDateTime.now();
+	private LocalDateTime completedAt = LocalDateTime.now();
 		
 	@ManyToOne(targetEntity = SalesSheet.class, fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "sales_sheet_id", nullable = true , updatable = true)

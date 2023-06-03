@@ -10,21 +10,21 @@ import { environment } from '../../environments/environment';
 
 const API_URL = environment.apiUrl;
 
+
 @Component({
-  selector: 'app-sales-expense',
-  templateUrl: './sales-expense.page.html',
-  styleUrls: ['./sales-expense.page.scss'],
+  selector: 'app-customer',
+  templateUrl: './customer.page.html',
+  styleUrls: ['./customer.page.scss'],
 })
-export class SalesExpensePage implements OnInit {
+export class CustomerPage implements OnInit {
+  salesAgentCustomer: ISalesAgentCustomerModel | undefined 
 
-  salesExpense: SalesExpenseModel | undefined 
+  salesAgentCustomers : ISalesAgentCustomerModel[] = []
 
-  salesExpenses : SalesExpenseModel[] = []
-
-  totalAmount : number = 0
-
-  description : string = ''
-  amount : number = 0
+  id : any
+  name : string = ''
+  location : string = ''
+  mobile : string = ''
 
   message : string = ''
 
@@ -42,65 +42,60 @@ export class SalesExpensePage implements OnInit {
     private spinner : NgxSpinnerService) { }
 
   ngOnInit() {
-    this.getSalesExpenses()
+    this.getSalesAgentCustomers()
   }
 
   clearValues(){
-
-    this.totalAmount  = 0
-    this.amount = 0
-
-    this.description = ''
+    this.id  = null
+    this.name = ''
+    this.location  = ''
+    this.mobile = ''
   }
 
   clear(){
-    this.description = ''
-    this.amount = 0
+    this.id  = null
+    this.name = ''
+    this.location  = ''
+    this.mobile = ''
   }
 
 
-  async getSalesExpenses(): Promise<void> {
-    this.salesExpenses = []
+  async getSalesAgentCustomers(): Promise<void> {
+    this.salesAgentCustomers = []
     this.clearValues()
     let options = {
       //headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
     }
     
-    if(localStorage.getItem('active-list') == null){
-      const toast = await this.toastController.create({
-        message: 'No active sales list selected',
-        duration: 2000,
-        position: 'top'
-      });
-      await toast.present();
-      this.router.navigate(['home'])
-      location.reload()
-    }
+    
     this.spinner.show()
-    await this.http.get<SalesExpenseModel[]>(API_URL+'/wms_load_sales_expenses?sales_list_no='+localStorage.getItem('active-list'), options)
+    await this.http.get<ISalesAgentCustomerModel[]>(API_URL+'/wms_load_sales_agent_customers?sales_agent_name='+localStorage.getItem('sales-agent-name'), options)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       data => {
-        let expenses : SalesExpenseModel[] = data!
-        expenses.forEach(element => {
-          this.salesExpenses.push(element)
-          this.totalAmount  = this.totalAmount + (element.amount)
+        let customers : ISalesAgentCustomerModel[] = data!
+        customers.forEach(element => {
+          this.salesAgentCustomers.push(element)
         })
       }
     )
     .catch(
       error => {
         console.log(error)
-        alert('could not load  sales list')
+        alert('could not load  customers')
         this.router.navigate(['home'])
         location.reload()
       }
     )
   }
 
-  async addExpense(){
-    if(window.confirm('Add this expense?')){
+  async addCustomer(){
+    if(this.name == '' || this.location == ''){
+      alert('Name and location required')
+      return
+    }
+    if(window.confirm('Add customer?')){
       //confirm 
     }else{
       //do  not confirm
@@ -109,37 +104,39 @@ export class SalesExpensePage implements OnInit {
     /**
      * Confirmation logic here
      */
-    var salesListNo = localStorage.getItem('active-list')!.toString()
-    var expense : SalesExpenseModel = {
+    var salesAgentName = localStorage.getItem('sales-agent-name')!.toString()
+    var customer : ISalesAgentCustomerModel = {
       id : null,
-      description : this.description,
-      amount : this.amount,
-      salesListNo : salesListNo
-      
+      name : this.name,
+      location : this.location,
+      mobile : this.mobile,
+      salesAgent : {
+        name : salesAgentName
+      }
     }
 
-    if(salesListNo == null){
-      alert('Could not perform operation, sales list not available')
+    if(salesAgentName == null){
+      alert('Could not perform operation, agent name not available')
       return
     }
 
     this.spinner.show()
-    await this.http.post(API_URL+'/wms_expense/save', expense)
+    await this.http.post(API_URL+'/sales_agent_customer/save', customer)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       () => {
         //this.router.navigate(['home'])
-        alert('Expense added')
+        alert('Customer added')
         //this.router.navigate(['sales-expense'])
-        this.getSalesExpenses()
+        this.getSalesAgentCustomers()
       }
     )
     .catch(
       async error => {
         console.log(error)
         const toast = await this.toastController.create({
-          message: 'Could not add expense',
+          message: 'Could not add customer',
           duration: 2000,
           position: 'top'
         });
@@ -155,32 +152,35 @@ export class SalesExpensePage implements OnInit {
 
     var present : boolean = false
 
-    var salesListNo = localStorage.getItem('active-list')!.toString()
+    var salesAgentName = localStorage.getItem('sales-agent-name')!.toString()
     
-    var expense : SalesExpenseModel = {
+    var customer : ISalesAgentCustomerModel = {
       id: id,
-      description : '',
-      amount : 0,
-      salesListNo : salesListNo
+      name : '',
+      location : '',
+      mobile : '',
+      salesAgent : {
+        name : salesAgentName
+      }
     }
 
     this.spinner.show()
-    await this.http.post(API_URL+'/wms_expense/delete', expense)
+    await this.http.post(API_URL+'/sales_agent_customer/delete', customer)
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
       () => {
         //this.router.navigate(['home'])
-        alert('Expense deleted')
+        alert('Customer deleted')
         //this.router.navigate(['sales-expense'])
-        this.getSalesExpenses()
+        this.getSalesAgentCustomers()
       }
     )
     .catch(
       async error => {
         console.log(error)
         const toast = await this.toastController.create({
-          message: 'Could not delete expense',
+          message: 'Could not delete customer',
           duration: 2000,
           position: 'top'
         });
@@ -207,12 +207,14 @@ export class SalesExpensePage implements OnInit {
   }
 }
 
-export interface SalesExpenseModel{
-  id : any
-  description : string
-  amount : number
-  salesListNo      : string
+export interface ISalesAgentCustomerModel {
+  id             : any
+  name           : string
+  location       : string
+  mobile         : string
+  salesAgent : ISalesAgent
 }
 
-
-
+export interface ISalesAgent {
+  name : string
+}

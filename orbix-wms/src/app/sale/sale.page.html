@@ -10,7 +10,7 @@
 <ion-content>
   <ion-header>
     <ion-toolbar>
-      <ion-title> <span (click)="presentCustomerPopover($event)" style="cursor: pointer;">[<ion-icon slot="start" name="pencil-sharp"></ion-icon>]</span> {{customerName}}</ion-title>
+      <ion-title>Customer: {{customerName}}<br><span (click)="presentCustomerPopover($event)" style="cursor: pointer;">[<ion-icon slot="start" name="pencil-sharp"></ion-icon>]</span><span (click)="clearCustomer()" style="cursor: pointer;">[<ion-icon slot="start" name="trash"></ion-icon>]</span></ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
@@ -209,7 +209,11 @@
         <ion-row>
           <ion-col>
             <ion-item>
-              <ion-input type="text" [(ngModel)]="customerName" style="text-align: center;" placeholder="Customer Name"></ion-input>
+              <datalist id="customers" style="padding: 0px;">
+                <option *ngFor="let c of salesAgentCustomers" [ngValue]="c.name">{{c.name}}</option>
+              </datalist>
+              <input type="text" (select)="setCustomer(customerName)" class="form-control" [(ngModel)]="customerName" style="text-align: center;" list="customers" placeholder="Customer Name">
+               
             </ion-item>
             <ion-item>
               <ion-input type="text" [(ngModel)]="customerMobile" style="text-align: center;" placeholder="Customer Mobile"></ion-input>
@@ -224,7 +228,10 @@
     <ion-footer>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button (click)="dismissCustomerPopover($event)">Set</ion-button>
+          <ion-button (click)="setCustomer(customerName)">Load</ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-button (click)="dismissCustomerPopover($event)" (click)="setCustomer(customerName)">Set</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-footer>   

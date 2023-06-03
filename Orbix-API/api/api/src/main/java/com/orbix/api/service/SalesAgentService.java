@@ -11,6 +11,7 @@ import com.orbix.api.models.LCustomerModel;
 import com.orbix.api.models.LProductModel;
 import com.orbix.api.models.LSalesListObjectModel;
 import com.orbix.api.models.RecordModel;
+import com.orbix.api.models.SalesAgentCustomerModel;
 import com.orbix.api.models.SalesExpenseModel;
 import com.orbix.api.models.SalesListModel;
 import com.orbix.api.models.SalesSheetModel;
@@ -40,6 +41,10 @@ public interface SalesAgentService {
 	Object saveExpense(WMSExpenseModel expense);
 	Object deleteExpense(WMSExpenseModel expense);
 	List<SalesExpenseModel> loadSalesExpenses(String salesListNo);
+	
+	Object saveCustomer(SalesAgentCustomerModel customer);
+	Object deleteCustomer(SalesAgentCustomerModel customer);
+	List<SalesAgentCustomerModel> loadCustomers(SalesAgent salesAgent);
 	
 	
 	SalesSheetModel getSalesSheet(Long id);

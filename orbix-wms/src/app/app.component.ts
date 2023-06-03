@@ -14,6 +14,7 @@ salesAgentName : string = ''
     { title: 'Sales List', url: '/sales-list', icon: 'document-attach' },
     { title: 'Sales Sheet', url: '/sales-sheet', icon: 'document' },
     { title: 'Expense', url: '/sales-expense', icon: 'cash' },
+    { title: 'Customer', url: '/customer', icon: 'document' },
     { title: 'Profile', url: '/profile', icon: 'person' },
     { title: 'Logout', url: '/logout', icon: 'exit' },
     //{ title: 'Archived', url: '/folder/Archived', icon: 'archive' },

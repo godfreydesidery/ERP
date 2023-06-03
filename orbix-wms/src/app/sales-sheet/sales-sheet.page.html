@@ -35,6 +35,15 @@
           <ion-col size="5">Total Due: </ion-col>
           <ion-col style="text-align: right;">{{totalDue | currency:'':''}}</ion-col>
         </ion-row>
+        <hr>
+        <ion-row>
+          <ion-col size="5">Expenses: </ion-col>
+          <ion-col style="text-align: right;">{{totalExpenses | currency:'':''}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="5">Bank Deposit/Cash: </ion-col>
+          <ion-col style="text-align: right;">{{totalPaid - totalExpenses | currency:'':''}}</ion-col>
+        </ion-row>
       </ion-grid>
     </ion-card-content>
   </ion-card>
