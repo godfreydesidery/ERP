@@ -4,6 +4,8 @@
 package com.orbix.api.domain;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -59,7 +61,7 @@ public class SalesSheetSale {
 	private String customerLocation = "";	
 	
 	private LocalDateTime completedAt = LocalDateTime.now();
-		
+	
 	@ManyToOne(targetEntity = SalesSheet.class, fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "sales_sheet_id", nullable = true , updatable = true)
     @OnDelete(action = OnDeleteAction.NO_ACTION)	

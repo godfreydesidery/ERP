@@ -90,6 +90,9 @@ export class CustomerClaimComponent implements OnInit {
 
   customerNames  : string[] = []
 
+  totalClaimed : number = 0
+  totalReplaced : number = 0
+
   constructor(private auth : AuthService,
               private http :HttpClient,
               private shortcut : ShortCutHandlerService, 
@@ -146,6 +149,17 @@ export class CustomerClaimComponent implements OnInit {
     this.loadClaims()
     this.loadProductDescriptions()
     this.loadCustomerNames()
+  }
+
+  refreshClaim(){
+    this.totalClaimed = 0
+    this.totalReplaced = 0
+    this.claimedProducts.forEach(element => {
+      this.totalClaimed = this.totalClaimed + element.qty*element.sellingPriceVatIncl
+    })
+    this.replacementProducts.forEach(element => {
+      this.totalReplaced = this.totalReplaced + element.qty*element.sellingPriceVatIncl
+    })
   }
   
   async save() { 
@@ -211,6 +225,7 @@ export class CustomerClaimComponent implements OnInit {
         }
       )
     }
+    this.refreshClaim()
   }
 
   async get(id: any) {
@@ -246,6 +261,7 @@ export class CustomerClaimComponent implements OnInit {
         ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load Claim')
       }
     )
+    this.refreshClaim()
   }
 
   async getByNo(no: string) {
@@ -283,6 +299,7 @@ export class CustomerClaimComponent implements OnInit {
         ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not load Claim')
       }
     )
+    this.refreshClaim()
   }
 
   async approve(id: any) {
@@ -365,6 +382,10 @@ export class CustomerClaimComponent implements OnInit {
         customerClaim : {id : this.id},
         product : {id : this.claimedProductId},
         qty : this.claimedProductQty,
+        costPriceVatExcl : this.claimedProductCostPriceVatExcl,
+        costPriceVatIncl : this.claimedProductCostPriceVatIncl,
+        sellingPriceVatExcl : this.claimedProductSellingPriceVatExcl,
+        sellingPriceVatIncl : this.claimedProductSellingPriceVatIncl,
         reason : this.claimedProductReason,
         remarks : this.claimedProductRemarks
       }
@@ -412,6 +433,10 @@ export class CustomerClaimComponent implements OnInit {
         customerClaim : {id : this.id},
         product : {id : this.claimReplacementProductId},
         qty : this.claimReplacementProductQty,
+        costPriceVatExcl : this.claimReplacementProductCostPriceVatExcl,
+        costPriceVatIncl : this.claimReplacementProductCostPriceVatIncl,
+        sellingPriceVatExcl : this.claimReplacementProductSellingPriceVatExcl,
+        sellingPriceVatIncl : this.claimReplacementProductSellingPriceVatIncl,
         remarks : this.claimReplacementProductRemarks
       }
       this.spinner.show()
@@ -813,6 +838,10 @@ export class CustomerClaimComponent implements OnInit {
         this.claimedProductCode = data!.product.code
         this.claimedProductDescription = data!.product.description
         this.claimedProductQty = data!.qty
+        this.claimedProductCostPriceVatExcl    = data!.costPriceVatExcl
+        this.claimedProductCostPriceVatIncl     = data!.costPriceVatIncl
+        this.claimedProductSellingPriceVatExcl = data!.sellingPriceVatExcl
+        this.claimedProductSellingPriceVatIncl  = data!.sellingPriceVatIncl
         this.claimedProductReason = data!.reason
         this.claimedProductRemarks = data!.remarks
       }
@@ -852,6 +881,10 @@ export class CustomerClaimComponent implements OnInit {
         this.claimReplacementProductBarcode = data!.product.barcode
         this.claimReplacementProductCode = data!.product.code
         this.claimReplacementProductDescription = data!.product.description
+        this.claimReplacementProductCostPriceVatExcl    = data!.costPriceVatExcl
+        this.claimReplacementProductCostPriceVatIncl     = data!.costPriceVatIncl
+        this.claimReplacementProductSellingPriceVatExcl = data!.sellingPriceVatExcl
+        this.claimReplacementProductSellingPriceVatIncl  = data!.sellingPriceVatIncl
         this.claimReplacementProductQty = data!.qty
         this.claimReplacementProductRemarks = data!.remarks
       }
@@ -980,34 +1013,55 @@ export class CustomerClaimComponent implements OnInit {
       [
         {text : 'Code', fontSize : 9}, 
         {text : 'Description', fontSize : 9},
-        {text : 'Qty', fontSize : 9},
+        {text : 'Qty @Price', fontSize : 9},
+        {text : 'Total', fontSize : 9},
       ]
     ]  
+    
     var finalProduct = [
       [
         {text : 'Code', fontSize : 9}, 
         {text : 'Description', fontSize : 9},
-        {text : 'Qty', fontSize : 9},
+        {text : 'Qty @Price', fontSize : 9},
+        {text : 'Total', fontSize : 9},
       ]
     ] 
-        
+   
     this.claimedProducts.forEach((element) => {
       var detail = [
         {text : element.product.code.toString(), fontSize : 9}, 
         {text : element.product.description.toString(), fontSize : 9},
-        {text : element.qty.toString(), fontSize : 9}, 
+        {text : element.qty.toString() + '@'+element.sellingPriceVatIncl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9}, 
+        {text : (element.qty * element.sellingPriceVatIncl).toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'}, 
       ]
       initialProduct.push(detail)
+      
     })
+    var detailSummary = [
+      {text : '', fontSize : 9}, 
+      {text : '', fontSize : 9},
+      {text : 'Total', fontSize : 9}, 
+      {text : (this.totalClaimed).toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'}, 
+    ]
+    initialProduct.push(detailSummary)
 
     this.replacementProducts.forEach((element) => {
       var detail = [
         {text : element.product.code.toString(), fontSize : 9}, 
         {text : element.product.description.toString(), fontSize : 9},
-        {text : element.qty.toString(), fontSize : 9}, 
+        {text : element.qty.toString() + '@'+element.sellingPriceVatIncl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9},  
+        {text : (element.qty * element.sellingPriceVatIncl).toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'}, 
       ]
       finalProduct.push(detail)
+      
     })
+    var detailSummary = [
+      {text : '', fontSize : 9}, 
+      {text : '', fontSize : 9},
+      {text : 'Total', fontSize : 9}, 
+      {text : (this.totalReplaced).toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 9, alignment : 'right'}, 
+    ]
+    finalProduct.push(detailSummary)
    
     const docDefinition = {
       header: '',
@@ -1055,7 +1109,7 @@ export class CustomerClaimComponent implements OnInit {
           {
             table : {
               headerRows : 1,
-              widths : ['auto', 200, 'auto'],
+              widths : ['auto', 250, 'auto', 'auto'],
               body : 
                 initialProduct
             }
@@ -1065,17 +1119,17 @@ export class CustomerClaimComponent implements OnInit {
         {
           table : {
             headerRows : 1,
-            widths : ['auto', 200, 'auto'],
+            widths : ['auto', 250, 'auto', 'auto'],
             body : 
               finalProduct
           }
       },
         ' ',
         ' ',
-        'Verified ____________________________________', 
+        'Verified ', 
         ' ',
         ' ',
-        'Approved __________________________________',             
+        'Approved ',             
       ]     
     };
     pdfMake.createPdf(docDefinition).open(); 
@@ -1105,10 +1159,10 @@ interface IClaimedProduct{
   //description         : string
   //uom                 : string
   qty                 : number
-  //costPriceVatExcl    : number
-  //costPriceVatIncl    : number
-  //sellingPriceVatExcl : number
-  //sellingPriceVatIncl : number
+  costPriceVatExcl    : number
+  costPriceVatIncl    : number
+  sellingPriceVatExcl : number
+  sellingPriceVatIncl : number
   product             : IProduct
   reason    : string
   remarks : string
@@ -1121,10 +1175,10 @@ interface IClaimReplacementProduct{
   //description         : string
   //uom                 : string
   qty                 : number
-  //costPriceVatExcl    : number
-  //costPriceVatIncl    : number
-  //sellingPriceVatExcl : number
-  //sellingPriceVatIncl : number
+  costPriceVatExcl    : number
+  costPriceVatIncl    : number
+  sellingPriceVatExcl : number
+  sellingPriceVatIncl : number
   product             : IProduct
   remarks : string
 }

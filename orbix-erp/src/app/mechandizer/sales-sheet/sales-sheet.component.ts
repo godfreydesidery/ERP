@@ -454,7 +454,7 @@ interface ISalesSheetSale{
   totalDiscount : number
   totalCharges : number
   totalDue : number
-  //completedAt : string
+  completedAt : string
   salesSheetSaleDetails : ISalesSheetSaleDetail[]	
 }
 
