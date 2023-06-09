@@ -49,4 +49,7 @@ public interface SalesAgentService {
 	
 	SalesSheetModel getSalesSheet(Long id);
 	SalesListModel getSalesList(Long id);
+	
+	boolean confirmSalesSheet(Long id);
+	boolean unconfirmSalesSheet(Long id);
 }

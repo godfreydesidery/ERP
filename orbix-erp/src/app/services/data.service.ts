@@ -46,6 +46,9 @@ export class DataService {
   bankName3        : string;
   bankAccountNo3   : string;
 
+  quotationNotes   : string
+  salesInvoiceNotes : string
+
   constructor(private http : HttpClient, 
               private auth : AuthService, 
               private sanitizer: DomSanitizer,
@@ -81,6 +84,9 @@ export class DataService {
     this.bankPostAddress3  = ''
     this.bankName3         = ''
     this.bankAccountNo3    = ''
+
+    this.quotationNotes    = ''
+    this.salesInvoiceNotes = ''
   }
 
   async getLogo() : Promise<string> {
@@ -124,6 +130,15 @@ export class DataService {
         this.email            = data!.email
         this.website          = data!.website
         this.fax              = data!.fax
+
+        /**
+         * Document notes
+         */
+        this.quotationNotes = data!.quotationNotes
+        this.salesInvoiceNotes = data!.salesInvoiceNotes
+        
+
+
         this.bankAccountName  = data!.bankAccountName
         this.bankPhysicalAddress = data!.bankPhysicalAddress
         this.bankPostCode     = data!.bankPostCode
@@ -163,8 +178,13 @@ export class DataService {
         company.bankPostAddress3 = this.bankPostAddress3
         company.bankName3 = this.bankName3
         company.bankAccountNo3 = this.bankAccountNo3
+
         
+
+        
+
       }
+      
     )
     .catch(
       (error) => {
@@ -246,22 +266,32 @@ export class DataService {
 
     var details = [
       [
-        {text : 'Bank Name: ' + bankName, fontSize : 9}, 
-        {text : 'Acc No: ' + accNo, fontSize : 9},
-        {text : 'Acc Name: ' + accName, fontSize : 9}
+        {text : 'Bank Name: ' + bankName, fontSize : 8}, 
+        {text : 'Acc No: ' + accNo, fontSize : 8},
+        {text : 'Acc Name: ' + accName, fontSize : 8}
       ],
       [
-        {text : 'Bank Name: ' + bankName2, fontSize : 9}, 
-        {text : 'Acc No: ' + accNo2, fontSize : 9},
-        {text : 'Acc Name: ' + accName2, fontSize : 9} 
+        {text : 'Bank Name: ' + bankName2, fontSize : 8}, 
+        {text : 'Acc No: ' + accNo2, fontSize : 8},
+        {text : 'Acc Name: ' + accName2, fontSize : 8} 
       ],
       [
-        {text : 'Bank Name: ' + bankName3, fontSize : 9}, 
-        {text : 'Acc No: ' + accNo3, fontSize : 9}, 
-        {text : 'Acc Name: ' + accName3, fontSize : 9} 
+        {text : 'Bank Name: ' + bankName3, fontSize : 8}, 
+        {text : 'Acc No: ' + accNo3, fontSize : 8}, 
+        {text : 'Acc Name: ' + accName3, fontSize : 8} 
       ]
     ]  
     return details
+  }
+
+  async getQuotationNotes() : Promise<string>{
+    await this.getCompanyProfile()
+    return this.quotationNotes
+  }
+
+  async getSalesInvoiceNotes() : Promise<string>{
+    await this.getCompanyProfile()
+    return this.salesInvoiceNotes
   }
 }
 
@@ -306,6 +336,9 @@ export interface ICompanyProfile{
   bankPostAddress3 : string
   bankName3        : string
   bankAccountNo3   : string
+
+  quotationNotes   : string
+  salesInvoiceNotes : string
 
   getCompanyProfile() : void
   saveCompanyProfile() : void

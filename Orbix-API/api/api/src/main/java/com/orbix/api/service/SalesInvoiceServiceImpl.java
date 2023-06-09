@@ -391,6 +391,8 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
 		//sinc = salesInvoiceRepository.saveAndFlush(sinc);
 		sale.setSalesInvoice(inv);
 		sale.setSalesAgent(inv.getSalesAgent());
+		sale.setSalesDiscount(inv.getDiscount());
+		//sale.setSalesExpenses(inv.get);
 		sale = saleRepository.saveAndFlush(sale);
 		
 		for(SalesInvoiceDetail d : details) {

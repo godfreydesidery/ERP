@@ -54,6 +54,9 @@ export class CompanyProfileComponent implements OnInit, ICompanyProfile {
   bankName3        : string;
   bankAccountNo3   : string;
 
+  quotationNotes   : string
+  salesInvoiceNotes : string
+
   logoUrl     : any
 
   constructor(private http : HttpClient, 
@@ -94,6 +97,9 @@ export class CompanyProfileComponent implements OnInit, ICompanyProfile {
     this.bankPostAddress3  = ''
     this.bankName3         = ''
     this.bankAccountNo3    = ''
+
+    this.quotationNotes    = ''
+    this.salesInvoiceNotes = ''
 
     this.logoUrl = ''
   }
@@ -148,6 +154,9 @@ export class CompanyProfileComponent implements OnInit, ICompanyProfile {
         this.bankPostAddress3  = data!.bankPostAddress3
         this.bankName3         = data!.bankName3
         this.bankAccountNo3    = data!.bankAccountNo3
+
+        this.quotationNotes    = data!.quotationNotes
+        this.salesInvoiceNotes = data!.salesInvoiceNotes
         if(this.companyName == null){
           alert('Could not find company details')
         }       
@@ -210,7 +219,9 @@ export class CompanyProfileComponent implements OnInit, ICompanyProfile {
       bankPostCode3     : this.bankPostCode3,
       bankPostAddress3  : this.bankPostAddress3,
       bankName3         : this.bankName3,
-      bankAccountNo3    : this.bankAccountNo3
+      bankAccountNo3    : this.bankAccountNo3,
+      quotationNotes    : this.quotationNotes,
+      salesInvoiceNotes : this.salesInvoiceNotes
     }
     this.spinner.show()
     await this.http.post<ICompanyProfile>(API_URL+'/company_profile/save', profile, options)
@@ -252,6 +263,9 @@ export class CompanyProfileComponent implements OnInit, ICompanyProfile {
         this.bankPostAddress3  = data!.bankPostAddress3
         this.bankName3         = data!.bankName3
         this.bankAccountNo3    = data!.bankAccountNo3
+
+        this.quotationNotes    = data!.quotationNotes
+        this.salesInvoiceNotes = data!.salesInvoiceNotes
         try{
           this.onUpload()
         }catch(e : any){}
@@ -354,6 +368,9 @@ export interface ICompanyProfile{
   bankPostAddress3 : string
   bankName3        : string
   bankAccountNo3   : string
+
+  quotationNotes   : string
+  salesInvoiceNotes : string
 
   getCompanyProfile() : void
   saveCompanyProfile() : void

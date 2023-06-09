@@ -89,6 +89,7 @@ export class QuotationComponent implements OnInit {
   descriptions : string[]
 
   companyName : string = ''
+  notes : string = ''
 
   constructor(private auth : AuthService,
               private http :HttpClient,
@@ -133,6 +134,8 @@ export class QuotationComponent implements OnInit {
     this.address = await this.data.getAddress()
     this.companyName = await this.data.getCompanyName()
     this.paymentDetails = await this.data.getPaymentDetails()
+    this.notes          = await this.data.getQuotationNotes()
+    console.log(this.notes)
     this.loadQuotations()
     this.loadCustomerNames()
     this.loadProductDescriptions()
@@ -838,6 +841,8 @@ export class QuotationComponent implements OnInit {
     var title  = 'Quotation'
     var logo : any = ''
     var total : number = 0
+    var notes : any = this.notes
+    
     if(this.logo == ''){
       logo = { text : '', width : 80, height : 70, absolutePosition : {x : 40, y : 40}}
     }else{
@@ -950,41 +955,48 @@ export class QuotationComponent implements OnInit {
             }
         },
         ' ',
-        ' ',
         {
           layout : 'noBorders',
           table : {
-            widths : [75, 75],
+            widths : [295, 75, 80],
             body : [
               [
+                {},
                 {text : 'Total VAT', fontSize : 8}, 
                 {text : this.totalVat.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right'} 
               ],
               [
+                {},
                 {text : 'Amount VAT Excl', fontSize : 8}, 
                 {text : this.amountVatExcl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right'} 
               ],
               [
+                {},
                 {text : 'Amount VAT Incl', fontSize : 8}, 
                 {text : this.amountVatIncl.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right'} 
               ],
               [
+                {},
                 {text : 'Discount', fontSize : 8}, 
                 {text : this.discount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right'} 
               ],
               [
+                {},
                 {text : 'Other Charges', fontSize : 8}, 
                 {text : this.otherCharges.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right'} 
               ],
               [
+                {},
                 {text : 'Net Amount', fontSize : 8}, 
-                {text : this.netAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 8, alignment : 'right', bold : true} 
+                {text : this.netAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }), fontSize : 10, alignment : 'right', bold : true} 
               ]
             ]
           },
         },
-        ' ',
-        'Payment Details',
+        '  ',
+        {text : notes, fontSize : 8},
+        '  ',
+        {text : 'Payment Details', fontSize : 8, bold : true},
         {
           layout : 'noBorders',
           table : {
@@ -995,12 +1007,30 @@ export class QuotationComponent implements OnInit {
           },
         },
         ' ',
-        ' ',
-        ' ',   
-        'Verified ____________________________________', 
-        ' ',
-        ' ',
-        'Approved __________________________________',             
+        {
+          layout : 'noBorders',
+          table : {
+            widths : [200, 200],
+            body : [
+              [
+                {text : 'Issued', fontSize : 8}, 
+                {text : 'Approved', fontSize : 8}, 
+              ],
+              [
+                {text : this.created, fontSize : 8}, 
+                {text : this.approved, fontSize : 8}, 
+              ],
+              [
+                {text : ' '},
+                {text : ' '}
+              ],
+              [
+                {text : '______________________'},
+                {text : '______________________'}
+              ],
+            ]
+          },
+        },
       ]     
     };
     pdfMake.createPdf(docDefinition).open(); 

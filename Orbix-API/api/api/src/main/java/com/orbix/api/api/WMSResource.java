@@ -95,6 +95,34 @@ public class WMSResource {
 		return ResponseEntity.ok().body(salesAgentService.getSalesList(sl.get().getId()));
 	}
 	
+	@GetMapping("/wms_confirm_sales_sheet")	
+	public ResponseEntity<Boolean> confirmSalesSheet(
+			@RequestParam(name = "sales_list_no") String salesListNo){
+		Optional<SalesList> sl = salesListRepository.findByNo(salesListNo);
+		if(!sl.isPresent()) {
+			throw new NotFoundException("Corresponding sales list not found");
+		}
+		Optional<SalesSheet> ss = salesSheetRepository.findBySalesList(sl.get());
+		if(!ss.isPresent()) {
+			throw new NotFoundException("Sales Sheet not found");
+		}
+		return ResponseEntity.ok().body(salesAgentService.confirmSalesSheet(ss.get().getId()));
+	}
+	
+	@GetMapping("/wms_unconfirm_sales_sheet")	
+	public ResponseEntity<Boolean> unconfirmSalesSheet(
+			@RequestParam(name = "sales_list_no") String salesListNo){
+		Optional<SalesList> sl = salesListRepository.findByNo(salesListNo);
+		if(!sl.isPresent()) {
+			throw new NotFoundException("Corresponding sales list not found");
+		}
+		Optional<SalesSheet> ss = salesSheetRepository.findBySalesList(sl.get());
+		if(!ss.isPresent()) {
+			throw new NotFoundException("Sales Sheet not found");
+		}
+		return ResponseEntity.ok().body(salesAgentService.unconfirmSalesSheet(ss.get().getId()));
+	}
+	
 	
 	
 	@GetMapping("/wms_load_available_products")	

@@ -91,6 +91,7 @@ export class SalesInvoiceComponent implements OnInit {
   descriptions : string[]
 
   companyName : string = ''
+  notes : string = ''
 
 
   //Debt Track
@@ -146,6 +147,7 @@ export class SalesInvoiceComponent implements OnInit {
     this.logo = await this.data.getLogo() 
     this.address = await this.data.getAddress()
     this.paymentDetails = await this.data.getPaymentDetails()
+    this.notes          = await this.data.getSalesInvoiceNotes()
     this.companyName = await this.data.getCompanyName()
     this.loadInvoices()
     this.loadCustomerNames()
@@ -995,6 +997,7 @@ export class SalesInvoiceComponent implements OnInit {
     var title  = 'Invoice'
     var logo : any = ''
     var total : number = 0
+    var notes : any = this.notes
     if(this.logo == ''){
       logo = { text : '', width : 80, height : 70, absolutePosition : {x : 40, y : 40}}
     }else{
@@ -1146,8 +1149,10 @@ export class SalesInvoiceComponent implements OnInit {
             ]
           },
         },
-        ' ',
-        'Payment Details',
+        '  ',
+        {text : notes, fontSize : 8},
+        '  ',
+        {text : 'Payment Details', fontSize : 8, bold : true},
         {
           layout : 'noBorders',
           table : {
@@ -1158,12 +1163,30 @@ export class SalesInvoiceComponent implements OnInit {
           },
         },
         ' ',
-        ' ',   
-        ' ',
-        'Verified ____________________________________', 
-        ' ',
-        ' ',
-        'Approved __________________________________',             
+        {
+          layout : 'noBorders',
+          table : {
+            widths : [200, 200],
+            body : [
+              [
+                {text : 'Issued', fontSize : 8}, 
+                {text : 'Approved', fontSize : 8}, 
+              ],
+              [
+                {text : this.created, fontSize : 8}, 
+                {text : this.approved, fontSize : 8}, 
+              ],
+              [
+                {text : ' '},
+                {text : ' '}
+              ],
+              [
+                {text : '______________________'},
+                {text : '______________________'}
+              ],
+            ]
+          },
+        },          
       ]     
     };
     pdfMake.createPdf(docDefinition).open(); 

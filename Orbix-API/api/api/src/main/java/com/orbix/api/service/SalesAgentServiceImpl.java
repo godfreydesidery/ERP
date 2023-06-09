@@ -330,6 +330,11 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 		SalesSheetModel salesSheetModel = new SalesSheetModel();
 		
 		salesSheetModel.setNo(salesSheet.getNo());
+		if(salesSheet.isConfirmed()) {
+			salesSheetModel.setConfirmed("CONFIRMED");
+		}else {
+			salesSheetModel.setConfirmed("NOT CONFIRMED");
+		}
 		List<SalesSheetSaleModel> saleSheetSaleModels = new ArrayList<>();
 		for(SalesSheetSale salesSheetSale : salesSheet.getSalesSheetSales()) {
 			SalesSheetSaleModel salesSheetSaleModel = new SalesSheetSaleModel();
@@ -359,6 +364,32 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 		salesSheetModel.setSalesSheetSales(saleSheetSaleModels);
 		return salesSheetModel;
 		
+	}
+	
+	@Override
+	public boolean confirmSalesSheet(Long id) {
+		Optional<SalesSheet> ss = salesSheetRepository.findById(id);
+		if(!ss.isPresent()) {
+			throw new NotFoundException("Sales sheet not found");
+		}
+		SalesSheet salesSheet = ss.get();
+		salesSheet.setConfirmed(true);
+		salesSheetRepository.saveAndFlush(salesSheet);
+		
+		return true;		
+	}
+	
+	@Override
+	public boolean unconfirmSalesSheet(Long id) {
+		Optional<SalesSheet> ss = salesSheetRepository.findById(id);
+		if(!ss.isPresent()) {
+			throw new NotFoundException("Sales sheet not found");
+		}
+		SalesSheet salesSheet = ss.get();
+		salesSheet.setConfirmed(false);
+		salesSheetRepository.saveAndFlush(salesSheet);
+		
+		return true;		
 	}
 	
 	@Override
