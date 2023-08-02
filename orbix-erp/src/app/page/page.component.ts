@@ -12,6 +12,7 @@ export class PageComponent implements OnInit {
   public systemDate: string = ''
 
 
+  companyName = ''
   isLoggedIn : boolean = false;
 
   mainMenuShown : boolean = true
@@ -48,7 +49,8 @@ export class PageComponent implements OnInit {
       this.systemDate = localStorage.getItem('system-date')!
     }else{
       this.systemDate = ''
-    }  
+    } 
+    this.companyName = localStorage.getItem('company-name') + '' 
   }
 
   public async logOut() : Promise<any>{

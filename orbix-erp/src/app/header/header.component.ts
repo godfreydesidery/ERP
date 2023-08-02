@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit {
   public userName    : string
   public systemDate  : string
 
+
   constructor(private router: Router,
     private auth : AuthService) {
 

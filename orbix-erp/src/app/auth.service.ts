@@ -166,7 +166,6 @@ export class AuthService {
     )
     return granted
   }
-
 }
 
 

@@ -3,6 +3,7 @@
  */
 package com.orbix.api.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,18 +59,20 @@ public class VoidedServiceImpl implements VoidedService {
 
 	@Override
 	public void deleteVoid(Long refId) {
-		Optional<Voided> d = voidedRepository.findByRefId(refId);
-		if(d.isPresent()) {
-			voidedRepository.delete(d.get());
-		}
+		//Optional<Voided> d = voidedRepository.findByRefId(refId);///used to bring errors on duplicates
+		List<Voided> vs = voidedRepository.findAllByRefId(refId);
+		for(Voided v :vs) {
+			voidedRepository.delete(v);
+		}			
 	}
 
 	@Override
 	public void checkVoid(Long refId) {
-		Optional<Voided> v = voidedRepository.findByRefId(refId);
-		if(v.isPresent()) {
-			v.get().setChecked(true);
-			voidedRepository.saveAndFlush(v.get());
-		}
+		//Optional<Voided> v = voidedRepository.findByRefId(refId);///used to bring errors on duplicates
+		List<Voided> vs = voidedRepository.findAllByRefId(refId);
+		for(Voided v :vs) {
+			v.setChecked(true);
+			voidedRepository.saveAndFlush(v);
+		}		
 	}
 }
