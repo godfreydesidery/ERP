@@ -1,0 +1,76 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="header-title">
+        <h1>Mechandizing | Allocations</h1>
+    </div>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="panel panel-bd lobidrag">
+                <div class="panel-heading">
+                    <div> 
+                        <a routerLink="/home"><button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+                        <button class="btn"style="margin: 2px; width: 30mm;" (click)="createShortCut('Allocations', 'allocations')" data-mdb-toggle="tooltip" title="Create a page shortcut on user's Dashboard"><i class="fas fa-external-link-alt"></i><br>Shortcut</button>
+                    </div>
+                </div>
+                <div class="panel-body" style="padding: 3mm;">
+                    <div class="row" [@fadeInOut]>
+                        
+                        <div class="col-sm-12">
+                            <br><br>
+                            <div class="row">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-6">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            Select Customer
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <input type="text" [(ngModel)]="customerNo" class="form-control special" placeholder="Customer No" readonly>
+                                            <select [(ngModel)]="customerName" (ngModelChange)="searchCustomer(customerName)" class="form-control input-sm">
+                                                <option></option>
+                                                <option *ngFor="let c of customerNames">{{c}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            Customer's Balance
+                                        </div>
+                                        <div class="col-9" style="text-align: right; font-family: Arial, Helvetica, sans-serif;">
+                                            {{customerBalance | currency :'':''}}
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <span>Allocate Funds to Unpaid or Partial Invoices</span>
+                                    <hr>
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td>Invoice No</td><td>Status</td><td>Balance</td><td>Action</td>
+                                            </tr>
+                                            <tr *ngFor="let i of invoices">
+                                                <td>{{i.no}}</td><td>{{i.status}}</td><td style="text-align: right;">{{i.balance | currency:'':''}}</td><td><button (click)="allocate(customerId, i.id)">Allocate</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-sm-4"></div>
+                            </div>
+                            <br>
+                        </div>
+                        <hr>
+                    </div>
+                    
+                    
+                </div>
+
+                 
+            </div>
+        </div>
+    </div>
+</section> <!-- /.content -->

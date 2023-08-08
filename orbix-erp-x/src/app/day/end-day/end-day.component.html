@@ -1,0 +1,51 @@
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="header-title">
+        <h1>Day | End Day</h1>
+    </div>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="panel panel-bd lobidrag">
+                <div class="panel-body" style="padding: 3mm;">
+                    <div class="row">
+                        <div class="col">
+                            <table style="width: 100%;">
+                                <tr style="width: 100%;">
+                                    <td style="vertical-align: top; height: 75vh;">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-2"></div>
+                                                <div class="col-8">
+                                                    <br><br>                               
+                                                    <table class="table table-bordered">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>Current System Date</td><td>{{systemDate}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Current Bussiness Date</td><td>{{bussinessDate}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Options</td><td><button (click)="endDay()" class="btn btn-success">End Current Bussiness Day and start a new Day</button></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="col-2"></div>                         
+                                            </div>
+                                        </div>                   
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> <!-- /.content -->

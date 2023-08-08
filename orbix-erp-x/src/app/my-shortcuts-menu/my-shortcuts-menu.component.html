@@ -1,0 +1,10 @@
+<div class="EnclosureBox">
+    <div class="SectionEnclosureBox">
+        <hr>
+        <div class="SectionOnBoxSubHeading" (click)="userandaccess.toggle()" mdbWavesEffect>My Shortcuts</div>
+        <div  mdbCollapse #userandaccess="bs-collapse">
+            <a *ngFor="let shortcut of shortcuts" routerLink="/{{shortcut.link}}"><div class="SectionOnBox">{{shortcut.name}}<span class='bi bi-eraser' (click)="removeShortcut(shortcut.name)" style="cursor: pointer;"><i class="fa-solid fa-times fa-fw"></i></span></div></a> 
+        </div>
+        <hr>
+    </div>
+</div>

@@ -1,0 +1,252 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="header-title">
+        <h1>Mechandizing | LPO</h1>
+    </div>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="panel panel-bd lobidrag">
+                <div class="panel-heading">
+                    <div> 
+                        <a routerLink="/home"><button class="btn" (click)="clear()" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+                        <button class="btn" style="margin: 2px; width: 20mm;" (click)="showList(listContent)" data-mdb-toggle="tooltip" title="View LPO List for selection"><i class="fas fa-list"></i><br>List</button>
+                        <button class="btn" (click)="clear()" (click)="unlockAll()" (click)="requestNo()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new LPO"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
+                        <button class="btn" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing LPO"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
+                        <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing LPO"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
+                        <button class="btn"style="margin: 2px; width: 20mm;" (click)="cancel(id)" data-mdb-toggle="tooltip" title="Cancel an LPO"><i class="fa-solid fa-times fa-fw"></i><br>Cancel</button>
+                        <button class="btn"style="margin: 2px; width: 20mm;" (click)="approve(id)" data-mdb-toggle="tooltip" title="Approve a Pending LPO"><i class="fa-solid fa-check fa-fw"></i><br>Approve</button>
+                        <button class="btn"style="margin: 2px; width: 20mm;" (click)="print(id)" data-mdb-toggle="tooltip" title="Print an Approved LPO"><i class="fas fa-print"></i><br>Print</button>
+                        <button class="btn"style="margin: 2px; width: 20mm;" (click)="exportToPdf()" data-mdb-toggle="tooltip" title="Export document to PDF"><i class="fas fa-file-pdf"></i><br>PDF</button>
+                        <button (click)="archive(id)" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Send a Received LPO to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive</button>
+                        <button (click)="archiveAll()" class="btn"style="margin: 2px; width: 30mm;" data-mdb-toggle="tooltip" title="Send all Received LPOs to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive All</button>
+                        <button class="btn"style="margin: 2px; width: 30mm;" (click)="createShortCut('LPO', 'lpo')" data-mdb-toggle="tooltip" title="Create a page shortcut on user's Dashboard"><i class="fas fa-external-link-alt"></i><br>Shortcut</button>
+                    </div>
+                </div>
+                <div class="panel-body" style="padding: 3mm;">
+                    <div class="row" [@fadeInOut]>
+                        <div class="col-sm-12">
+                            <br><br>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <small>LPO#</small>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <div class="row">
+                                                <div class="col-8">
+                                                    <input type="hidden" [(ngModel)]="id">
+                                                    <input type="text" [(ngModel)]="no" [disabled]="lpoNoLocked" class="form-control special">
+                                                </div>
+                                                <div class="col-4">
+                                                    <button class="btn btn-success" (click)="getByNo(no)" style="margin: 2px; width: 26mm;"><i class="fas fa-search"></i>Search</button>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <small>Select Supplier</small>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="text" [(ngModel)]="supplierCode" class="form-control special" placeholder="Supplier Code" readonly>
+                                            <select [(ngModel)]="supplierName" (ngModelChange)="searchSupplier(supplierName)" class="form-control input-sm">
+                                                <option></option>
+                                                <option *ngFor="let s of supplierNames">{{s}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <small>Comments</small>
+                                            <textarea [(ngModel)]="comments" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <small>Status</small>
+                                        </div>
+                                        <div class="col-9">
+                                            <small>{{status}}</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <small>Created</small>
+                                        </div>
+                                        <div class="col-9">
+                                            <small>{{created}}</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <small>Approved</small>
+                                        </div>
+                                        <div class="col-9">
+                                            <small>{{approved}}</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <small>Printed</small>
+                                        </div>
+                                        <div class="col-9">
+                                            <small>{{printed}}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                        <hr>
+                        <div class="col-sm-12">
+                            <table style="width: 100%;">
+                                <tr style="width: 100%;">
+                                    <td style="vertical-align: top; height: 75vh;">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <button *ngIf="status==='PENDING' || status==='BLANK' || status===''" class="btn btn-success" style="margin: 2px; border-radius: 5mm;" (click)="open(content, '', '')" data-mdb-toggle="tooltip" title="Add Product"><i class="fa fa-plus"></i></button>
+                                                </div>
+                                                <div class="col-12">
+                                                    <table class="table table-bordered">
+                                                        <thead style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
+                                                            <tr>
+                                                                <th>Code</th>
+                                                                <th>Description</th>
+                                                                <th>Pack Size</th>
+                                                                <th>Qty</th>
+                                                                <th>Cost Price</th>
+                                                                <th>Total Cost</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let d of lpoDetails">
+                                                                <td>{{d.product.code}}</td>
+                                                                <td>{{d.product.description}}</td>
+                                                                <td>{{d.product.packSize}}</td>
+                                                                <td>{{d.qty}}</td>
+                                                                <td style="text-align: right;">{{d.costPriceVatIncl | currency:'':''}}</td>
+                                                                <td style="text-align: right;">{{d.qty*d.costPriceVatIncl | currency:'':''}}</td>
+                                                                <td><span *ngIf="status==='PENDING'" style="cursor: pointer;" (click)="deleteDetail(d.id)"><i class="fas fa-trash"></i></span><span *ngIf="status==='PENDING'" style="cursor: pointer; margin-left: 5mm;" (click)="open(content, d.product.id, d.id)"><i class="fas fa-pencil"></i></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th>Total</th>
+                                                                <th style="text-align: right;">{{total | currency:'':''}}</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>                   
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>   
+                    </div>
+                    
+                </div>
+
+                 
+            </div>
+        </div>
+    </div>
+</section> <!-- /.content -->
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add/Edit Product</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td style="text-align: right;">Barcode</td>
+                    <td style="padding: 0;">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" [(ngModel)]="barcode" class="form-control special"></td><td><button (click)="searchProduct(barcode, code, description)" style="margin: 1mm;">Search</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Code</td><td style="padding: 0;"><input type="text" [(ngModel)]="code" class="form-control special"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Description</td>
+                    <td style="padding: 0;">
+                        <input type="text" [(ngModel)]="description" list="descriptions" class="form-control special">
+                        <datalist id="descriptions" style="padding: 0px;">
+                            <option *ngFor="let d of descriptions" [ngValue]="d">{{d}}</option>
+                        </datalist>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Qty</td><td style="padding: 0;"><input type="text" [(ngModel)]="qty" class="form-control special"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Cost Price</td><td style="padding: 0;"><input type="text" [(ngModel)]="costPriceVatIncl" class="form-control special" readonly></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Pack Size</td><td style="padding: 0;"><input type="text" [(ngModel)]="packSize" class="form-control special" readonly></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+      <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>-->
+      <button type="button" (click)="saveDetail()" (click)="modal.close('Save click')" class="btn btn-outline-dark">Add/Update</button>
+    </div>
+</ng-template>
+
+<ng-template #listContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">LPO List</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-12" style="height: 10cm; overflow: auto;">
+                <table class="table table-bordered">
+                    <thead style="position: sticky; top: 0;">
+                        <tr class="table-dark">
+                            <td>LPO#</td>
+                            <td>Status</td>
+                            <td>Select</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let lpo of lpos">
+                            <td>{{lpo.no}}</td>
+                            <td>{{lpo.status}}</td>
+                            <td><span (click)="get(lpo.id)" (click)="modal.close('Select click')" style="cursor: pointer;">[Select]</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+    <div class="modal-footer">
+      
+    </div>
+</ng-template>

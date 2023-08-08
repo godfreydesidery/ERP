@@ -1,0 +1,142 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="header-title">
+        <h1>Human Resource | Employee Register</h1>
+    </div>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="panel panel-bd lobidrag">
+                <div class="panel-heading">
+                    <div> 
+                        <a routerLink="/home"><button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+                        <button class="btn" (click)="clearFields()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new LPO"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
+                        <button class="btn" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing LPO"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
+                        <button (click)="delete()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing LPO"><i class="fa-solid fa-times"></i><br>Delete</button>
+                        <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing LPO"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
+                    </div>
+                </div>
+                <div class="panel-body" style="padding: 3mm;">
+                    <div class="row" [@fadeInOut]>
+                        <div class="col-md-6">
+                            <br>
+                            <input type="hidden" [(ngModel)]="id">
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Employee No*</label>
+                                </div>
+                                <div class="col-5">
+                                    <input type="text" [(ngModel)]="no" [readonly]="noLocked" autocomplete="disabled" class="form-control special">
+                                </div>
+                                <div class="col-3">
+                                    <button (click)="getByNoOrName(no, alias)" class="btn btn-success form-control">Search</button>                              
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Roll No</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="rollNo" [readonly]="inputsLocked" autocomplete="disabled" class="form-control special">                             
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Alias</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="alias" list="aliases" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">
+                                    <datalist id="aliases" style="padding: 0px;">
+                                        <option *ngFor="let a of aliases" [ngValue]="a">{{a}}</option>
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>First Name</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="firstName" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                            
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Second Name</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="secondName" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                            
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Last Name</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="lastName" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                            
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label></label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="checkbox" [(ngModel)]="active"><label>Active</label>                            
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Address</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="address" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                            
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Telephone</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="tel" [(ngModel)]="telephone" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                            
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Email</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="email" [(ngModel)]="email" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                         
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <br>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <td>No</td>
+                                        <td>Roll No</td>
+                                        <td>Name</td>
+                                        <td>Active</td>
+                                        <td>Select</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let employee of employees">
+                                        <td>{{employee.no}}</td>
+                                        <td>{{employee.rollNo}}</td>
+                                        <td>{{employee.alias}}</td>
+                                        <td>{{employee.active}}</td>
+                                        <td><span (click)="get(employee.id)" style="cursor: pointer;">[Select]</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> <!-- /.content -->

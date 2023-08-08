@@ -1,0 +1,69 @@
+<div class="row" [@fadeInOut]>
+    <div class="col-sm-12" style="text-align: center;">
+        <!--<h6>Home | My Dashboard</h6>-->
+    </div>
+    <div class="col">
+        <table style="width: 100%;">
+            <tr style="width: 100%;">
+                <td style="vertical-align: top; height: 80vh;">
+                    <div class="container-fluid">
+                        <!--<div class="row">
+                            <div class="col-12">
+                                <div class="alert alert-dark" role="alert"><b>{{companyName}}</b> Home-My Dashboard</div>
+                            </div>
+                        </div>-->
+                        <div class="row">
+                            <!--<div class="col-sm-4" style="margin-top: 10mm;">
+                                <mdb-card>
+                                    <mdb-card-body>
+                                        <mdb-card-title>
+                                            <h4>My Shortcuts</h4>
+                                        </mdb-card-title>
+                                        <div class="flex-row">
+                                            <span *ngFor="let shortcut of shortcuts"><a  class="card-link" routerLink='/{{shortcut.link}}'>{{shortcut.name}}----------</a><span class='bi bi-eraser' (click)="removeShortcut(shortcut.name)" style="cursor: pointer;"><mdb-icon fas icon="trash" mdbDropdownToggle></mdb-icon></span><br></span>
+                                        </div>
+                                    </mdb-card-body>
+                                </mdb-card>
+                            </div>-->
+                            <div class="col-sm-4" style="margin-top: 10mm;">
+                                <mdb-card>
+                                    <mdb-card-body>
+                                        <mdb-card-title>
+                                            <h4>Pending Documents</h4>
+                                        </mdb-card-title>
+                                        <div class="flex-row">
+                                            <ul>
+                                                <li>Quotation <span class="badge badge-danger">1</span></li>
+                                                <li>Sales Invoice <span class="badge badge-danger">1</span></li>
+                                                <li>Packing List <span class="badge badge-danger">1</span></li>
+                                                <li>Sales List <span class="badge badge-danger">1</span></li>
+                                                <li>Customer Claim <span class="badge badge-danger">1</span></li>
+                                                <li>Sales Receipt <span class="badge badge-danger">1</span></li>
+                                                <li>Allocation <span class="badge badge-danger">1</span></li>
+                                                <li>Web POS <span class="badge badge-danger">1</span></li>
+                                                <li>Production <span class="badge badge-danger">1</span></li>
+                                            </ul>
+                                        </div>
+                                    </mdb-card-body>
+                                </mdb-card>
+                            </div>          
+                            <!--<div class="col-sm-4" style="margin-top: 10mm;">
+                                <mdb-card>
+                                    <mdb-card-body>
+                                        <mdb-card-title>
+                                            <h4>My Messages</h4>
+                                        </mdb-card-title>
+                                        <div class="flex-row">
+
+                                        </div>
+                                    </mdb-card-body>
+                                </mdb-card>
+                            </div>  -->
+                                             
+                        </div>                       
+                    </div>                   
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

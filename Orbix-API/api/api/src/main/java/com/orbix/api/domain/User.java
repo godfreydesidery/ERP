@@ -67,7 +67,7 @@ public class User {
 //    private boolean loginDisabled;
 
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	private Collection<Role> roles = new ArrayList<>();	
 		
 }

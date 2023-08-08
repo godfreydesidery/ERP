@@ -1,0 +1,57 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="header-title">
+        <h1>Suppliers | Supplier Mass Manager</h1>
+    </div>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="panel panel-bd lobidrag">
+                <div class="panel-body" style="padding: 3mm;">
+                    <div class="row">
+                        <div class="col">
+                            <table style="width: 100%;">
+                                <tr style="width: 100%;">
+                                    <td style="vertical-align: top; height: 75vh;">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-2"></div>
+                                                <div class="col-8">
+                                                    <br><br>
+                                                    <div class="alert alert-info" role="alert">
+                                                        <span>Progress: {{progressStatus}} {{currentRecord}} of {{totalRecords}}</span>
+                                                        <hr>
+                                                        <div class="alert alert-info" role="alert">Upload Suppliers from file
+                                                            <input type="file" (change)="uploadSupplierFile($event)" multiple="false">
+                                                        </div>
+                                                        <hr>
+                                                        <div class="alert alert-info" role="alert">Update Suppliers from file
+                                                            <input type="file" (change)="updateSupplierFile($event)" multiple="false">
+                                                        </div>
+                                                        <hr>
+                                                        <div class="alert alert-info" role="alert">Download Suppliers
+                                                            <button (click)="exportSupplierToExcel()">Download</button>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="alert alert-info" role="alert">Download Supplier Template
+                                                            <button (click)="exportTemplateToExcel()">Download</button>
+                                                        </div>
+                                                        <hr>
+                                                    </div>
+                                                </div>
+                                                <div class="col-2"></div>                                      
+                                            </div>
+                                        </div>                   
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> <!-- /.content -->

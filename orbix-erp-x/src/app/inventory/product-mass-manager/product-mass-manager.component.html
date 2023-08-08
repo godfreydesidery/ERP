@@ -1,0 +1,67 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="header-title">
+        <h1>Inventory | Product Mass Manager</h1>
+    </div>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="panel panel-bd lobidrag">
+                <div class="panel-body" style="padding: 3mm;">
+                    <div class="col">
+                        <table style="width: 100%;">
+                            <tr style="width: 100%;">
+                                <td style="vertical-align: top; height: 75vh;">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-2"></div>
+                                            <div class="col-8">
+                                                <br><br>
+                                                <div class="alert alert-info" role="alert">
+                                                    <span>Progress: {{progressStatus}} {{currentRecord}} of {{totalRecords}}</span>
+                                                    <hr>
+                                                    <table class="table table-bordered">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>Upload Products from file</td>
+                                                                <td><input type="file" (change)="uploadProductFile($event)" multiple="false"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Update Products from file</td>
+                                                                <td><input type="file" (change)="updateProductFile($event)" multiple="false"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Update Inventory from file</td>
+                                                                <td><input type="file" (change)="updateInventoryFile($event)" multiple="false"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Update Prices from file</td>
+                                                                <td><input type="file" (change)="updatePricingFile($event)" multiple="false"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Download Product file</td>
+                                                                <td><button (click)="exportProductToExcel()">Download</button></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Download Product file Template</td>
+                                                                <td><button (click)="exportTemplateToExcel()">Download</button></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-2"></div>                                      
+                                        </div>
+                                    </div>                   
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> <!-- /.content -->

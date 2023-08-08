@@ -1,0 +1,61 @@
+<!--<div style="height: 15mm;  background-color: #888888;">
+    <div class="quote">       
+        <span><font style="color: white; font-size: smaller;"><i>System Date: {{systemDate}} User: {{userName}}</i></font><a class="badge" (click)="logOut()" style="cursor: pointer;">Log Out</a></span>       
+    </div>   
+</div>-->
+<!--Navbar-->
+<mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark unique-color sticky-top" [containerInside]="false">
+
+    <!-- Navbar brand -->
+    <mdb-navbar-brand><a class="navbar-brand" style="color: white;">ORBIX-ERP</a></mdb-navbar-brand>
+  
+    <!-- Collapsible content -->
+    <links>
+  
+      <!-- Links -->
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link waves-light" mdbWavesEffect>Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item dropdown" dropdown>
+            <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+              Administration<span class="caret"></span></a>
+            <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+              <a class="dropdown-item waves-light" mdbWavesEffect href="#">Admin Functions</a>
+              <div class="divider dropdown-divider"></div>
+              <a class="dropdown-item waves-light" mdbWavesEffect href="#">HumanResource</a>
+            </div>
+          </li>
+        <li class="nav-item">
+          <a class="nav-link waves-light" mdbWavesEffect>Inventory</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link waves-light" mdbWavesEffect>Mechandizing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link waves-light" mdbWavesEffect>Production</a>
+      </li>
+        <li class="nav-item">
+            <a class="nav-link waves-light" mdbWavesEffect>Reports</a>
+        </li>
+      </ul>
+      <!-- Links -->
+  
+      <ul class="navbar-nav ml-auto nav-flex-icons">
+        <li class="nav-item">
+          <a class="nav-link">
+            <div class="btn-group" mdbDropdown>
+              <mdb-icon fas icon="user" mdbDropdownToggle></mdb-icon>
+              <div class="dropdown-menu dropdown-menu-right dropdown-primary">
+                <a class="dropdown-item" href="#">Logout</a>
+                
+              </div>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </links>
+    <!-- Collapsible content -->
+  
+  </mdb-navbar>
+  <!--/.Navbar-->

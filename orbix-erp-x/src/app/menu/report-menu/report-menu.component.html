@@ -1,0 +1,32 @@
+<div class="EnclosureBox">
+    <div class="SectionEnclosureBox">
+        <div class="SectionOnBoxSubHeading" (click)="salesReports.toggle()" mdbWavesEffect>Purchases & Sales</div>
+        <div mdbCollapse #salesReports="bs-collapse">
+            <a routerLink="/daily-sales-report"><div class="SectionOnBox">Daily Sales Report</div></a>
+            <a routerLink="/z-history"><div class="SectionOnBox">Z History</div></a>
+            <a routerLink="/product-listing-report"><div class="SectionOnBox">Product Listing Report</div></a>
+            <a routerLink="/supply-sales-report"><div class="SectionOnBox">Supply Sales Report</div></a>
+            <a routerLink="/supply-sales-report-extended"><div class="SectionOnBox">Supply Sales Report-Extended</div></a>
+            <a routerLink="/fast-moving-items"><div class="SectionOnBox">Fast Moving Items</div></a>
+            <a routerLink="/slow-moving-items"><div class="SectionOnBox">Slow Moving Items</div></a>
+            <a routerLink="/sales-and-purchases-summary-report"><div class="SectionOnBox">Sales and Purchases Summary</div></a>
+            <!--<a routerLink="/daily-summary-report"><div class="SectionOnBox">Daily Summary Report</div></a>-->
+            <hr>
+            <a routerLink="/daily-purchases-report"><div class="SectionOnBox">Daily Purchases Report</div></a>
+            <a routerLink="/lpo-report"><div class="SectionOnBox">LPO Report</div></a>
+            <a routerLink="/grn-report"><div class="SectionOnBox">GRN Report</div></a>
+        </div> 
+        <div class="SectionOnBoxSubHeading" (click)="inventoryReports.toggle()" mdbWavesEffect>Inventory Reports</div>
+        <div mdbCollapse #inventoryReports="bs-collapse">
+            <a routerLink="/supplier-stock-status"><div class="SectionOnBox">Supplier Stock Status</div></a>
+            <a routerLink="/negative-stock-report"><div class="SectionOnBox">Negative Stock Report</div></a>
+            <a routerLink="/stock-card-report"><div class="SectionOnBox">Stock Card Report</div></a>
+        </div> 
+        <div class="SectionOnBoxSubHeading" (click)="productionReports.toggle()" mdbWavesEffect>Production Reports</div>
+        <div mdbCollapse #productionReports="bs-collapse">
+            <a routerLink="/daily-production-report"><div class="SectionOnBox">Daily Production Report</div></a>
+            <a routerLink="/material-vs-production-report"><div class="SectionOnBox">Material vs Production Report</div></a>
+            <a routerLink="/material-usage-report"><div class="SectionOnBox">Material Usage Report</div></a>
+        </div>
+    </div>
+</div>

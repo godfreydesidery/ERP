@@ -1,0 +1,269 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="header-title">
+        <h1>Mechandizing | Quotations</h1>
+    </div>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="panel panel-bd lobidrag">
+                <div class="panel-heading">
+                    <div> 
+                        <a routerLink="/home"><button class="btn" (click)="clear()" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+                        <button class="btn" style="margin: 2px; width: 20mm;" (click)="showList(listContent)" data-mdb-toggle="tooltip" title="View List for selection"><i class="fas fa-list"></i><br>List</button>
+                        <button class="btn" (click)="clear()" (click)="unlockAll()" (click)="requestNo()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new Quotation"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
+                        <button class="btn" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing Quotation"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
+                        <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing Quotation"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
+                        <button class="btn"style="margin: 2px; width: 20mm;" (click)="cancel(id)" data-mdb-toggle="tooltip" title="Cancel Pending Quotation"><i class="fa-solid fa-times fa-fw"></i><br>Cancel</button>
+                        <button class="btn"style="margin: 2px; width: 20mm;" (click)="approve(id)" data-mdb-toggle="tooltip" title="Approve a Pending Quotation"><i class="fa-solid fa-check fa-fw"></i><br>Approve</button>
+                        <button class="btn"style="margin: 2px; width: 20mm;" (click)="exportToPdf()" data-mdb-toggle="tooltip" title="Export document to PDF"><i class="fas fa-file-pdf"></i><br>PDF</button>
+                        <button (click)="archive(id)" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Send an Approved Quotation to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive</button>
+                        <button (click)="archiveAll()" class="btn"style="margin: 2px; width: 30mm;" data-mdb-toggle="tooltip" title="Send all Received Approved Quotations to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive All</button>
+                        <button class="btn"style="margin: 2px; width: 30mm;" (click)="createShortCut('Quotation', 'quotations')" data-mdb-toggle="tooltip" title="Create a page shortcut on user's Dashboard"><i class="fas fa-external-link-alt"></i><br>Shortcut</button>
+                    </div>
+                </div>
+                <div class="panel-body" style="padding: 3mm;">
+                    <div class="row" [@fadeInOut]>
+                        <div class="col-sm-12">
+                            <br><br>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <small>Quotationt#</small>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <div class="row">
+                                                <div class="col-8">
+                                                    <input type="text" [(ngModel)]="no" class="form-control special" [readonly]="quotationNoLocked">
+                                                </div>
+                                                <div class="col-4">
+                                                    <button class="btn btn-success" (click)="getByNo(no)" style="margin: 2px; width: 26mm;"><i class="fas fa-search"></i>Search</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <small>Select Customer</small>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <input type="text" [(ngModel)]="customerNo" class="form-control special" placeholder="Customer No" readonly>
+                                            <select [(ngModel)]="customerName" (ngModelChange)="searchCustomer(customerName)" class="form-control input-sm" [disabled]="inputsLocked">
+                                                <option></option>
+                                                <option *ngFor="let c of customerNames">{{c}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <small>Billing Address</small>
+                                            <textarea [(ngModel)]="billingAddress" class="form-control" style="font-size: smaller; height: 3cm;"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <small>Shipping Address</small>
+                                            <textarea [(ngModel)]="shippingAddress" class="form-control" style="font-size: smaller; height: 3cm;"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <small>Comments</small>
+                                            <textarea [(ngModel)]="comments" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <small>Status</small>
+                                        </div>
+                                        <div class="col-9">
+                                            <small>{{status}}</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <small>Created</small>
+                                        </div>
+                                        <div class="col-9">
+                                            <small>{{created}}</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <small>Approved</small>
+                                        </div>
+                                        <div class="col-9">
+                                            <small>{{approved}}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                        <hr>
+                        <div class="col-12">
+                            <button class="btn btn-success" style="margin: 2px; border-radius: 5mm;" (click)="open(content, '', '')" data-mdb-toggle="tooltip" title="Add Product"><i class="fa fa-plus"></i></button>
+                        </div>
+                        <div class="col-12">
+                            <table class="table table-bordered table-striped">
+                                <thead style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Description</th>
+                                        <th>Qty</th>
+                                        <th>Price(VAT Incl)</th>
+                                        <th>Total Cost</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let d of quotationDetails">
+                                        <td>{{d.product.code}}</td>
+                                        <td>{{d.product.description}}</td>
+                                        <td>{{d.qty}}</td>
+                                        <td style="text-align: right;">{{d.sellingPriceVatIncl | currency:'':''}}</td>
+                                        <td style="text-align: right;">{{d.qty*d.sellingPriceVatIncl | currency:'':''}}</td>
+                                        <td><span *ngIf="status === 'PENDING'" style="cursor: pointer;" (click)="open(content, d.product.id, d.id)"><i class="fas fa-pencil"></i></span>_____<span *ngIf="status === 'PENDING'" style="cursor: pointer;" (click)="deleteDetail(d.id)"><i class="fas fa-trash"></i></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th style="text-align: right;">{{total | currency:'':''}}</th>
+                                        <th></th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-bordered table-sm" style="width: 10cm;">
+                                        <tbody>
+                                            <tr>
+                                                <td><small>Total VAT</small></td>
+                                                <td style="text-align: right;">{{totalVat | currency:'':''}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><small>Amount VAT Excl</small></td>
+                                                <td style="text-align: right;">{{amountVatExcl | currency:'':''}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><small>Amount VAT Incl</small></td>
+                                                <td style="text-align: right;">{{amountVatIncl | currency:'':''}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><small>Discount</small></td>
+                                                <td style="text-align: right;"> <input type="text" [(ngModel)]="discount" (change)="showNet()" class="form-control special" style="text-align: right;"></td>
+                                            </tr>
+                                            <tr>
+                                                <td><small>Other Charges</small></td>
+                                                <td style="text-align: right;"> <input type="text" [(ngModel)]="otherCharges" (change)="showNet()" class="form-control special" style="text-align: right;"></td>
+                                            </tr>
+                                            <tr>
+                                                <td><small>Net Amount</small></td>
+                                                <td style="text-align: right;">{{netAmount | currency:'':''}}</td>
+                                            </tr>
+                                        </tbody>
+                                        
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                 
+            </div>
+        </div>
+    </div>
+</section> <!-- /.content -->
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add/Edit Product</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td style="text-align: right;">Barcode</td>
+                    <td style="padding: 0;">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" [(ngModel)]="barcode" class="form-control special"></td><td><button (click)="searchProduct(barcode, code, description)" style="margin: 1mm;">Search</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Code</td><td style="padding: 0;"><input type="text" [(ngModel)]="code" class="form-control special"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Description</td>
+                    <td style="padding: 0;">
+                        <input type="text" [(ngModel)]="description" list="descriptions" class="form-control special">
+                        <datalist id="descriptions" style="padding: 0px;">
+                            <option *ngFor="let d of descriptions" [ngValue]="d">{{d}}</option>
+                        </datalist>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Qty</td><td style="padding: 0;"><input type="text" [(ngModel)]="qty" class="form-control special"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Cost Price <span (click)="unlockPrice()"><i class="fas fa-pencil"></i></span></td><td style="padding: 0;"><input type="text" [(ngModel)]="sellingPriceVatIncl" class="form-control special" [readonly]="priceLocked"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="saveDetail()" (click)="modal.close('Save click')" class="btn btn-outline-dark">Add/Update</button>
+    </div>
+</ng-template>
+
+<ng-template #listContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Quotation List</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-12" style="height: 10cm; overflow: auto;">
+                <table class="table table-bordered">
+                    <thead style="position: sticky; top: 0;">
+                        <tr class="table-dark">
+                            <td>Quotation#</td>
+                            <td>Customer</td>
+                            <td>Status</td>
+                            <td>Select</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let q of quotations">
+                            <td>{{q.no}}</td>
+                            <td>{{q.customer.name}}</td>
+                            <td>{{q.status}}</td>
+                            <td><span (click)="get(q.id)" (click)="modal.close('Select click')" style="cursor: pointer;">[Select]</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+    <div class="modal-footer">
+      
+    </div>
+</ng-template>
