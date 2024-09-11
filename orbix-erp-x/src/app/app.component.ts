@@ -56,12 +56,14 @@ export class AppComponent implements OnInit{
   }
    
   async ngOnInit(): Promise<void> {
+
     this.ping()
     this.loadCompanyName()
     this.titleService.setTitle('Orbix ERP - '+localStorage.getItem('company-name'))
     try{
       await this.loadDay()
-    }catch(e:any){}    
+    }catch(e:any){
+    }    
     var currentUser = null
     if(localStorage.getItem('current-user') != null){
       currentUser = localStorage.getItem('current-user')
@@ -136,6 +138,7 @@ export class AppComponent implements OnInit{
   public async logout() : Promise<any>{
     if(window.confirm('Log out?')){
       localStorage.removeItem('current-user')
+      localStorage.removeItem('system-date')
       alert('You have logged out!')
       await this.router.navigate([''])
       window.location.reload()

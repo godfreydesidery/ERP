@@ -4,6 +4,7 @@
 package com.orbix.api.api;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -355,6 +356,89 @@ public class ProductionResource {
 		return ResponseEntity.created(uri).body(mat.get());
 	}
 	
+	@PostMapping("/productions/verify_material_all")
+	@PreAuthorize("hasAnyAuthority('PRODUCTION-APPROVE')")
+	public ResponseEntity<List<Material>> verifyMaterialAll(
+			@RequestBody List<MaterialProduction> materialProductions,
+			HttpServletRequest request){
+		List<Material> mats = new ArrayList<>();
+		
+		for(MaterialProduction materialProduction : materialProductions) {
+			Optional<Material> mat = materialRepository.findById(materialProduction.getMaterial().getId());
+			if(!mat.isPresent()) {
+				throw new NotFoundException("Material not found");
+			}
+			mats.add(mat.get());
+			Optional<Production> prod = productionRepository.findById(materialProduction.getProduction().getId());
+			if(!prod.isPresent()) {
+				throw new NotFoundException("Production does not exist");
+			}
+			if(!prod.get().getStatus().equals("OPEN")) {
+				throw new InvalidOperationException("Could not process, only open production can be edited");
+			}
+			/**
+			 * Check whether material exist in the unverified list
+			 */
+			Optional<ProductionUnverifiedMaterial> pum = productionUnverifiedMaterialRepository.findByMaterialAndProduction(mat.get(), prod.get());
+			if(pum.isPresent()) {
+				/**
+				 * Check if qty matches
+				 */
+				if(pum.get().getQty() != materialProduction.getQty()) {
+					throw new InvalidEntryException("Could not verify, quantity do not match");
+				}
+				
+				
+				Optional<ProductionMaterial> pm = productionMaterialRepository.findByMaterialAndProductionAndVerifiedByAndVerifiedAt(mat.get(), prod.get(), userService.getUserId(request), dayRepository.getCurrentBussinessDay().getId());
+				if(pm.isPresent()) {
+					/**
+					 * Add qty
+					 */
+					pm.get().setQty(pm.get().getQty() + materialProduction.getQty());
+					productionMaterialRepository.saveAndFlush(pm.get());
+				}else {
+					/**
+					 * Add new material
+					 */
+					ProductionMaterial productionMaterial = new ProductionMaterial();
+					productionMaterial.setProduction(prod.get());
+					productionMaterial.setMaterial(mat.get());
+					productionMaterial.setQty(materialProduction.getQty());
+					productionMaterial.setVerifiedAt(dayService.getDayId());
+					productionMaterial.setVerifiedBy(userService.getUserId(request));
+					productionMaterialRepository.saveAndFlush(productionMaterial);
+				}
+				/**
+				 * Deduct material from stock
+				 */
+				double materialStock = mat.get().getStock();
+				double newMaterialStock = materialStock - materialProduction.getQty();
+				mat.get().setStock(newMaterialStock);
+				materialRepository.saveAndFlush(mat.get());
+				/**
+				 * Now, update material stock cards
+				 */
+				MaterialStockCard msc = new MaterialStockCard();
+				msc.setQtyOut(materialProduction.getQty());		
+				msc.setBalance(newMaterialStock);
+				msc.setMaterial(mat.get());
+				msc.setDay(dayRepository.getCurrentBussinessDay());
+				msc.setReference("Used in production Ref# "+prod.get().getNo());
+				materialStockCardRepository.saveAndFlush(msc);
+				/**
+				 * Remove from production unverified materials
+				 */
+				productionUnverifiedMaterialRepository.delete(pum.get());
+			}else {
+				throw new InvalidOperationException("Material not registered in production");
+			}
+		}
+		
+		
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/productions/verify_material").toUriString());
+		return ResponseEntity.created(uri).body(mats);
+	}
+	
 	@PostMapping("/productions/remove_product")
 	@PreAuthorize("hasAnyAuthority('PRODUCTION-UPDATE')")
 	public ResponseEntity<Product> removeProduct(
@@ -459,6 +543,97 @@ public class ProductionResource {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/productions/verify_product").toUriString());
 		return ResponseEntity.created(uri).body(p.get());
 	}
+	
+	
+	@PostMapping("/productions/verify_product_all")
+	@PreAuthorize("hasAnyAuthority('PRODUCTION-APPROVE')")
+	public ResponseEntity<List<Product>> verifyProductAll(
+			@RequestBody List<ProductProduction> productProductions,
+			HttpServletRequest request){
+		
+		List<Product> ps = new ArrayList<>();
+		
+		for(ProductProduction productProduction : productProductions) {
+			Optional<Product> p = productRepository.findById(productProduction.getProduct().getId());
+			if(!p.isPresent()) {
+				throw new NotFoundException("Product not found");
+			}
+			
+			ps.add(p.get());
+			
+			Optional<Production> prod = productionRepository.findById(productProduction.getProduction().getId());
+			if(!prod.isPresent()) {
+				throw new NotFoundException("Production does not exist");
+			}
+			if(!prod.get().getStatus().equals("OPEN")) {
+				throw new InvalidOperationException("Could not process, only open production can be edited");
+			}
+			/**
+			 * Check whether material exist in the unverified list
+			 */
+			Optional<ProductionUnverifiedProduct> pup = productionUnverifiedProductRepository.findByProductionAndProduct(prod.get(), p.get());
+			if(pup.isPresent()) {
+				/**
+				 * Check if qty matches
+				 */
+				if(pup.get().getQty() != productProduction.getQty()) {
+					throw new InvalidEntryException("Could not verify, quantity do not match");
+				}
+				
+				Optional<ProductionProduct> pp = productionProductRepository.findByProductAndProductionAndVerifiedByAndVerifiedAt(p.get(), prod.get(), userService.getUserId(request), dayRepository.getCurrentBussinessDay().getId());
+				if(pp.isPresent()) {
+					/**
+					 * Add qty
+					 */
+					pp.get().setQty(pp.get().getQty() + productProduction.getQty());
+					productionProductRepository.saveAndFlush(pp.get());
+				}else {
+					/**
+					 * Add new material
+					 */
+					ProductionProduct productionProduct = new ProductionProduct();
+					productionProduct.setProduction(prod.get());
+					productionProduct.setProduct(p.get());
+					productionProduct.setSellingPriceVatExcl(p.get().getSellingPriceVatExcl());
+					productionProduct.setSellingPriceVatIncl(p.get().getSellingPriceVatIncl());
+					productionProduct.setQty(productProduction.getQty());
+					productionProduct.setVerifiedAt(dayService.getDayId());
+					productionProduct.setVerifiedBy(userService.getUserId(request));
+					productionProductRepository.saveAndFlush(productionProduct);
+				}
+				/**
+				 * Deduct material from stock
+				 */
+				double productStock = p.get().getStock();
+				double newProductStock = productStock + productProduction.getQty();
+				p.get().setStock(newProductStock);
+				productRepository.saveAndFlush(p.get());
+				/**
+				 * Now, update material stock cards
+				 */
+				ProductStockCard psc = new ProductStockCard();
+				psc.setQtyIn(productProduction.getQty());		
+				psc.setBalance(newProductStock);
+				psc.setProduct(p.get());
+				psc.setDay(dayRepository.getCurrentBussinessDay());
+				psc.setReference("Produced in production Ref# "+prod.get().getNo());
+				productStockCardRepository.saveAndFlush(psc);
+				/**
+				 * Remove from production unverified products
+				 */
+				productionUnverifiedProductRepository.delete(pup.get());
+			}else {
+				throw new InvalidOperationException("Product not registered in production");
+			}
+		}
+		
+		
+		
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/productions/verify_product").toUriString());
+		return ResponseEntity.created(uri).body(ps);
+	}
+	
+	
 	
 	@PutMapping("/productions/cancel")
 	@PreAuthorize("hasAnyAuthority('PRODUCTION-CANCEL')")

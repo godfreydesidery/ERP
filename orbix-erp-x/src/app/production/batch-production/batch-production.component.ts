@@ -453,6 +453,42 @@ export class BatchProductionComponent implements OnInit {
     })
   }
 
+  async verifyMaterialAll(){
+    let options = {
+      headers : new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+
+    var materials : IMaterialProduction[] = []
+
+    this.productionUnverifiedMaterials.forEach(element => {
+      var material : IMaterialProduction = {
+        material   : {id : element.material.id, code : '', description : ''},
+        production : {id : this.id},
+        qty        : element.qty
+      }
+      if(material.qty > 0){
+        materials.push(material)
+      }
+    })
+
+    if(window.confirm('Confirm verification of all unverified materials, once verified, they can not be removed')){
+      //proceed with verification
+    }else{
+      return
+    }
+    this.spinner.show()
+    await this.http.post<IProduction>(API_URL+'/productions/verify_material_all', materials, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(data => {
+      this.get(this.id)
+    })
+    .catch(error => {
+      console.log(error)
+      ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not verify materials')
+    })
+  }
+
   async loadMaterials(){
     let options = {
       headers : new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
@@ -941,6 +977,7 @@ export class BatchProductionComponent implements OnInit {
       production : {id : this.id},
       qty        : qty
     }
+
     if(qty <= 0){
       alert('Can not verify product, invalid quantity value.')
       return
@@ -969,6 +1006,57 @@ export class BatchProductionComponent implements OnInit {
     .catch(error => {
       console.log(error)
       ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not verify product')
+    })
+  }
+
+  async verifyProductAll(){
+    let options = {
+      headers : new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+
+    var products : IProductProduction[] = []
+
+    this.productionUnverifiedProducts.forEach(element => {
+      var product : IProductProduction = {
+        product    : {
+          id                  : element.product.id, 
+          code                : '', 
+          description         : '',
+          sellingPriceVatIncl : 0,
+          sellingPriceVatExcl : 0,
+          costPriceVatIncl    : 0,
+          costPriceVatExcl    : 0
+        },
+        production : {id : this.id},
+        qty        : element.qty
+      }
+
+      if(element.qty > 0){
+        products.push(product)
+      }
+
+    })
+
+    if(this.id == null || this.id == ''){
+      alert('Please select production')
+      return
+    }
+
+    if(window.confirm('Confirm verification of the selected product, once verified, it can not be removed')){
+      //proceed with verification
+    }else{
+      return
+    }
+    this.spinner.show()
+    await this.http.post<IProduction>(API_URL+'/productions/verify_product_all', products, options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(data => {
+      this.get(this.id)
+    })
+    .catch(error => {
+      console.log(error)
+      ErrorHandlerService.showHttpErrorMessage(error, '', 'Could not verify products')
     })
   }
 

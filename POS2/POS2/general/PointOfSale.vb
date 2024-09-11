@@ -256,10 +256,11 @@ Public Class PointOfSale
             strOutputData = strOutputData + "====================================" + CRLF
 
             For i As Integer = 0 To descr.Length - 1
-                strOutputData = strOutputData + itemCode(i) + " x " + qty(i) + "  " + price(i) + "  " + amount(i) + CRLF
+                strOutputData = strOutputData + itemCode(i) + " x " + qty(i) + " @ " + price(i) + " = " + amount(i) + CRLF
                 strOutputData = strOutputData + descr(i) + CRLF
+                strOutputData = strOutputData + "------------------------------------" + CRLF
             Next
-            strOutputData = strOutputData + "------------------------------------" + CRLF
+            'strOutputData = strOutputData + "------------------------------------" + CRLF
 
             strOutputData = strOutputData + "Sub Total                   " + subTotal + CRLF
             strOutputData = strOutputData + "Tax                         " + VAT + CRLF

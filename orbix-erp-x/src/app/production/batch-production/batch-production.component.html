@@ -140,7 +140,7 @@
                                     <div *ngIf="status==='OPEN'">
                                         <span style="font-size: large;">Selected materials to use / used</span><br>
                                         <br>
-                                        <span style="font-size: large;"><u><i>Unverified Materials</i></u></span><span style="cursor: pointer;"><font style="color: blue;">  [Verify all]</font></span><span style="cursor: pointer;"><font style="color: rgb(243, 11, 11);">  [Remove all]</font></span><br>
+                                        <span style="font-size: large;"><u><i>Unverified Materials</i></u></span><span style="cursor: pointer;"><font style="color: blue;"> <a (click)="verifyMaterialAll()">[Verify all]</a> </font></span><span style="cursor: pointer;"><font style="color: rgb(243, 11, 11);">  [Remove all]</font></span><br>
                                         <table class="table table-bordered">
                                             <tbody>
                                                 <tr *ngFor="let m of unverifiedMaterials">
@@ -163,13 +163,14 @@
                                     <div *ngIf="status==='OPEN'">
                                         <div class="row">
                                             <div class="row-12">
-                                                <span>Unverified Products </span><button (click)="openProductModal(productModal, '', '', '', 0)" class="btn btn-success">+Add</button>
+                                                <span> Unverified Products </span><button (click)="openProductModal(productModal, '', '', '', 0)" class="btn btn-success">+Add</button> 
+                                                <br>
                                             </div>
                                         </div>  
                                         <table class="table table-bordered">
                                             <tbody>
                                                 <tr>
-                                                    <td>Code</td><td>Description</td><td>Qty</td><td>Action</td>
+                                                    <td>Code</td><td>Description</td><td>Qty</td><td>Action <a (click)="verifyProductAll()" style="color: blue;">[Verify all]</a></td>
                                                 </tr>
                                                 <tr *ngFor="let p of unverifiedProducts">
                                                     <td>{{p.code}}</td><td>{{p.description}}</td><td>{{p.qty}}</td><td><span (click)="openProductModal(productModal, p.id, p.code, p.description, p.qty)" style="cursor: pointer;">[Edit]</span><span (click)="verifyProduct(p.id, p.qty)" style="cursor: pointer;"><font style="color: rgb(56, 20, 66);">  [Verify]</font></span><span (click)="removeProduct(p.id)" style="cursor: pointer;"><font style="color: rgb(236, 11, 11);">  [Remove]</font></span></td>

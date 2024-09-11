@@ -14,8 +14,8 @@
 
   <!-- Site wrapper -->
   <div class="wrapper" *ngIf="isLoggedIn===true">
-      <header class="main-header">
-          <a href="index.html" class="logo"> <!-- Logo -->
+      <header class="main-header" style="height: 16mm;">
+          <a href="#" class="logo"> <!-- Logo -->
               <span class="logo-mini">
                   <!--<b>A</b>H-admin-->
                   <!--<img src="assets/dist/img/mini-logo.png" alt="">-->
@@ -36,11 +36,11 @@
                 </a>
                 <div class="navbar-custom-menu pull-right" (click)="logout()">
                   <ul class="nav navbar-nav">
-                      <li class="dropdown">
+                      <li class="dropdownn">
                           
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
+                          <a href="#" class="dropdown-togglee" data-toggle="dropdown"> 
 
-                              <i class=" fa fa-user"></i><span style="color: wheat;">{{userName}}</span>
+                              <i class=" fa fa-user"></i><span style="color: wheat;">{{userName}} | {{systemDate}}</span>
                           <div>
                           <!--<img src="assets/dist/img/avatar4.png" class="img-circle" height="40" width="40" alt="User Image">-->
                             

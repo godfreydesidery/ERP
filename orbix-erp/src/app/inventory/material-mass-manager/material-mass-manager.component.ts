@@ -248,12 +248,12 @@ export class MaterialMassManagerComponent implements OnInit {
     for(let i = 1; i < data.length; i++) {
       this.currentRecord = i
       //checks for empty code and name
-      if( data[i][0] == '' ||
-          data[i][2] == '' ||
-          data[i][3] == ''      
+      if( data[i][0] === '' ||
+          data[i][1] === '' ||
+          data[i][2] === ''      
         )
       {
-        alert(i)
+        alert('Error at '+ (i + 1) + 'row')
         valid = false
       }
     }
