@@ -82,6 +82,9 @@ public class CompanyProfileServiceImpl implements CompanyProfileService {
 				profile.setBankPostCode3(companyProfile.getBankPostCode3());
 				profile.setBankName3(companyProfile.getBankName3());
 				profile.setBankAccountNo3(companyProfile.getBankAccountNo3());
+				
+				profile.setQuotationNotes(companyProfile.getQuotationNotes());
+				profile.setSalesInvoiceNotes(companyProfile.getSalesInvoiceNotes());
 			}else {
 				profile = companyProfile;
 			}

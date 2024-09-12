@@ -1,0 +1,119 @@
+<div class="login-wrapper">
+  <div>
+      <div class="row" style="margin-top: 10%;">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4">
+              <div class="panel panel-bd">
+                  <div class="panel-heading">
+                      <div class="view-header">
+                          <div class="row">
+                              <div class="col-4"></div>
+                              <div class="col-4">
+                                  <div class="header-icon">
+                                      <i class="pe-7s-unlock"></i>
+                                  </div>
+                                  <div>
+                                      <br>
+                                      <h3>Login</h3>
+                                  </div>
+                              </div>
+                              <div class="col-4"></div>
+                          </div>
+                          <div class="row">
+                              <div class="col-sm-12">
+                                  <div class="header-title">
+                                      <label class="text-info"><strong>Enter your Username and Password to login.</strong></label>
+                                  </div>
+                              </div>
+                          </div>
+                          
+                          
+                      </div>
+                  </div>
+                  <div class="panel-body" style="padding: 3mm;">
+                    <div class="row">
+                      <div class="col-12">
+                        <font color="green" style="font-size: larger;">{{status}}</font>
+                      </div>
+                      <br>
+                    </div>
+                      <div class="row">
+                          <div class="col-12">
+                              <label class="text-info"><b>Username</b></label>
+                              <input type="text" [(ngModel)]="username" placeholder="Username" title="Please enter you username" required="" value="" name="username" id="username" class="form-control" style="text-align: center; height: 10mm;">
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-12">
+                              <label class="text-info"><b>Password</b></label>
+                              <input type="password" [(ngModel)]="password" title="Please enter your password" placeholder="******" required="" value="" name="password" id="password" class="form-control" style="text-align: center; height: 10mm;">
+                          </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                          <div class="col-6">
+                              <button class="btn btn-info form-control" (click)="loginUser()" style="height: 15mm;">Login</button>
+                          </div>
+                          <div class="col-6">
+                              <button class="btn btn-danger btn-outline form-control" (click)="clearFields()" style="height: 15mm;">Reset</button>
+                          </div>
+                      </div>
+                      <br>
+                      <a href="#" (click)="contactAdministrator()">Forgot password?</a>
+                     
+                  </div>
+              </div>
+          </div>
+          <div class="col-4"></div>
+      </div>
+      <div style="text-align: center;">
+        <span style="width: 100%; text-align: right;"><font style="font-size: smaller;" color="black">Copyright &copy; 2023, Orbix. All Rights Reserved.</font></span>
+      </div>
+      
+  </div>
+</div>
+
+
+
+
+<!--<div class="col-sm-4 offset-sm-4" style="margin-top: 2cm; background-color: rgb(215, 219, 223); border-radius: 3mm;">
+    
+    <form class="text-center border p-5" autocomplete="off">
+        <p class="h4 mb-4" style="color: rgb(6, 6, 143);">ORBIX-ERP</p>
+        <p class="h4 mb-4">User Login</p>
+        <font color="blue" style="font-size: larger;">{{status}}</font>
+        <input type="search" [(ngModel)]="username" name="username" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="Username" autocomplete="new-password" (focus)="clearCredentials($event)">
+        <input type="password" [(ngModel)]="password" name="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Password" autocomplete="new-password" (focus)="clearCredentials($event)">
+        <div class="d-flex justify-content-around">
+          <div>
+            <a href="#" (click)="contactAdministrator()">Forgot password?</a>
+          </div>
+        </div>
+        <button mdbBtn color="info" class="my-4" (click)="loginUser()">Login</button>
+        <button mdbBtn color="danger" class="my-4" (click)="clearFields()">Cancel</button>
+        
+      </form>
+        <div style="text-align: center;">
+          <span style="width: 100%; text-align: right;"><font style="font-size: smaller;" color="black">Copyright &copy; 2021, Orbix. All Rights Reserved.</font></span>
+        </div>
+      </div>
+
+
+
+
+      <ng-template #showMessage let-modal>
+        <div class="modal-header">
+          <h6 class="modal-title" id="modal-basic-title"></h6>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    {{message}}
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button (click)="modal.close('Run click')" class="btn btn-success" style="margin: 2px;">OK</button>
+        </div>
+    </ng-template>-->

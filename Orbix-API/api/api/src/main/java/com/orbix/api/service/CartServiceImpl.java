@@ -319,8 +319,10 @@ public class CartServiceImpl implements CartService {
 		}else {
 			d.get().setVoided(false);
 			cartDetailRepository.saveAndFlush(d.get());
-		}		
-		voidedService.deleteVoid(dId);		
+		}
+		try {
+			voidedService.deleteVoid(dId);	
+		}catch(Exception e) {}			
 		return true;
 	}
 	

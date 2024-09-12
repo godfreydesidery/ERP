@@ -1,0 +1,73 @@
+<div class="row" [@fadeInOut]>
+    <div class="col">
+        <table style="width: 100%;">
+            <tr style="width: 100%;">
+                <td style="width: 100mm; vertical-align: top;"><p class="h6">Admin / Biometric Registration</p></td>
+                <td></td>                                   
+            </tr>
+        </table>
+        <table style="width: 100%;">
+            <tr style="width: 100%;">
+                <td style="vertical-align: top; height: 75vh;">
+                    <div class="container-fluid">
+                        <div class="row">
+                            
+                            <div class="col-2"></div>
+                            <div class="col-8">
+                                <br>
+                                <br>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <td>Roll No</td>
+                                            <td>Names</td>
+                                            <td>Biometric</td>
+                                            <td>Add/Edit</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let user of users">
+                                            <td>{{user.rollNo}}</td>
+                                            <td>{{user.lastName}}, {{user.firstName}}</td>
+                                            <td>[Present]</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary" (click)="open(content,user.username)">Add/Edit</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div> 
+                            <div class="col-2"></div>                                      
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add/Edit Biometric for {{name}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td>Roll No</td><td><input type="text" [(ngModel)]="rollNo" readonly></td>
+                </tr>
+                <tr>
+                    <td>Name</td><td><input type="text" [(ngModel)]="name"  readonly></td>
+                </tr>
+                <tr>
+                    <td>Biometric</td><td><input type="file"></td>
+                </tr>
+            </tbody>
+        </table>
+      
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    </div>
+</ng-template>

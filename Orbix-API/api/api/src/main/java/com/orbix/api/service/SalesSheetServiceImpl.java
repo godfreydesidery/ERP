@@ -3,9 +3,12 @@
  */
 package com.orbix.api.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -57,19 +60,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SalesSheetServiceImpl implements SalesSheetService{
 	
-	private final SalesListRepository salesListRepository;
-	private final SalesListDetailRepository salesListDetailRepository;
-	private final UserRepository userRepository;
-	private final UserService userService;
-	private final DayRepository dayRepository;
-	private final ProductRepository productRepository;
-	private final ProductStockCardService productStockCardService;
-	private final SaleService saleService;
-	private final SaleRepository saleRepository;
-	private final SaleDetailRepository saleDetailRepository;
-	private final ProductDamageService productDamageService;
-	private final ProductOfferService productOfferService;
-	private final DebtService debtService;
 	private final SalesSheetRepository salesSheetRepository;
 	
 	@Override
@@ -114,6 +104,9 @@ public class SalesSheetServiceImpl implements SalesSheetService{
 			salesSheetSaleModel.setTotalDiscount(salesSheetSale.getTotalDiscount());
 			salesSheetSaleModel.setTotalCharges(salesSheetSale.getTotalCharges());
 			salesSheetSaleModel.setTotalDue(salesSheetSale.getTotalDue());
+			if(salesSheetSale.getCompletedAt() !=  null) {				
+				salesSheetSaleModel.setCompletedAt(salesSheetSale.getCompletedAt().plusHours(3).toString());
+			}
 			List<SalesSheetSaleDetailModel> salesSheetSaleDetailModels = new ArrayList<SalesSheetSaleDetailModel>();
 			for(SalesSheetSaleDetail salesSheetSaleDetail : salesSheetSale.getSalesSheetSaleDetails()) {
 				SalesSheetSaleDetailModel salesSheetSaleDetailModel = new SalesSheetSaleDetailModel();
@@ -162,10 +155,9 @@ public class SalesSheetServiceImpl implements SalesSheetService{
 			salesSheetSaleModel.setTotalDiscount(salesSheetSale.getTotalDiscount());
 			salesSheetSaleModel.setTotalCharges(salesSheetSale.getTotalCharges());
 			salesSheetSaleModel.setTotalDue(salesSheetSale.getTotalDue());
-			//if(salesSheetSale.getCompletedAt() !=  null) {
-				//salesSheetSaleModel.setCompletedAt(salesSheetSale.getCompletedAt().toString());
-			//}
-			
+			if(salesSheetSale.getCompletedAt() !=  null) {				
+				salesSheetSaleModel.setCompletedAt(salesSheetSale.getCompletedAt().plusHours(3).toString());
+			}			
 			List<SalesSheetSaleDetailModel> salesSheetSaleDetailModels = new ArrayList<SalesSheetSaleDetailModel>();
 			for(SalesSheetSaleDetail salesSheetSaleDetail : salesSheetSale.getSalesSheetSaleDetails()) {
 				SalesSheetSaleDetailModel salesSheetSaleDetailModel = new SalesSheetSaleDetailModel();

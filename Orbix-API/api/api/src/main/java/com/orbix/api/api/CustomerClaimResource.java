@@ -235,7 +235,11 @@ public class CustomerClaimResource {
 			/**
 			 * Update existing detail
 			 */
-			detail = d.get();			
+			detail = d.get();	
+			detail.setCostPriceVatExcl(claimedProduct.getCostPriceVatExcl());
+			detail.setCostPriceVatIncl(claimedProduct.getCostPriceVatIncl());
+			detail.setSellingPriceVatExcl(claimedProduct.getSellingPriceVatExcl());
+			detail.setSellingPriceVatIncl(claimedProduct.getSellingPriceVatIncl());
 			detail.setQty(claimedProduct.getQty());
 			detail.setReason(claimedProduct.getReason());
 			detail.setRemarks(claimedProduct.getRemarks());
@@ -250,6 +254,10 @@ public class CustomerClaimResource {
 			
 			detail.setCustomerClaim(l.get());
 			detail.setProduct(claimedProduct.getProduct());
+			detail.setCostPriceVatExcl(claimedProduct.getCostPriceVatExcl());
+			detail.setCostPriceVatIncl(claimedProduct.getCostPriceVatIncl());
+			detail.setSellingPriceVatExcl(claimedProduct.getSellingPriceVatExcl());
+			detail.setSellingPriceVatIncl(claimedProduct.getSellingPriceVatIncl());
 			detail.setQty(claimedProduct.getQty());
 			detail.setReason(claimedProduct.getReason());
 			detail.setRemarks(claimedProduct.getRemarks());
@@ -288,7 +296,11 @@ public class CustomerClaimResource {
 			/**
 			 * Update existing detail
 			 */
-			detail = d.get();			
+			detail = d.get();
+			detail.setCostPriceVatExcl(claimReplacementProduct.getCostPriceVatExcl());
+			detail.setCostPriceVatIncl(claimReplacementProduct.getCostPriceVatIncl());
+			detail.setSellingPriceVatExcl(claimReplacementProduct.getSellingPriceVatExcl());
+			detail.setSellingPriceVatIncl(claimReplacementProduct.getSellingPriceVatIncl());
 			detail.setQty(claimReplacementProduct.getQty());
 			detail.setRemarks(claimReplacementProduct.getRemarks());
 		}else {
@@ -302,6 +314,10 @@ public class CustomerClaimResource {
 			detail.setCustomerClaim(l.get());
 			detail.setProduct(claimReplacementProduct.getProduct());
 			detail.setQty(claimReplacementProduct.getQty());
+			detail.setCostPriceVatExcl(claimReplacementProduct.getCostPriceVatExcl());
+			detail.setCostPriceVatIncl(claimReplacementProduct.getCostPriceVatIncl());
+			detail.setSellingPriceVatExcl(claimReplacementProduct.getSellingPriceVatExcl());
+			detail.setSellingPriceVatIncl(claimReplacementProduct.getSellingPriceVatIncl());
 			detail.setRemarks(claimReplacementProduct.getRemarks());
 		}		
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/claim_replacement_products/save").toUriString());
@@ -320,6 +336,10 @@ public class CustomerClaimResource {
 		detail.setId(d.get().getId());
 		detail.setProduct(d.get().getProduct());
 		detail.setQty(d.get().getQty());
+		detail.setCostPriceVatExcl(d.get().getCostPriceVatExcl());
+		detail.setCostPriceVatIncl(d.get().getCostPriceVatIncl());
+		detail.setSellingPriceVatExcl(d.get().getSellingPriceVatExcl());
+		detail.setSellingPriceVatIncl(d.get().getSellingPriceVatIncl());
 		detail.setReason(d.get().getReason());
 		detail.setRemarks(d.get().getRemarks());
 		
@@ -340,6 +360,10 @@ public class CustomerClaimResource {
 		detail.setId(d.get().getId());
 		detail.setProduct(d.get().getProduct());
 		detail.setQty(d.get().getQty());
+		detail.setCostPriceVatExcl(d.get().getCostPriceVatExcl());
+		detail.setCostPriceVatIncl(d.get().getCostPriceVatIncl());
+		detail.setSellingPriceVatExcl(d.get().getSellingPriceVatExcl());
+		detail.setSellingPriceVatIncl(d.get().getSellingPriceVatIncl());
 		detail.setRemarks(d.get().getRemarks());
 				
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/claim_replacement_products/get").toUriString());

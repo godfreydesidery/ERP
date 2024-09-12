@@ -1,0 +1,487 @@
+
+<!--<div class="container-fluid primary-background" style="padding-left: 0%; padding-right: 0%;">
+  <app-page></app-page>
+</div>
+<ngx-spinner>Processing, Please wait...</ngx-spinner>-->
+
+
+<body class="hold-transition sidebar-mini">
+
+  <div *ngIf="isLoggedIn===false">
+      <app-login></app-login>
+    </div>
+
+
+  <!-- Site wrapper -->
+  <div class="wrapper" *ngIf="isLoggedIn===true">
+      <header class="main-header" style="height: 16mm;">
+          <a href="#" class="logo"> <!-- Logo -->
+              <span class="logo-mini">
+                  <!--<b>A</b>H-admin-->
+                  <!--<img src="assets/dist/img/mini-logo.png" alt="">-->
+              </span>
+              <span class="logo-lg">
+                  <!--<b>Admin</b>H-admin-->
+                  <!--<img src="assets/dist/img/logo.png" alt="">-->
+              </span>
+              <small style="font-size: small; color: rgb(189, 189, 195);">{{companyName}}</small>
+          </a>
+          <!-- Header Navbar -->
+          <nav class="navbar navbar-static-top">
+            <div class="row" style="width: 100%;">
+              <div class=" col-xs-12">
+                <a href="#" class="sidebar-toggle pull-left" data-toggle="offcanvas" role="button"> <!-- Sidebar toggle button-->
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="fa fa-tasks"></span>
+                </a>
+                <div class="navbar-custom-menu pull-right" (click)="logout()">
+                  <ul class="nav navbar-nav">
+                      <li class="dropdownn">
+                          
+                          <a href="#" class="dropdown-togglee" data-toggle="dropdown"> 
+
+                              <i class=" fa fa-user"></i><span style="color: wheat;">{{userName}} | {{systemDate}}</span>
+                          <div>
+                          <!--<img src="assets/dist/img/avatar4.png" class="img-circle" height="40" width="40" alt="User Image">-->
+                            
+                          </div>
+                          </a>
+                          <!--<ul class="dropdown-menu">-->
+                              <!--<li><a href="profile.html"><i class="fa fa-users"></i> User Profile</a></li>
+                              <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>-->
+                              <!--<li (click)="logout()" style="height: 2cm;"><a href="#" style="height: 2cm;"> <h4><i class="fa fa-sign-out"></i>Logout</h4></a></li>
+                          </ul>-->
+                      </li>
+                  </ul>
+              </div>
+              </div>
+            </div>
+                
+              
+              
+          </nav>
+      </header>
+      <!-- =============================================== -->
+      <!-- Left side column. contains the sidebar -->
+      <aside class="main-sidebar">
+          <!-- sidebar -->
+          <div class="sidebar">
+              <!-- Sidebar user panel -->
+              <!--<div class="user-panel">
+                  <div class="image pull-left">
+                      <img src="assets/dist/img/avatar5.png" class="img-circle" alt="User Image">
+                  </div>
+                  <div class="info">
+                      <h4>Welcome</h4>
+                      <h5 style="color: white;">{{userName}}</h5>
+                  </div>
+              </div>-->
+              
+              <!-- sidebar menu -->
+                    <br>
+                    <ul class="sidebar-menu">
+                      <li class="active">
+                        <a href="index.html"><i class="fa fa-hospital-o"></i><span>Dashboard</span>
+                        </a>
+                      </li>
+                      <hr>
+                      
+                    
+                      <!--Main Menu-->
+                      <li class="treeview" *ngIf="mainMenuShown" style="--hover-color : rgb(167, 167, 175);">
+                        <a href="#"><span>Main Menu</span></a>
+                      </li>
+
+                      <li class="treeview" *ngIf="mainMenuShown" style="--hover-color : rgb(167, 167, 175);">
+                        <a href="#" (click)="showInventoryMenu()"><i class="fa fa-user-md"></i><span>Inventory</span></a>
+                      </li>
+
+                      <li class="treeview" *ngIf="mainMenuShown" style="--hover-color : rgb(167, 167, 175);">
+                        <a href="#" (click)="showMechandizerMenu()"><i class="fa fa-user-md"></i><span>Mechandizing</span></a>
+                      </li>
+                      <li class="treeview" *ngIf="mainMenuShown" style="--hover-color : rgb(167, 167, 175);">
+                        
+                        <a href="#" (click)="showProductionMenu()"><i class="fa fa-user-md"></i><span>Production</span></a>
+                        
+                      </li>
+                      <li class="treeview" *ngIf="mainMenuShown" style="--hover-color : rgb(167, 167, 175);">
+                        
+                        <a href="#" (click)="showSupplierRelationsMenu()"><i class="fa fa-user-md"></i><span>Suppliers</span></a>
+                        
+                      </li>
+                      <li class="treeview" *ngIf="mainMenuShown" style="--hover-color : rgb(167, 167, 175);">
+                        
+                       
+                        <a href="#" (click)="showCustomerRelationsMenu()"><i class="fa fa-user-md"></i><span>Customers</span></a>
+                        
+                      </li>
+                      <li class="treeview" *ngIf="mainMenuShown" style="--hover-color : rgb(167, 167, 175);">
+                       
+                        
+                     
+                        <a href="#" (click)="showHumanResourceMenu()"><i class="fa fa-user-md"></i><span>HRM</span></a>
+                        
+                      </li>
+                      <li class="treeview" *ngIf="mainMenuShown" style="--hover-color : rgb(167, 167, 175);">
+                       
+                  
+                        <a href="#" (click)="showAdminMenu()"><i class="fa fa-user-md"></i><span>Admin</span></a>
+ 
+                      </li>
+                      <li class="treeview" *ngIf="mainMenuShown" style="--hover-color : rgb(167, 167, 175);">
+                        
+          
+                        <a href="#" (click)="showDayMenu()"><i class="fa fa-user-md"></i><span>Day</span></a>   
+                      </li>
+                      <li class="treeview" *ngIf="mainMenuShown" style="--hover-color : rgb(167, 167, 175);">
+                        
+ 
+                        <a href="#" (click)="showReportMenu()"><i class="fa fa-user-md"></i><span>Reports</span></a>
+                      </li>
+
+                      <li class="treeview" *ngIf="mainMenuShown === false" style="--hover-color : rgb(167, 167, 175);">
+                        <a href="#" (click)="showMainMenu()"><i class="glyphicon glyphicon-triangle-left"></i><span>Back To Main</span></a>
+                      </li>
+
+
+                      <!--Inventory Sub menu-->
+                      
+                      <li class="treeview" *ngIf="inventoryMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Products</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/product-master">Product Master</a></li>
+                            <li><a routerLink="/product-inquiry">Product Inquiry</a></li>
+                        </ul>
+                      </li>
+                      <li class="treeview" *ngIf="inventoryMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Materials</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/material-master">Material Master</a></li>
+                            <li><a routerLink="/material-inquiry">Material Inquiry</a></li>
+                        </ul>
+                      </li>
+                      <li class="treeview" *ngIf="inventoryMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Inventory Units</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/class">Classes</a></li>
+                            <li><a routerLink="/sub-class">Sub Classes</a></li>
+                            <hr>
+                            <li><a routerLink="/category">Category</a></li>
+                            <li><a routerLink="/sub-category">Sub Category</a></li>
+                        </ul>
+                      </li>
+                      <li class="treeview" *ngIf="inventoryMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Groups</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/group-level1">Level 1</a></li>
+                            <li><a routerLink="/group-level2">Level 2</a></li>
+                            <li><a routerLink="/group-level3">Level 3</a></li>
+                            <li><a routerLink="/group-level4">Level 4</a></li>
+                        </ul>
+                      </li>
+                      <li class="treeview" *ngIf="inventoryMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Mass Operations</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/product-mass-manager">Products</a></li>
+                            <li><a routerLink="/material-mass-manager">Materials</a></li>
+                        </ul>
+                      </li>
+                      <li class="treeview" *ngIf="inventoryMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Inventory Conversion</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/product-to-material">Product to Material</a></li>
+                            <li><a routerLink="/product-to-product">Product to Product</a></li>
+                            <li><a routerLink="/material-to-material">Material to Material</a></li>
+                        </ul>
+                      </li>
+                      <li class="treeview" *ngIf="inventoryMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Inventory Settings</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/product-material-ratio">Product-Material Ratio</a></li>
+                        </ul>
+                      </li>
+                      <!--Mechandizer Sub Menu-->
+                      <li class="treeview" *ngIf="mechandizerMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Orders & Purchases</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/drp">DRP</a></li>
+                            <li><a routerLink="/lpo">LPO</a></li>
+                            <li><a routerLink="/grn">GRN</a></li>
+                        </ul>
+                      </li>
+                      <li class="treeview" *ngIf="mechandizerMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Sales & Returns</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/quotations">Quotations</a></li>
+                            <li><a routerLink="/sales-invoices">Sales Invoices</a></li>
+                            <li><a routerLink="/sales-receipts">Sales Receipts</a></li>
+                            <li><a routerLink="/allocations">Allocations</a></li>
+                            <li><a routerLink="/web-pos">Web POS</a></li>
+                            <li><a routerLink="/sales-ledge">Sales Ledge</a></li>
+                            <li><a routerLink="/sales-journal">Sales Journal</a></li>
+                            <li><a routerLink="/bill-reprint">Bill Reprint</a></li>
+                            <hr>
+                            <li><a routerLink="/packing-list">Packing List</a></li>
+                            <li><a routerLink="/sales-list">Sales List</a></li>
+                            <li><a routerLink="/sales-sheet">Sales Sheet</a></li>
+                            <hr>
+                            <li><a routerLink="/customer-returns">Customer Returns</a></li>
+                            <li><a routerLink="/customer-claims">Customer Claims</a></li>
+                            <li><a routerLink="/return-to-vendor">Return to Vendor</a></li>
+                            <hr>
+                            <li><a routerLink="/sales-agents">Sales Agents</a></li>
+                        </ul>
+                      </li>
+                      <li class="treeview" *ngIf="mechandizerMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Credit Notes</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/vendor-cr-note">Vendor Credit Notes</a></li>
+                            <li><a routerLink="/customer-cr-note">Customer Credit Notes</a></li>
+                        </ul>
+                      </li>
+                      <li class="treeview" *ngIf="mechandizerMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Debt Processing</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/sales-debt">Sales Debts</a></li>
+                            <li><a routerLink="/debt-receipts">Debt Receipts</a></li>
+                            <li><a routerLink="/debt-allocations">Debt Allocation</a></li>
+                            <li><a routerLink="/debt-tracker">Debt Tracker</a></li>
+                            <hr>
+                        </ul>
+                      </li>
+                      <!--Production Sub Menu-->
+                      <li class="treeview" *ngIf="productionMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Production</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/batch-production">Batch Production</a></li>
+                        </ul>
+                      </li>
+                      <!--Supplier Sub Menu-->
+                      <li class="treeview" *ngIf="supplierRelationsMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Supplier</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/supplier-master">Supplier Master</a></li>
+                            <li><a routerLink="/supplier-mass-manager">Supplier Mass Manager</a></li>
+                        </ul>
+                      </li>
+                      <!--Customer Sub Menu-->
+                      <li class="treeview" *ngIf="customerRelationsMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Customer</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/customer-master">Corporate Customers Master</a></li>
+                            <li><a routerLink="/customer-mass-manager">Customer Mass Manager</a></li>
+                        </ul>
+                      </li>
+                      <!--HRM Sub Menu-->
+                      <li class="treeview" *ngIf="humanResourceMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>HRM</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/employee-register">Employee Register</a></li>
+                        </ul>
+                      </li>
+                      <!--Admin Sub Menu-->
+                      <li class="treeview" *ngIf="adminMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>User & Access</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/user-profile">User Profile</a></li>
+                            <li><a routerLink="/role-manager">Role Manager</a></li>
+                            <li><a routerLink="/access-control">Access Control</a></li>
+                        </ul>
+                      </li>
+                      <!--Admin Sub Menu-->
+                      <li class="treeview" *ngIf="adminMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>POS</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/till-administration">Till Administration</a></li>
+                        </ul>
+                      </li>
+                      <!--Admin Sub Menu-->
+                      <li class="treeview" *ngIf="adminMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Company</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/company-profile">Company Profile</a></li>
+                            <li><a routerLink="/department">Departments</a></li>
+                            <li><a routerLink="/vat-group">VAT Groups</a></li>
+                        </ul>
+                      </li>
+                      <!--Day Sub Menu-->
+                      <li class="treeview" *ngIf="dayMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Day</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/end-day">End Day</a></li>
+                        </ul>
+                      </li>
+                      <!--Report Sub Menu-->
+                      <li class="treeview" *ngIf="reportMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Purchases & Sales Reports</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/daily-sales-report">Daily Sales Report</a></li>
+                            <li><a routerLink="/Z-History">Z-History</a></li>
+                            <li><a routerLink="/product-listing-report">Product Listing Report</a></li>
+                            <li><a routerLink="/supply-sales-report">Supply Sales Report</a></li>
+                            <li><a routerLink="/supply-sales-report-extended">Supply Sales Report-Extended</a></li>
+                            <li><a routerLink="/fast-moving-items">Fast Moving Items</a></li>
+                            <li><a routerLink="/slow-moving-items">Slow Moving Items</a></li>
+                            <li><a routerLink="/sales-and-purchases-summary-report">Sales & Purchases Summary</a></li>
+                            <hr>
+                            <li><a routerLink="/daily-purchases-report">Daily Purchase Report</a></li>
+                            <li><a routerLink="/lpo-report">LPO Report</a></li>
+                            <li><a routerLink="/grn-report">GRN Report</a></li>
+                        </ul>
+                      </li>
+
+                      <li class="treeview" *ngIf="reportMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Inventory Reports</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/supplier-stock-status">Supplier Stock Status</a></li>
+                            <li><a routerLink="/negative-stock-report">Negative Stock Report</a></li>
+                            <li><a routerLink="/stock-card-report">Stock Card Report</a></li>
+                        </ul>
+                      </li>
+
+
+                      <li class="treeview" *ngIf="reportMenuShown">
+                        <a href="#">
+                            <i class="fa fa-user-md"></i><span>Production Reports</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a routerLink="/daily-production-report">Daily Production Report</a></li>
+                            <li><a routerLink="/material-vs-production-report">Material vs Production Report</a></li>
+                            <li><a routerLink="/material-usage-report">Material Usage Report</a></li>
+                        </ul>
+                      </li>
+
+
+
+
+                    
+
+
+
+              
+             
+      </ul>
+  </div> <!-- /.sidebar -->
+</aside>
+      <!-- =============================================== -->
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+          <router-outlet></router-outlet>
+          <!--<app-dashboard></app-dashboard>-->
+      </div><!-- /.content-wrapper -->
+       
+      <footer class="main-footer">
+          <div class="pull-right hidden-xs"> <b>Version</b> 1.0</div>
+          <strong>Copyright &copy; 2023 <a href="#">Orbix</a>.</strong> All rights reserved.
+      </footer>
+  </div> <!-- ./wrapper -->
+</body>
+<ngx-spinner>Processing, Please wait...</ngx-spinner>

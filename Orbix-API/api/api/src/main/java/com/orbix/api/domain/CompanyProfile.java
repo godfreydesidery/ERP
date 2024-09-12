@@ -12,6 +12,8 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+import org.hibernate.validator.constraints.Length;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -66,5 +68,10 @@ public class CompanyProfile {
 	private String bankPostAddress3;
 	private String bankName3;
 	private String bankAccountNo3;
+	
+	//@Length(max = 2000)
+	private String quotationNotes;
+	//@Length(max = 2000)
+	private String salesInvoiceNotes;
 
 }

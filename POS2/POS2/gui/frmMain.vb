@@ -564,7 +564,8 @@ Public Class frmMain
             qty(count) = receipt.receiptDetails(i).qty.ToString()
             price(count) = LCurrency.displayValue(receipt.receiptDetails(i).sellingPriceVatIncl.ToString())
             tax(count) = LCurrency.displayValue(receipt.receiptDetails(i).vat.ToString())
-            amount(count) = LCurrency.displayValue(receipt.receiptDetails(i).amount.ToString())
+            'amount(count) = LCurrency.displayValue(receipt.receiptDetails(i).amount.ToString())
+            amount(count) = LCurrency.displayValue(((receipt.receiptDetails(i).qty * receipt.receiptDetails(i).sellingPriceVatIncl * (1 - (discount / 100)))).ToString())
             count = count + 1
         Next
         PointOfSale.printReceipt(Till.TILLNO, receipt.no, Day.bussinessDate, Company.TIN.ToString(), Company.VRN.ToString(), code, descr, qty, price, tax, amount, subTotal, totalVat, total, tender.ToString(), balance.ToString())

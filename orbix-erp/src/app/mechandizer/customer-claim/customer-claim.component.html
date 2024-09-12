@@ -109,7 +109,8 @@
                                         <tr>
                                             <td>Code</td>
                                             <td>Description</td>
-                                            <td>Qty</td>
+                                            <td>Qty@Price</td>
+                                            <td>Total Price</td>
                                             <td>Action</td>
                                         </tr>
                                     </thead>
@@ -117,8 +118,16 @@
                                         <tr *ngFor="let d of claimedProducts">
                                             <td>{{d.product.code}}</td>
                                             <td>{{d.product.description}}</td>
-                                            <td><b>{{d.qty}}</b>  <i>    {{d.product.uom}}    </i></td>
+                                            <td><b>{{d.qty}}</b>  <i>    {{d.product.uom}}</i>@{{ d.sellingPriceVatIncl | currency:'':''}}</td>
+                                            <td style="text-align: right;">{{d.qty * d.sellingPriceVatIncl | currency:'':''}}</td>
                                             <td><span style="cursor: pointer;" (click)="deleteClaimedProduct(d.id)">[Remove]</span><span style="cursor: pointer;" (click)="openClaimed(contentClaimed, d.id)">[Edit]</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td><b>Total</b></td>
+                                            <td style="text-align: right;"><b>{{totalClaimed | currency:'':''}}</b></td>
+                                            <td></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -145,7 +154,8 @@
                                         <tr>
                                             <td>Code</td>
                                             <td>Description</td>
-                                            <td>Qty</td>
+                                            <td>Qty@Price</td>
+                                            <td>Total</td>
                                             <td>Action</td>
                                         </tr>
                                     </thead>
@@ -153,8 +163,16 @@
                                         <tr *ngFor="let d of replacementProducts">
                                             <td>{{d.product.code}}</td>
                                             <td>{{d.product.description}}</td>
-                                            <td><b>{{d.qty}}</b>  <i>    {{d.product.uom}}    </i></td>
+                                            <td><b>{{d.qty}}</b>  <i>    {{d.product.uom}}</i>@{{ d.sellingPriceVatIncl | currency:'':''}}</td>
+                                            <td style="text-align: right;">{{d.qty * d.sellingPriceVatIncl | currency:'':''}}</td>
                                             <td><span style="cursor: pointer;" (click)="deleteFinal(d.id)">[Remove]</span><span style="cursor: pointer;" (click)="openReplacement(contentReplacement, d.id)">[Edit]</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td><b>Total</b></td>
+                                            <td style="text-align: right;"><b>{{totalReplaced | currency:'':''}}</b></td>
+                                            <td></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -207,6 +225,9 @@
                         </datalist>
                     </td>
                 </tr>
+                <tr>
+                    <td style="text-align: right;">Price</td><td style="padding: 0;"><input type="text" [(ngModel)]="claimedProductSellingPriceVatIncl" class="form-control special" style="text-align: right;" readonly></td>
+                </tr> 
                 <tr>
                     <td style="text-align: right;">Qty</td><td style="padding: 0;"><input type="text" [(ngModel)]="claimedProductQty" class="form-control special"></td>
                 </tr>   
@@ -264,6 +285,9 @@
                         </datalist>
                     </td>
                 </tr>
+                <tr>
+                    <td style="text-align: right;">Price</td><td style="padding: 0;"><input type="text" [(ngModel)]="claimReplacementProductSellingPriceVatIncl" class="form-control special" style="text-align: right;" readonly></td>
+                </tr> 
                 <tr>
                     <td style="text-align: right;">Qty</td><td style="padding: 0;"><input type="text" [(ngModel)]="claimReplacementProductQty" class="form-control special"></td>
                 </tr>  

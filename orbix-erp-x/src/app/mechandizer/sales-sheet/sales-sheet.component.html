@@ -1,0 +1,234 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="header-title">
+        <h1>Mechandizing | Sales Sheet</h1>
+    </div>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="panel panel-bd lobidrag">
+                <div class="panel-heading">
+                    <div> 
+                        <a routerLink="/home"><button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+                        <button class="btn" style="margin: 2px; width: 20mm;" (click)="showList(listContent)" data-mdb-toggle="tooltip" title="View List for selection"><i class="fas fa-list"></i><br>List</button>
+                        <button class="btn"style="margin: 2px; width: 30mm;" (click)="createShortCut('Sales List', 'sales-list')" data-mdb-toggle="tooltip" title="Create a page shortcut on user's Dashboard"><i class="fas fa-external-link-alt"></i><br>Shortcut</button>
+                    </div>
+                </div>
+                <div class="panel-body" style="padding: 3mm;">
+                    <div class="row" [@fadeInOut]>
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <small>Sales Sheet#</small>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <div class="row">
+                                                <div class="col-8">
+                                                    <input type="text" [(ngModel)]="no" class="form-control special">
+                                                </div>
+                                                <div class="col-4">
+                                                    <button class="btn btn-success" (click)="getByNo(no)" style="margin: 2px; width: 26mm;"><i class="fas fa-search"></i>Search</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <small>Sales Agent</small>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <input type="text" [(ngModel)]="salesAgentName" class="form-control special" readonly>
+                                        </div>
+                                    </div>              
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <small>Total Sales</small>
+                                        </div>
+                                        <div class="col-sm-8" style="text-align: right;">
+                                            <small style="text-align: right;">{{totalAmount | currency:'':''}}</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <small>Total Paid</small>
+                                        </div>
+                                        <div class="col-sm-8" style="text-align: right;">
+                                            <small style="text-align: right;">{{totalPaid | currency:'':''}}</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <small>Total Discount</small>
+                                        </div>
+                                        <div class="col-sm-8" style="text-align: right;">
+                                            <small style="text-align: right;">{{totalDiscount | currency:'':''}}</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <small>Total Charges</small>
+                                        </div>
+                                        <div class="col-sm-8" style="text-align: right;">
+                                            <small style="text-align: right;">{{totalCharges | currency:'':''}}</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <small>Total Due</small>
+                                        </div>
+                                        <div class="col-sm-8" style="text-align: right;">
+                                            <small style="text-align: right;">{{totalDue | currency:'':''}}</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <small>Total Expenses</small>
+                                        </div>
+                                        <div class="col-sm-8" style="text-align: right;">
+                                            <small style="text-align: right;">{{totalExpenses | currency:'':''}}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <small>Confirmation</small>
+                                        </div>
+                                        <div class="col-9">
+                                            <small>{{confirmed}}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                            <table class="table table-bordered table-sm">
+                                <tbody>
+                                    <tr *ngFor="let sale of salesSheetSales" style="border-color:grey; border-width: 1px;">
+                                        <td>
+                                            <table>
+                                                <tbody>
+                                                    <tr><td>Time:</td><td>{{sale.completedAt}}</td></tr>
+                                                    <tr><td>Customer:</td><td>{{sale.customerName}}</td></tr>
+                                                    <tr><td>Mob:</td><td>{{sale.customerMobile}}</td></tr>
+                                                    <tr><td>Location:</td><td>{{sale.customerLocation}}</td></tr>
+                                                    <tr><td>Total Amount:</td><td style="text-align: right;">{{sale.totalAmount | currency:'':''}}</td></tr>
+                                                    <tr><td>Total Paid:</td><td style="text-align: right;">{{sale.totalPaid | currency:'':''}}</td></tr>
+                                                    <tr><td>Total Discount:</td><td style="text-align: right;">{{sale.totalDiscount | currency:'':''}}</td></tr>
+                                                    <tr><td>Total Due:</td><td style="text-align: right;">{{sale.totalDue | currency:'':''}}</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <table class="table table-bordered table-striped table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <td>Code</td>
+                                                        <td>Description</td>
+                                                        <td>Qty</td>
+                                                        <td>Price</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let detail of sale.salesSheetSaleDetails">
+                                                        <td>{{detail.code}}</td>
+                                                        <td>{{detail.description}}</td>
+                                                        <td>{{detail.qty}}</td>
+                                                        <td style="text-align: right;">{{detail.price | currency:'':''}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                    
+                            <table class="table table-bordered table-sm">
+                                <tbody>
+                                    <tr style="border-color:grey; border-width: 1px;">
+                                        <td>
+                                            <table>
+                                                <tbody>
+                                                   
+                                                    <tr><td>Expenses</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <table class="table table-bordered table-striped table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <td>Description</td>
+                                                        <td>Amount</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let expense of salesSheetExpenses">
+                                                        <td>{{expense.description}}</td>
+                                                        <td style="text-align: right;">{{expense.amount | currency:'':''}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Total</b></td>
+                                                        <td style="text-align: right;"><b>{{totalExpenses | currency:'':''}}</b></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>    
+                    </div>
+                    
+                </div>
+
+                 
+            </div>
+        </div>
+    </div>
+</section> <!-- /.content -->
+
+<ng-template #listContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Sales Sheets</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-12" style="height: 10cm; overflow: auto;">
+                <table class="table table-bordered">
+                    <thead style="position: sticky; top: 0;">
+                        <tr class="table-dark">
+                            <td>Sales Sheet#</td>
+                            <td>Sales List#</td>
+                            <td>Sales Agent/Route</td>
+                            <td>Confirmed</td>
+                            <td>Select</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let slst of salesSheets">
+                            <td>{{slst.no}}</td>
+                            <td>{{slst.salesListNo}}</td>
+                            <td>{{slst.salesAgentName}}</td>
+                            <td>{{slst.confirmed}}</td>
+                            <td><span (click)="getByNo(slst.no)" (click)="modal.close('Select click')" style="cursor: pointer;">[Select]</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+    <div class="modal-footer">
+      
+    </div>
+</ng-template>
+

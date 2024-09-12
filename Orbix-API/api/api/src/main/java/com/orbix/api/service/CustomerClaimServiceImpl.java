@@ -105,6 +105,10 @@ public class CustomerClaimServiceImpl implements CustomerClaimService {
 		for(ClaimedProduct in : claimedProducts) {
 			ClaimedProductModel initialModel = new ClaimedProductModel();
 			initialModel.setId(in.getId());
+			initialModel.setCostPriceVatExcl(in.getCostPriceVatExcl());
+			initialModel.setCostPriceVatIncl(in.getCostPriceVatIncl());
+			initialModel.setSellingPriceVatExcl(in.getSellingPriceVatExcl());
+			initialModel.setSellingPriceVatIncl(in.getSellingPriceVatIncl());
 			initialModel.setProduct(in.getProduct());
 			initialModel.setQty(in.getQty());
 			initialModel.setReason(in.getReason());
@@ -115,6 +119,10 @@ public class CustomerClaimServiceImpl implements CustomerClaimService {
 		for(ClaimReplacementProduct fin : claimReplacementProducts) {
 			ClaimReplacementModel finalModel = new ClaimReplacementModel();
 			finalModel.setId(fin.getId());
+			finalModel.setCostPriceVatExcl(fin.getCostPriceVatExcl());
+			finalModel.setCostPriceVatIncl(fin.getCostPriceVatIncl());
+			finalModel.setSellingPriceVatExcl(fin.getSellingPriceVatExcl());
+			finalModel.setSellingPriceVatIncl(fin.getSellingPriceVatIncl());
 			finalModel.setProduct(fin.getProduct());
 			finalModel.setQty(fin.getQty());
 			finalModel.setRemarks(fin.getRemarks());
@@ -154,6 +162,10 @@ public class CustomerClaimServiceImpl implements CustomerClaimService {
 		for(ClaimedProduct in : claimedProducts) {
 			ClaimedProductModel initialModel = new ClaimedProductModel();
 			initialModel.setId(in.getId());
+			initialModel.setCostPriceVatExcl(in.getCostPriceVatExcl());
+			initialModel.setCostPriceVatIncl(in.getCostPriceVatIncl());
+			initialModel.setSellingPriceVatExcl(in.getSellingPriceVatExcl());
+			initialModel.setSellingPriceVatIncl(in.getSellingPriceVatIncl());
 			initialModel.setProduct(in.getProduct());
 			initialModel.setQty(in.getQty());
 			initialModel.setReason(in.getReason());
@@ -164,6 +176,10 @@ public class CustomerClaimServiceImpl implements CustomerClaimService {
 		for(ClaimReplacementProduct fin : claimReplacementProducts) {
 			ClaimReplacementModel finalModel = new ClaimReplacementModel();
 			finalModel.setId(fin.getId());
+			finalModel.setCostPriceVatExcl(fin.getCostPriceVatExcl());
+			finalModel.setCostPriceVatIncl(fin.getCostPriceVatIncl());
+			finalModel.setSellingPriceVatExcl(fin.getSellingPriceVatExcl());
+			finalModel.setSellingPriceVatIncl(fin.getSellingPriceVatIncl());
 			finalModel.setProduct(fin.getProduct());
 			finalModel.setQty(fin.getQty());
 			finalModel.setRemarks(fin.getRemarks());
@@ -221,6 +237,10 @@ public class CustomerClaimServiceImpl implements CustomerClaimService {
 		model.setId(d.getId());
 		model.setProduct(d.getProduct());
 		model.setQty(d.getQty());
+		model.setCostPriceVatExcl(d.getCostPriceVatExcl());
+		model.setCostPriceVatIncl(d.getCostPriceVatIncl());
+		model.setSellingPriceVatExcl(d.getSellingPriceVatExcl());
+		model.setSellingPriceVatIncl(d.getSellingPriceVatIncl());
 		model.setReason(d.getReason());
 		model.setRemarks(d.getRemarks());
 		model.setCustomerClaim(d.getCustomerClaim());
@@ -239,6 +259,10 @@ public class CustomerClaimServiceImpl implements CustomerClaimService {
 		model.setId(d.getId());
 		model.setProduct(d.getProduct());
 		model.setQty(d.getQty());
+		model.setCostPriceVatExcl(d.getCostPriceVatExcl());
+		model.setCostPriceVatIncl(d.getCostPriceVatIncl());
+		model.setSellingPriceVatExcl(d.getSellingPriceVatExcl());
+		model.setSellingPriceVatIncl(d.getSellingPriceVatIncl());
 		model.setRemarks(d.getRemarks());		
 		model.setCustomerClaim(d.getCustomerClaim());	
 		return model;
@@ -255,6 +279,10 @@ public class CustomerClaimServiceImpl implements CustomerClaimService {
 		model.setId(d.get().getId());
 		model.setProduct(d.get().getProduct());
 		model.setQty(d.get().getQty());
+		model.setCostPriceVatExcl(d.get().getCostPriceVatExcl());
+		model.setCostPriceVatIncl(d.get().getCostPriceVatIncl());
+		model.setSellingPriceVatExcl(d.get().getSellingPriceVatExcl());
+		model.setSellingPriceVatIncl(d.get().getSellingPriceVatIncl());
 		model.setReason(d.get().getReason());
 		model.setRemarks(d.get().getRemarks());		
 		model.setCustomerClaim(d.get().getCustomerClaim());
@@ -271,6 +299,10 @@ public class CustomerClaimServiceImpl implements CustomerClaimService {
 		model.setId(d.get().getId());
 		model.setProduct(d.get().getProduct());
 		model.setQty(d.get().getQty());
+		model.setCostPriceVatExcl(d.get().getCostPriceVatExcl());
+		model.setCostPriceVatIncl(d.get().getCostPriceVatIncl());
+		model.setSellingPriceVatExcl(d.get().getSellingPriceVatExcl());
+		model.setSellingPriceVatIncl(d.get().getSellingPriceVatIncl());
 		model.setRemarks(d.get().getRemarks());		
 		model.setCustomerClaim(d.get().getCustomerClaim());
 		return model;
@@ -304,6 +336,10 @@ public class CustomerClaimServiceImpl implements CustomerClaimService {
 			model.setId(d.getId());
 			model.setProduct(d.getProduct());
 			model.setQty(d.getQty());
+			model.setCostPriceVatExcl(d.getCostPriceVatExcl());
+			model.setCostPriceVatIncl(d.getCostPriceVatIncl());
+			model.setSellingPriceVatExcl(d.getSellingPriceVatExcl());
+			model.setSellingPriceVatIncl(d.getSellingPriceVatIncl());
 			model.setReason(d.getReason());
 			model.setRemarks(d.getRemarks());			
 			model.setCustomerClaim(d.getCustomerClaim());	
@@ -321,6 +357,10 @@ public class CustomerClaimServiceImpl implements CustomerClaimService {
 			model.setId(d.getId());
 			model.setProduct(d.getProduct());
 			model.setQty(d.getQty());
+			model.setCostPriceVatExcl(d.getCostPriceVatExcl());
+			model.setCostPriceVatIncl(d.getCostPriceVatIncl());
+			model.setSellingPriceVatExcl(d.getSellingPriceVatExcl());
+			model.setSellingPriceVatIncl(d.getSellingPriceVatIncl());
 			model.setRemarks(d.getRemarks());			
 			model.setCustomerClaim(d.getCustomerClaim());	
 			models.add(model);

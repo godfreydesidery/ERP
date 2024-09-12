@@ -1,0 +1,297 @@
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="header-title">
+        <h1>Inventory | Product Inquiry</h1>
+    </div>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="panel panel-bd lobidrag">
+                <div class="panel-heading">
+                    <div> 
+                        <a routerLink="/home"><button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+                        <button class="btn"style="margin: 2px; width: 30mm;" (click)="clear()" data-mdb-toggle="tooltip" title="Clear the screen"><i class="fa-solid fa-times fa-fw"></i><br>Clear</button>                                    
+                        <button class="btn"style="margin: 2px; width: 30mm;" (click)="createShortCut('Product Inquiry', 'product-inquiry')" data-mdb-toggle="tooltip" title="Create a page shortcut on user's Dashboard"><i class="fas fa-external-link-alt"></i><br>Shortcut</button>
+                    </div>
+                </div>
+                <div class="panel-body" style="padding: 3mm;">
+                    <div class="row" [@fadeInOut]>
+                        <div class="col-md-6">
+                            <br>
+                            <div class="row">
+                                <div class="col-9">
+                                    <div class="row">
+                                        <div class="col-4 float-end" style="text-align: right;">
+                                            <label>Barcode*</label>                               
+                                        </div>
+                                        <div class="col-8">
+                                            <input type="text" [(ngModel)]="barcode" name="username" list="users" required class="form-control input-sm special" autocomplete="off">                               
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4 float-end" style="text-align: right;">
+                                            <label>Code*</label>                               
+                                        </div>
+                                        <div class="col-8">
+                                            <input type="text" [(ngModel)]="code" name="username" list="users" required class="form-control input-sm special" autocomplete="off">                               
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <button (click)="search()" class="btn btn-success form-control"><i class="fas fa-search"></i>Search</button>                               
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Description*</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="description" name="description" list="descriptions" required class="form-control input-sm special" autocomplete="off">   
+                                    <datalist id="descriptions" style="padding: 0px;">
+                                        <option *ngFor="let d of descriptions" [ngValue]="d">{{d}}</option>
+                                    </datalist>                            
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Short Description</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="shortDescription" required class="form-control input-sm special" readonly autocomplete="off">                               
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Common Name</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="commonName" name="rollNo" required class="form-control input-sm special" readonly>                               
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;"></div>
+                                <div class="col-9">
+                                    <input type="checkbox" [(ngModel)]="sellable"><label>Sellable</label>                              
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;"></div>
+                                <div class="col-9">
+                                    <input type="checkbox" [(ngModel)]="active"><label>Active</label>                               
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Supplier</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="supplierName" name="rollNo" required class="form-control input-sm special" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <br>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Department</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="departmentName" name="rollNo" required class="form-control input-sm special" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Class</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="className" name="rollNo" required class="form-control input-sm special" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Sub Class</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="subClassName" name="rollNo" required class="form-control input-sm special" readonly>
+                                </div>
+                            </div>      
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Category</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="categoryName" name="rollNo" required class="form-control input-sm special" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Sub Category</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="subCategoryName" name="rollNo" required class="form-control input-sm special" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Group Level 1</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="levelOneName" name="rollNo" required class="form-control input-sm special" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Group Level 2</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="levelTwoName" name="rollNo" required class="form-control input-sm special" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Group Level 3</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="levelThreeName" name="rollNo" required class="form-control input-sm special" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Group Level 4</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="levelFourName" name="rollNo" required class="form-control input-sm special" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Discount %</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="discount" name="rollNo" required class="form-control input-sm special" readonly>                               
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>VAT %</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="vat" name="rollNo" required class="form-control input-sm special" readonly>                               
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>VAT Group</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="vatGroup" name="vatGroup" required class="form-control input-sm special" readonly>                               
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Profit Margin %</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="profitMargin" name="rollNo" required class="form-control input-sm special" readonly>                               
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Cost Price VAT-Incl</label>                               
+                                </div>
+                                <div class="col-9 float-end" style="text-align: right;">{{costPriceVatIncl | currency:'':''}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Cost Price VAT-Excl</label>                               
+                                </div>
+                                <div class="col-9 float-end" style="text-align: right;">{{costPriceVatExcl | currency:'':''}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Selling Price VAT-Incl</label>                               
+                                </div>
+                                <div class="col-9 float-end" style="text-align: right;">{{sellingPriceVatIncl | currency:'':''}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Selling Price VAT-Excl</label>                               
+                                </div>
+                                <div class="col-9 float-end" style="text-align: right;">{{sellingPriceVatExcl | currency:'':''}}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>UOM</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="uom" name="rollNo" required class="form-control input-sm special" readonly>                               
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Pack Size</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="packSize" name="rollNo" required class="form-control input-sm special" readonly>                               
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Stock</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="stock" name="rollNo" required class="form-control input-sm special" readonly>                               
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Minimum Inventory</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="minimumInventory" name="rollNo" required class="form-control input-sm special" readonly>                               
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Maximum Inventory</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="maximumInventory" name="rollNo" required class="form-control input-sm special" readonly>                               
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Default Reorder Level</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="defaultReorderLevel" name="rollNo" required class="form-control input-sm special" readonly>                               
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 float-end" style="text-align: right;">
+                                    <label>Default Reorder Qty</label>                               
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" [(ngModel)]="defaultReorderQty" name="rollNo" required class="form-control input-sm special" readonly=true>                               
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                 
+            </div>
+        </div>
+    </div>
+</section> <!-- /.content -->
+
+
+
