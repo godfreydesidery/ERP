@@ -20,6 +20,7 @@ import com.orbix.api.accessories.Formater;
 import com.orbix.api.domain.Customer;
 import com.orbix.api.domain.Product;
 import com.orbix.api.domain.SalesAgent;
+import com.orbix.api.domain.SalesAgentCustomer;
 import com.orbix.api.domain.SalesList;
 import com.orbix.api.domain.SalesListDetail;
 import com.orbix.api.domain.SalesSheet;
@@ -33,6 +34,7 @@ import com.orbix.api.models.LCustomerModel;
 import com.orbix.api.models.LProductModel;
 import com.orbix.api.models.LSalesListObjectModel;
 import com.orbix.api.models.RecordModel;
+import com.orbix.api.models.SalesAgentCustomerModel;
 import com.orbix.api.models.SalesExpenseModel;
 import com.orbix.api.models.SalesListDetailModel;
 import com.orbix.api.models.SalesListModel;
@@ -45,6 +47,7 @@ import com.orbix.api.models.WMSSalesModel;
 import com.orbix.api.repositories.CustomerRepository;
 import com.orbix.api.repositories.EmployeeRepository;
 import com.orbix.api.repositories.ProductRepository;
+import com.orbix.api.repositories.SalesAgentCustomerRepository;
 import com.orbix.api.repositories.SalesAgentRepository;
 import com.orbix.api.repositories.SalesListRepository;
 import com.orbix.api.repositories.SalesSheetExpenseRepository;
@@ -72,9 +75,11 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 	private final SalesSheetSaleDetailRepository salesSheetSaleDetailRepository;
 	private final ProductRepository productRepository;
 	private final SalesSheetExpenseRepository salesSheetExpenseRepository;
+	private final SalesAgentCustomerRepository salesAgentCustomerRepository;
 
 	@Override
 	public SalesAgent save(SalesAgent salesAgent) {
+		salesAgent.setName(salesAgent.getName().trim().replaceAll("\\s+", " "));
 		validateAgent(salesAgent);
 		log.info("Saving sale agent to the database");
 		SalesAgent c = salesAgentRepository.saveAndFlush(salesAgent);		
@@ -325,6 +330,11 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 		SalesSheetModel salesSheetModel = new SalesSheetModel();
 		
 		salesSheetModel.setNo(salesSheet.getNo());
+		if(salesSheet.isConfirmed()) {
+			salesSheetModel.setConfirmed("CONFIRMED");
+		}else {
+			salesSheetModel.setConfirmed("NOT CONFIRMED");
+		}
 		List<SalesSheetSaleModel> saleSheetSaleModels = new ArrayList<>();
 		for(SalesSheetSale salesSheetSale : salesSheet.getSalesSheetSales()) {
 			SalesSheetSaleModel salesSheetSaleModel = new SalesSheetSaleModel();
@@ -354,6 +364,32 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 		salesSheetModel.setSalesSheetSales(saleSheetSaleModels);
 		return salesSheetModel;
 		
+	}
+	
+	@Override
+	public boolean confirmSalesSheet(Long id) {
+		Optional<SalesSheet> ss = salesSheetRepository.findById(id);
+		if(!ss.isPresent()) {
+			throw new NotFoundException("Sales sheet not found");
+		}
+		SalesSheet salesSheet = ss.get();
+		salesSheet.setConfirmed(true);
+		salesSheetRepository.saveAndFlush(salesSheet);
+		
+		return true;		
+	}
+	
+	@Override
+	public boolean unconfirmSalesSheet(Long id) {
+		Optional<SalesSheet> ss = salesSheetRepository.findById(id);
+		if(!ss.isPresent()) {
+			throw new NotFoundException("Sales sheet not found");
+		}
+		SalesSheet salesSheet = ss.get();
+		salesSheet.setConfirmed(false);
+		salesSheetRepository.saveAndFlush(salesSheet);
+		
+		return true;		
 	}
 	
 	@Override
@@ -480,6 +516,93 @@ public class SalesAgentServiceImpl implements SalesAgentService{
 			model.setId(m.getId());
 			model.setDescription(m.getDescription());
 			model.setAmount(m.getAmount());
+			sm.add(model);
+		}
+		return sm;
+	}
+	
+	
+	
+	@Override
+	public Object saveCustomer(SalesAgentCustomerModel c) {
+		Optional<SalesAgent> a = salesAgentRepository.findByName(c.getSalesAgent().getName());
+		if(!a.isPresent()) {
+			throw new NotFoundException("Operation failed, corresponding sales agent not found");
+		}
+		
+		c.setName(c.getName().trim().replaceAll("\\s+", " "));
+		Optional<SalesAgentCustomer> sa = salesAgentCustomerRepository.findByNameAndSalesAgent(c.getName(), a.get()); 
+		if(sa.isPresent()) {
+			throw new NotFoundException("Operation failed, customer already exist for the particular agent.");
+		}
+		SalesAgentCustomer customer = new SalesAgentCustomer();
+		customer.setName(c.getName().trim().replaceAll("\\s+", " "));
+		customer.setLocation(c.getLocation());
+		customer.setMobile(c.getMobile());
+		customer.setSalesAgent(a.get());
+		
+		customer = salesAgentCustomerRepository.saveAndFlush(customer);
+		
+		List<SalesAgentCustomerModel> customers = new ArrayList<SalesAgentCustomerModel>();
+		List<SalesAgentCustomer> cs = salesAgentCustomerRepository.findAllBySalesAgent(a.get());
+		
+		for(SalesAgentCustomer e : cs) {
+			SalesAgentCustomerModel mod = new SalesAgentCustomerModel();
+			mod.setId(e.getId());
+			mod.setName(e.getName());
+			mod.setLocation(e.getLocation());
+			mod.setMobile(e.getMobile());
+			mod.setSalesAgent(null);
+			customers.add(mod);
+		}
+		
+		return customers;
+		
+	}
+	
+	@Override
+	public Object deleteCustomer(SalesAgentCustomerModel c) {
+		Optional<SalesAgent> a = salesAgentRepository.findByName(c.getSalesAgent().getName());
+		if(!a.isPresent()) {
+			throw new NotFoundException("Operation failed, corresponding sales agent not found");
+		}
+		
+		
+		Optional<SalesAgentCustomer> se = salesAgentCustomerRepository.findById(c.getId());
+		if(!se.isPresent()) {
+			throw new NotFoundException("Customer not found");
+		}
+		salesAgentCustomerRepository.delete(se.get());
+		
+		List<SalesAgentCustomerModel> customers = new ArrayList<SalesAgentCustomerModel>();
+		List<SalesAgentCustomer> cs = salesAgentCustomerRepository.findAllBySalesAgent(a.get());
+		
+		for(SalesAgentCustomer e : cs) {
+			SalesAgentCustomerModel mod = new SalesAgentCustomerModel();
+			mod.setId(e.getId());
+			mod.setName(e.getName());
+			mod.setLocation(e.getLocation());
+			mod.setMobile(e.getMobile());
+			mod.setSalesAgent(null);
+			customers.add(mod);
+		}
+		
+		return customers;
+		
+	}
+	
+	@Override
+	public List<SalesAgentCustomerModel> loadCustomers(SalesAgent salesAgent) {
+		
+		List<SalesAgentCustomer> ss = salesAgentCustomerRepository.findAllBySalesAgent(salesAgent);
+		
+		List<SalesAgentCustomerModel> sm = new ArrayList<SalesAgentCustomerModel>();
+		for(SalesAgentCustomer m : ss) {
+			SalesAgentCustomerModel model = new SalesAgentCustomerModel();
+			model.setId(m.getId());
+			model.setName(m.getName());
+			model.setLocation(m.getLocation());
+			model.setMobile(m.getMobile());
 			sm.add(model);
 		}
 		return sm;

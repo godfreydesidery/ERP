@@ -28,9 +28,14 @@ const API_URL = environment.apiUrl;
 })
 export class SalesSheetPage implements OnInit {
 
-  salesSheet: SalesSheetModel | undefined 
+  salesSheet : SalesSheetModel | undefined 
+  confirmed : string = ''
 
   salesSheetSales : SalesSheetSaleModel[] = []
+
+  salesExpenses : SalesExpenseModel[] = []
+
+  totalExpenses : number = 0
 
 
   totalSales : number = 0
@@ -82,17 +87,18 @@ export class SalesSheetPage implements OnInit {
     .pipe(finalize(() => this.spinner.hide()))
     .toPromise()
     .then(
-      data => {
+      async data => {
+        this.confirmed = data!.confirmed
         let sales : SalesSheetSaleModel[] = data!.salesSheetSales
         sales.forEach(element => {
           this.salesSheetSales.push(element)
-
           this.totalSales  = this.totalSales + element.totalAmount
           this.totalPaid  = this.totalPaid + element.totalPaid
           this.totalDiscount  = this.totalDiscount + element.totalDiscount
           this.totalCharges  = this.totalCharges + element.totalCharges
           this.totalDue  = this.totalDue + element.totalDue
         })
+        await this.getSalesExpenses()
       }
     )
     .catch(
@@ -104,11 +110,121 @@ export class SalesSheetPage implements OnInit {
       }
     )
   }
+
+  async confirmSalesSheet(): Promise<void> {
+   
+    let options = {
+      //headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    
+    if(localStorage.getItem('active-list') == null){
+      const toast = await this.toastController.create({
+        message: 'No active sales list selected',
+        duration: 2000,
+        position: 'top'
+      });
+      await toast.present();
+      this.router.navigate(['home'])
+      location.reload()
+    }
+    this.spinner.show()
+    await this.http.get<SalesSheetModel>(API_URL+'/wms_confirm_sales_sheet?sales_list_no='+localStorage.getItem('active-list'), options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      async () => {
+        await this.getSalesSheet()
+        await this.getSalesExpenses()
+      }
+    )
+    .catch(
+      error => {
+        console.log(error)
+        alert('could not load  sales sheet')
+        this.router.navigate(['home'])
+        location.reload()
+      }
+    )
+  }
+
+  async unconfirmSalesSheet(): Promise<void> {
+   
+    let options = {
+      //headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    
+    if(localStorage.getItem('active-list') == null){
+      const toast = await this.toastController.create({
+        message: 'No active sales list selected',
+        duration: 2000,
+        position: 'top'
+      });
+      await toast.present();
+      this.router.navigate(['home'])
+      location.reload()
+    }
+    this.spinner.show()
+    await this.http.get<SalesSheetModel>(API_URL+'/wms_unconfirm_sales_sheet?sales_list_no='+localStorage.getItem('active-list'), options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      async () => {
+        await this.getSalesSheet()
+        await this.getSalesExpenses()
+      }
+    )
+    .catch(
+      error => {
+        console.log(error)
+        alert('could not load  sales sheet')
+        this.router.navigate(['home'])
+        location.reload()
+      }
+    )
+  }
+
+  async getSalesExpenses(): Promise<void> {
+    this.salesExpenses = []
+    this.totalExpenses = 0
+    let options = {
+      //headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    
+    if(localStorage.getItem('active-list') == null){
+      const toast = await this.toastController.create({
+        message: 'No active sales list selected',
+        duration: 2000,
+        position: 'top'
+      });
+      await toast.present();
+      this.router.navigate(['home'])
+      location.reload()
+    }
+    this.spinner.show()
+    await this.http.get<SalesExpenseModel[]>(API_URL+'/wms_load_sales_expenses?sales_list_no='+localStorage.getItem('active-list'), options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        let expenses : SalesExpenseModel[] = data!
+        expenses.forEach(element => {
+          this.salesExpenses.push(element)
+          this.totalExpenses  = this.totalExpenses + (element.amount)
+        })
+      }
+    )
+    .catch(
+      error => {
+        console.log(error)
+      }
+    )
+  }
 }
 
 export interface SalesSheetModel{
   id : any
   no : string
+  confirmed : string
   salesSheetSales : SalesSheetSaleModel[]
 }
 
@@ -133,4 +249,10 @@ export interface SalesSheetSaleDetailModel{
   description : string
   qty : number
   price : number
+}
+
+export interface SalesExpenseModel{
+  id : any
+  amount : number
+  salesListNo      : string
 }

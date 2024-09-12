@@ -1,0 +1,133 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="header-title">
+        <h1>Reports | Purchases | LPO Report</h1>
+    </div>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="panel panel-bd lobidrag">
+                <div class="panel-heading">
+                    <div> 
+                        <a routerLink="/home"><button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+                        <button class="btn" (click)="showRunOptions(runOptions)" style="margin: 2px; width: 35mm;" data-mdb-toggle="tooltip" title="Enter Run options to run report"><mdb-icon fas icon="sync"></mdb-icon><br>Run Options</button>
+                        <button class="btn" (click)="exportToPdf()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Export report to PDF"><mdb-icon fas icon="file-pdf"></mdb-icon><br>PDF</button>
+                        <button class="btn" (click)="exportToSpreadsheet()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Export report to Spreadsheet"><mdb-icon fas icon="file-excel"></mdb-icon><br>Excel</button>
+                        <button class="btn" (click)="clear()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Clear entries"><i class="fa-solid fa-times fa-fw"></i><br>Clear</button>
+                    </div>
+                </div>
+                <div class="panel-body" style="padding: 3mm;">
+                    <div class="row" [@fadeInOut]>
+                        <div class="col-12">
+                            <br>
+                            <table class="table table-bordered table-striped table-sm">
+                                <thead style="background-image: linear-gradient(#FDFEFE ,#BDC3C7);">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Code</th>
+                                        <th>Description</th>
+                                        <th>Qty</th>
+                                        <th>Amount</th>
+                                        <th>Supplier</th>
+                                        <th>LPO#</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let r of report">
+                                        <td>{{r.date | date: 'yyyy-MM-dd'}}</td>
+                                        <td>{{r.code}}</td>
+                                        <td>{{r.description}}</td>
+                                        <td>{{r.qty}}</td>
+                                        <td style="text-align: right;">{{r.amount | currency:'':''}}</td>
+                                        <td>{{r.supplierName}}</td>
+                                        <td>{{r.lpoNo}}</td>
+                                    </tr>               
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> <!-- /.content -->
+
+<ng-template #runOptions let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title" id="modal-basic-title">Enter options to run LPO Report</h6>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-2" style="min-width: 50mm;">
+                        <span>From</span>
+                        <input type="date" [(ngModel)]="from" class="form-control">
+                    </div>
+                    <div class="col-2" style="min-width: 50mm;">
+                        <span>To</span>
+                        <input type="date"  [(ngModel)]="to" class="form-control">
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="row">
+                    <div class="col-12">
+                        <span><u>Select Supplier</u></span>
+                        <select [(ngModel)]="supplierName" class="form-control" (ngModelChange)="clearList()">
+                            <option></option>
+                            <option *ngFor="let s of supplierNames">{{s}}</option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-12">
+                        <p><u>Select Product</u></p>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <input type="search" [(ngModel)]="barcode" class="form-control" (focus)="clearProduct()" placeholder="Barcode">
+                            </div>
+                            <div class="col-sm-6">
+                                <button class="btn btn-success form-control" (click)="search()">Search Product</button>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <input type="search" [(ngModel)]="code" class="form-control" (focus)="clearProduct()" placeholder="Code">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row"  *ngIf="id">
+                                    <div class="col-8">
+                                        <button class="btn btn-success form-control" (click)="addProduct()">Add Product</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn btn-danger" (click)="clearProduct()">X</button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <br>
+                        <input type="search" [(ngModel)]="description" class="form-control" list="descriptions" (focus)="clearProduct()" placeholder="Description"><br>  
+                        <datalist id="descriptions" style="padding: 0px;">
+                            <option *ngFor="let d of descriptions" [ngValue]="d">{{d}}</option>
+                        </datalist> 
+                        <span>Double click to remove Product <u style="cursor: pointer;" (click)="clearList()"><font color="red">Remove All Products</font></u></span><br><br>               
+                        <select name="products" id="products" size="5" class="form-control">
+                            <option *ngFor="let p of products" (dblclick)="removeProduct(p.id)" >{{p.description}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button (click)="getLpoReport(from, to)" (click)="modal.close('Run click')" class="btn btn-success" style="margin: 2px;">Run Report</button>
+    </div>
+</ng-template>

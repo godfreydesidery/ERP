@@ -177,7 +177,7 @@ public class ProductionServiceImpl implements ProductionService {
 		model.setBatchSize(prod.get().getBatchSize());
 		model.setStatus(prod.get().getStatus());
 		model.setComments(prod.get().getComments());
-		model.setUom(prod.get().getComments());
+		model.setUom(prod.get().getUom());
 		
 		if(prod.get().getCreatedAt() != null && prod.get().getCreatedBy() != null) {
 			model.setCreated(dayRepository.findById(prod.get().getCreatedAt()).get().getBussinessDate() +" "+ userRepository.getAlias(prod.get().getCreatedBy()));

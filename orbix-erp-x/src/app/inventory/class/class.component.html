@@ -1,0 +1,83 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="header-title">
+        <h1>Inventory | Class</h1>
+    </div>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="panel panel-bd lobidrag">
+                <div class="panel-heading">
+                    <div> 
+                        <a routerLink="/home"><button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+                        <button class="btn" (click)="clearData()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new Class"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
+                        <button class="btn" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing Class"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
+                        <button (click)="delete(id)" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Delete an existing Class"><i class="fa-solid fa-trash"></i><br>Delete</button>
+                        <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing Class"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
+                    </div>
+                </div>
+                <div class="panel-body" style="padding: 3mm;">
+                    <div class="row" [@fadeInOut]>
+                        <div class="col-md-6">
+                            <br>
+                            <div class="row">
+                                <!--<input type="hidden" name="id" [(ngModel)]="id">-->
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Class Name</label>                               
+                                </div>
+                                <div class="col-5">
+                                    <input type="text" [(ngModel)]="name" name="name" required class="form-control input-sm special" autocomplete="off" [readonly]="inputsLocked">   
+                                </div>                                   
+                                <div class="col-3">
+                                    <button class="btn btn-success form-control"><i class="fas fa-search"></i>Search</button>                               
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Department</label>                               
+                                </div>
+                                <div class="col-5">
+                                    <select [(ngModel)]="departmentName" class="form-control input-sm" [disabled]="inputsLocked">
+                                        <option></option>
+                                        <option *ngFor="let d of departmentNames">{{d}}</option>
+                                    </select>
+                                </div>                                
+                            </div>  
+                        </div>
+                        <div class="col-md-6">
+                            <br>
+                            <div class="row">
+                                <div class="col-12">
+                                    <table class="table table-sm table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <td>Class</td>
+                                                <td>Department</td>
+                                                <td>Select</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let c of classes">
+                                                <td style="vertical-align: top;">{{c.name}}</td>
+                                                <td style="vertical-align: top;">{{c.department.name}}</td>
+                                                <td style="vertical-align: top;"><font (click)="get(c.id)" style="cursor: pointer; color: rgb(35, 32, 224);">Select</font></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                 
+            </div>
+        </div>
+    </div>
+</section> <!-- /.content -->
+
+

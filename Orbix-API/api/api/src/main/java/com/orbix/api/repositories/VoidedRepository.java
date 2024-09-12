@@ -3,6 +3,7 @@
  */
 package com.orbix.api.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,5 +21,11 @@ public interface VoidedRepository extends JpaRepository<Voided, Long> {
 	 * @return
 	 */
 	Optional<Voided> findByRefId(Long refId);
+
+	/**
+	 * @param refId
+	 * @return
+	 */
+	List<Voided> findAllByRefId(Long refId);
 
 }

@@ -44,6 +44,9 @@ export class SalePage implements OnInit {
 
   
 
+  salesAgentCustomer: ISalesAgentCustomerModel | undefined 
+
+  salesAgentCustomers : ISalesAgentCustomerModel[] = []
 
   descriptions : string[]
   availableProducts : LProductModel[] = []
@@ -67,6 +70,7 @@ export class SalePage implements OnInit {
 
   product! : LProduct
 
+  customerId   : any
   customerName : string = 'GENERAL CUSTOMER'
   customerMobile : string = ''
   customerLocation : string = ''
@@ -91,8 +95,9 @@ export class SalePage implements OnInit {
     }
 
   ngOnInit() {
-   this.loadSalesList()
-   this.refreshSummary()
+    this.getSalesAgentCustomers()
+    this.loadSalesList()
+    this.refreshSummary()
   }
 
 
@@ -421,6 +426,10 @@ export class SalePage implements OnInit {
   }
 
   async confirmSale(){
+    if(this.customerName == ''){
+      alert('Please fill in customer information')
+      return
+    }
     if(window.confirm('Confirm this sale?')){
       //confirm the sale
     }else{
@@ -477,6 +486,61 @@ export class SalePage implements OnInit {
     
   }
 
+  clearCustomer(){
+    this.customerId  = null
+    this.customerName = ''
+    this.customerLocation  = ''
+    this.customerMobile = ''
+  }
+
+
+  async getSalesAgentCustomers(): Promise<void> {
+    this.salesAgentCustomers = []
+    this.clearCustomer()
+    let options = {
+      //headers: new HttpHeaders().set('Authorization', 'Bearer '+this.auth.user.access_token)
+    }
+    
+    
+    this.spinner.show()
+    await this.http.get<ISalesAgentCustomerModel[]>(API_URL+'/wms_load_sales_agent_customers?sales_agent_name='+localStorage.getItem('sales-agent-name'), options)
+    .pipe(finalize(() => this.spinner.hide()))
+    .toPromise()
+    .then(
+      data => {
+        let customers : ISalesAgentCustomerModel[] = data!
+        customers.forEach(element => {
+          this.salesAgentCustomers.push(element)
+        })
+      }
+    )
+    .catch(
+      error => {
+        console.log(error)
+        alert('could not load  customers')
+        this.router.navigate(['home'])
+        location.reload()
+      }
+    )
+  }
+
+  setCustomer(name : string){
+    var present : boolean = false
+    //this.clearCustomer()
+    this.salesAgentCustomers.forEach(element => {
+      if(element.name == name){
+        this.customerName = element.name
+        this.customerLocation = element.location
+        this.customerMobile = element.mobile
+        present = true
+        return
+      }
+    })
+    if(present == false){
+      alert('Customer not available')
+    }   
+  }
+
  
 }
 
@@ -511,6 +575,13 @@ interface Sale{
   totalCharges     : number
   totalDue        : number
   products         : LProduct[]
+}
+
+export interface ISalesAgentCustomerModel {
+  id             : any
+  name           : string
+  location       : string
+  mobile         : string
 }
 
 

@@ -1,0 +1,216 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="header-title">
+        <h1>Mechandizing | Sales Agents | Sales Agents Master</h1>
+    </div>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="panel panel-bd lobidrag">
+                <div class="panel-heading">
+                    <div> 
+                        <a routerLink="/home"><button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+                        <button class="btn" (click)="clearFields()" (click)="requestNo()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new SalesAgent"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
+                        <button class="btn" (click)="unlockAll()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing SalesAgent"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
+                        <button class="btn" (click)="clearFields()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Delete an existing SalesAgent"><i class="fa-solid fa-times"></i><br>Clear</button>
+                        <button class="btn" (click)="delete()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Delete an existing SalesAgent"><i class="fa-solid fa-trash"></i><br>Delete</button>
+                        <button class="btn" (click)="save()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing SalesAgent"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
+                    </div>
+                </div>
+                <div class="panel-body" style="padding: 3mm;">
+                    <div class="row" [@fadeInOut]>
+                        <div class="col-md-6">
+                            <br>
+                            <input type="hidden" [(ngModel)]="id">
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Code*</label>
+                                </div>
+                                <div class="col-5">
+                                    <input type="text" [(ngModel)]="no" class="form-control special" [readonly]="noLocked">
+                                </div>
+                                <div class="col-3">
+                                    <button (click)="getByNoOrName(no, name)" class="btn btn-success form-control">Search</button>                              
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Name</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="name" list="names" class="form-control special" [readonly]="nameLocked" autocomplete="disabled">
+                                    <datalist id="names" style="padding: 0px;">
+                                        <option *ngFor="let n of names" [ngValue]="n">{{n}}</option>
+                                    </datalist>                             
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Contact Name</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="contactName" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                            
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label></label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="checkbox" [(ngModel)]="active"><label>Active</label>                             
+                                </div>
+                            </div>
+                    
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label></label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="checkbox" [(ngModel)]="webPosEnabled"><label>Web POS Enabled</label>                             
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Credit Limit</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="creditLimit" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                             
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Invoice Limit</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="invoiceLimit" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                             
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Credit Days</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="creditDays" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                             
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Sales Target</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="salesTarget" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                             
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Terms of Contract</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="termsOfContract" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                             
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Physical Address</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="physicalAddress" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                             
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Post Code</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="postCode" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                           
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Post Address</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="postAddress" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                             
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Telephone</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="tel" [(ngModel)]="telephone" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                             
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Mobile</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="tel" [(ngModel)]="mobile" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                            
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Email</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="email" [(ngModel)]="email" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                            
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Fax</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="tel" [(ngModel)]="fax" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                              
+                                </div>
+                            </div>
+                    
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Pass Name</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="passName" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                              
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 float-end" style="text-align: right;">
+                                    <label>Pass Code</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" [(ngModel)]="passCode" class="form-control special" [readonly]="inputsLocked" autocomplete="disabled">                              
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-6">
+                            <table class="table table-bordered table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <td>Name</td>                
+                                        <td>Contact Name</td>
+                                        <td>Active</td>
+                                        <td>Select</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let salesAgent of salesAgents">
+                                        <td>{{salesAgent.name}}</td>
+                                        <td>{{salesAgent.contactName}}</td>
+                                        <td>{{salesAgent.active}}</td>
+                                        <td><span (click)="get(salesAgent.id)" style="cursor: pointer;">[Select]</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> <!-- /.content -->

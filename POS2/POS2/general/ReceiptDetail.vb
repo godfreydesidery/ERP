@@ -11,6 +11,7 @@
     Public Property sellingPriceVatIncl As Double
     Public Property sellingPriceVatExcl As Double
     Public Property discount As Double
-    Public Property amount As Double
+    Public Property amount As Double = (qty * sellingPriceVatIncl) - discount
+
     Public Property receipt As Receipt = New Receipt
 End Class

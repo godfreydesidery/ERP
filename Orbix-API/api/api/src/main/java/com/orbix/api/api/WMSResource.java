@@ -28,6 +28,7 @@ import com.orbix.api.models.LAgentModel;
 import com.orbix.api.models.LCustomerModel;
 import com.orbix.api.models.LProductModel;
 import com.orbix.api.models.LSalesListObjectModel;
+import com.orbix.api.models.SalesAgentCustomerModel;
 import com.orbix.api.models.SalesExpenseModel;
 import com.orbix.api.models.SalesListModel;
 import com.orbix.api.models.SalesSheetModel;
@@ -94,6 +95,34 @@ public class WMSResource {
 		return ResponseEntity.ok().body(salesAgentService.getSalesList(sl.get().getId()));
 	}
 	
+	@GetMapping("/wms_confirm_sales_sheet")	
+	public ResponseEntity<Boolean> confirmSalesSheet(
+			@RequestParam(name = "sales_list_no") String salesListNo){
+		Optional<SalesList> sl = salesListRepository.findByNo(salesListNo);
+		if(!sl.isPresent()) {
+			throw new NotFoundException("Corresponding sales list not found");
+		}
+		Optional<SalesSheet> ss = salesSheetRepository.findBySalesList(sl.get());
+		if(!ss.isPresent()) {
+			throw new NotFoundException("Sales Sheet not found");
+		}
+		return ResponseEntity.ok().body(salesAgentService.confirmSalesSheet(ss.get().getId()));
+	}
+	
+	@GetMapping("/wms_unconfirm_sales_sheet")	
+	public ResponseEntity<Boolean> unconfirmSalesSheet(
+			@RequestParam(name = "sales_list_no") String salesListNo){
+		Optional<SalesList> sl = salesListRepository.findByNo(salesListNo);
+		if(!sl.isPresent()) {
+			throw new NotFoundException("Corresponding sales list not found");
+		}
+		Optional<SalesSheet> ss = salesSheetRepository.findBySalesList(sl.get());
+		if(!ss.isPresent()) {
+			throw new NotFoundException("Sales Sheet not found");
+		}
+		return ResponseEntity.ok().body(salesAgentService.unconfirmSalesSheet(ss.get().getId()));
+	}
+	
 	
 	
 	@GetMapping("/wms_load_available_products")	
@@ -145,5 +174,31 @@ public class WMSResource {
 			throw new NotFoundException("Sales list not found");
 		}		
 		return ResponseEntity.ok().body(salesAgentService.loadSalesExpenses(salesListNo));
+	}
+	
+	@PostMapping("/sales_agent_customer/save")
+	public Object saveExpense(
+			@RequestBody SalesAgentCustomerModel customer){
+		
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/wms/sales_agent_customer/save").toUriString());
+		return salesAgentService.saveCustomer(customer);
+	}
+	
+	@PostMapping("/sales_agent_customer/delete")
+	public Object deleteCustomer(
+			@RequestBody SalesAgentCustomerModel customer){
+		
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/wms/sales_agent_customer/delete").toUriString());
+		return salesAgentService.deleteCustomer(customer);
+	}
+	
+	@GetMapping("/wms_load_sales_agent_customers")	
+	public ResponseEntity<List<SalesAgentCustomerModel>> getSalesAgentCustomers(
+			@RequestParam(name = "sales_agent_name") String name){
+		Optional<SalesAgent> sl = salesAgentRepository.findByName(name);
+		if(!sl.isPresent()) {
+			throw new NotFoundException("Sales agent not found");
+		}		
+		return ResponseEntity.ok().body(salesAgentService.loadCustomers(sl.get()));
 	}
 }

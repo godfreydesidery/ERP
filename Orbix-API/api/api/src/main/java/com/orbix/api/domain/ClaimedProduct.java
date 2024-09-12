@@ -38,6 +38,11 @@ public class ClaimedProduct {
 	private String reason;
 	private String remarks;
 	
+	private double costPriceVatIncl = 0;
+	private double costPriceVatExcl  = 0;
+	private double sellingPriceVatIncl = 0;
+	private double sellingPriceVatExcl = 0;
+	
 	@ManyToOne(targetEntity = Product.class, fetch = FetchType.EAGER,  optional = true)
     @JoinColumn(name = "product_id", nullable = true , updatable = true)
     @OnDelete(action = OnDeleteAction.NO_ACTION)	

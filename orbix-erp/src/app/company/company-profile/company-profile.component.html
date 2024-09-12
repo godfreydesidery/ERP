@@ -121,6 +121,15 @@
                                         <tr>
                                             <td style="text-align: right; width: 50mm;">Bank Acc No</td><td><input type="text" [(ngModel)]="bankAccountNo3" class="form-control special"></td>
                                         </tr>
+                                        <hr>
+                                        <tr>
+                                            <td style="text-align: right; width: 50mm;">Quotation Notes</td>
+                                            <td><textarea class="form-control special" [(ngModel)]="quotationNotes"></textarea></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: right; width: 50mm;">Sales Invoice Notes</td>
+                                            <td><textarea class="form-control special" [(ngModel)]="salesInvoiceNotes"></textarea></td>
+                                        </tr>
                                         <tr>
                                             <td style="text-align: right; width: 50mm;"></td><td><button (click)="saveCompanyProfile()" class="btn btn-success ">Save</button></td>
                                         </tr>

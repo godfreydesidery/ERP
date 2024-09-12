@@ -1,0 +1,353 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="header-title">
+        <h1>Mechandizing | Customer Claim</h1>
+    </div>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="panel panel-bd lobidrag">
+                <div class="panel-heading">
+                    <div> 
+                        <a routerLink="/home"><button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Go to Home dashboard"><i class="fas fa-home"></i><br>Home</button></a>
+                        <button class="btn" style="margin: 2px; width: 20mm;" (click)="showList(listContent)" data-mdb-toggle="tooltip" title="View PTP List for selection"><i class="fas fa-list"></i><br>List</button>
+                        <button class="btn" (click)="clear()" (click)="clearClaimed()" (click)="clearReplacement()" (click)="requestNo()" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Create a new PTP"><i class="fa-solid fa-file fa-fw"></i><br>New</button>
+                        <button class="btn" style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Edit an existing PTP"><i class="fa-solid fa-edit fa-fw"></i><br>Edit</button>
+                        <button (click)="save()" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Save or Update an existing PTP"><i class="fa-solid fa-save fa-fw"></i><br>Save</button>
+                    
+                        <button class="btn"style="margin: 2px; width: 20mm;" (click)="cancel(id)" data-mdb-toggle="tooltip" title="Cancel a PTP"><i class="fa-solid fa-times fa-fw"></i><br>Cancel</button>
+                        <button class="btn"style="margin: 2px; width: 20mm;" (click)="approve(id)" data-mdb-toggle="tooltip" title="Approve a Pending PTP"><i class="fa-solid fa-check fa-fw"></i><br>Approve</button>
+                        <button class="btn"style="margin: 2px; width: 20mm;" (click)="exportToPdf()" data-mdb-toggle="tooltip" title="Export document to PDF"><i class="fas fa-file-pdf"></i><br>PDF</button>
+                    
+                        <button (click)="archive(id)" class="btn"style="margin: 2px; width: 20mm;" data-mdb-toggle="tooltip" title="Send an Approved PTP to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive</button>
+                        <button (click)="archiveAll()" class="btn"style="margin: 2px; width: 30mm;" data-mdb-toggle="tooltip" title="Send all Approved PTPs to archives for future reference"><i class="fas fa-file-archive"></i><br>Archive All</button>
+                        <button class="btn"style="margin: 2px; width: 30mm;" (click)="createShortCut('CCL', 'customer-claim')" data-mdb-toggle="tooltip" title="Create a page shortcut on user's Dashboard"><i class="fas fa-external-link-alt"></i><br>Shortcut</button>
+                    </div>
+                </div>
+                <div class="panel-body" style="padding: 3mm;">
+                    <div class="row" [@fadeInOut]>
+                        <div class="col-sm-12">
+                            <br><br>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <small>Claim#</small>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <div class="row">
+                                                <div class="col-8">
+                                                    <input type="text" [(ngModel)]="no" class="form-control special">
+                                                </div>
+                                                <div class="col-4">
+                                                    <button class="btn btn-success" (click)="getByNo(no)" style="margin: 2px; width: 26mm;"><i class="fas fa-search"></i>Search</button>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <small>Select Customer</small>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="text" [(ngModel)]="customerNo" class="form-control special" placeholder="Customer No" readonly>
+                                            <select [(ngModel)]="customerName" (ngModelChange)="searchCustomer(customerName)" class="form-control input-sm">
+                                                <option></option>
+                                                <option *ngFor="let c of customerNames">{{c}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <small>Comments</small>
+                                            <textarea [(ngModel)]="comments" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <small>Status</small>
+                                        </div>
+                                        <div class="col-9">
+                                            <small>{{status}}</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <small>Created</small>
+                                        </div>
+                                        <div class="col-9">
+                                            <small>{{created}}</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <small>Approved</small>
+                                        </div>
+                                        <div class="col-9">
+                                            <small>{{approved}}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                        <hr>
+                        <div class="col-sm-6">
+                            <table style="width: 100%;">
+                                <tr style="width: 100%;">
+                                    <td style="vertical-align: top; height: 75vh;">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <span><u>Claimed Products</u></span>
+                                                    <button *ngIf="status==='PENDING' || status==='BLANK' || status===''" class="btn btn-success" style="margin: 2px; border-radius: 5mm;" (click)="openClaimed(contentClaimed, '')" data-mdb-toggle="tooltip" title="Add Product"><i class="fa fa-plus"></i></button>
+                                                </div>
+                                                <div class="col-12">
+                                                    <table class="table table-bordered table-striped table-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <td>Code</td>
+                                                                <td>Description</td>
+                                                                <td>Qty@Price</td>
+                                                                <td>Total Price</td>
+                                                                <td>Action</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let d of claimedProducts">
+                                                                <td>{{d.product.code}}</td>
+                                                                <td>{{d.product.description}}</td>
+                                                                <td><b>{{d.qty}}</b>  <i>    {{d.product.uom}}</i>@{{ d.sellingPriceVatIncl | currency:'':''}}</td>
+                                                                <td style="text-align: right;">{{d.qty * d.sellingPriceVatIncl | currency:'':''}}</td>
+                                                                <td><span style="cursor: pointer;" (click)="deleteClaimedProduct(d.id)">[Remove]</span><span style="cursor: pointer;" (click)="openClaimed(contentClaimed, d.id)">[Edit]</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td><b>Total</b></td>
+                                                                <td style="text-align: right;"><b>{{totalClaimed | currency:'':''}}</b></td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>                   
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-6">
+                            <table style="width: 100%;">
+                                <tr style="width: 100%;">
+                                    <td style="vertical-align: top; height: 75vh;">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <span><u>Claim Replacement Products</u></span>
+                                                    <button *ngIf="status==='PENDING' || status==='BLANK' || status===''" class="btn btn-success" style="margin: 2px; border-radius: 5mm;" (click)="openReplacement(contentReplacement, '')" data-mdb-toggle="tooltip" title="Add Product"><i class="fa fa-plus"></i></button>
+                                                </div>
+                                                <div class="col-12">
+                                                    <table class="table table-bordered table-striped table-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <td>Code</td>
+                                                                <td>Description</td>
+                                                                <td>Qty@Price</td>
+                                                                <td>Total</td>
+                                                                <td>Action</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let d of replacementProducts">
+                                                                <td>{{d.product.code}}</td>
+                                                                <td>{{d.product.description}}</td>
+                                                                <td><b>{{d.qty}}</b>  <i>    {{d.product.uom}}</i>@{{ d.sellingPriceVatIncl | currency:'':''}}</td>
+                                                                <td style="text-align: right;">{{d.qty * d.sellingPriceVatIncl | currency:'':''}}</td>
+                                                                <td><span style="cursor: pointer;" (click)="deleteFinal(d.id)">[Remove]</span><span style="cursor: pointer;" (click)="openReplacement(contentReplacement, d.id)">[Edit]</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td><b>Total</b></td>
+                                                                <td style="text-align: right;"><b>{{totalReplaced | currency:'':''}}</b></td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>                   
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                 
+            </div>
+        </div>
+    </div>
+</section> <!-- /.content -->
+
+<ng-template #contentClaimed let-modal style="height: 4cm;">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add/Edit Initial Product</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td style="text-align: right;">Barcode</td>
+                    <td style="padding: 0;">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="text" [(ngModel)]="claimedProductBarcode" class="form-control special">
+                                    </td>
+                                    <td>
+                                        <button (click)="searchClaimedProduct(claimedProductBarcode, claimedProductCode, claimedProductDescription)" style="margin: 1mm;">Search</button>
+                                    </td>
+                                    <td>
+                                        <button (click)="clearClaimed()">Reset</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Code</td><td style="padding: 0;"><input type="text" [(ngModel)]="claimedProductCode" class="form-control special"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Description</td>
+                    <td style="padding: 0;">
+                        <input type="text" [(ngModel)]="claimedProductDescription" list="descriptions" class="form-control special">
+                        <datalist id="descriptions" style="padding: 0px;">
+                            <option *ngFor="let d of descriptions" [ngValue]="d">{{d}}</option>
+                        </datalist>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Price</td><td style="padding: 0;"><input type="text" [(ngModel)]="claimedProductSellingPriceVatIncl" class="form-control special" style="text-align: right;" readonly></td>
+                </tr> 
+                <tr>
+                    <td style="text-align: right;">Qty</td><td style="padding: 0;"><input type="text" [(ngModel)]="claimedProductQty" class="form-control special"></td>
+                </tr>   
+                <tr>
+                    <td style="text-align: right;">Reason</td><td style="padding: 0;"><input type="text" [(ngModel)]="claimedProductReason" class="form-control special"></td>
+                </tr>   
+                <tr>
+                    <td style="text-align: right;">Remarks</td><td style="padding: 0;"><input type="text" [(ngModel)]="claimedProductRemarks" class="form-control special"></td>
+                </tr>   
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="saveClaimedProduct()" (click)="modal.close('Save click')" class="btn btn-outline-dark">Save</button>
+    </div>
+</ng-template>
+
+<ng-template #contentReplacement let-modal style="height: 4cm;">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add/Edit Final Product</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td style="text-align: right;">Barcode</td>
+                    <td style="padding: 0;">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="text" [(ngModel)]="claimReplacementProductBarcode" class="form-control special">
+                                    </td>
+                                    <td>
+                                        <button (click)="searchReplacementProduct(claimReplacementProductBarcode, claimReplacementProductCode, claimReplacementProductDescription)" style="margin: 1mm;">Search</button>
+                                    </td>
+                                    <td>
+                                        <button (click)="clearReplacement()">Reset</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Code</td><td style="padding: 0;"><input type="text" [(ngModel)]="claimReplacementProductCode" class="form-control special"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Description</td>
+                    <td style="padding: 0;">
+                        <input type="text" [(ngModel)]="claimReplacementProductDescription" list="descriptions" class="form-control special">
+                        <datalist id="descriptions" style="padding: 0px;">
+                            <option *ngFor="let d of descriptions" [ngValue]="d">{{d}}</option>
+                        </datalist>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Price</td><td style="padding: 0;"><input type="text" [(ngModel)]="claimReplacementProductSellingPriceVatIncl" class="form-control special" style="text-align: right;" readonly></td>
+                </tr> 
+                <tr>
+                    <td style="text-align: right;">Qty</td><td style="padding: 0;"><input type="text" [(ngModel)]="claimReplacementProductQty" class="form-control special"></td>
+                </tr>  
+                <tr>
+                    <td style="text-align: right;">Remarks</td><td style="padding: 0;"><input type="text" [(ngModel)]="claimReplacementProductRemarks" class="form-control special"></td>
+                </tr>  
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="saveReplacementProduct()" (click)="modal.close('Save click')" class="btn btn-outline-dark">Save</button>
+    </div>
+</ng-template>
+
+
+
+<ng-template #listContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Customer Claim List</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-12" style="height: 10cm; overflow: auto;">
+                <table class="table table-bordered">
+                    <thead style="position: sticky; top: 0;">
+                        <tr class="table-dark">
+                            <td>Claim#</td>
+                            <td>Status</td>
+                            <td>Select</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let c of customerClaims">
+                            <td>{{c.no}}</td>
+                            <td>{{c.status}}</td>
+                            <td><span (click)="get(c.id)" (click)="modal.close('Select click')" style="cursor: pointer;">[Select]</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+    <div class="modal-footer">
+      
+    </div>
+</ng-template>

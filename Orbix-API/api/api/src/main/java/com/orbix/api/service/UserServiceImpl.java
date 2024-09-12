@@ -165,7 +165,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		return privilegeRepository.save(privilege);
 	}
 
-	@Override
+	/*@Override
 	public void addPrivilegeToRole(String roleName, String privilegeName) {
 		Role role = roleRepository.findByName(roleName);
 		Optional<Privilege> p = privilegeRepository.findByName(privilegeName);
@@ -175,7 +175,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		}catch(Exception e) {
 			log.info(e.getMessage());
 		}			
+	}*/
+	
+	@Override
+	public void addPrivilegeToRole(String roleName, String privilegeName) {
+		Role role = roleRepository.findByName(roleName);
+		Optional<Privilege> p = privilegeRepository.findByName(privilegeName);
+		
+		try {
+			if(!role.getPrivileges().contains(p.get())) {
+				role.getPrivileges().add(p.get());
+			}			
+		}catch(Exception e) {
+			log.info(e.getMessage());
+		}			
 	}
+	
+	
 	
 	@Override
 	public void removePrivilegeFromRole(String roleName, String privilegeName) {
@@ -283,6 +299,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		}
 		return privilegesList;
 	}
+	
+	
 
 	@Override
 	public Role getRoleById(Long id) {
