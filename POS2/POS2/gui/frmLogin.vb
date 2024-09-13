@@ -48,10 +48,13 @@ Public Class frmLogin
 
     Private Sub frmLogin_Load(sender As Object, e As EventArgs) Handles Me.Shown
 
+
+
         Dim path As String = LApllication.localAppDataDir
         'create a directory
 
         If (Not My.Computer.FileSystem.DirectoryExists(path)) Then
+
             My.Computer.FileSystem.CreateDirectory(path)
             serverSettings()
             Me.Close()
@@ -59,6 +62,7 @@ Public Class frmLogin
         End If
         Try
             Dim app As New LApllication
+
             app.loadSettings()
         Catch ex As Exception
             MsgBox("Failed to load application", vbCritical + vbOKOnly, "Error: Application")
