@@ -152,7 +152,7 @@ Public Class PointOfSale
 
 
 
-    Public Shared Function printReceipt(tillNo As String, receiptNo As String, date_ As String, TIN As String, VRN As String, itemCode() As String, descr() As String, qty() As String, price() As String, tax() As String, amount() As String, subTotal As String, VAT As String, grandTotal As String, cash As String, balance As String)
+    Public Shared Function printReceipt(tillNo As String, receiptNo As String, date_ As String, TIN As String, VRN As String, code() As String, descr() As String, qty() As String, price() As String, tax() As String, amount() As String, subTotal As String, VAT As String, grandTotal As String, cash As String, balance As String)
 
         'PointOfSale.printFiscalReceipt(tillNo, receiptNo, date_, TIN, VRN, itemCode, descr, qty, price, tax, amount, subTotal, VAT, grandTotal, cash, balance)
 
@@ -251,16 +251,17 @@ Public Class PointOfSale
 
             strOutputData = strOutputData + CRLF
 
-            strOutputData = strOutputData + "CODE        QTY   PRICE@     AMOUNT" + CRLF
+
             strOutputData = strOutputData + "DESCRIPTION" + CRLF
+            strOutputData = strOutputData + "CODE        QTY   PRICE@     AMOUNT" + CRLF
             strOutputData = strOutputData + "====================================" + CRLF
 
-            For i As Integer = 0 To descr.Length - 1
-                strOutputData = strOutputData + itemCode(i) + " x " + qty(i) + " @ " + price(i) + " = " + amount(i) + CRLF
+            For i As Integer = 0 To descr.Length - 2
                 strOutputData = strOutputData + descr(i) + CRLF
+                strOutputData = strOutputData + qty(i) + " @ " + price(i) + " = " + amount(i) + CRLF
+                'strOutputData = strOutputData + code(i) + " x " + qty(i) + " @ " + price(i) + " = " + amount(i) + CRLF
                 strOutputData = strOutputData + "------------------------------------" + CRLF
             Next
-            'strOutputData = strOutputData + "------------------------------------" + CRLF
 
             strOutputData = strOutputData + "Sub Total                   " + subTotal + CRLF
             strOutputData = strOutputData + "Tax                         " + VAT + CRLF
@@ -273,6 +274,7 @@ Public Class PointOfSale
             strOutputData = strOutputData + "Sale Date&Time : " + fDateTime + CRLF + CRLF
             strOutputData = strOutputData + CRLF
             strOutputData = strOutputData + "  Served by: " + User.AALIAS + CRLF
+            strOutputData = strOutputData + "------------------------------------" + CRLF
             strOutputData = strOutputData + (Chr(&H1D) & "V" & Chr(66) & Chr(0))
             Try
                 prn.OpenPrint(posPrinterLogicName)
